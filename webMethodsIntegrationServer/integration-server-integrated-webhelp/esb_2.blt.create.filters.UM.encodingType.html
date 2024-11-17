@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Universal Messaging Provider Filters and Encoding Type</title><link rel="Prev" href="esb_2.blt.create.filters.UM.html" title="Previous" /><link rel="Next" href="msg_triggers_creating_3.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb_2.blt.create.filters.UM.encodingType.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN_002fSk28KdCXaPZEEl9_002fo5hGA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb_2.blt.create.filters.UM.encodingType.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_pubsub_guide.html#wwconnect_header">Publish-Subscribe Developer’s Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb_2.blt.html#wwconnect_header">Working with webMethods Messaging Triggers</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb_2.blt.create.html#wwconnect_header">Creating a webMethods Messaging Trigger</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb_2.blt.create.filters.UM.html#wwconnect_header">Creating Filters for Use with Universal Messaging</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Universal Messaging Provider Filters and Encoding Type</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EUTH4B" class="Heading_4"><span class="ph">Universal Messaging</span> Provider Filters and Encoding Type</div><div id="wwID0ERUH4B" class="Body">The encoding type specified for the publishable document type to which the <span class="ph">webMethods messaging trigger</span> subscribes determines the scope of the published document to which <span class="ph">Universal Messaging</span> applies the filter.</div><div id="wwID0EFVH4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When IData is the encoding type, <span class="ph">Universal Messaging</span> applies the filter to the custom header fields added to a published document via the <span class="varname">_properties</span> field. The provider filter allows the <span class="ph">webMethods messaging trigger</span> to indicate which documents it wants to receive based on the header contents.</div><div id="wwID0EFWH4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When protocol buffers is the encoding type, <span class="ph">Universal Messaging</span> applies the filter to the body of the document only.</div><div id="wwID0E3WH4B" class="List_1_Continued">Because <span class="ph">Integration Server</span> includes the headers in the body of the published document as well as in the document header, you can still filter on the document headers when the encoding type is protocol buffers.</div><div id="wwID0EIXH4B" class="Body">When using protocol buffers to encode messages, there are additional considerations for creating provider filters for <span class="ph">Universal Messaging</span>. Specifically, <span class="ph">Universal Messaging</span> <span class="emphasis">cannot</span> filter on:</div><div id="wwID0EBYH4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Fields that cannot be encoded as protocol buffers, including fields whose names contain characters that are not valid for protocol buffers, data types that are not supported by protocol buffers, and duplicate fields.</div><div id="wwID0EUYH4B" class="List_1_Continued">For information about fields that cannot be represented as protocol buffers, see the information about setting an encoding type for a publishable document type in the <span class="ph"> </span><span class="ph_002c_Citation">webMethods Service Development Help</span>.</div><div id="wwID0EFZH4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Undeclared fields that are not defined in the publishable document type but are in the published document.</div><div id="wwID0EYZH4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Fields that contain null values. Even if the field can be represented in protocol buffers, at run time, a null value cannot be included in a protocol buffer message. Consequently, <span class="ph">Universal Messaging</span> cannot apply a provider filter that checks for a null value.</div><div id="wwID0EP1H4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Any list data type where one of the elements in the list contains a null value.</div><div id="wwID0EC2H4B" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Fields whose values are references to another field.</div><div id="wwID0EW2H4B" class="Body">While <span class="ph">Universal Messaging</span> cannot filter on the contents of the fields identified above, these fields and their contents will be passed through as an UnknownFieldSet which is represented as an IData byte array. A <span class="ph">webMethods messaging trigger</span> that receives the document will be able to decode the fields and include them in the pipeline.</div><div id="wwID0EE3H4B" class="Body">For <span class="ph">Universal Messaging</span> to filter on protocol buffers, the configuration property <span class="uicontrol">Global Values &gt; ExtendedMessageSelector</span> must be set to true on <span class="ph">Universal Messaging</span>. True is the default.</div><div id="wwID0EW3H4B" class="Body">Use <span class="ph">Universal Messaging Enterprise Manager</span> to view and edit the configuration properties for the realm to which <span class="ph">Integration Server</span> connects.</div><div id="wwID0EE4H4B" class="Note"><span class="Bold">Note:<br /></span>When the encoding type is IData, it is optional to include <span class="varname">_properties</span> in the provider filter. For example, if you want <span class="ph">Universal Messaging</span> to filter for messages where the contents of the <span class="varname">_properties</span>/<span class="varname">color</span> field is equal to “blue”, the provider filter would be: color=’blue’. However, when the encoding type is protocol buffers, you need to include <span class="varname">_properties</span> in the provider filter. For example, _properties.color=’blue’. If you want a provider filter that operates on the contents of <span class="varname">_properties</span> to work regardless of the encoding type, always include <span class="varname">_properties</span> in the filter expression.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

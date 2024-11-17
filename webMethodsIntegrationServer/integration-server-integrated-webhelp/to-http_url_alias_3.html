@@ -1,0 +1,108 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Creating an HTTP URL Alias</title><link rel="Prev" href="to-http_url_alias_2.html" title="Previous" /><link rel="Next" href="to-http_url_alias_4.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/to-http_url_alias_3.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pOjFFwPXcRDgRXN41wBOBYA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/to-http_url_alias_3.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_admin_guide.html#wwconnect_header">Integration Server Administrator's Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-http_url_alias.html#wwconnect_header">Setting Up HTTP URL Aliases</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Creating an HTTP URL Alias</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ETOQT" class="Heading_2">Creating an HTTP URL Alias</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/to-http_url_alias_4.html#wwconnect_header">Specifying the URL Path</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/to-http_url_alias_5.html#wwconnect_header">Using Port Mappings with a URL Alias</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/to-http_url_alias_8.html#wwconnect_header">Using a URL Alias for the “Empty Path”</a></div></dd></dl></div><div id="wwID0EDPQT" class="Body">When you create a URL alias, you create an association between an alias and a resource on <span class="ph">Integration Server</span>. Keep the following information in mind when creating a URL alias:</div><div id="wwID0ETPQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can create a URL alias for a request that comes through an HTTP or HTTPS port only.</div><div id="wwID0EGQQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>An alias name must be unique across <span class="ph">Integration Server</span>.</div><div id="wwID0E4QQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can associate a single URL alias with multiple destinations by specifying port mappings. A port mapping correlates the alias with a different URL alias based on the port on which the request was received. For more information about creating port mappings for a URL alias, see 
+    <a href="../integration-server-integrated-webhelp/to-http_url_alias_5.html#wwID0EKPRT"
+   
+     title="Using Port Mappings with a URL Alias"
+    ><span class="heading-page">Using Port Mappings with a URL
+								Alias</span></a>.</div><div id="wwID0EZRQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can create a URL alias for the empty path (/) for a hostname:port combination, such as localhost:5555. By creating an empty path alias, you can specify a default destinations for any incoming port. For more information about the empty path alias, see 
+    <a href="../integration-server-integrated-webhelp/to-http_url_alias_8.html#wwID0ECGST"
+   
+     title="Using a URL Alias for the “Empty Path”"
+    ><span class="heading-page">Using a URL Alias for the “Empty
+								Path”</span></a>.</div><div id="wwID0EVSQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you want to use URL alias with a REST resource you must enable partial matching of URL aliases. For more information, see 
+    <a href="../integration-server-integrated-webhelp/to-http_url_alias_10.html#wwID0EHTST"
+   
+     title="Enabling Partial Matching of URL Aliases"
+    ><span class="heading-page">Enabling Partial Matching of URL
+						Aliases</span></a>.</div><div id="wwID0ERTQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you enabled or intend to enable partial matching of URL aliases, do not define an alias that begins with another alias. For more information, see 
+    <a href="../integration-server-integrated-webhelp/to-http_url_alias_10.html#wwID0EHTST"
+   
+     title="Enabling Partial Matching of URL Aliases"
+    ><span class="heading-page">Enabling Partial Matching of URL
+						Aliases</span></a>.</div><div id="wwID0ENUQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can create an HTTP URL alias for a service using <span class="ph">Designer</span> as well as <span class="ph">Integration Server</span>. However, if you want to use the same URL alias for more than one service or a service and other resources, you must create the URL alias using <span class="ph">Integration Server Administrator</span>. For instructions on creating an HTTP URL alias from <span class="ph">Designer</span>, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Service Development Help</span>.</div><div id="wwID0E1VQT" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>As of 10.3, <span class="ph">Microservices Runtime</span> or <span class="ph">Integration Server</span> equipped with a <span class="ph">Microservices Runtime</span> license creates two predefined URL alias named “health” and “metrics” for use with the <span class="codeph">health</span> and <span class="codeph">metrics</span> endpoints that provide monitoring capabilities. <span class="ph">Software&nbsp;AG</span> recommends that you avoid creating URL aliases with these names. Additionally, <span class="ph">Software&nbsp;AG</span> does not recommend editing the predefined “health” or “metrics” URL aliases.</div><div id="wwID0EJXQT" class="Note_1"><span class="Bold">Note:<br /></span>If you migrate to <span class="ph">Microservices Runtime</span> version 10.3 or higher from an earlier version and you already have a URL alias named “health” and/or “metrics”, <span class="ph">Microservices Runtime</span> does not create the “health” and/or “metrics” URL alias. Any invocation of the <span class="codeph">health</span> or <span class="codeph">metrics</span> endpoints does not result in execution of health indicators or metrics gathering, respectively. If you want to use the health gauge and/or metrics gathering, you need to rename your existing URL alias named “health” or “metrics”. Upon restart, <span class="ph">Microservices Runtime</span> will create a new health and/or metrics URL alias that corresponds to the <span class="codeph">health</span> endpoint and/or <span class="codeph">metrics</span> functionality.</div><div id="wwID0E4YQT" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To create an HTTP URL alias</div><div id="wwID0EJZQT" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Open </span><span class="Command_002c_Command">Integration Server Administrator</span><span class="Command"> if it is not already open. </span></div><div id="wwID0EI1QT" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Go to </span><span class="Command_002c_uicontrol">Settings &gt; URL aliases</span><span class="Command">. </span></div><div id="wwID0EH2QT" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Create URL Alias</span><span class="Command">. </span></div><div id="wwID0EG3QT" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Under </span><span class="Command_002c_uicontrol">URL Alias Properties</span><span class="Command">, provide the following information: </span></div><div class="ww_skin_page_overflow"><table class="norules2" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 25.8%"><div id="wwID0EP5QT" class="Table_Cell_Head">For this parameter...</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 74.1%"><div id="wwID0EV5QT" class="Table_Cell_Head">Specify...</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EE6QT" class="Table_Cell"><span class="uicontrol">Alias</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EV6QT" class="Table_Cell">A name for the alias.</div><div id="wwID0E16QT" class="Table_Cell">The alias name cannot include a space, nor can it include the following characters:</div><div id="wwID0E66QT" class="Table_Cell"># % ? ’ “ &lt; \</div><div id="wwID0EEART" class="Table_Cell">The alias name cannot begin with the string "http://"</div><div id="wwID0EJART" class="Table_Cell">There is no length restriction for the alias.</div><div id="wwID0EOART" class="Note"><span class="Bold">Note:<br /></span>Do not specify an alias if you intend to use this URL alias for the empty path.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKBRT" class="Table_Cell"><span class="uicontrol">Use as empty path alias</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVBRT" class="Table_Cell">Select this check box if you want to use this alias for the empty path.</div><div id="wwID0E2BRT" class="Table_Cell">When you select the <span class="uicontrol">Use as empty path alias</span> check box, <span class="ph">Integration Server</span> changes the alias to &lt;EMPTY&gt;.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPCRT" class="Table_Cell"><span class="uicontrol">Default URL Path</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EADRT" class="Table_Cell">The path to the resource on <span class="ph">Integration Server</span>. For details on how to specify a URL path for the different types of destinations, see 
+    <a href="../integration-server-integrated-webhelp/to-http_url_alias_4.html#wwID0EBIRT"
+   
+     title="Specifying the URL Path"
+    ><span class="heading-page">Specifying the URL Path</span></a>.</div><div id="wwID0ETDRT" class="Table_Cell">You must specify a <span class="uicontrol">Default URL Path</span> field if you do not define any port mappings for the URL alias.</div><div id="wwID0E4DRT" class="Table_Cell">If the URL alias includes port mappings, the <span class="uicontrol">Default URL Path</span> field is optional. However, it might be useful to supply a <span class="uicontrol">Default URL Path</span> value so that a request received on a port for which there is not a port mapping will “fall through” to the default URL path. If a URL alias specifies a port mapping but does not specify a <span class="uicontrol">Default URL Path</span> value, <span class="ph">Integration Server</span> uses the alias as the URL path.</div><div id="wwID0ETERT" class="Table_Cell">The URL path cannot include a space or the following characters: # % ? ’ “ &lt; \</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5ERT" class="Table_Cell"><span class="uicontrol">Package</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJFRT" class="Table_Cell">Name of the package with which you want to associate this alias.</div></td></tr></table></div><div id="wwID0EVFRT" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">If you want to define a different destination for the URL alias based on the incoming port, create a port mapping. For information, see </span>
+    <a href="../integration-server-integrated-webhelp/to-http_url_alias_5.html#wwID0EKPRT"
+   
+     title="Using Port Mappings with a URL Alias"
+    ><span class="Command_002c_heading-page">Using Port Mappings with a URL
+								Alias</span></a><span class="Command">. do the following: </span></div><div id="wwID0EYGRT" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Save Changes.</span><span class="Command"> </span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>About the Storage Elements</title><link rel="Prev" href="Storage%20folder.html" title="Previous" /><link rel="Next" href="Storage%20Folder%20Locking.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/Storage%20Folder%20Overview.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pFTmAHa1tFnBUMbJdlvRMiw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/Storage%20Folder%20Overview.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/Storage%20folder.html#wwconnect_header">Storage Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">About the Storage Elements</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ERGKIB" class="Heading_2">About the Storage Elements</div><div id="wwID0EJHKIB" class="Body">You use the elements in the storage folder to create, close, and delete data stores in the <span class="ph">Integration Server</span> short-term store. <span class="ph">Integration Server</span> uses the short-term store for information that needs to persist across server restarts. For example, if the <span class="ph">Integration Server</span> on which your flow service is executing becomes unavailable and then restarts, the flow service can check the state information in the short-term store and begin processing at the point where the flow service was interrupted. The short-term store exists as the IS_DATASTORE table in an external database identified to <span class="ph">Integration Server</span> through the ISInternal functional alias.</div><div id="wwID0E6HKIB" class="Body">When using the <span class="apiname">pub.storage</span> services, keep in mind that the short-term store is not intended to be used as a general-purpose storage engine. Rather, it is primarily provided to support shared storage of application resources and transient data in an <span class="ph">Integration Server</span> clustered environment. Consequently, <span class="ph">Software&nbsp;AG</span> recommends that you do not use the short-term store to process high volumes, large data records, or to permanently archive records.</div><div id="wwID0ESIKIB" class="Important"><span class="Bold">Important:<br /></span>These services are a tool for maintaining state information in the short-term store. It is up to the developer of the flow service to make sure the flow service keeps track of its state and correctly handles restarts.</div><div id="wwID0EJJKIB" class="Body">In Release 7.1, the <span class="ph">Integration Server</span> 6.1 Repository Server was replaced by a set of database tables collectively called IS Internal. During <span class="ph">Integration Server</span> installation, you can choose to use the embedded IS Internal database, or you can choose to use an external RDBMS in which you have created or will create the IS Internal database component. If you choose the external RDBMS, data associated with the <span class="apiname">pub.storage</span> services will be stored in the IS_DATASTORE table in the IS Internal database component. For DB2, the size of a BLOB column is defined when the table is created; you might find that the VALUE column in the IS_DATASTORE table is not wide enough to accommodate your pub.storage data. If you have not yet created the IS Internal database component, open the appropriate table creation script below in a text editor and modify the width of the VALUE column in the IS_DATASTORE table:</div><div id="wwID0EAKKIB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="ph"> </span><span class="ph_002c_emphasis">Software&nbsp;AG_directory</span><span class="ph"> </span>\common\db\scripts\db2\isinternal\<span class="varname">version</span>\create\db2_isi _c_ddl.sql</div><div id="wwID0EBLKIB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="ph"> </span><span class="ph_002c_emphasis">Software&nbsp;AG_directory</span><span class="ph"> </span>\common\db\scripts\db2as400\isinternal\<span class="varname">version</span>\create\db2as400_isi_c_ddl.sql</div><div id="wwID0EDMKIB" class="Body">Where <span class="varname">version</span> is the directory that contains the latest version of the external RDBMS.</div><div id="wwID0EOMKIB" class="Tip"><span class="Bold">Tip:<br /></span>The directory with the highest number corresponds to the latest version of the external RDBMS.</div><div id="wwID0EFNKIB" class="Body">If you have already created the IS Internal database component and the VALUE column is not wide enough to accommodate your pub.storage data, use DB2 commands to modify the width of the VALUE column in the IS_DATASTORE table.</div><div id="wwID0EKNKIB" class="Note"><span class="Bold">Note:</span><span class="ph">Integration Server</span> provides a performance optimization in the pub.storage implementation. This optimization caches database keys in local memory. Set watt.server.storage.optimizeForStandalone to true to use this optimization for a stand-alone<span class="ph">Integration Server</span>. The watt.server.storage.optimizeForStandalone must be set to false in a cluster. When in a cluster, the local cache can get out of sync with the database if another server in the cluster deletes then recreates data with the same <span class="varname">storeName</span> and <span class="varname">key</span> as the locally cached data.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

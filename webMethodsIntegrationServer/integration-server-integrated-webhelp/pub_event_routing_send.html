@@ -1,0 +1,111 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>pub.event.routing:send</title><link rel="Prev" href="pub_event_routing_EventAcknowledge.html" title="Previous" /><link rel="Next" href="pub_event_routing_subscribe.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/pub_event_routing_send.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pdtbWa8sFUlTICmplLJvBUA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/pub_event_routing_send.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/Event%20folder.html#wwconnect_header">Event Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/Event%20folder2.html#wwconnect_header">Summary of Elements in this Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">pub.event.routing:send</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ECQGBB" class="Heading_3">pub.event.routing:send</div><div id="wwID0EDRGBB" class="Body">WmPublic. <span class="emphasis">Deprecated</span> - Use <span class="ph">Digital Event Services</span>.</div><div id="wwID0ESRGBB" class="Body">Sends events to the messaging provider using <span class="ph">webMethods Event Routing</span>. <span class="ph">Integration Server</span> constructs events using the parameters defined in this service.</div><div id="wwID0EASGBB" class="Note"><span class="Bold">Note:</span><span class="ph">Event Routing</span> is a framework that <span class="ph">Software&nbsp;AG</span> provides for applications to communicate using events. For more information about using <span class="ph">Event Routing</span>, see <span class="ph"> </span><span class="ph_002c_Citation">Communicating Between Software&nbsp;AG Products Using Event Routing</span>.</div><div id="wwID0ERTGBB" class="Section_Title">Input Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 22.9%"><div id="wwID0EAVGBB" class="Lines"><br /><span class="varname">documentType Name</span><br /></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 77%"><div id="wwID0EQVGBB" class="Table_Cell"><span class="bisdatatype">String</span> Optional. Fully qualified name of the IS document type that specifies the structure to impose on the body of the event. By specifying a document type, you can identify:</div><div id="wwID0E6VGBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The order and dimensionality of elements.</div><div id="wwID0EQWGBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The prefix associated with each namespace in the instance document.</div><div id="wwID0ECXGBB" class="Table_Cell">When field names in a document type include a prefix and specify a value for the <span class="uicontrol">XML namespace</span> property, the <span class="apiname">pub.event.routing:send</span> service will convert a name/value pair in the <span class="varname">event/body</span> IData with the same prefix and name to an XML element with that prefix and with a local name equivalent to the XML namespace property value.</div><div id="wwID0EWXGBB" class="Note"><span class="Bold">Note:<br /></span>You must specify an IS document type for the <span class="varname">documentTypeName</span> parameter if <span class="varname">createOptions</span> is set to <span class="codeph">VALIDATE_BODY</span>. The XML structure of the IS document type specified in the <span class="varname">documentTypeName</span> parameter must match the XML structure passed as the value of <span class="varname">evt:body</span> in the 
+    <a href="../integration-server-integrated-webhelp/pub_event_eda_event.html#wwID0EKH3AB"
+   
+     title="pub.event.eda:event"
+    ><span class="apiname-only">pub.event.eda:event</span></a> document type.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ETZGBB" class="Table_Cell"><span class="varname">event</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6ZGBB" class="Table_Cell"><span class="bisdatatype">Document</span> A document reference (IData) to the 
+    <a href="../integration-server-integrated-webhelp/pub_event_eda_event.html#wwID0EKH3AB"
+   
+     title="pub.event.eda:event"
+    ><span class="apiname-only">pub.event.eda:event</span></a> document type containing the event that you want to publish, including the event header and payload.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZ1GBB" class="Table_Cell"><span class="varname">createOptions</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EF2GBB" class="Table_Cell"><span class="bisdatatype">String List</span> Optional. Options that <span class="ph">Integration Server</span> passes on to the <span class="ph">Event Routing</span> framework during the creation of an event.</div><div id="wwID0EY2GBB" class="Table_Cell">Possible values are none or any one or both of the following:</div><div id="wwID0EB3GBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">EXTRACT_FILTERABLE_PROPS</span> if you want the <span class="ph">Event Routing</span> framework to verify that the workspace name and service name that combine to form the value of <span class="varname">evt:type</span> in the 
+    <a href="../integration-server-integrated-webhelp/pub_event_eda_event.html#wwID0EKH3AB"
+   
+     title="pub.event.eda:event"
+    ><span class="apiname-only">pub.event.eda:event</span></a> document type are valid.</div><div id="wwID0EI4GBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">VALIDATE_BODY</span> if you want the <span class="ph">Event Routing</span> framework to verify that the XML structure passed as the value of <span class="varname">evt:body</span> in the 
+    <a href="../integration-server-integrated-webhelp/pub_event_eda_event.html#wwID0EKH3AB"
+   
+     title="pub.event.eda:event"
+    ><span class="apiname-only">pub.event.eda:event</span></a> document type matches the XML structure of the IS document type specified as the <span class="varname">documentTypeName</span> parameter.</div><div id="wwID0EU5GBB" class="Note_1"><span class="Bold">Note:<br /></span>If you select the <span class="codeph">VALIDATE_BODY</span> option, you must specify an IS document type for the <span class="varname">documentTypeName</span> parameter. <span class="ph">Integration Server</span> will issue an error if you do not specify any value for <span class="varname">documentTypeName</span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFAHBB" class="Table_Cell"><span class="varname">isAsync</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERAHBB" class="Table_Cell"><span class="bisdatatype">Boolean</span> Optional. Specifies whether or not the event is sent synchronously or asynchronously. Set to:</div><div id="wwID0EABHBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">true</span> to send the event asynchronously.</div><div id="wwID0EVBHBB" class="List_1_Continued">If set to <span class="codeph">true</span>, after sending the event, <span class="ph">Integration Server</span> executes the next step in the flow service immediately. <span class="ph">Integration Server</span> does not wait for an acknowledgment before continuing service execution.</div><div id="wwID0EICHBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">false</span> to send the event synchronously.</div><div id="wwID0E4CHBB" class="List_1_Continued">If set to <span class="codeph">false</span>, after sending the event, <span class="ph">Integration Server</span> waits for an acknowledgment before executing the next step in the flow service. This is the default.</div><div id="wwID0ENDHBB" class="Table_Cell">If the value of <span class="varname">isAsync</span> is set to <span class="codeph">true</span>, you must specify a callback service in the <span class="varname">serviceName</span> input parameter.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHEHBB" class="Table_Cell"><span class="varname">service Name</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ETEHBB" class="Table_Cell"><span class="bisdatatype">String</span> Optional. The callback service that you want <span class="ph">Integration Server</span> to invoke upon receiving an acknowledgment from the <span class="ph">Event Routing</span> framework after completing the send operation.</div><div id="wwID0EGFHBB" class="Table_Cell">The input signature for the callback service is defined by the document pub.event.routing:eventAcknowledgement. The pub.event.routing:eventAcknowledgement must be provided as an input document to the callback service.</div><div id="wwID0ELFHBB" class="Note"><span class="Bold">Note:<br /></span>You must specify a callback service if the value of <span class="varname">isAsync</span> parameter is set to <span class="codeph">true</span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJHHBB" class="Table_Cell"><span class="varname">runAsUser</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVHHBB" class="Table_Cell"><span class="bisdatatype">String</span> Optional. The name of the user account whose credentials <span class="ph">Integration Server</span> uses to execute the callback service. This parameter is required only if the event is being sent asynchronously, that is, if the <span class="varname">isAsync</span> parameter is set to <span class="codeph">true</span>.</div><div id="wwID0ENIHBB" class="Table_Cell">You can specify a locally defined user account or a user account defined in a central or external directory. The user account you specify must have the execute ACL associated with the callback service.</div><div id="wwID0ESIHBB" class="Table_Cell">If you do not specify any user account for an event that is sent asynchronously, <span class="ph">Integration Server</span> uses the name specified in the watt.server.event.routing.runAsUser server configuration parameter. If no user is specified in that parameter, <span class="ph">Integration Server</span> uses the Administrator user to execute the service. For more information about watt.server.event.routing.runAsUser, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Administrator’s Guide</span>.</div></td></tr></table></div><div id="wwID0E2JHBB" class="Section_Title">Output Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 22.9%"><div id="wwID0EFLHBB" class="Table_Cell"><span class="varname">eventID</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 77%"><div id="wwID0ERLHBB" class="Table_Cell"><span class="bisdatatype">String</span> The unique identifier of the sent event. The <span class="varname">eventID</span> is the same as the <span class="varname">evt:EventID</span> in 
+    <a href="../integration-server-integrated-webhelp/pub_event_eda_event.html#wwID0EKH3AB"
+   
+     title="pub.event.eda:event"
+    ><span class="apiname-only">pub.event.eda:event</span></a>, either supplied by the user who emitted the event or generated by the <span class="ph">Event Routing</span> framework.</div></td></tr></table></div><div id="wwID0E6MHBB" class="Section_Title">Usage Notes</div><div id="wwID0EENHBB" class="Body">This service replaces <span class="apiname">pub.event.nerv:send</span>, which has been removed.</div><div id="wwID0EXNHBB" class="Section_Title">See Also</div><div id="wwID0EBOHBB" class="Simple_List_1">
+    <a href="../integration-server-integrated-webhelp/pub_event_routing_subscribe.html#wwID0E2PHBB"
+   
+     title="pub.event.routing:subscribe"
+    ><span class="apiname-only">pub.event.routing:subscribe</span></a></div><div id="wwID0EQOHBB" class="Simple_List_1">
+    <a href="../integration-server-integrated-webhelp/pub_event_routing_unsubscribe.html#wwID0E3GIBB"
+   
+     title="pub.event.routing:unsubscribe"
+    ><span class="apiname-only">pub.event.routing:unsubscribe</span></a></div><div id="wwID0E6OHBB" class="Simple_List_1">
+    <a href="../integration-server-integrated-webhelp/pub_event_eda_event.html#wwID0EKH3AB"
+   
+     title="pub.event.eda:event"
+    ><span class="apiname-only">pub.event.eda:event</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

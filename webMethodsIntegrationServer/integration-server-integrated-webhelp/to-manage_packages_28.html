@@ -1,0 +1,88 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Overview of Package Replication</title><link rel="Prev" href="to-manage_packages_27.html" title="Previous" /><link rel="Next" href="to-manage_packages_29.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/to-manage_packages_28.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="ptJQwAGoiA9Lz_002fR6nMfRxAQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/to-manage_packages_28.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_admin_guide.html#wwconnect_header">Integration Server Administrator's Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-manage_packages.html#wwconnect_header">Managing Packages</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-manage_packages_27.html#wwconnect_header">Copying Packages from One Server to Another</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Overview of Package Replication</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E5WAW" class="Heading_3">Overview of Package Replication</div><div id="wwID0EHXAW" class="Body">During replication, a single <span class="ph">Integration Server</span> sends (publishes) a specified package to one or more recipient servers. The server on which the package originates is referred to as the <span class="term">publisher</span>, and the recipients are referred to as <span class="term">subscribers</span>.</div><div class="ww_skin_page_overflow"><div id="wwID0EZXAW" class="Figure"><img class="Default" src="../integration-server-integrated-webhelp/images/pkg_replication_overview.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 393px; max-width: 519px; top: 0pt" alt="An overview of package replication" /></div></div><div id="wwID0ERYAW" class="Body">Subscribing servers receive the package in their inbound directory (<span class="ph"> </span><span class="ph_002c_emphasis">Integration&nbsp;Server_directory</span><span class="ph"> </span>\instances\<span class="varname">instance_name</span>\replicate\inbound). To activate the new package, an administrator on the subscribing server must install the package after it arrives. (This procedure is explained in 
+    <a href="../integration-server-integrated-webhelp/to-manage_packages_49.html#wwID0EFKHW"
+   
+     title="About Installing Packages Published by Another Server"
+    ><span class="heading-page">About Installing Packages Published
+by Another Server</span></a>.)</div><div id="wwID0EQZAW" class="Body">Either a publisher or a subscriber can request a subscription. A publisher can send (push) the package and the subscriber can request (pull) the package.</div><div id="wwID0EVZAW" class="Body">Before you send a package to another server, you must create a <span class="term">release</span>. When you create a release, the server creates a distribution file that contains the package and information about the package, and makes the package available to subscribers.</div><div id="wwID0E6ZAW" class="Body">You can have multiple releases for a given package. For example, you might have separate releases for versions 1.0, 1.1, and 1.2 of a given package. Or, you might use different releases to separate packages for different audiences. Each release must have a unique name.</div><div id="wwID0EE1AW" class="Important"><span class="Bold">Important:<br /></span>If you have multiple releases of a given package and one or more subscribers have specified the automatic pull feature, those subscribers will receive <span class="emphasis">all releases</span> of a package when a new release of it becomes available. For more information about the automatic pull feature, see 
+    <a href="../integration-server-integrated-webhelp/to-manage_packages_42.html#wwID0E26EW"
+   
+     title="The Subscribing Server"
+    ><span class="heading-page">The Subscribing Server</span></a>.</div><div id="wwID0EJ2AW" class="Body">A release can contain the complete package (a <span class="term">full</span> release) or just patches to the package (a <span class="term">patch</span> release). Typically you will publish a full release when you have made major changes to the package and use patches just to correct problems with a package.</div><div id="wwID0EX2AW" class="Body">With a full release, the new package entirely replaces the old package on the subscriber's server. With a patch release, the files in the patch release replace the versions of those files in the target package; all other files in the target package remain intact.</div><div id="wwID0E32AW" class="Body">In addition to specifying a full or patch release, you can select all files to go in the release or just some.</div><div id="wwID0EB3AW" class="Body">The following diagram illustrates how a patch release replaces files:</div><div class="ww_skin_page_overflow"><div id="wwID0EG3AW" class="Figure"><img class="Default" src="../integration-server-integrated-webhelp/images/pkg_patch-release.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 291px; max-width: 395px; top: 0pt" alt="" /></div></div><div id="wwID0E13AW" class="Body">The following diagram illustrates the results if you selected a single service for replication and specified a <span class="term">full</span> release instead.</div><div class="ww_skin_page_overflow"><div id="wwID0EE4AW" class="Figure"><img class="Default" src="../integration-server-integrated-webhelp/images/pkg_full_replication.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 291px; max-width: 395px; top: 0pt" alt="" /></div></div><div id="wwID0EY4AW" class="Body">Most often you will select all files and specify a full release, or select some files and specify a patch release. There might be times however when you want to select just some files and specify a full release. For example, there might be files in a package, such as internal documentation files, that a developer does not want released to others. Selecting all files except the extraneous ones and specifying a full release results in a package that contains just the desired files.</div><div id="wwID0E44AW" class="Body">There might be other times when you want to replace some files, leave others intact, and delete others. To achieve this greater level of control, you can perform a patch release and specify files to copy and files to delete. Files that you do not specify for copying or deletion remain intact. In the following example, we want to leave Service A intact, replace Service B, and delete Service C from the target package.</div><div class="ww_skin_page_overflow"><div id="wwID0EC5AW" class="Figure"><img class="Default" src="../integration-server-integrated-webhelp/images/pkg_patch-rep_with_deletion.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 294px; max-width: 395px; top: 0pt" alt="" /></div></div><div id="wwID0EW5AW" class="Body">The following shows what you must specify on the <span class="uicontrol">Specify Files for the Release</span> page to accomplish this task:</div><div class="ww_skin_page_overflow"><div id="wwID0EA6AW" class="Figure"><img class="Default" src="../integration-server-integrated-webhelp/images/pkg_spec_files_for_release_screen.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 343px; max-width: 447px; top: 0pt" alt="" /></div></div><div id="wwID0EU6AW" class="Body">The <span class="ph">Integration Server</span> keeps track of package versions, <span class="ph">Integration Server</span> versions, and JVM versions so that during package installation the subscribing server can make sure the package being installed is compatible with the subscribing server's environment. The type of version checking performed depends on whether the release is a full or patch release.</div><div id="wwID0ECABW" class="Note"><span class="Bold">Note:<br /></span>If patch releases have been applied to a package, the developer can see the patch history when viewing the package from <span class="ph">Designer</span>. However, when the publisher publishes a full release of the package, the patch history is removed.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

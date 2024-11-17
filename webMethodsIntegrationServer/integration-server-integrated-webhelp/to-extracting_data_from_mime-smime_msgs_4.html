@@ -1,0 +1,89 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>How to Extract the Payload from a MIME Message</title><link rel="Prev" href="to-extracting_data_from_mime-smime_msgs_3.html" title="Previous" /><link rel="Next" href="to-extracting_data_from_mime-smime_msgs_5.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/to-extracting_data_from_mime-smime_msgs_4.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN7Oa0V6mQ4E01MA1jXriXoQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/to-extracting_data_from_mime-smime_msgs_4.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_mime_guide.html#wwconnect_header">MIME-S/MIME Developer’s Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-extracting_data_from_mime-smime_msgs.html#wwconnect_header">Extracting Data from MIME and S/MIME Messages</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-extracting_data_from_mime-smime_msgs_3.html#wwconnect_header">Extracting the Payload from a MIME Message</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">How to Extract the Payload from a MIME Message</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ELRN3B" class="Heading_3">How to Extract the Payload from a MIME Message</div><div id="wwID0E2RN3B" class="Body">The following procedure describes the general steps you take to extract data from a MIME message.</div><div id="wwID0EHSN3B" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command"> </span><span class="Command_002c_inlinetitle">Place the MIME message in the pipeline as an InputStream or a MimeMessage.</span><span class="Command"> For the </span><span class="Command_002c_Command">Integration Server</span><span class="Command"> services to work with a MIME message, the message </span><span class="Command_002c_emphasis">must</span><span class="Command"> be passed into the pipeline as an InputStream or a MimeMessage. If your solution acquires the MIME message in another form (such as a String or a byte[]) you must convert it to an InputStream before running the MIME services against it. </span></div><div id="wwID0EXTN3B" class="Note_1"><span class="Bold">Note:<br /></span>The way in which you acquire a MIME message and put it in the pipeline will depend on your particular solution. You might retrieve it from a back-end system, you might read it from a file, or you might receive it from a custom content handler. Regardless of how you acquire the message, it must be in the form of an InputStream or a MimeMessage to be able to use it with the MIME services.</div><div id="wwID0EPUN3B" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command"> </span><span class="Command_002c_inlinetitle">Convert the MIME message to a MIME object using the pub.mime:createMimeData service.</span><span class="Command">  Pass the InputStream or MimeMessage containing the MIME message to </span><span class="Command_002c_apiname">createMimeData</span><span class="Command">. This service returns a MIME object called </span><span class="Command_002c_varname">mimeData</span><span class="Command"> that contains the message’s constituent elements (header fields and content). It also returns a set of values indicating whether the enclosed message is encrypted or digitally signed. (For information about extracting information from an encrypted and/or signed MIME message, see </span>
+    <a href="../integration-server-integrated-webhelp/to-extracting_data_from_mime-smime_msgs_7.html#wwID0EAWO3B"
+   
+     title="Extracting the Payload from a Signed MIME Message"
+    ><span class="Command_002c_heading-page">Extracting the Payload from a Signed MIME
+						Message</span></a><span class="Command"> and </span>
+    <a href="../integration-server-integrated-webhelp/to-extracting_data_from_mime-smime_msgs_3.html#wwID0EOQN3B"
+   
+     title="Extracting the Payload from a MIME Message"
+    ><span class="Command_002c_heading-page">Extracting the Payload from a MIME
+						Message</span></a><span class="Command">. </span></div><div id="wwID0E2WN3B" class="Important_1"><span class="Bold">Important:<br /></span>The MIME object that the <span class="apiname">createMimeData</span> service returns is an IData object whose contents you can examine during testing and debugging. However, the internal structure of this object is subject to change in future versions of <span class="ph">Integration Server</span>. To extract content from a MIME object, <span class="emphasis">you must always use</span> the MIME services that <span class="ph">Integration Server</span> provides for this purpose. <span class="emphasis">Do not</span> explicitly map data from the elements in the MIME object with the pipeline editor.</div><div id="wwID0ELYN3B" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command"> </span><span class="Command_002c_inlinetitle">Extract the payload from the MIME object using the pub.mime:getBodyPartContent service.</span><span class="Command"> This service takes as input the MIME object that you created in the previous step 2. If the message contains multiple parts, you can use the </span><span class="Command_002c_varname">index</span><span class="Command"> or </span><span class="Command_002c_varname">contentID</span><span class="Command"> parameter to specify which part you want to retrieve, where: </span></div><div id="wwID0EB1N3B" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="varname">index</span> is a String that specifies the index number (that is, position number) of the part whose content you want to retrieve. (Index 0 is the first part, Index 1 is the second part, and so forth.)</div><div id="wwID0EZ1N3B" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="varname">contentID</span> is a String that specifies the value of the content-ID header whose content you want to retrieve. For example, if you wanted to retrieve the content of from the part with the “content-ID: AJ9994388-0500,” you would set <span class="varname">contentID</span> to “AJ9994388-0500.”</div><div id="wwID0EX2N3B" class="Body_1">If you do not specify <span class="varname">index</span> or <span class="varname">contentID</span>, <span class="apiname">getBodyPartContent</span> returns the content from the first body part in the message.</div><div id="wwID0EM3N3B" class="Body_1">The content of the requested body part is returned as an InputStream named <span class="varname">content</span>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>URL Client Uses to Invoke Services</title><link rel="Prev" href="esb.client.browser.prerequisites.html" title="Previous" /><link rel="Next" href="esb.client.browser.input.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.client.browser.url.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pbwdqtINH5bdLiNr4NUcO7A" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.client.browser.url.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.client.html#wwconnect_header">Creating Client Code</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.client.browser.html#wwconnect_header">Building a Browser-Based Client</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">URL Client Uses to Invoke Services</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EDUGWB" class="Heading_3">URL Client Uses to Invoke Services</div><div id="wwID0ECVGWB" class="Body">When embedding an URL that invokes a service into a web page of a browser-based client, you can use either HTTP GET or HTTP POST. The URL for either method is similar to the following:</div><div class="ww_skin_page_overflow"><div id="wwID0EHVGWB" class="Figure"><img class="Default" src="../integration-server-integrated-webhelp/images/clientcode_browser-url.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 52px; max-width: 346px; top: 0pt" alt="" /></div></div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 10.7%"><div id="wwID0EAXGWB" class="Table_Cell_Head">Item</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 89.2%"><div id="wwID0EGXGWB" class="Table_Cell_Head">Description</div></td></tr><tr><td class="internalhead" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVXGWB" class="internalhead">1</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2XGWB" class="Table_Cell">Identifies the <span class="ph">Integration Server</span> where the service to invoke resides.</div></td></tr><tr><td class="internalhead" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELYGWB" class="internalhead">2</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERYGWB" class="Table_Cell">Specifies the required keyword “<span class="codeph">invoke</span>”, which tells <span class="ph">Integration Server</span> that the URL identifies a service that is to be executed.</div></td></tr><tr><td class="internalhead" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFZGWB" class="internalhead">3</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELZGWB" class="Table_Cell">Identifies the folder in which the service to invoke resides. Separate subfolders with periods. This folder name is case sensitive. Be sure to use the same combination of upper and lower case letters as specified in the folder name on <span class="ph">Integration Server</span>.</div></td></tr><tr><td class="internalhead" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2ZGWB" class="internalhead">4</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EB1GWB" class="Table_Cell">Identifies the service that you want to invoke. The service name is case sensitive. Be sure to use the same combination of upper and lower case letters as specified in the service name on <span class="ph">Integration Server</span>.</div></td></tr><tr><td class="internalhead" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ER1GWB" class="internalhead">5</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EX1GWB" class="Table_Cell">Specifies the input values for the service. Specify a question mark (?) before the input values. The question mark signals the beginning of the <span class="term">query string</span> that contains the input values. Each input value is represented as <span class="varname">variable</span>=<span class="varname">value</span>. The <span class="varname">variable</span> portion is case sensitive. Be sure to use the same combination of upper and lower case letters as specified in your service. If your service requires more than one input value, separate each <span class="varname">variable</span>=<span class="varname">value</span> with an ampersand (&amp;).</div><div id="wwID0E12GWB" class="Note"><span class="Bold">Note:<br /></span>Only specify the query string portion of the URL when using the HTTP GET method.</div></td></tr></table></div><div id="wwID0EV3GWB" class="Note"><span class="Bold">Note:<br /></span>If you are serving the web pages that invoke services from an <span class="ph">Integration Server</span>, you can use a relative URL to invoke the service. By doing so, you can serve the exact web page from several servers without having to update the URLs.</div><div id="wwID0EX4GWB" class="Section_Title">HTTP GET Method</div><div id="wwID0E34GWB" class="Body">To use the GET method, embed a URL that includes all the input values for the service in the query string portion of the URL. When the server receives the URL, it translates the input values into an IData object. For more information about how the server creates the IData object that it sends to the service, see 
+    <a href="../integration-server-integrated-webhelp/esb.client.browser.input.html#wwID0EYCHWB"
+   
+     title="How Input Values are Passed to the Service the Browser-Based Client Invokes"
+    ><span class="heading-page">How Input Values are Passed to the Service
+								the Browser-Based Client Invokes</span></a>.</div><div id="wwID0ET5GWB" class="Section_Title">HTTP POST Method</div><div id="wwID0EY5GWB" class="Body">To use the POST method, create an HTML form in your web page. Create fields in the HTML form in which a user will supply the input information. The values you specify for the NAME attributes of the HTML form fields should match the names of input values that the service expects. Be sure to use the exact combination of upper and lower case letters as specified in your service. For example, if your service requires the input values <span class="varname">sku</span> and <span class="varname">quantity</span>, you might create an HTML form with the following fields:</div><div id="wwID0EI6GWB" class="Preformatted">&lt;SELECT NAME="sku"&gt;  <br />&lt;OPTION VALUE="A1"&gt;A1&lt;/OPTION&gt;  <br />&lt;OPTION VALUE="B2"&gt;B2&lt;/OPTION&gt;  <br />&lt;OPTION VALUE="C3"&gt;C3&lt;/OPTION&gt;  <br />&lt;/SELECT&gt;  <br />&nbsp; <br />&lt;INPUT TYPE="TEXT" NAME="quantity" VALUE="1"&gt;</div><div id="wwID0EO6GWB" class="Body">Specify the URL for the service in the ACTION attribute and “POST” in the METHOD attribute. For example:</div><div id="wwID0ET6GWB" class="Preformatted">&lt;FORM ACTION="/invoke/sample.webPageDemo/getProductCost" METHOD="POST"&gt;</div><div id="wwID0EZ6GWB" class="Body">After the user fills in the form and submits it, the web browser creates a document that contains the information the user supplied in the HTML form (performs an HTTP POST). The browser invokes the URL identified in the ACTION attribute, which invokes the service on <span class="ph">Integration Server</span>, and the browser posts the document that contains the user’s input information to <span class="ph">Integration Server</span>. For more information about how the server creates the IData object that it sends to the service, see 
+    <a href="../integration-server-integrated-webhelp/esb.client.browser.input.html#wwID0EYCHWB"
+   
+     title="How Input Values are Passed to the Service the Browser-Based Client Invokes"
+    ><span class="heading-page">How Input Values are Passed to the Service
+								the Browser-Based Client Invokes</span></a>.</div><div id="wwID0E1AHWB" class="title">Related Topics</div><div id="wwID0E5AHWB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.client.browser.html#wwID0E4JGWB"
+   
+     title="Building a Browser-Based Client"
+    ><span class="Link_Text">Building a Browser-Based Client</span></a></div><div id="wwID0EKBHWB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.client.browser.prerequisites.html#wwID0EGPGWB"
+   
+     title="Prerequisites for Building Browser-Based Client Code"
+    ><span class="Link_Text">Prerequisites for Building Browser-Based Client Code</span></a></div><div id="wwID0EWBHWB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.client.browser.input.html#wwID0EYCHWB"
+   
+     title="How Input Values are Passed to the Service the Browser-Based Client Invokes"
+    ><span class="Link_Text">How Input Values are Passed to the Service the Browser-Based Client Invokes</span></a></div><div id="wwID0ECCHWB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.client.browser.output.html#wwID0EK1IWB"
+   
+     title="How Integration Server Returns Output from the Service the Client Invoked"
+    ><span class="Link_Text">How Integration Server Returns Output from the Service the Client Invoked</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

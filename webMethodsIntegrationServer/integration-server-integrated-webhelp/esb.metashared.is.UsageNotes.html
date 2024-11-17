@@ -1,0 +1,107 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Usage Notes for IS Assets</title><link rel="Prev" href="esb.metashared.is.asset.retract.assetLevel.html" title="Previous" /><link rel="Next" href="esb.metashared.status.information.for.publish.and.retract.requests.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.metashared.is.UsageNotes.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN_002fLWbeD8fKZ_002fphJXvUAw2Rw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.metashared.is.UsageNotes.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-publishing_and_retracting_is_assets.html#wwconnect_header">Publishing and Retracting Metadata for IS and TN Assets</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.metashared.is.intro.html#wwconnect_header">Publishing and Retracting Metadata</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Usage Notes for IS Assets</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EY6PWB" class="Heading_3">Usage Notes for IS Assets</div><div id="wwID0ERAQWB" class="Body">Keep the following information in mind when publishing and retracting metadata for IS assets:</div><div id="wwID0E3AQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You cannot retract a published asset that is referenced by another published asset until the asset that established the reference is retracted. For example, suppose that you publish a process (processA), that uses an IS service (serviceA). Then, you publish the package (packageA) that contains serviceA. Because processA depends on an asset in packageA, you can only retract packageA (and any of its contents) after you retract processA. If you change processA so that it no longer references serviceA and republish processA, you can retract packageA.</div><div id="wwID0EPBQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Uninstalling <span class="ph">Integration Server</span> can cause any published <span class="ph">Integration Server</span> assets to become unreferenced, or orphaned. Retract any published <span class="ph">Integration Server</span> assets before uninstalling the <span class="ph">Integration Server</span> that contains those assets.</div><div id="wwID0ESCQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If a published IS asset is in pending state in <span class="ph">CentraSite</span>, retracting the package that contains the IS asset results in an orphaned asset in <span class="ph">CentraSite</span>. For example, suppose that you published a package containing an IS service to <span class="ph">CentraSite</span>. If you change the life cycle state of the IS service asset to “Deploy” and then retract the package while the state change is pending, the IS service asset is not deleted when the package is retracted. The IS service asset becomes an orphaned asset in <span class="ph">CentraSite</span>.</div><div id="wwID0EVDQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="ph">CentraSite</span> only establishes the “Uses” relationship between the IS Service Interface asset created for a consumer Web service descriptor and the Service asset created for a web service if the Service asset exists in <span class="ph">CentraSite</span> before you publish the consumer Web service descriptor.</div><div id="wwID0EQEQWB" class="List_1_Continued">If you create the web service asset in <span class="ph">CentraSite</span> by importing its WSDL after publishing the consumer Web service descriptor, republish the consumer Web service descriptor to establish the “Uses” relationship between the IS Service Interface asset created for the Web service descriptor and the Service asset created for the web service.</div><div id="wwID0E2EQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can use the scheduler capabilities within <span class="ph">Integration Server</span> to schedule the <span class="apiname">pub.metadata.assets:publishPackages</span> service to publish information about <span class="ph">Integration Server</span> packages and administrative assets to <span class="ph">CentraSite</span>. The <span class="apiname">pub.metadata.assets:publishPackages</span> service publishes metadata to <span class="ph">CentraSite</span> using <span class="ph">Integration Server</span> credentials. For more information about configuring <span class="ph">CentraSite</span> credentials on <span class="ph">Integration Server</span>, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Administrator’s Guide</span>. For more information about scheduling services, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Built-In Services Reference</span>.</div><div id="wwID0EIHQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>To establish the correct relationships between Web service descriptors created from WSDL documents and the <span class="ph">CentraSite</span> Service asset, use the New wizard in <span class="ph">Designer</span> to create the Web service descriptor and select <span class="ph">CentraSite</span> as the source location. If you create a Web service descriptor from a WSDL in <span class="ph">CentraSite</span> or directly from a file or URL, the “Uses” and “Implements” relationships will not be established between the Web service descriptor and the <span class="ph">CentraSite</span> service asset.</div><div id="wwID0EPIQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you intend to change the compatibility mode of a Web service descriptor for which you published metadata to <span class="ph">CentraSite</span>, first retract metadata for the Web service descriptor. Next, change the compatibility mode. Finally, republish metadata for the Web service descriptor to <span class="ph">CentraSite</span>.</div><div id="wwID0EKJQWB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Each asset in <span class="ph">CentraSite</span> has a “Deployed On” property that identifies each <span class="ph">Integration Server</span> from which an asset with that name has been published. However, the <span class="ph">Integration Server</span>s might have published different versions of the same asset or completely different assets that happen to have the same name. In <span class="ph">CentraSite</span>, it will appear as if both <span class="ph">Integration Server</span>s published the exact same asset. <span class="ph">CentraSite</span> will maintain the asset that was most recently published.</div><div id="wwID0EVKQWB" class="List_1_Continued">For example, suppose that <span class="ph">Integration Server</span>1 publishes a service named <span class="apiname">myService</span>. <span class="ph">CentraSite</span> creates an IS service asset with the name <span class="apiname">myService</span> and a “Deployed On” property value of <span class="ph">Integration Server</span>1. Later, <span class="ph">Integration Server</span>2 also publishes a service named <span class="apiname">myService</span> but the service published by <span class="ph">Integration Server</span>2 is not identical to the service published by <span class="ph">Integration Server</span>1. <span class="ph">CentraSite</span> will update the IS service asset to represent the <span class="apiname">myService</span> service published <span class="ph">Integration Server</span>2. <span class="ph">CentraSite</span> also updates the “Deployed On” property value to be: <span class="ph">Integration Server</span>1, <span class="ph">Integration Server</span>2. <span class="ph">CentraSite</span> indicates that both <span class="ph">Integration Server</span>s published an identical asset when, in fact, they did not.</div><div id="wwID0EDNQWB" class="List_1_Continued">When an <span class="ph">Integration Server</span> retracts an asset, <span class="ph">CentraSite</span> removes that <span class="ph">Integration Server</span> from the “Deployed On” property for the <span class="ph">CentraSite</span> asset. If the asset is not deployed on another <span class="ph">Integration Server</span>, <span class="ph">CentraSite</span> removes the asset. If the asset is deployed on another <span class="ph">Integration Server</span>, the asset remains in <span class="ph">CentraSite</span>. The content of the <span class="ph">CentraSite</span> asset will be the asset that was most recently published. This might result in a <span class="ph">CentraSite</span> asset whose content does not represent the IS asset that was published by the <span class="ph">Integration Server</span> listed in the “Deployed On” property.</div><div id="wwID0EVOQWB" class="List_1_Continued">To continue the above example in which <span class="ph">Integration Server</span>1 and then <span class="ph">Integration Server</span>2 published different versions of services named <span class="apiname">myService</span>, if <span class="ph">Integration Server</span>2 retracts <span class="apiname">myService</span>, <span class="ph">CentraSite</span> removes <span class="ph">Integration Server</span>2 from the “Deployed On” property value. However, the content of the <span class="apiname">myService</span> asset in <span class="ph">CentraSite</span> represents the <span class="apiname">myService</span> asset published by <span class="ph">Integration Server</span>2 because <span class="ph">Integration Server</span>2 published the asset most recently. This results in <span class="ph">CentraSite</span> indicating that the <span class="apiname">myService</span> asset published by <span class="ph">Integration Server</span>2 is deployed on <span class="ph">Integration Server</span>1.</div><div id="wwID0ELRQWB" class="title">Related Topics</div><div id="wwID0EPRQWB" class="Related_Concept">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.is.asset.considerations.html#wwID0ES4MWB"
+   
+     title="Considerations for Publishing and Retracting Metadata"
+    ><span class="Link_Text">Considerations for Publishing and Retracting Metadata</span></a></div><div id="wwID0E4RQWB" class="Related_Task">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.is.asset.publish.ISLevel.html#wwID0EJLNWB"
+   
+     title="Publishing Metadata for IS Assets or TN Document Types at the Integration Server Level"
+    ><span class="Link_Text">Publishing Metadata for IS Assets or TN Document Types at the Integration Server Level</span></a></div><div id="wwID0ELSQWB" class="Related_Task">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.is.asset.retract.ISLevel.html#wwID0EODOWB"
+   
+     title="Retracting Metadata for IS Assets or TN Document Types at the Integration Server Level"
+    ><span class="Link_Text">Retracting Metadata for IS Assets or TN Document Types at the Integration Server Level</span></a></div><div id="wwID0EZSQWB" class="Related_Task">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.is.asset.publish.assetLevel.html#wwID0EMZOWB"
+   
+     title="Publishing Metadata for IS Assets or TN Document Types at the Asset Level"
+    ><span class="Link_Text">Publishing Metadata for IS Assets or TN Document Types at the Asset Level</span></a></div><div id="wwID0EHTQWB" class="Related_Task">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.is.asset.retract.assetLevel.html#wwID0EKMPWB"
+   
+     title="Retracting Metadata for IS Assets or TN Document Types at the Asset Level"
+    ><span class="Link_Text">Retracting Metadata for IS Assets or TN Document Types at the Asset Level</span></a></div><div id="wwID0EVTQWB" class="Related_Reference">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.status.information.for.publish.and.retract.requests.html#wwID0E3UQWB"
+   
+     title="Status Information for Publish and Retract Requests"
+    ><span class="Link_Text">Status Information for Publish and Retract Requests</span></a></div><div id="wwID0EDUQWB" class="Related_Reference">
+    <a href="../integration-server-integrated-webhelp/esb.metashared.summary.information.for.publish.and.retract.requests.html#wwID0ENCRWB"
+   
+     title="Summary Information for Publish and Retract Requests"
+    ><span class="Link_Text">Summary Information for Publish and Retract Requests</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Synchronizing a Single Publishable Document Type</title><link rel="Prev" href="esb.docTypes.sync.combineActionAndStatus.html" title="Previous" /><link rel="Next" href="esb.docTypes.sync.multiple.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.docTypes.sync.single.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pqlJD4V6ZqE6U2BjgjJZQeg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.docTypes.sync.single.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.docTypes.pdt.html#wwconnect_header">Working with Publishable Document Types</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.docTypes.sync.html#wwconnect_header">About Synchronizing Publishable Document Types</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Synchronizing a Single Publishable Document Type</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EB4ZRB" class="Heading_3">Synchronizing a Single Publishable Document Type</div><div id="wwID0EZ4ZRB" class="Context">You can synchronize a single publishable document type with its corresponding provider definition. When you synchronize one publishable document type, keep the following points in mind:</div><div id="wwID0EG5ZRB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you want to <span class="uicontrol">Pull from Provider</span>, you need to have write access to the publishable document type and own the lock on it. For more information about locking elements and access permissions (ACLs), see 
+    <a href="../integration-server-integrated-webhelp/esb.lock.locking.html#wwID0EIEWLB"
+   
+     title="About Locking Elements"
+    ><span class="heading-page">About Locking Elements</span></a> and 
+    <a href="../integration-server-integrated-webhelp/esb.acls.assigning.html#wwID0EEBULB"
+   
+     title="Assigning ACLs"
+    ><span class="heading-page">Assigning ACLs</span></a>.</div><div id="wwID0EP6ZRB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When you <span class="uicontrol">Pull from Provider</span>, <span class="ph">Designer</span> gives you the option of overwriting elements with the same name that already exist on the <span class="ph">Integration Server</span>. The provider definition (<span class="ph">Broker</span> document type) might reference elements such as an IS schema or other IS document types. If the <span class="ph">Integration Server</span> you are importing to already contains any elements with the referenced names, you need to know if there is any difference between the existing elements and those being imported from the messaging provider (<span class="ph">Broker</span>). If there are differences, you need to understand what they are and how importing them will affect any integration solution that uses them. For more information about overwriting existing elements, see 
+    <a href="../integration-server-integrated-webhelp/esb.docTypes.sync.overwrite.html#wwID0E122RB"
+   
+     title="Importing and Overwriting References During Synchronization"
+    ><span class="heading-page">Importing and Overwriting References During
+						Synchronization</span></a>.</div><div id="wwID0EDB1RB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For a publishable document type created for an adapter notification, you can select <span class="uicontrol">Push to Provider</span> or <span class="uicontrol">Skip</span> only.</div><div id="wwID0E5B1RB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the <span class="uicontrol">Linked to source</span> property is set to true for the publishable document type, the action you can take depends on the source for the publishable document type. You can select:</div><div id="wwID0E2C1RB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Pull from Provider</span> only if the <span class="uicontrol">Source URI</span> is a <span class="ph">Broker</span> document type.</div><div id="wwID0E1D1RB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Push to Provider</span> only if the <span class="uicontrol">Source URI</span> is a URI other than a <span class="ph">Broker</span> document type.</div><div id="wwID0E1E1RB" class="List_1_Continued">When <span class="uicontrol">Linked to source</span> is true, the content and structure of the document type cannot be modified. For information about allowing editing of an element created from a source file, see 
+    <a href="../integration-server-integrated-webhelp/esb.elements.allowingEditing.html#wwID0EUEHLB"
+   
+     title="Allowing Editing of Derived Elements"
+    ><span class="heading-page">Allowing Editing of Derived Elements</span></a>.</div><div id="wwID0EOF1RB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>To generate additional logging information in the server log when <span class="ph">Integration Server</span> synchronizes document types that use protocol buffer encoding with <span class="ph">Universal Messaging</span>, set the logging level for the server log facility <span class="uicontrol">0154 Protocol Buffer Encoding (Universal Messaging)</span> to Debug or Trace. Increased logging can help you to locate problems that occur during protocol buffer encoding.</div><div id="wwID0ENG1RB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>To generate additional logging in the server log when <span class="ph">Integration Server</span> synchronizes document types with the <span class="ph">Broker</span>, increase the logging level for the server log facility <span class="uicontrol">0097 Broker Document Type Synchronizer</span>.</div><div id="wwID0ENH1RB" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To synchronize a single publishable document type</div><div id="wwID0EZH1RB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">In Package Navigator view, select the publishable document type that you want to synchronize. </span></div><div id="wwID0ERI1RB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Select </span><span class="Command_002c_uicontrol">File &gt; Sync Document Types &gt; Selected</span><span class="Command">. </span><span class="Command_002c_Command">Designer</span><span class="Command"> displays the Synchronize dialog box. The Synchronize dialog box displays the synchronization status of the document type, as described in </span>
+    <a href="../integration-server-integrated-webhelp/esb.docTypes.sync.status.html#wwID0E6QYRB"
+   
+     title="Synchronization Status"
+    ><span class="Command_002c_heading-page">Synchronization Status</span></a><span class="Command">. </span></div><div id="wwID0EAK1RB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Under </span><span class="Command_002c_uicontrol">Action</span><span class="Command">, do one of the following: </span></div><div class="ww_skin_page_overflow"><table class="rules2" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 21.7%"><div id="wwID0EJM1RB" class="Table_Cell_Head">Select...</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 78.2%"><div id="wwID0EPM1RB" class="Table_Cell_Head">To...</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5M1RB" class="Table_Cell"><span class="uicontrol">Push to Provider</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJN1RB" class="Table_Cell">Update the provider definition with the publishable document type.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUN1RB" class="Table_Cell"><span class="uicontrol">Pull from Provider</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6N1RB" class="Table_Cell">Update the publishable document type with the provider definition. This option is available when the provider definition is a <span class="ph">Broker</span> document type only.</div></td></tr></table></div><div id="wwID0EOO1RB" class="Note_1"><span class="Bold">Note:<br /></span>The result of a synchronization action depends on the document status. For more information about how the result of a synchronization status depends on the synchronization status, see 
+    <a href="../integration-server-integrated-webhelp/esb.docTypes.sync.combineActionAndStatus.html#wwID0EGIZRB"
+   
+     title="Combining Synchronization Action with Synchronization Status"
+    ><span class="heading-page">Combining Synchronization Action with
+						Synchronization Status</span></a>.</div><div id="wwID0EPP1RB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">If you select </span><span class="Command_002c_uicontrol">Pull from Provider</span><span class="Command">, as the action, </span><span class="Command_002c_Command">Designer</span><span class="Command"> enables the </span><span class="Command_002c_uicontrol">Overwrite existing elements when importing referenced elements</span><span class="Command"> check box. </span></div><div id="wwID0E1Q1RB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">If you want to replace existing elements in the </span><span class="Command_002c_Command">Integration Server</span><span class="Command"> with identically named elements referenced by the provider definition (</span><span class="Command_002c_Command">Broker</span><span class="Command"> document type), select the </span><span class="Command_002c_uicontrol">Overwrite existing elements when importing referenced elements</span><span class="Command"> check box. See </span>
+    <a href="../integration-server-integrated-webhelp/esb.docTypes.sync.overwrite.html#wwID0E122RB"
+   
+     title="Importing and Overwriting References During Synchronization"
+    ><span class="Command_002c_heading-page">Importing and Overwriting References During
+						Synchronization</span></a><span class="Command"> for more information about this topic. </span></div><div id="wwID0EPS1RB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Synchronize</span><span class="Command"> to synchronize the document type and provider definition. </span></div><div id="wwID0EYT1RB" class="title">Related Topics</div><div id="wwID0E3T1RB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.docTypes.sync.cluster.html#wwID0EOX2RB"
+   
+     title="Synchronizing Document Types in a Cluster"
+    ><span class="Link_Text">Synchronizing Document Types in a Cluster</span></a></div><div id="wwID0EIU1RB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.docTypes.sync.gateway.html#wwID0EVZ2RB"
+   
+     title="Synchronizing Document Types Across a Gateway"
+    ><span class="Link_Text">Synchronizing Document Types Across a Gateway</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

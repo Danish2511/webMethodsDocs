@@ -1,0 +1,103 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>About Automatic Service Retry</title><link rel="Prev" href="esb.svc.allowedHTTPMethods.html" title="Previous" /><link rel="Next" href="esb.svc.retry.maxRetryPeriod.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.svc.retry.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN6XUSXXFr5H7JBM9U1MQRkA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.svc.retry.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.svc.html#wwconnect_header">Building Services</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">About Automatic Service Retry</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EI3NMB" class="Heading_2">About Automatic Service Retry</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.svc.retry.maxRetryPeriod.html#wwconnect_header">About the Maximum Retry Period</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.svc.retry.task.html#wwconnect_header">Configuring Service Retry</a></div></dd></dl></div><div id="wwID0EA4NMB" class="Body">You can set <span class="ph">Integration Server</span> so that it retries a service if the service fails because of a transient error. A <span class="term">transient error</span> is an error that arises from a temporary condition that might be resolved or restored quickly, such as the unavailability of a resource due to network issues or failure to connect to a database. The service might execute successfully if <span class="ph">Integration Server</span> waits a short interval of time and then retries the service.</div><div id="wwID0ES4NMB" class="Body">To set up automatic service retry:</div><div id="wwID0E44NMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Configure each service you want <span class="ph">Integration Server</span> to automatically retry by specifying:</div><div id="wwID0E15NMB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Retry interval, which defines how long <span class="ph">Integration Server</span> waits before trying to re-execute the service.</div><div id="wwID0ER6NMB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Maximum retry attempts, which is the number of times you want <span class="ph">Integration Server</span> to try to re-execute the service.</div><div id="wwID0EJAOMB" class="List_1_Continued">For more information, see 
+    <a href="../integration-server-integrated-webhelp/esb.svc.retry.task.html#wwID0ERKOMB"
+   
+     title="Configuring Service Retry"
+    ><span class="heading-page">Configuring Service Retry</span></a>.</div><div id="wwID0EZAOMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Configure the watt.server.invoke.maxRetryPeriod server configuration parameter to set the maximum retry period. The maximum retry period is the total amount of time that can elapse for <span class="ph">Integration Server</span> to make all possible retry attempts. For more information, see 
+    <a href="../integration-server-integrated-webhelp/esb.svc.retry.maxRetryPeriod.html#wwID0ENHOMB"
+   
+     title="About the Maximum Retry Period"
+    ><span class="heading-page">About the Maximum Retry Period</span></a>.</div><div id="wwID0EZBOMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Build your service so that it throws an ISRuntimeException when a transient error occurs. For more information, see 
+    <a href="../integration-server-integrated-webhelp/esb.retry.html#wwID0EHYCWB"
+   
+     title="Building Services that Retry"
+    ><span class="heading-page">Building Services that Retry</span></a>.</div><div id="wwID0EWCOMB" class="Body">At run time, when a service that is coded for retry determines that a transient error occurred, it throws an ISRuntimeException to signal <span class="ph">Integration Server</span> to retry the service. When a service throws an ISRuntimeException, <span class="ph">Integration Server</span> waits the length of the retry interval and then re-executes the service using the original input pipeline passed to the service. <span class="ph">Integration Server</span> continues to retry the service until the service executes successfully or <span class="ph">Integration Server</span> makes the maximum number of retry attempts. If the service throws an ISRuntimeException during the final retry attempt, <span class="ph">Integration Server</span> treats the last failure as a service error. The service ends with a service exception.</div><div id="wwID0EQDOMB" class="Body"><span class="ph">Integration Server</span> generates the following journal log message between retry attempts:</div><div id="wwID0E1DOMB" class="Preformatted">[ISS.0014.0031V3]&nbsp;Service&nbsp;<span class="varname">serviceName</span>&nbsp;failed&nbsp;with&nbsp;ISRuntimeException. <br />Retry&nbsp;<span class="varname">x</span>&nbsp;of&nbsp;<span class="varname">y</span>&nbsp;will&nbsp;begin&nbsp;in&nbsp;<span class="varname">retryInterval</span>&nbsp;milliseconds.</div><div id="wwID0EVEOMB" class="Note"><span class="Bold">Note:<br /></span>If service auditing is also configured for the service, <span class="ph">Integration Server</span> adds an entry to the service log for each failed retry attempt. Each of these entries will have a status of “Retried” and an error message of “Null”. However, if <span class="ph">Integration Server</span> makes the maximum retry attempts and the service still fails, the final service log entry for the service will have a status of “Failed” and will display the actual error message.</div><div id="wwID0E3FOMB" class="title">Related Topics</div><div id="wwID0EAGOMB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.svc.retry.maxRetryPeriod.html#wwID0ENHOMB"
+   
+     title="About the Maximum Retry Period"
+    ><span class="Link_Text">About the Maximum Retry Period</span></a></div><div id="wwID0EMGOMB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.svc.retry.task.html#wwID0ERKOMB"
+   
+     title="Configuring Service Retry"
+    ><span class="Link_Text">Configuring Service Retry</span></a></div><div id="wwID0EYGOMB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.retry.html#wwID0EHYCWB"
+   
+     title="Building Services that Retry"
+    ><span class="Link_Text">Building Services that Retry</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

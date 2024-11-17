@@ -1,0 +1,94 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Decreasing Execution Threads for Concurrent webMethods Messaging Triggers</title><link rel="Prev" href="to-optimize_pub_sub_16.html" title="Previous" /><link rel="Next" href="to-optimize_pub_sub_18.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/to-optimize_pub_sub_17.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="puec1VdnebAM4sBL4pHt9zg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/to-optimize_pub_sub_17.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_admin_guide.html#wwconnect_header">Integration Server Administrator's Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-optimize_pub_sub.html#wwconnect_header">Managing webMethods Messaging Triggers</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-optimize_pub_sub_13.html#wwconnect_header">Managing Document Processing</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-optimize_pub_sub_16.html#wwconnect_header">Decreasing Document Processing for Concurrent Triggers</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Decreasing Execution Threads for Concurrent webMethods Messaging Triggers</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EPPXX" class="Heading_4">Decreasing Execution Threads for Concurrent <span class="ph">webMethods Messaging Trigger</span>s</div><div id="wwID0EEQXX" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To decrease execution threads for concurrent <span class="ph">webMethods messaging trigger</span>s</div><div id="wwID0EVQXX" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Open the </span><span class="Command_002c_Command">Integration Server Administrator</span><span class="Command">. </span></div><div id="wwID0EURXX" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Go to </span><span class="Command_002c_uicontrol">Messaging &gt;</span><span class="Command"> </span><span class="Command_002c_uicontrol">webMethods triggers</span><span class="Command">. </span></div><div id="wwID0EZSXX" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Edit Global</span><span class="Command"> </span><span class="Command_002c_uicontrol">webMethods Messaging Trigger</span><span class="Command"> </span><span class="Command_002c_uicontrol">Controls</span><span class="Command">. </span></div><div id="wwID0EEUXX" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Under </span><span class="Command_002c_uicontrol">Document Processing</span><span class="Command">, in the </span><span class="Command_002c_uicontrol">Execution Threads Throttle</span><span class="Command"> field, select the percentage of the configured maximum execution threads value at which you want to the server to function. </span><span class="Command_002c_Command">Integration Server</span><span class="Command"> applies this percentage to the maximum execution threads value for all concurrent </span><span class="Command_002c_Command">webMethods messaging trigger</span><span class="Command">s. </span></div><div id="wwID0EVVXX" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">If you want to apply the </span><span class="Command_002c_uicontrol">Execution Threads Throttle</span><span class="Command"> change to all the servers in a cluster, select the </span><span class="Command_002c_uicontrol">Apply Change Across Cluster</span><span class="Command"> check box. </span></div><div id="wwID0E6WXX" class="Body_1">This check box appears only if the current <span class="ph">Integration Server</span> belongs to a properly configured cluster and is configured to synchronize trigger changes across the cluster. For more information about configuring an <span class="ph">Integration Server</span> to synchronize trigger management changes across a cluster, see 
+    <a href="../integration-server-integrated-webhelp/to-optimize_pub_sub_25.html#wwID0E4M1X"
+   
+     title="Cluster Synchronization for webMethods Messaging Trigger Management"
+    ><span class="heading-page">Cluster Synchronization for 
+						webMethods Messaging Trigger Management</span></a>.</div><div id="wwID0EYXXX" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Save Changes</span><span class="Command">. </span></div><div id="wwID0E6YXX" class="Example_Title">Notes:</div><div id="wwID0EZZXX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The <span class="uicontrol">Execution Threads Throttle</span> value is maintained across server restarts and package reloads.</div><div id="wwID0EQ1XX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Serial triggers always process one document at a time. The <span class="uicontrol">Execution Threads Throttle</span> property does not affect serial triggers.</div><div id="wwID0EH2XX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the percentage by which you reduce trigger execution threads does not resolve to a whole number, <span class="ph">Integration Server</span> rounds up or rounds down to the nearest whole number. However, if rounding down would set the value to 0, <span class="ph">Integration Server</span> rounds up to 1. For example, if you reduce <span class="uicontrol">Execution Threads Throttle</span> to 10% of maximum, a concurrent trigger with a maximum execution threads value of 12 would have an adjusted value of 1 (<span class="ph">Integration Server</span> rounds 1.2 down to 1). A concurrent trigger with a maximum execution threads value of 4 would have an adjusted value of 1 (<span class="ph">Integration Server</span> rounds 0.4 up to 1).</div><div id="wwID0EO3XX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When you reduce the <span class="uicontrol">Execution Threads Throttle</span> and save your changes, <span class="ph">Integration Server</span> does not terminate threads currently executing concurrent triggers to meet the adjusted maximum. <span class="ph">Integration Server</span> allows server threads processing documents for concurrent triggers to execute to completion. <span class="ph">Integration Server</span> waits until the number of threads executing for a concurrent trigger is less than the adjusted maximum before dispatching another server thread to process a document for that trigger.</div><div id="wwID0ER4XX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you suspend document processing (trigger execution) and do not suspend document retrieval, <span class="ph">Integration Server</span> will fill all the trigger queues to capacity. Full trigger queues consume more memory than empty trigger queues.</div><div id="wwID0EI5XX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can also reduce the number of concurrent execution threads for a trigger by reducing the capacity of a trigger queue below the maximum number of concurrent execution threads for the trigger. The maximum number of dispatched threads for a trigger cannot exceed the trigger queue's capacity. For more information about reducing trigger queue capacity, see 
+    <a href="../integration-server-integrated-webhelp/to-optimize_pub_sub_6.html#wwID0E4GUX"
+   
+     title="Decreasing the Capacity of Trigger Queues"
+    ><span class="heading-page">Decreasing the Capacity of Trigger
+								Queues</span></a>.</div><div id="wwID0EE6XX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you use the <span class="uicontrol">Execution Threads Throttle</span> as part of your capacity planning process and you determine that the configured values for <span class="uicontrol">Maximum execution threads</span> need to change, you can use the <span class="ph">Integration Server Administrator</span> or <span class="ph">Software AG Designer</span> to set the new maximum execution threads values for each concurrent trigger. For more information about setting trigger properties, see 
+    <a href="../integration-server-integrated-webhelp/to-optimize_pub_sub_29.html#wwID0EBF2X"
+   
+     title="Modifying webMethods Messaging Trigger Properties"
+    ><span class="heading-page">Modifying 
+						webMethods Messaging Trigger Properties</span></a>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

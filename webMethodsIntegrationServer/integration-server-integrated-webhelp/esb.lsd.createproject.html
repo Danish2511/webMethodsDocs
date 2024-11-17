@@ -1,0 +1,123 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Creating a Local Service Development Project</title><link rel="Prev" href="to-local_service_development.html" title="Previous" /><link rel="Next" href="esb.lsd.addelement.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.lsd.createproject.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="phg7gBBENboHycVCt2EqP_002fA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.lsd.createproject.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.lsd.html#wwconnect_header">Using the Local Service Development Feature</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Creating a Local Service Development Project</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EDZ2LB" class="Heading_2">Creating a Local Service Development Project</div><div id="wwID0EC12LB" class="Body">To use the local service development feature in <span class="ph">Designer</span>, you must first define a project in the workspace that represents a package in <span class="ph">Integration Server</span>. By creating the local service development project and adding it to the VCS, you can share your files using your VCS client. When you create a project for a package, the package along with its contents are added to the VCS.</div><div id="wwID0EQ12LB" class="Body">Keep the following points in mind when creating a local service development project:</div><div id="wwID0E212LB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The package for which you want to create a local development project must exist and be located in the <span class="ph"> </span><span class="ph_002c_emphasis">Integration&nbsp;Server_directory</span><span class="ph"> </span>\instances\default\packages directory folder of the local development <span class="ph">Integration Server</span>.</div><div id="wwID0E422LB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The package for which you want to create a local development project must not be present in the VCS.</div><div id="wwID0EQ32LB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>A project with the same name as the package must not be present in your Eclipse workspace.</div><div id="wwID0EF42LB" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To create a local service development project</div><div id="wwID0ER42LB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">In Package Navigator view, right-click the package for which you want to create a local service development project and select </span><span class="Command_002c_uicontrol">Create Local Service Development Project</span><span class="Command">. </span></div><div id="wwID0EV52LB" class="Body_1"><span class="ph">Designer</span> creates the local service development project and displays the Share Project wizard.</div><div id="wwID0EB62LB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">From the list of VCS client plug-ins, select the VCS client that you want to use to share the new project. Click </span><span class="Command_002c_uicontrol">Next</span><span class="Command">. </span></div><div id="wwID0EAA3LB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">The screens that appear next are specific to the VCS client that you selected. Enter the relevant information and credentials of your VCS client. </span></div><div id="wwID0EYA3LB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">In the confirmation screen, ensure that the displayed information is correct and click </span><span class="Command_002c_uicontrol">Finish</span><span class="Command">. </span></div><div id="wwID0E3B3LB" class="Body_1"><span class="ph">Designer</span> creates a project in your workspace with the same name as the package.</div><div class="ww_skin_page_overflow"><div id="wwID0EGC3LB" class="Body_1">In Package Navigator view, the icon representing the package that you have shared to the VCS changes to <img class="Default" src="../integration-server-integrated-webhelp/images/package_local_dev.gif" width="100%" style="display: inline; float: none; left: 0pt; max-height: 13px; max-width: 13px; top: 0pt" alt="" /> showing that the package is shared. The package and the elements contained in the package will now be available in the VCS. <span class="ph">Designer</span> displays icon overlays that are specific to your VCS for the files in the shared package in Package Navigator view. These icon overlays indicate the VCS status of the files in your workspace.</div></div><div id="wwID0E5C3LB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">If you are using Team Foundation Server as your VCS client, you must do the following after the project is created: </span></div><div id="wwID0E2D3LB" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>a. </span></span><span class="Command">Add the content of the project to the Team Foundation Server repository. To do this, right-click the project in Package Explorer view and select </span><span class="Command_002c_uicontrol">Team &gt; Check In Pending Changes</span><span class="Command">. </span></div><div id="wwID0E1E3LB" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>b. </span></span><span class="Command">Set the Team Foundation Server working folder to any system location. To set the </span><span class="Command_002c_Command"> </span><span class="Command_002c_Command_002c_emphasis">Integration&nbsp;Server_directory</span><span class="Command_002c_Command"> </span><span class="Command">\instances\default\packages directory as the working directory, clear the </span><span class="Command_002c_uicontrol">Move project to Integration Server package as linked resource</span><span class="Command"> check box in </span><span class="Command_002c_uicontrol">Window &gt; Preferences &gt; Software AG &gt; Service Development &gt; Local Service Development</span><span class="Command">. To do this, from the Team Explorer view, open the Source Control editor. Right-click the local service development project in the Source Control editor, and select </span><span class="Command_002c_uicontrol">Set Working Folder</span><span class="Command"> </span></div><div id="wwID0E5G3LB" class="title">Related Topics</div><div id="wwID0ECH3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.addelement.html#wwID0EPL3LB"
+   
+     title="Adding Folders and Elements to the VCS"
+    ><span class="Link_Text">Adding Folders and Elements to the VCS</span></a></div><div id="wwID0EOH3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.modifyelement.html#wwID0EVU3LB"
+   
+     title="Modifying Packages, Folders, or Elements in the VCS"
+    ><span class="Link_Text">Modifying Packages, Folders, or Elements in the VCS</span></a></div><div id="wwID0E1H3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.checkoutelement.html#wwID0EWC4LB"
+   
+     title="Checking Out an Element from the VCS"
+    ><span class="Link_Text">Checking Out an Element from the VCS</span></a></div><div id="wwID0EGI3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.checkinelement.html#wwID0EZR4LB"
+   
+     title="Checking In Packages and Element to the VCS"
+    ><span class="Link_Text">Checking In Packages and Element to the VCS</span></a></div><div id="wwID0ESI3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.getlatestversion.html#wwID0EI44LB"
+   
+     title="Getting the Latest Version from the VCS"
+    ><span class="Link_Text">Getting the Latest Version from the VCS</span></a></div><div id="wwID0E5I3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.getspecificversion.html#wwID0EGF5LB"
+   
+     title="Getting a Specific Version from the VCS"
+    ><span class="Link_Text">Getting a Specific Version from the VCS</span></a></div><div id="wwID0EKJ3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.copypackagesvcstois.html#wwID0EHK5LB"
+   
+     title="Copying Packages from the VCS to Integration Server"
+    ><span class="Link_Text">Copying Packages from the VCS to Integration Server</span></a></div><div id="wwID0EWJ3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.reloadpackage.html#wwID0EN15LB"
+   
+     title="Reloading a Package"
+    ><span class="Link_Text">Reloading a Package</span></a></div><div id="wwID0ECK3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.buildjavaandcservice.html#wwID0ECM6LB"
+   
+     title="Building Java and C Services"
+    ><span class="Link_Text">Building Java and C Services</span></a></div><div id="wwID0EOK3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.deletepackage.html#wwID0E2T6LB"
+   
+     title="Deleting a Package Associated with a Local Service Development Project"
+    ><span class="Link_Text">Deleting a Package Associated with a Local Service Development Project</span></a></div><div id="wwID0E1K3LB" class="heading">
+    <a href="../integration-server-integrated-webhelp/esb.lsd.deleteproject.html#wwID0EQZ6LB"
+   
+     title="Deleting a Local Service Development Project"
+    ><span class="Link_Text">Deleting a Local Service Development Project</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

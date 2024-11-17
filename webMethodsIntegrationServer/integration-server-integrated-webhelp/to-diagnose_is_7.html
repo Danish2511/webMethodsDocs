@@ -1,0 +1,88 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Diagnostic Utility Performance</title><link rel="Prev" href="to-diagnose_is_6.html" title="Previous" /><link rel="Next" href="to-diagnose_is_8.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/to-diagnose_is_7.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pM6n6qyTUgvvgc71dUHS6bA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/to-diagnose_is_7.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_admin_guide.html#wwconnect_header">Integration Server Administrator's Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-diagnose_is.html#wwconnect_header">Diagnosing the Integration Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-diagnose_is_6.html#wwconnect_header">Using the Diagnostic Utility</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Diagnostic Utility Performance</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EKTUY" class="Heading_3">Diagnostic Utility Performance</div><div id="wwID0ETTUY" class="Body">The diagnostic utility can execute slowly when logging large amounts of data from the <span class="ph">Integration Server</span> and, possibly, layered products. To increase performance, you can set limits to the amount of data the diagnostic tool returns by specifying a <span class="varname">maxLogSize</span> value or setting the <span class="codeph">watt.server.diagnostic.logperiod</span> parameter.</div><div id="wwID0EGUUY" class="Body">The <span class="varname">maxLogSize</span> parameter of the <span class="apiname">wm.server.admin:getDiagnosticData</span> service sets the size limit for log files written to the diagnostic_data.zip file. If a log file exceeds the specified <span class="varname">maxLogSize</span>, the diagnostic utility omits it from the .zip file but records it in a diagnosticwarning.txt file. This file lists all of the log files that exceed the <span class="varname">maxLogSize</span> value. It is located in the logs directory of the .zip file.</div><div id="wwID0EAVUY" class="Note"><span class="Bold">Note:<br /></span>You can use the <span class="varname">maxLogSize</span> input parameter only when running the diagnostic utility from a browser. You cannot limit the log size when you run the diagnostic utility from <span class="ph">Integration Server Administrator</span>. For more information, see 
+    <a href="../integration-server-integrated-webhelp/to-diagnose_is_9.html#wwID0ENIVY"
+   
+     title="Running the Diagnostic Utility Service"
+    ><span class="heading-page">Running the Diagnostic Utility
+								Service</span></a>.</div><div id="wwID0EIWUY" class="Body">Use the <span class="codeph">watt.server.diagnostic.logperiod </span>parameter to specify the log period. By default, it is set to 6 hours. When this property is set to 0, the utility does not return any log files. It returns only the configuration and run-time data files. The logging information the utility returns depends on how you store the logs. If you save the logs to a database, the diagnostic utility will return the exact number of log entries that match the specified number of hours. If you save the logs to the file system, it will return not only the period within the specified number of hours but the entire log for that day. For instructions about how to set server configuration parameters, see 
+    <a href="../integration-server-integrated-webhelp/to-configure_the_server_33.html#wwID0E4WNQ"
+   
+     title="Working with Extended Configuration Settings"
+    ><span class="heading-page">Working with Extended Configuration Settings</span></a>.</div><div id="wwID0E2WUY" class="Body">The logging information the diagnostic utility returns also depends on whether logs from layered products are included in the .zip file. A layered product is any product that runs on top of <span class="ph">Integration Server</span> such as <span class="ph">ActiveTransfer</span> or <span class="ph">Trading Networks Server</span>. Layered products can include product-specific log files in the diagnostic utility by registering their product logs with the utility.</div><div id="wwID0ENXUY" class="Body">Use the <span class="codeph">watt.server.diagnostic.logFiles.maxMB</span> parameter to specify the size limit for including audit log files in the diagnostic archive. While collecting each audit log file, <span class="ph">Integration Server</span> calculates the total size of the log files for the requested log period. If the total size of the log files for a particular audit log exceeds the value of <span class="codeph">watt.server.diagnostic.logFiles.maxMB</span> for the log period, <span class="ph">Integration Server</span> does not include that audit log file in the diagnostic archive. The size limit applies to all log files included in the diagnostic archive, including log files produced by layered products.</div><div id="wwID0EDYUY" class="Body">Consider the examples below.</div><div id="wwID0EIYUY" class="Body">Example 1</div><div id="wwID0ETYUY" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">watt.server.diagnostic.logFiles.maxMB</span> is 250 and <span class="codeph">watt.server.diagnostic.logperiod</span> is 6.</div><div id="wwID0EOZUY" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>There are two WMSESSION log files that cover the previous six hours.</div><div id="wwID0EB1UY" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The total size of the two WMSESSION log files is greater than 250 MB.</div><div id="wwID0EV1UY" class="Body">RESULT: No session audit log data will be included in the diagnostic data archive.</div><div id="wwID0E11UY" class="Body">Example 2</div><div id="wwID0EF2UY" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">watt.server.diagnostic.logFiles.maxMB</span> is 300 and <span class="codeph">watt.server.diagnostic.logperiod</span> is 8</div><div id="wwID0EA3UY" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>There is one WMSERVICE log file that covers the previous eight hours.</div><div id="wwID0ET3UY" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The size of the WMSERVICE log file is less than 300 MB.</div><div id="wwID0EH4UY" class="Body">RESULT: Service audit log data will be included in the diagnostic data archive.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

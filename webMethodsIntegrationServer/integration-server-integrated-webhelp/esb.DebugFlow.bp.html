@@ -1,0 +1,95 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Using Breakpoints When Debugging Flow Services</title><link rel="Prev" href="esb.DebugFlow.foreach.map.html" title="Previous" /><link rel="Next" href="esb.DebugFlow.bp.state.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.DebugFlow.bp.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="purHlvpKuHMAnwXsrYA6vNg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.DebugFlow.bp.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.DebugFlow.html#wwconnect_header">Debugging Flow Services</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Using Breakpoints When Debugging Flow Services</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EQTOPB" class="Heading_2">Using Breakpoints When Debugging Flow Services</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.state.html#wwconnect_header">Breakpoint States</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.set.flow.html#wwconnect_header">Setting and Removing Breakpoints on Flow Step</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.set.trans.html#wwconnect_header">Setting and Removing Breakpoints on a Transformer</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.enable.html#wwconnect_header">Enabling and Disabling Breakpoints in a Flow Service</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.skip.html#wwconnect_header">Skipping Breakpoints in a Flow Service</a></div></dd></dl></div><div id="wwID0EIUOPB" class="Body">Within <span class="ph">Designer</span>, a breakpoint is a point in a flow service where you want processing to halt when you debug that flow service. Breakpoints can help you isolate a section of code or examine data values at a particular point in the execution path. For example, you might want to set a pair of breakpoints before and after a particular segment of a flow so that you can examine the pipeline in the Variables view before and after that segment executes.</div><div id="wwID0ESUOPB" class="Body">When you execute a service that contains a breakpoint or call a child service that contains a breakpoint, the service is executed up to, but not including, the designated breakpoint step. At this point, processing stops and the debug session suspends. To resume processing, you can execute one of the step commands or select <span class="uicontrol">Run &gt; Resume</span>. After you resume the debug session, <span class="ph">Designer</span> stops at any subsequent breakpoints.</div><div id="wwID0EAVOPB" class="Body">When working with breakpoints, keep the following points in mind:</div><div id="wwID0ELVOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Breakpoints are persistent in <span class="ph">Designer</span>.</div><div id="wwID0ECWOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Breakpoints are also local to <span class="emphasis">your</span> <span class="ph">Designer</span> workspace. Breakpoints that you set in your workspace do not affect other developers or users who might be executing or debugging services in which you have set breakpoints.</div><div id="wwID0E5WOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Breakpoints are only recognized when you execute a service in debug session. Breakpoints are ignored when you run a service.</div><div id="wwID0ERXOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>To set a breakpoint in a service, you must have Read access to a service. However, if the service is invoked within another service (a top-level service) to which you have Read access, you can set a breakpoint on the service within the top-level service.</div><div id="wwID0EEYOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When you delete a flow step or transformer that contains a breakpoint, <span class="ph">Designer</span> removes the breakpoint.</div><div id="wwID0E2YOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can use breakpoints as markers in your flow services. To do this, assign a breakpoint to the flow step that you want to use as a marker. In Breakpoints view, you can quickly go to the flow step by right-clicking the breakpoint and selecting <span class="uicontrol">Go to File</span> or by double-clicking the breakpoint.</div><div id="wwID0ESZOPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Breakpoints can be used in flow services that contain transactions, however, the breakpoint must be set before the transaction starts or after the transaction commits or rolls back. Do not set breakpoints within the transaction. If you do so, transactionality will not be honored and the flow service may throw an exception.</div><div id="wwID0EF1OPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When using breakpoints in a flow service that performs an asynchronous request/reply with <span class="ph">webMethods</span> messaging where <span class="ph">Universal Messaging</span> is the messaging provider, insert the breakpoint at or before the service that initiates the request and/or after the service that retrieves the request. That is, insert the breakpoint at or before the invocation of <span class="apiname">pub.publish:publishAndWait</span> or <span class="apiname">pub.publish:deliverAndWait</span> and/or after the invocation of <span class="apiname">pub.publish:waitForReply</span>. Do not set a breakpoint on a step that occurs after the initiating the request but before retrieving the reply. When you run a flow service in debug mode, <span class="ph">Designer</span> considers every <span class="uicontrol">Run</span>, <span class="uicontrol">Step Into</span>, <span class="uicontrol">Step Over</span> action to be a new service execution. The request/reply channel created by the publishing service is removed when <span class="ph">Designer</span> encounters the breakpoint. Setting a breakpoint after the publish but before retrieving the reply results in the removal of the request reply/channel which means that there is no channel from which the <span class="apiname">pub.publish:waitForReply</span> service can retrieve a reply document.</div><div id="wwID0EI3OPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can use Breakpoints view to manage your existing breakpoints.</div><div id="wwID0E23OPB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can import/export breakpoints from one workspace to share them with other developers.</div><div id="wwID0EY4OPB" class="title">Related Topics</div><div id="wwID0E34OPB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.state.html#wwID0EV6OPB"
+   
+     title="Breakpoint States"
+    ><span class="Link_Text">Breakpoint States</span></a></div><div id="wwID0EI5OPB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.set.flow.html#wwID0EAIPPB"
+   
+     title="Setting and Removing Breakpoints on Flow Step"
+    ><span class="Link_Text">Setting and Removing Breakpoints on Flow Step</span></a></div><div id="wwID0EU5OPB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.enable.html#wwID0EDWPPB"
+   
+     title="Enabling and Disabling Breakpoints in a Flow Service"
+    ><span class="Link_Text">Enabling and Disabling Breakpoints in a Flow Service</span></a></div><div id="wwID0EA6OPB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.DebugFlow.bp.skip.html#wwID0EA3PPB"
+   
+     title="Skipping Breakpoints in a Flow Service"
+    ><span class="Link_Text">Skipping Breakpoints in a Flow Service</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

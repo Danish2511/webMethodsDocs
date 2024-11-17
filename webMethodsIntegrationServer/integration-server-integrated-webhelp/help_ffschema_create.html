@@ -1,0 +1,127 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Creating Flat File Schemas</title><link rel="Prev" href="esb.ffoverview.dictionary.create.html" title="Previous" /><link rel="Next" href="help_ffschema_create_2.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/help_ffschema_create.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pvICbk93WLdufS46wL66DNw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/help_ffschema_create.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.flat.file.html#wwconnect_header">Working with Flat Files</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Creating Flat File Schemas</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E6AGVB" class="Heading_2">Creating Flat File Schemas</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/help_ffschema_create_2.html#wwconnect_header">Creating the Flat File Schema</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.parser.html#wwconnect_header">Specifying a Record Parser</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.identifier.html#wwconnect_header">Specifying a Record Identifier</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.structure.html#wwconnect_header">Defining the Schema Structure</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.defaultRecord.html#wwconnect_header">Setting a Default Record</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.undefinedData.html#wwconnect_header">Allowing Undefined Data</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.area.html#wwconnect_header">Creating an Area</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.floatingRecord.html#wwconnect_header">Specifying a Floating Record</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.edit.html#wwconnect_header">Editing a Flat File Schema</a></div></dd></dl></div><div id="wwID0EACGVB" class="Body">You can use <span class="ph">Designer</span> to create a flat file schema that <span class="ph">Integration Server</span> can use as a blue print for parsing and creating flat files.</div><div id="wwID0EOCGVB" class="Body">Building a flat file schema is a process that involves the following basic stages:</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 12.5%"><div id="wwID0EYDGVB" class="internalhead">Stage 1</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 87.5%"><div id="wwID0E5DGVB" class="Table_Cell"><span class="inlinetitle">Create the flat file schema.</span> During this stage, you create the new flat file schema on the <span class="ph">Integration Server</span> where you will do your development and testing. For more information, see 
+    <a href="../integration-server-integrated-webhelp/help_ffschema_create.html#wwID0E6AGVB"
+   
+     title="Creating Flat File Schemas"
+    ><span class="heading-page">Creating Flat File Schemas</span></a>. You can create the flat file schema either manually or using a sample file. If you choose to use a sample file, you can skip <span class="parmname">Stage 2</span> and <span class="parmname">Stage 3</span> and go to <span class="parmname">Stage 4</span>. For more information on creating a flat file schema using a sample file, see 
+    <a href="../integration-server-integrated-webhelp/help_ffschema_create_3.html#wwID0E3TGVB"
+   
+     title="Creating a Flat File Schema From a Sample File"
+    ><span class="heading-page">Creating a Flat File Schema From a Sample File</span></a>.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYFGVB" class="internalhead">Stage 2</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5FGVB" class="Table_Cell"><span class="inlinetitle">Define the record parser and specify a record identifier for the flat file schema.</span> During this stage, you associate a record parser with the flat file schema that will process flat files inbound to the <span class="ph">Integration Server</span>. You also specify how you want the record to be identified after it is parsed. For more information about defining the record parser, see 
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.parser.html#wwID0EF3JVB"
+   
+     title="Specifying a Record Parser"
+    ><span class="heading-page">Specifying a Record Parser</span></a>. For more information about specifying a record identifier, see 
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.identifier.html#wwID0ELCNVB"
+   
+     title="Specifying a Record Identifier"
+    ><span class="heading-page">Specifying a Record Identifier</span></a>.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFHGVB" class="internalhead">Stage 3</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELHGVB" class="Table_Cell"><span class="inlinetitle">Define the structure.</span> During this stage, you specify the hierarchical structure of the flat file by creating and nesting record definitions or record references. For more instructions, see 
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.structure.html#wwID0ETMNVB"
+   
+     title="Defining the Schema Structure"
+    ><span class="heading-page">Defining the Schema Structure</span></a>.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFIGVB" class="internalhead">Stage 4</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELIGVB" class="Table_Cell"><span class="inlinetitle">Set properties for the flat file schema.</span> During this stage, you set up the ACL (access control lists) permissions, configure a default record, add areas, and allow undefined data for your flat file schema or dictionary.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E3IGVB" class="internalhead">Stage 5</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ECJGVB" class="Table_Cell"><span class="inlinetitle">Test the flat file schema.</span> During this stage, you can use the tools provided by <span class="ph">Designer</span> to test the flat file schema. For more information, see 
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.testing.runningLaunchConfig.html#wwID0E6YPVB"
+   
+     title="Testing a Flat File Schema"
+    ><span class="heading-page">Testing a Flat File Schema</span></a>.</div></td></tr></table></div><div id="wwID0EGKGVB" class="Note"><span class="Bold">Note:<br /></span>When validation is enabled, <span class="ph">Integration Server</span> can generate errors for the <span class="uicontrol">Ordered</span>, <span class="uicontrol">Mandatory</span>, <span class="uicontrol">Validator</span>, and <span class="uicontrol">Undefined Data</span> properties. To enable validation, you must set the validate variable of the <span class="apiname">convertToValues</span> service to <span class="codeph">True</span>. For more information about this service, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Built-In Services Reference</span>.</div><div id="wwID0ERNGVB" class="title">Related Topics</div><div id="wwID0EVNGVB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/help_ffschema_create_2.html#wwID0EHQGVB"
+   
+     title="Creating the Flat File Schema"
+    ><span class="Link_Text">Creating the Flat File Schema</span></a></div><div id="wwID0EDOGVB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.identifier.html#wwID0ELCNVB"
+   
+     title="Specifying a Record Identifier"
+    ><span class="Link_Text">Specifying a Record Identifier</span></a></div><div id="wwID0EPOGVB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.structure.html#wwID0ETMNVB"
+   
+     title="Defining the Schema Structure"
+    ><span class="Link_Text">Defining the Schema Structure</span></a></div><div id="wwID0E2OGVB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.defaultRecord.html#wwID0EZWNVB"
+   
+     title="Setting a Default Record"
+    ><span class="Link_Text">Setting a Default Record</span></a></div><div id="wwID0EHPGVB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.undefinedData.html#wwID0ECBOVB"
+   
+     title="Allowing Undefined Data"
+    ><span class="Link_Text">Allowing Undefined Data</span></a></div><div id="wwID0ETPGVB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.ffschema.create.schema.floatingRecord.html#wwID0EGTOVB"
+   
+     title="Specifying a Floating Record"
+    ><span class="Link_Text">Specifying a Floating Record</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

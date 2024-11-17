@@ -1,0 +1,87 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>pub.publish.notification:error</title><link rel="Prev" href="pub_publish_waitForReply.html" title="Previous" /><link rel="Next" href="Remote%20folder.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/pub_publish_notification_error.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pwiCZ3NYU8hF0voivet_002fZrQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/pub_publish_notification_error.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/Publish%20folder.html#wwconnect_header">Publish Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/Publish%20folder2.html#wwconnect_header">Summary of Elements in this Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">pub.publish.notification:error</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EX23EB" class="Heading_3">pub.publish.notification:error</div><div id="wwID0EW33EB" class="Body">WmPublic. Publishable document type that defines the document that <span class="ph">Integration Server</span> generates and delivers when a trigger encounters an error or exception condition during processing.</div><div id="wwID0EC43EB" class="Note"><span class="Bold">Note:</span><span class="ph">Integration Server</span> does not generate and return and error message when the trigger received a document from <span class="ph">Universal Messaging</span>.</div><div id="wwID0E643EB" class="Body"><span class="ph">Integration Server</span> generates an error document if the trigger service cannot successfully process a document for one of the following reasons:</div><div id="wwID0EP53EB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The trigger service encounters an exception condition (that is not an ISRuntimeException) during execution.</div><div id="wwID0EC63EB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="ph">Integration Server</span> makes the maximum number of attempts to re-execute the trigger service and the service still fails because of a transient error condition.</div><div id="wwID0EMA4EB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Some other system exception occurred.</div><div id="wwID0E5A4EB" class="Note_1"><span class="Bold">Note:</span><span class="ph">Integration Server</span> does not generate an error document if the subscribing trigger is part of a disabled process model version because the trigger service associated with a disabled process model version never executes.</div><div id="wwID0EZB4EB" class="Body"><span class="ph">Integration Server</span> delivers the error document to the client ID specified in the <span class="varname">errorsTo</span> field contained in the received document's envelope. If the <span class="varname">errorsTo</span> field is empty, the <span class="ph">Integration Server</span> delivers the error document to the original document's publisher (as specified in the <span class="varname">pubId</span> envelope field). The error document notifies the publisher or other designated recipient that the subscriber cannot process the document successfully.</div><div id="wwID0EWC4EB" class="Note"><span class="Bold">Note:<br /></span>If a trigger service cannot process a locally published document successfully, <span class="ph">Integration Server</span> produces and delivers an error document only if the <span class="ph">Integration Server</span> is connected to a <span class="ph">webMethods Broker</span>.</div><div id="wwID0EAE4EB" class="Section_Title">Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 25%"><div id="wwID0EKF4EB" class="Table_Cell"><span class="varname">adapterType</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 75%"><div id="wwID0EWF4EB" class="Table_Cell"><span class="bisdatatype">String</span> Optional. The resource producing the error. <span class="ph">Integration Server</span> sets the value of this field to <span class="codeph"> </span><span class="codeph_002c_ph">Integration Server</span><span class="codeph"> </span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EWG4EB" class="Table_Cell"><span class="varname">errorCategory</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ECH4EB" class="Table_Cell"><span class="bisdatatype">String</span> Optional. Type of exception. <span class="ph">Integration Server</span> sets the value of this field to <span class="codeph">Application</span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2H4EB" class="Table_Cell"><span class="varname">errorText</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHI4EB" class="Table_Cell"><span class="bisdatatype">String</span> Optional. Exception text message. At Dispatcher debug level 9, a stack trace of the exception will also be returned.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYI4EB" class="Table_Cell"><span class="varname">eventID</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEJ4EB" class="Table_Cell"><span class="bisdatatype">java.lang.Long</span> Optional. The event ID of the document that caused this exception. If the trigger service executed because a document satisfied a join condition, then the <span class="varname">eventID</span> is the event ID of the last document that satisfied the condition.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1J4EB" class="Table_Cell"><span class="varname">_env</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EGK4EB" class="Table_Cell"><span class="bisdatatype">Document</span> Optional. A document reference to the 
+    <a href="../integration-server-integrated-webhelp/pub_publish_envelope.html#wwID0ER5VEB"
+   
+     title="pub.publish:envelope"
+    ><span class="apiname-only">pub.publish:envelope</span></a> document type.</div></td></tr></table></div><div id="wwID0EHL4EB" class="Section_Title">Usage Notes</div><div id="wwID0EML4EB" class="Body">The client to which <span class="ph">Integration Server</span> delivers the error document needs to subscribe to the <span class="apiname">pub.publish.notification:error</span> document type. If the client does not have a trigger that subscribes to this document type, the client will never receive or process the error document. If the client receiving the error document is an <span class="ph">Integration Server</span>, it generates the message <span class="codeph">[ISS.0098.0024V2] No trigger available for incoming Document pub.publish.notification:error</span>.</div><div id="wwID0EDM4EB" class="Body">The watt.server.messaging.deliverNotificationErrors server configuration parameter specifies whether <span class="ph">Integration Server</span> generates and delivers <span class="apiname">pub.publish.notifcation.error </span>messages. When set to true, <span class="ph">Integration Server</span> generates and delivers <span class="apiname">pub.publish.notification:error</span> messages when an error or exception condition during <span class="ph">webMethods messaging trigger</span>processing. The generation and delivery of notification error messages may result in the generation of Adapter:Error events. When set to false, <span class="ph">Integration Server</span>does not generate or deliver <span class="apiname">pub.publish.notification:error</span> messages. The notification error messages are suppressed.</div><div id="wwID0EQN4EB" class="Section_Title">See Also</div><div id="wwID0E1N4EB" class="Simple_List_1">
+    <a href="../integration-server-integrated-webhelp/pub_publish_envelope.html#wwID0ER5VEB"
+   
+     title="pub.publish:envelope"
+    ><span class="apiname-only">pub.publish:envelope</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

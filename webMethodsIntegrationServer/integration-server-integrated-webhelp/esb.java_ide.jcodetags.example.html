@@ -1,0 +1,107 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Example of Code Commented for the jcode Utility</title><link rel="Prev" href="esb.java_ide.jcodetags.html" title="Previous" /><link rel="Next" href="esb.java_ide.jcode.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/integration-server-integrated-webhelp/esb.java_ide.jcodetags.example.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pQoafMLl8Kci1bNOYvbPn_002bQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/integration-server-integrated-webhelp/esb.java_ide.jcodetags.example.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.11 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/to-webhelp_intro_sd_guide.html#wwconnect_header">Service Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.java_ide.html#wwconnect_header">Building Java Services in Your Own IDE</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../integration-server-integrated-webhelp/esb.java_ide.jcodetags.html#wwconnect_header">Adding Comments to Your Java Code for the jcode Utility</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Example of Code Commented for the jcode Utility</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EOJMOB" class="Heading_3">Example of Code Commented for the jcode Utility</div><div id="wwID0EGKMOB" class="Body">The following is a complete example of Java source code that includes jcode tags (comments) that the jcode utility requires.</div><div id="wwID0ELKMOB" class="Preformatted">package recording;  <br />/**  <br />* This is an example of Java source code that includes jcode tags <br />* (comments) that the <span class="ph">Integration Server</span>jcode utility requires. Note that, unless  <br />* noted otherwise, when using the frag or fragall command of the   <br />* jcode utility, the utility strips out all comments in the Java source <br />*  file. <br />*/  <br />/**  <br />* == IMPORTS ==  <br />* Wrap imports the START-IMPORTS and END-IMPORTS tags.  <br />*/  <br />// --- &lt;&lt;IS-START-IMPORTS&gt;&gt; ---  <br />import com.wm.app.b2b.server.Service;  <br />import com.wm.app.b2b.server.ServiceException;  <br />import com.wm.data.IData;  <br />import com.wm.data.IDataCursor;  <br />import com.wm.data.IDataUtil;  <br />import java.util.*;  <br />// --- &lt;&lt;IS-END-IMPORTS&gt;&gt; ---  <br />/**  <br />* == CLASS NAMING ==  <br />* This class contains the definition of all the Java services  <br />* within the recording.accounts folder (note the declaration for the  <br />* recording Java package at the top). Each service is defined by a  <br />* method. The service will have the same name as the method name.  <br />* /  <br />public class accounts  <br />{  <br />    /* *  <br />    * == INDIVIDUAL SERVICES ==  <br />    * The createAccount service expects three parameters: a string  <br />    * ("name", a string array ("references"), and a document. The   <br />    * service returns two strings ("message" and "id") .  <br />    *  <br />    * Wrap the start and end of the service with the   <br />    * IS-START(&lt;serviceName&gt;)and IS-END tags, where &lt;serviceName&gt; <br />    * is the method/service name.  <br />    * Note that the two lines immediately before start tag and after  <br />    * the end tags are mandatory.  <br />    *  <br />    * Also note the use of comments to establish a signature for the  <br />    * service. Each signature line has the following format:  <br />    *  <br />    *  [direction] type:dimension:option name  <br />    *  <br />    *  where:  <br />    *    - direction: is "i" for input or "o" for output  <br />    *    - type:      is one of the following:  <br />    *                 "field" for instances of java.lang.String  <br />    *                 "document type" for instances of com.wm.data.IData  <br />    *                 "object" for instances of any other class  <br />    *    - option:    is one of the following:  <br />    *                 "required" if the parameter is required  <br />    *                 "optional" if the parameter is optional  <br />    *    - name:      is the name of the parameter  <br />    *  <br />    * To indicate nesting, use a single "-" at the beginning of  <br />    * each line for each level of nesting.  <br />    * /  <br />    public static void createAccount (IData pipeline)  <br />       throws ServiceException  <br />     {  <br />       // --- &lt;&lt;IS-START(createAccount)&gt;&gt; ---  <br />       // [i] field:0:required name  <br />       // [i] field:1:required references  <br />       // [i] record:0:required data  <br />       // [i] - field:1:required address  <br />       // [i] - field:1:required phone  <br />       // [o] field:1:required message  <br />       // [o] field:1:required id  <br />       IDataCursor idc = pipeline.getCursor();  <br />       String name = IDataUtil.getString(idc, "name");  <br />       String [] refs = IDataUtil.getStringArray(idc, "references");  <br />       IData data = IDataUtil.getIData(idc, "data");  <br />       // Service logic that takes action on the input information  <br />       // goes here. Note that when you use the jcode utility to   <br />       // fragment the service, it does not strip comments inside   <br />       // the service body. As a result, the comments are   <br />       // preserved and will display if you use <span class="ph">Designer</span> <br />       // to view the service.  <br />       idc.last();  <br />       idc.insertAfter ("message", "createAccount not fully implemented");  <br />       idc.insertAfter ("id", "00000000");  <br />       idc.destroy();  <br />       // --- &lt;&lt;IS-END&gt;&gt; -- -  <br />       return ;  <br />     }  <br />    /* *  <br />    * == COMPLEX SIGNATURES = =  <br />    * The getAccount service takes a single string "id", and returns  <br />    * a complex structure representing the account information.  <br />    * Note the use of the helper functions (defined below).  <br />    * /  <br />    public static void getAccount (IData pipeline)  <br />       throws ServiceException  <br />     {  <br />       // --- &lt;&lt;IS-START(getAccount)&gt;&gt; -- -  <br />       // [i] field:0:required id  <br />       // [o] record:1:required account  <br />       // [o] - field:0:required name  <br />       // [o] - field:1:required refs  <br />       // [o] - record:0:required contact  <br />       // [o] -- field:0:required address  <br />       // [o] -- field:0:required phone  <br />       IDataCursor idc = pipeline.getCursor();  <br />       if(idc.first("id"))  <br />        {  <br />         try  <br />          {  <br />            String id = IDataUtil.getString(idc);  <br />            IData data = getAccountInformation(id);  <br />            idc.last();  <br />            idc.insertAfter ("account", data);  <br />          }  <br />         catch (Exception e)  <br />          {  <br />            throw new ServiceException(e.toString());  <br />          }  <br />        }  <br />       idc.destroy();  <br />       // --- &lt;&lt;IS-END&gt;&gt; -- -  <br />     }  <br />    /* *  <br />    * == SHARED SOURCE ==  <br />    * Wrap the start and end of the shared code with the  <br />    * IS-START-SHARED and IS-END-SHARED tags. The shared code includes   <br />    * both global data structures and non-public functions that are <br />    * not exposed as services.  <br />    */  <br />    // --- &lt;&lt;IS-START-SHARED&gt;&gt; ---  <br />    private static Vector accounts = new Vector( );  <br />    private static IData getAccountInformation (String id)  {  <br />      throw new RuntimeException ("this service is not implemented yet");  <br />     }  <br />    // --- &lt;&lt;IS-END-SHARED&gt;&gt; ---  <br />}</div><div id="wwID0EDLMOB" class="title">Related Topics</div><div id="wwID0EHLMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.html#wwID0EORKOB"
+   
+     title="Building Java Services in Your Own IDE"
+    ><span class="Link_Text">Building Java Services in Your Own IDE</span></a></div><div id="wwID0ETLMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.ServiceOrganization.html#wwID0EX4KOB"
+   
+     title="How Java Services are Organized on Integration Server"
+    ><span class="Link_Text">How Java Services are Organized on Integration Server</span></a></div><div id="wwID0E6LMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.idata.html#wwID0E4ZLOB"
+   
+     title="IData Object for Java Service Input and Output"
+    ><span class="Link_Text">IData Object for Java Service Input and Output</span></a></div><div id="wwID0ELMMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.requirements.html#wwID0ESQLOB"
+   
+     title="Requirements for the Java Service Source Code"
+    ><span class="Link_Text">Requirements for the Java Service Source Code</span></a></div><div id="wwID0EXMMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.jcodetags.html#wwID0EV6LOB"
+   
+     title="Adding Comments to Your Java Code for the jcode Utility"
+    ><span class="Link_Text">Adding Comments to Your Java Code for the jcode Utility</span></a></div><div id="wwID0EDNMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.jcode.html#wwID0EFOMOB"
+   
+     title="Using the jcode Utility"
+    ><span class="Link_Text">Using the jcode Utility</span></a></div><div id="wwID0EPNMOB" class="heading-page">
+    <a href="../integration-server-integrated-webhelp/esb.java_ide.jcode.frag.html#wwID0ELVNOB"
+   
+     title="Using jcode frag/fragall to Split Java Source for Designer"
+    ><span class="Link_Text">Using jcode frag/fragall to Split Java Source for Designer</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
