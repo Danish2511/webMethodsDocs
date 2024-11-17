@@ -1,0 +1,319 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.ImportExportParametersBuilder;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.xml.NirvanaRealm;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.List;
+import java.util.Vector;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.Marshaller;
+
+
+/**
+ * This application can be used to export the objects within a realm into an xml format.
+ * <p/>
+ * The program will search through the realm and output the acl entries and permissions, configuration,
+ * for all channels, queues, interfaces and scheduler information
+ */
+public class nExportRealmXML extends nSampleApp {
+
+  private String realmUrl = null;
+  private String fileName = null;
+  private ImportExportParametersBuilder exportParameters = null;
+
+  /**
+   * Constructor for the class, takes the string realm url
+   */
+  public nExportRealmXML(String[] args) {
+
+    nRealmNode node = null;
+    Writer writer = null;
+    try {
+      processArgs(args);
+      report("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+
+      // construct the realm node
+      node = new nRealmNode(attr);
+      node.waitForEntireNameSpace();
+      NirvanaRealm realm = node.exportConfiguration(exportParameters);
+
+      // create a JAXBContext
+      JAXBContext jc = JAXBContext.newInstance("com.pcbsys.nirvana.nAdminAPI.xml");
+
+      // create a Marshaller and marshal to System.out
+      Marshaller m = jc.createMarshaller();
+      m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      m.setProperty(Marshaller.JAXB_ENCODING, "UTF-8");
+      writer = new OutputStreamWriter(new FileOutputStream(fileName), "UTF-8");
+      m.marshal(realm, writer);
+
+      // close the node, which closes all sessions made to the namespace
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    } finally {
+      closeNode(node);
+    }
+
+    if (writer != null) {
+      try {
+        writer.close();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+    }
+  }
+
+  /**
+   * Main program thread, takes a realm URL as the parameter to start the search
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    new nExportRealmXML(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 0:
+        Usage();
+        UsageEnv();
+        System.exit(1);
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("FILE", args[0]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("FILE", args[0]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String[] args) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+    fileName = System.getProperty("FILE");
+    if (fileName == null) {
+      Usage();
+      System.exit(1);
+    }
+
+    if (args == null) {
+      Usage();
+      System.exit(1);
+    }
+
+    exportParameters = ImportExportParametersBuilder.createParametersBuilder();
+
+    // set what will be exported based on command line arguments
+    for (int x = 0; x < args.length; x++) {
+      if (args[x].equals("-all")) {
+        exportParameters.enableAll();
+      } else if (args[x].equals("-realmacl")) {
+        exportParameters.setRealmAclProcessing(true);
+      } else if (args[x].equals("-realms")) {
+        exportParameters.setRealmsProcessing(true);
+      } else if (args[x].equals("-cluster")) {
+        exportParameters.setClusterProcessing(true);
+      } else if (args[x].equals("-realmcfg")) {
+        exportParameters.setRealmCfgProcessing(true);
+      } else if (args[x].equals("-channels")) {
+        exportParameters.setChannelsProcessing(true);
+      } else if (args[x].startsWith("-channelfilter")) {
+        exportParameters.setChannelfilter(getFilter(args[x]));
+      } else if (args[x].equals("-channelacls")) {
+        exportParameters.setChannelAclsProcessing(true);
+      } else if(args[x].equals("-channelprotobufs")){
+        exportParameters.setChannelProtobufsProcessing(true);
+      } else if (args[x].equals("-jndi")) {
+        exportParameters.setJndiProcessing(true);
+      } else if (args[x].equals("-joins")) {
+        exportParameters.setJoinsProcessing(true);
+      } else if (args[x].equals("-durables")) {
+        exportParameters.setDurablesProcessing(true);
+      } else if (args[x].equals("-queues")) {
+        exportParameters.setQueuesProcessing(true);
+      } else if (args[x].startsWith("-queuefilter")) {
+        exportParameters.setQueuefilter(getFilter(args[x]));
+      } else if (args[x].equals("-queueacls")) {
+        exportParameters.setQueueAclsProcessing(true);
+      }else if(args[x].equals("-queueprotobufs")){
+        exportParameters.setQueueProtobufsProcessing(true);
+      } else if (args[x].equals("-interfaces")) {
+        exportParameters.setInterfacesProcessing(true);
+      } else if (args[x].equals("-plugins")) {
+        exportParameters.setPluginsProcessing(true);
+      } else if (args[x].equals("-via")) {
+        exportParameters.setViaProcessing(true);
+      }
+    }
+  }
+
+  private String getFilter(String arg) {
+    String[] parts = arg.split("=");
+
+    if(parts.length != 2) {
+      throw new IllegalArgumentException("Wrong filter: " + arg + " Use '='!");
+    }
+
+    return parts[1];
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+    System.out.println("Usage ...\n");
+    System.out.println("nexportrealmxml [export_file_location]\n");
+    System.out.println(
+        "<Optional Arguments> -all -realms -cluster -realmacl -realmcfg -channels -jndi -channelfilter=<filter> -channeacls -channelprotobufs -joins -durables -queues -queuefilter=<filter> -queueacls -queueprotobufs -interfaces -plugins -via\n");
+    System.out.println(
+        "\n<filter> values are a comma separated list of java regular expressions that can filter channel, queue names respectively.");
+    System.out.println(
+        "\nExample 1: nexportrealmxml test.xml -channels -channelfilter=/perf.+ \n will export only channels whose absolute path starts with /perf");
+    System.out.println(
+        "\nExample 2: nexportrealmxml test.xml -channels -channelfilter=.+test \n will export only channels whose absolute path ends in test");
+    System.out.println(
+        "\nExample 3: nexportrealmxml test.xml -channels -channelfilter=.*test.* \n will export only channels whose absolute path contains test");
+    System.out.println(
+        "\nExample 4: nexportrealmxml test.xml -all -channelfilter=.*test.*,/perf.* \n will export everything with channels being restricted to those with absolute path containing test or starting with /perf");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+  /**
+   * Closes the work realm node gracefully without leaving any open linked realm node and any non-daemon threads
+   *
+   * @param realmNode - the work realm node
+   */
+  private void closeNode(nRealmNode realmNode) {
+    if (realmNode != null) {
+      nClusterNode clusterNode = realmNode.getCluster();
+      if (clusterNode != null) {
+        // not only we must close the cluster node of the work realm node and the realm nodes pointed by it, but also we
+        // must close all realm nodes linked to each of these realm nodes, plus their descendants of any depth, to
+        // prevent the application from staying active due to non-daemon threads coming from the sessions of linked
+        // realm nodes
+        closeClusterNodeRecursively(clusterNode);
+      } else {
+        // not only we must close the work realm node, but also we must close all realm nodes linked to it, plus their
+        // descendants of any depth, to prevent the application from staying active due to non-daemon threads coming
+        // from the sessions of linked realm nodes
+        closeRealmNodeRecursively(realmNode);
+      }
+    }
+  }
+
+  /**
+   * Recursively closes each of the realm nodes in a cluster node and its linked realm nodes
+   *
+   * @param clusterNode the cluster node to close
+   */
+  private void closeClusterNodeRecursively(nClusterNode clusterNode) {
+    List<nRealmNode> realmNodesToClose = new ArrayList<>();
+
+    Enumeration nodes = clusterNode.getNodes();
+    while (nodes.hasMoreElements()) {
+      Object node = nodes.nextElement();
+      if (node instanceof nRealmNode) {
+        addRealmToCloseList((nRealmNode) node, realmNodesToClose);
+      } else if (node instanceof nContainer) {
+        addContainerChildrenToCloseList((nContainer) node, realmNodesToClose);
+      }
+    }
+
+    clusterNode.close();
+
+    for (nRealmNode realmNodeToClose: realmNodesToClose) {
+      realmNodeToClose.close();
+    }
+  }
+
+  /**
+   * Closes a realm node and its linked descendant realm nodes of an unlimited depth
+   *
+   * @param realmNode the realm node to be closed
+   */
+  private void closeRealmNodeRecursively(nRealmNode realmNode) {
+    List<nRealmNode> realmNodesToClose = new ArrayList<>();
+
+    addRealmToCloseList(realmNode, realmNodesToClose);
+
+    for (nRealmNode realmNodeToClose: realmNodesToClose) {
+      realmNodeToClose.close();
+    }
+  }
+
+  /**
+   * Recursively adds all realm nodes at all depths of a container and their linked descendant realm nodes of any depth
+   * to a list of realms that will be closed. If a realm node is already present in the list, it will not be added.
+   *
+   * @param container the container
+   * @param realmNodesToClose the list of realm nodes that will be closed by the calling method
+   */
+  private void addContainerChildrenToCloseList(nContainer container, List<nRealmNode> realmNodesToClose) {
+    Enumeration nodes = container.getNodes();
+    while (nodes.hasMoreElements()) {
+      Object node = nodes.nextElement();
+      if (node instanceof nRealmNode) {
+        addRealmToCloseList((nRealmNode) node, realmNodesToClose);
+      } else if (node instanceof nContainer) {
+        addContainerChildrenToCloseList((nContainer) node, realmNodesToClose);
+      }
+    }
+  }
+
+  /**
+   * Adds a realm node and its linked realm nodes to a list of realm nodes that will be closed, unless the realm node is
+   * already present in the list.
+   *
+   * @param realmNode the realm node to be added
+   * @param realmNodesToClose the list of realm nodes that will be closed by the calling method
+   */
+  private void addRealmToCloseList(nRealmNode realmNode, List<nRealmNode> realmNodesToClose) {
+    if (realmNodesToClose.contains(realmNode)) {
+      return;
+    }
+
+    realmNodesToClose.add(realmNode);
+
+    Vector<nRealmNode> linkedRealmNodes = realmNode.getRealmList();
+    for (nRealmNode linkedRealmNode: linkedRealmNodes) {
+      addRealmToCloseList(linkedRealmNode, realmNodesToClose);
+    }
+  }
+
+  public static void report(String line) {
+    Date dt = new Date();
+    System.out.println(dt.toString() + " > " + line);
+  }
+
+}

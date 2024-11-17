@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Out-of-Memory Protection</title><link rel="Prev" href="co-rollback_definition.html" title="Previous" /><link rel="Next" href="co-pause_publishing.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-out_of_memory_protection.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pnZOrTfhMey7sqqvtklJs0Q" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-out_of_memory_protection.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_concepts.html#wwconnect_header">Concepts</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_common_features.html#wwconnect_header">Commonly Used Features</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Out-of-Memory Protection</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EYNDR" class="Heading_2">Out-of-Memory Protection</div><div id="wwID0EAODR" class="Body">Universal Messaging provides methods that you can use to protect from out-of-memory situations. It is important to note that a subset of these methods may impact performance; those which do so are disabled by default.</div><div id="wwID0EMODR" class="Section_Title">Metric Management</div><div id="wwID0ERODR" class="Body">Universal Messaging provides metrics pertaining to memory usage on a realm server. When you select the <span class="uicontrol">Monitoring</span> tab in the Enterprise Manager, these metrics can be found under the <span class="uicontrol">Metrics</span> tab, as shown below:</div><div class="ww_skin_page_overflow"><div id="wwID0EFODR-4" class="Section"><img class="ScaleFit" src="../num-webhelp/images/metrictab.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 166px; max-width: 673px; top: 0pt" alt="" /></div></div><div id="wwID0EHPDR" class="Body">Metrics can be enabled/disabled on a realm server through the realm configuration. Setting the configuration option <span class="parmname">EnableMetrics</span> controls the enabling/disabling of <span class="emphasis">all</span> metrics; each metric can also be enabled/disabled individually.</div><div id="wwID0EXPDR" class="Body"><span class="inlinetitle">Event Usage</span></div><div id="wwID0EBQDR" class="Body">The event usage metric provides information on memory currently in use by on-heap events. The three statistics provided are as follows:</div><div id="wwID0EPQDR" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Current Memory Usage - the memory currently in use by on-heap events.</div><div id="wwID0EARDR" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>Maximum Available Memory - the maximum memory currently available to the JVM.</div><div id="wwID0ERRDR" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span>Current Memory Percentage - the percentage of the maximum memory available to the JVM currently occupied by on-heap events.</div><div id="wwID0EESDR" class="Body">Event usage monitoring can be enabled/disabled through the configuration option <span class="parmname">EnableEventMemoryMonitoring</span>. Enabling this metric may impact performance, and so it is disabled by default. Disabling this metric will cause "N/A" to be displayed for each of the three statistics described previously, as shown in the screenshot above.</div><div id="wwID0EXSDR" class="Section_Title">Flow Control</div><div id="wwID0E3SDR" class="Body">Universal Messaging provides the ability to hold producing connections (publishes, transactional publishes, batch publishes, etc.) before processing their events. This is to allow consumers to reduce the number of events on connections before additional events are published, thus decreasing memory usage.</div><div id="wwID0EBTDR" class="Body">Flow control can be enabled/disabled and configured on a realm server through the realm configuration. Setting the configuration option <span class="parmname">EnableFlowControl</span> controls the enabling/disabling of flow control; flow control is disabled by default. There are also three other realm server configurable options:</div><div id="wwID0EQTDR" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">FlowControlWaitTimeOne</span> - the first level of waiting, and shortest wait time; activated at 70% memory usage</div><div id="wwID0EFUDR" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">FlowControlWaitTimeTwo</span> - the second level of waiting; activated at 80% memory usage</div><div id="wwID0E1UDR" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">FlowControlWaitTimeThree</span> - the final level of waiting, and longest wait time; activated at 90% memory usage</div><div id="wwID0EQVDR" class="Body">Each of these options can be configured to suit the level of out-of-memory protection required. They represent the amount of time, in milliseconds, for which producer connections are throttled upon reaching the associated percentage of memory usage. In general, as memory usage gets closer to 100%, the need for throttling will be greater, so you would normally set <span class="parmname">FlowControlWaitTimeThree</span> to a higher value than <span class="parmname">FlowControlWaitTimeTwo</span>, which in turn will be higher than <span class="parmname">FlowControlWaitTimeOne</span>.</div><div id="wwID0EFWDR" class="Body">Example: Assume a current memory usage of 90%. If there is a new publish request, the connection from which the publish originates will be throttled for <span class="parmname">FlowControlWaitTimeThree</span> milliseconds, ensuring the event(s) will not be published sooner than <span class="parmname">FlowControlWaitTimeThree</span> milliseconds from the time of publish.</div><div id="wwID0EVWDR" class="Body">If the memory usage exceeds the value defined by the configurable option <span class="parmname">EmergencyThreshold</span> (94% by default), the connection will be paused for a long duration (24 days).</div><div id="wwID0EAXDR" class="Note"><span class="Bold">Note:<br /></span>The memory threshold values of 70%, 80% and 90% that trigger the wait times <span class="parmname">FlowControlWaitTimeOne</span>, <span class="parmname">FlowControlWaitTimeTwo</span> and <span class="parmname">FlowControlWaitTimeThree</span> respectively are defined on the assumption that <span class="parmname">EmergencyThreshold</span> is set to its default value of 94%. If the <span class="parmname">EmergencyThreshold</span> value is reduced, the memory threshold values also reduce proportionally.</div><div id="wwID0EPYDR" class="Body"><span class="inlinetitle">Transactional Publishes</span></div><div id="wwID0EZYDR" class="Body">It is important to note that when using transactional publishes, by default the timeouts are shorter than standard publishes. This means that even if a client times out, the event may still be processed if the session has not been disconnected by the keep alive. As such, when using transactional publishes, it is best practice to call publish just once before committing. Every consecutive publish will be throttled, potentially leading to a timeout during the commit, and despite this timeout, the commit may still be successful.</div><div id="wwID0E5YDR" class="Note"><span class="Bold">Note:<br /></span>Even if flow control is enabled globally on the server, you can use Universal Messaging client API calls to bypass flow control for an individual producing connection. To do this, a boolean flag can be set on the relevant session attributes which requests that the associated connection should not be throttled. See the client API documentation on the class <span class="apiname">nSessionAttributes</span> for more information.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,233 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nRealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to remove a subject from a realm
+ * You can also specify to remove an acl entry from all known realms within a namespace, by
+ * recursively searching through looking for other realm nodes and removing the acl entry
+ * This is achieved by specifying -r as a command line parameter.
+ */
+
+public class nDelRealmAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private boolean recursive = false;
+  private nSessionAttributes attr = null;
+  private nRealmNode node = null;
+
+  /**
+   * Construct and instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nDelRealmAclEntry(String args[]) {
+    try {
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      node.waitForEntireNameSpace();
+      System.out.println("Removing entry for " + name + "@" + host);
+      // remove the entry from the acl
+      node.removeACLEntry(new nRealmACLEntry(name + "@" + host));
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Removed ACL entry for " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump();
+      // if you specify -r as a command line parameter, you can choose to traverse the entire
+      // realm namespace, including any realms that have been added to the root realm node
+      if (recursive) {
+        traverse(node);
+      }
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * recursively search through the nodes from a realm node looking for other realm nodes
+   */
+  public nRealmNode traverse(nRealmNode p_node) {
+    // get the enumeration of child nodes from p_node
+    Enumeration enum1 = p_node.getNodes();
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      // only deal with realm nodes
+      if (obj instanceof nRealmNode) {
+        nRealmNode node = (nRealmNode) obj;
+        try {
+          node.removeACLEntry(new nRealmACLEntry(name + "@" + host));
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Removed ACL entry for " + node.getName());
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        dump();
+        // now traverse the child nodes
+        return traverse(node);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNode(cont.getNodes());
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Search the enumeration of nodes passed as a parameter
+   */
+  private void searchNode(Enumeration p_nodes) {
+    try {
+      while (p_nodes.hasMoreElements()) {
+        Object obj = p_nodes.nextElement();
+        if (obj instanceof nRealmNode) {
+          nRealmNode node = (nRealmNode) obj;
+          try {
+            // get the acl for this realm node
+            nACL acl = node.getACLs();
+            // remove the entry from the acl
+            acl.remove(name + "@" + host);
+            // set the node acl to the acl list with the removed entry
+            node.setACLs(acl);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          System.out.println("Removed ACL entry for " + node.getName());
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          dump();
+        } else if (obj instanceof nContainer) {
+          searchNode(((nContainer) obj).getNodes());
+        }
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject to remove.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * Output to system.out the permissions that have been set
+   */
+  public void dump() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("NAME                   : " + name);
+    System.out.println("HOST                   : " + host);
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    }
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-r")) {
+        recursive = true;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("NAME", args[0]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("NAME", args[0]);
+        System.setProperty("HOST", args[1]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * as system properties
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nDelRealmAclEntry setAcl = new nDelRealmAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("ndelrealmacl <user> <host> [-r] \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<user> - User name parameter to delete the realm ACL entry from");
+    System.out.println("<host> - Host name parameter to delete the realm ACL entry from");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[-r] - Specifies whether recursive traversal of the namespace should be done");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

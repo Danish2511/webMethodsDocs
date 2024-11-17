@@ -1,0 +1,218 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nChannel;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nChannelNotFoundException;
+import com.pcbsys.nirvana.client.nIllegalArgumentException;
+import com.pcbsys.nirvana.client.nIllegalChannelMode;
+import com.pcbsys.nirvana.client.nRequestTimedOutException;
+import com.pcbsys.nirvana.client.nSecurityException;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.client.nSessionNotConnectedException;
+import com.pcbsys.nirvana.client.nSessionPausedException;
+import com.pcbsys.nirvana.client.nUnexpectedResponseException;
+import com.pcbsys.nirvana.client.nUnknownRemoteRealmException;
+
+/**
+ * Purges messages within a specifed range on a Nirvana channel
+ */
+public class purgeEvents extends nSampleApp {
+
+  private static purgeEvents mySelf = null;
+
+  /**
+   * This method demonstrates the Nirvana API calls necessary to purge a
+   * channel. It is called after all command line arguments have been received
+   * and validated
+   *
+   * @param realmDetails a String[] containing the possible RNAME values
+   * @param cname the channel name to get the last eid for
+   * @param starteid the first eid of the range to be purged
+   * @param endeid the last eid of the range to be purged
+   * @param filter an optional filter string for events to be purged
+   */
+  private void doit(String[] realmDetails, String cname, long starteid, long endeid, String filter) {
+
+    mySelf.constructSession(realmDetails);
+
+    // Purges the specified range from the channel
+    try {
+
+      // Create a channel attributes object
+      nChannelAttributes nca = new nChannelAttributes();
+      nca.setName(cname);
+
+      // Obtain a channel reference
+      nChannel myChannel = mySession.findChannel(nca);
+
+      // Purge the specified range
+      if (filter != null && filter.length() > 0) {
+        myChannel.purgeEvents(starteid, endeid, filter);
+        System.out
+            .println("Purged all events matching filter \"" + filter + "\" between " + starteid + " and " + endeid);
+      } else {
+        myChannel.purgeEvents(starteid, endeid);
+        System.out.println("Purged all events between " + starteid + " and " + endeid);
+      }
+
+    } catch (nSessionPausedException pas) {
+    }
+    // Handle errors
+    catch (nIllegalArgumentException illArg) {
+      System.out.println("Failed due to the following Illegal Argument exception ");
+      illArg.printStackTrace();
+    } catch (nIllegalChannelMode cm) {
+      System.out.println("The requested channel is a queue and cannot be accessed like a channel");
+      System.out.println("Use the queue API's instead");
+      cm.printStackTrace();
+      System.exit(1);
+    } catch (nChannelNotFoundException cnfe) {
+      System.out.println("The channel specified could not be found.");
+      System.out.println("Please ensure that the channel exists in the REALM you connect to.");
+      cnfe.printStackTrace();
+      System.exit(1);
+    } catch (nSecurityException se) {
+      System.out.println("Insufficient permissions for the requested operation.");
+      System.out.println("Please check the ACL settings on the server.");
+      se.printStackTrace();
+      System.exit(1);
+    } catch (nSessionNotConnectedException snce) {
+      System.out.println("The session object used is not physically connected to the Nirvana realm.");
+      System.out.println("Please ensure the realm is up and check your RNAME value.");
+      snce.printStackTrace();
+      System.exit(1);
+    } catch (nUnexpectedResponseException ure) {
+      System.out.println("The Nirvana REALM has returned an unexpected response.");
+      System.out.println("Please ensure the Nirvana REALM and client API used are compatible.");
+      ure.printStackTrace();
+      System.exit(1);
+    } catch (nUnknownRemoteRealmException urre) {
+      System.out.println("The channel specified resided in a remote realm which could not be found.");
+      System.out.println("Please ensure the channel name specified is correct.");
+      urre.printStackTrace();
+      System.exit(1);
+    } catch (nRequestTimedOutException rtoe) {
+      System.out.println("The requested operation has timed out waiting for a response from the REALM.");
+      System.out.println("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+      rtoe.printStackTrace();
+      System.exit(1);
+    }
+
+    // Close the session we opened
+    try {
+      nSessionFactory.close(mySession);
+    } catch (Exception ex) {
+    }
+    // Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 4:
+        System.getProperties().put("FILTER", args[3]);
+      case 3:
+        System.getProperties().put("END", args[2]);
+      case 2:
+        System.getProperties().put("START", args[1]);
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+        }
+        System.getProperties().put("CHANNAME", args[0]);
+        break;
+    }
+  }
+
+  public static void main(String[] args) {
+
+    // Create an instance for this class
+    mySelf = new purgeEvents();
+
+    // Process command line arguments
+    mySelf.processArgs(args);
+
+    // Process Environment Variables
+    nSampleApp.processEnvironmentVariables();
+
+    // Check the channel name specified
+    String channelName = null;
+    if (System.getProperty("CHANNAME") != null) {
+      channelName = System.getProperty("CHANNAME");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+
+    long startEid = 0; // Default value
+    // Check if a start EID has been specified
+    if (System.getProperty("START") != null) {
+      try {
+        startEid = Long.parseLong(System.getProperty("START"));
+      } catch (Exception num) {
+      } // Ignore and use the defaults
+    }
+
+    long endEid = -1; // Default value (all)
+    // Check if an end EID has been specified
+    if (System.getProperty("END") != null) {
+      try {
+        endEid = Long.parseLong(System.getProperty("END"));
+      } catch (Exception num) {
+      } // Ignore and use the default
+    }
+
+    String filter = "";
+    // Check if a filter has been specified
+    if (System.getProperty("FILTER") != null) {
+      try {
+        filter = System.getProperty("FILTER");
+      } catch (Exception strex) {
+      } // Ignore and use the default
+    }
+
+    // Check the local realm details
+    int idx = 0;
+    String RNAME = null;
+    if (System.getProperty("RNAME") != null) {
+      RNAME = System.getProperty("RNAME");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+
+    // Process the local REALM RNAME details
+    String[] rproperties = new String[4];
+    rproperties = parseRealmProperties(RNAME);
+
+    // Purge the specified events from the channel
+    mySelf.doit(rproperties, channelName, startEid, endEid, filter);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("npurgechan <channel name> <start eid> <end eid> <filter>\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel name> - Channel name parameter for the channel to be purged");
+    System.out.println("<start eid> - The start eid of the range of events to be purged");
+    System.out.println("<end eid> - The end eid of the range of events to be purged");
+    System.out.println("<filter> - An optional filter string for events to be purged");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+} // End of purgeEvents Class
+

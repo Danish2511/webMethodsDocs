@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Creating a Channel</title><link rel="Prev" href="co-index_dg_22.html" title="Previous" /><link rel="Next" href="co-findchannel_3.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-createchannel_3.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pyxSHTdDDNwhqIyMHJ04zyg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-createchannel_3.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_developer_guide.html#wwconnect_header">Developer Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_enterprise_apis.html#wwconnect_header">Enterprise APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/co-index_dg_17.html#wwconnect_header">Enterprise Developer's Guide for Java</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/co-index_dg_22.html#wwconnect_header">Publish / Subscribe Using Channels/Topics</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Creating a Channel</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EUHCV" class="Heading_4">Creating a Channel</div><div id="wwID0E3HCV" class="Body">Channels can be created programmatically as detailed below, or they can be created using the Enterprise Manager.</div><div id="wwID0EBICV" class="Body">In order to create a channel, first of all you must create an nSession object, which is effectively your logical and physical connection to a Universal Messaging realm. This is achieved by using an RNAME for your Universal Messaging realm when constructing the nSessionAttributes object, as shown below:</div><div id="wwID0EGICV" class="Preformatted">String[] RNAME={"nsp://127.0.0.1:9000"}; <br />nSessionAttributes nsa=new nSessionAttributes(RNAME); <br />nSession mySession=nSessionFactory.create(nsa); <br />mySession.init();</div><div id="wwID0EMICV" class="Body">Once the nSession.init() method is successfully called, your connection to the realm will be established.</div><div id="wwID0ERICV" class="Body">Using the nSession objects instance <span class="apiname">'mySession'</span> we can then begin creating the channel object. Channels have an associated set of attributes, that define their behaviour within the Universal Messaging Realm Server. As well as the name of the channel, the attributes determine the availability of the events published to a channel to any subscribers wishing to consume them.</div><div id="wwID0E3ICV" class="Body">To create a channel, we do the following:</div><div id="wwID0EBJCV" class="Preformatted">nChannelAttributes cattrib = new nChannelAttributes(); <br />cattrib.setMaxEvents(0); <br />cattrib.setTTL(0); <br />cattrib.setType(nChannelAttributes.PERSISTENT_TYPE); <br />cattrib.setName("mychannel"); <br />nChannel myChannel=mySession.createChannel(cattrib);</div><div id="wwID0EHJCV" class="Body">Now we have a reference to a Universal Messaging channel within the realm.</div><div id="wwID0EMJCV" class="Note"><span class="Bold">Note:<br /></span>The set of permissible characters you can use to name a channel is described in the section 
+    <a href="../num-webhelp/ta-create_channel.html#wwID0E4G6R"
+   
+     title="Creating Channels"
+    ><span class="ph_002c_heading-page">Creating Channels</span></a> in the Enterprise Manager section of the <span class="Citation">Administration Guide</span>.</div><div id="wwID0E5KCV" class="Section_Title">Setting User and Group Permissions during Channel Creation</div><div id="wwID0EDLCV" class="Body">User and a group permissions can be created using the factory methods defined in the <span class="apiname">nStorePermission</span> class.</div><div id="wwID0EOLCV" class="Body">For example, a user permission can be created with</div><div id="wwID0ETLCV" class="Preformatted">nStorePermission.createForUser(&lt;username&gt;, &lt;host&gt;, &lt;permission_mask&gt;)</div><div id="wwID0EZLCV" class="Body">or</div><div id="wwID0E5LCV" class="Preformatted">nStorePermission.createForUser(&lt;subject&gt;, &lt;permission_mask&gt;)</div><div id="wwID0EEMCV" class="Body">where &lt;username&gt; and &lt;host&gt; are String parameters, &lt;subject&gt; is a String in the format "&lt;username&gt;@&lt;host&gt;" and &lt;permission_mask&gt; is a <span class="apiname">long</span> representing the mask for the corresponding user/group.</div><div id="wwID0EPMCV" class="Body">The permission mask must be generated using the <span class="apiname">nStorePermissionGenerator</span> class. The utility provides methods for building channel permissions from an EnumSet. The following enumeration is defined:</div><div id="wwID0EANCV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="apiname">nChannelStorePermission</span> - for all permissions that can be applied on a channel</div><div id="wwID0EYNCV" class="Body">Here is an example for generating the permission mask:</div><div id="wwID0E4NCV" class="Preformatted">long channelPermission = nStorePermissionGenerator.getChannelPermissions<br />    (EnumSet.of(nChannelStorePermission.MANAGE, nChannelStorePermission.PUBLISH, <br />                nChannelStorePermission.PURGE));</div><div id="wwID0EDOCV" class="Body">The Client API contains the following method which is accessible from a session instance:</div><div id="wwID0EIOCV" class="Preformatted">createChannel(nChannelAttributes attributes, long initialEid, <br />    Collection&lt;nStorePermission&gt; channelPermissions)<br /></div><div id="wwID0EOOCV" class="Body">The method for creating multiple stores is overloaded and accepts collection with permissions that can be applied to the corresponding store. Here is an example:</div><div id="wwID0ETOCV" class="Preformatted">create(nChannelAttributes[] attr, Collection&lt;Collection&lt;nStorePermission&gt;&gt; permissionsList)<br /></div><div id="wwID0EZOCV" class="Body">The permissions for each store are also a collection, since multiple permissions can be applied on a single store during creation. If the create procedure fails for one of the stores, the others are created successfully. The reason for the failure can be found using the methods defined in the <span class="apiname">nCreateResult</span> class which is used as a returned value for each store when multiple channels are requested to be created from the client.</div><div id="wwID0EEPCV" class="Body">If applying the requested permissions fails when attempting to create a single channel, an <span class="apiname">nSecurityException</span> is thrown containing the name of the subject for which the operation has failed. For example, if the client tries to grant permissions for a group which does not exist, the operation will fail and the channel will not be created. The client is authorized to grant permissions on store creation only for existing groups.</div><div id="wwID0EPPCV" class="Body">Here is a code sample illustrating the usage for creating a channel:</div><div id="wwID0EUPCV" class="Preformatted">long userPermission = nStorePermissionGenerator.getChannelPermissions(<br />    EnumSet.of(nChannelStorePermission.MANAGE, nChannelStorePermission.PUBLISH));<br />long secondUserPermission = nStorePermissionGenerator.getChannelPermissions(<br />    EnumSet.of(nChannelStorePermission.PUBLISH, nChannelStorePermission.PURGE));<br />nStorePermission firstPermission = nStorePermission.createForUser(<br />    "user", "127.0.0.1", userPermission);<br />nStorePermission secondPermission = nStorePermission.createForUser(<br />    "username@127.0.0.1", secondUserPermission);<br />Collection&lt;nStorePermission&gt; channelPermissions = <br />    Arrays.asList(firstPermission, secondPermission);<br /><br />nChannelAttributes channelAttributes = new nChannelAttributes("channelToCreate");<br />session.createChannel(channelAttributes, 0, channelPermissions);<br /></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

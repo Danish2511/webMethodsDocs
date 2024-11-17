@@ -1,0 +1,167 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using com.pcbsys.nirvana.client;
+
+/**
+ * deletes a join between a nirvana channel and a nirvana queue
+ */
+namespace com.pcbsys.nirvana.apps
+{
+    public class deletequeuejoin : nSampleApp
+    {
+        private static string RNAME;
+        private string chanName;
+        private string queueName;
+        private static deletequeuejoin mySelf;
+
+        /**
+         * This method demonstrates the Nirvana API calls necessary to delete
+         * a queue join.
+         * It is called after all command line arguments have been received and
+         * validated
+         *
+         * @param realmDetails a String[] containing the possible RNAME values
+         */
+        private void doit(String[] realmDetails)
+        {
+
+            mySelf.constructSession(realmDetails);
+
+            //deletes the specified queue join
+            try
+            {
+
+                //Create the channel attributes object to locate the source channel first
+                nChannelAttributes nca = new nChannelAttributes();
+                nca.setName(chanName);
+
+                //Create the channel attributes for the destination queue
+                nChannelAttributes dest = new nChannelAttributes();
+                dest.setName(queueName);
+
+                //Obtain a reference to the source channel
+                nChannel mySrcChannel = mySession.findChannel(nca);
+
+                //Obtain a reference to the destination queue
+                nQueue myDstQueue = mySession.findQueue(dest);
+
+                mySrcChannel.deleteJoin(myDstQueue);
+
+            }
+            //Handle errors
+            catch (nChannelNotFoundException cnfe)
+            {
+                Console.WriteLine("The channel specified could not be found.");
+                Console.WriteLine("Please ensure that the channel exists in the REALM you connect to.");
+                Console.WriteLine(cnfe.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nSecurityException se)
+            {
+                Console.WriteLine("Unsufficient permissions for the requested operation.");
+                Console.WriteLine("Please check the ACL settings on the server.");
+                Console.WriteLine(se.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nSessionNotConnectedException snce)
+            {
+                Console.WriteLine("The session object used is not physically connected to the Nirvana realm.");
+                Console.WriteLine("Please ensure the realm is up and check your RNAME value.");
+                Console.WriteLine(snce.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nUnexpectedResponseException ure)
+            {
+                Console.WriteLine("The Nirvana REALM has returned an unexpected response.");
+                Console.WriteLine("Please ensure the Nirvana REALM and client API used are compatible.");
+                Console.WriteLine(ure.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nUnknownRemoteRealmException urre)
+            {
+                Console.WriteLine("The channel specified resided in a remote realm which could not be found.");
+                Console.WriteLine("Please ensure the channel name specified is correct.");
+                Console.WriteLine(urre.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nRequestTimedOutException rtoe)
+            {
+                Console.WriteLine("The requested operation has timed out waiting for a response from the REALM.");
+                Console.WriteLine("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+                Console.WriteLine(rtoe.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nBaseClientException nbce)
+            {
+                Console.WriteLine("An error occured while creating the Channel Attributes object.");
+                Console.WriteLine(nbce.StackTrace);
+                Environment.Exit(1);
+            }
+            //Close the session we opened
+            try
+            {
+                nSessionFactory.close(mySession);
+            }
+            catch (Exception) { }
+            //Close any other sessions so that we can exit
+            nSessionFactory.shutdown();
+
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            if (args.Length < 3)
+            {
+                Usage();
+                Environment.Exit(1);
+            }
+            RNAME = args[0];
+            chanName = args[1];
+            queueName = args[2];
+
+        }
+
+        public static void Main(String[] args)
+        {
+
+            //Create an instance for this class
+            mySelf = new deletequeuejoin();
+
+            //Process command line arguments
+            mySelf.processArgs(args);
+
+            //Process the local REALM RNAME details
+            String[] rproperties = parseRealmProperties(RNAME);
+
+            //delete the queue join specified
+            mySelf.doit(rproperties);
+        }
+
+        /**
+         * Prints the usage message for this class
+         */
+        private static void Usage()
+        {
+
+            Console.WriteLine("Usage ...\n");
+            Console.WriteLine("deletequeuejoin <rname> <source channel name> <destination queue name>\n");
+            Console.WriteLine(
+              "<Required Arguments> \n");
+            Console.WriteLine(
+              "<rname> - the rname of the server to connect to");
+            Console.WriteLine(
+              "<source channel name> - Channel name parameter of the local channel name to join");
+            Console.WriteLine(
+              "<destination queue name> - Queue name parameter of the remote queue name to join");
+        }
+
+    } // End of deletequeuejoin Class
+
+}

@@ -1,0 +1,187 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "PingClient.h"
+#include <stdlib.h> 
+#include <chrono>
+#include "ClientTransportContextFactory.h"
+#include "TransportFactory.h"
+
+
+int com::softwareag::umtransport::samples::ping::PingClient::main(int argc, char** argv){
+	if (argc < 2){
+		std::cout << "Usage : \n PingClient <URL> [<size> <No / sec>]" << std::endl;
+		return 1;
+	}
+
+	std::string url(argv[1]);
+	int pktSize = 64;
+	int perSec = 1;
+
+	if (argc > 2){
+		pktSize = std::atoi(argv[2]);
+	}
+	if (argc > 3){
+		perSec = std::atoi(argv[3]);
+		if (perSec < 1){
+			perSec = 1;
+		}
+	}
+
+	perSec = 1000 / perSec; //Put to milliseconds
+	pktSize = (pktSize / 8) * 8; //Round to whole byte's
+	try{
+		auto ctx = ClientTransportContextFactory::build(url);
+
+		auto transport = TransportFactory::connect(std::move(ctx));
+		std::shared_ptr<SynchronousTransport> sharedTransport(std::move(transport));
+		SyncWriter* writer = new SyncWriter(sharedTransport, pktSize);
+		Reader reader(sharedTransport, pktSize);
+		PacketGenerator packetGenerator(sharedTransport, writer, perSec);
+
+		Poco::Thread readerThread;
+		readerThread.setPriority(Poco::Thread::PRIO_HIGHEST);
+		readerThread.start(reader);
+
+		Poco::Thread packetGeneratorThread;
+		packetGeneratorThread.start(packetGenerator);
+
+		std::cout << "Press <CR> key to finish";
+		std::cin.ignore();
+
+		sharedTransport->close();
+
+		readerThread.tryJoin(10000);
+		packetGeneratorThread.tryJoin(10000);
+	}
+	catch (Poco::Exception &ex){
+		std::cout << ex.displayText();
+	}
+	return 0;
+}
+
+com::softwareag::umtransport::samples::ping::PingClient::SyncWriter::SyncWriter(std::shared_ptr<SynchronousTransport> transport, int packetSize) {
+	m_transport = transport;
+	bufferSize = packetSize;
+	buffer = new unsigned char[packetSize];
+	writeValue(buffer, 0, packetSize, 4);
+}
+
+com::softwareag::umtransport::samples::ping::PingClient::SyncWriter::~SyncWriter(){
+	delete[] buffer;
+}
+
+void com::softwareag::umtransport::samples::ping::PingClient::SyncWriter::send(){
+	long long time = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+	writeValue(buffer, bufferSize - 8, time, 8);
+	m_transport->getOutputStream().write(buffer, bufferSize);
+	m_transport->getOutputStream().flush();
+}
+
+com::softwareag::umtransport::samples::ping::PingClient::Reader::Reader(std::shared_ptr<SynchronousTransport> transport, int pktSize){
+	m_transport = transport;
+	packetSize = pktSize;
+}
+
+com::softwareag::umtransport::samples::ping::PingClient::Reader::~Reader(){}
+
+void com::softwareag::umtransport::samples::ping::PingClient::Reader::run(){
+	unsigned char* tmp = new unsigned char[packetSize];
+	try{
+		long long latency = 0;
+		long long counter = 0;
+		long long start = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+		while (!m_transport->isClosed()){
+			int pos = 0;
+			while (pos < packetSize){
+				pos += m_transport->getInputStream().read(tmp, packetSize - pos);
+			}
+			long long now = std::chrono::duration_cast<std::chrono::nanoseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+			long long tnw = readValue(tmp, packetSize - 8, 8);
+			long long time = now - tnw;
+			latency += time;
+			counter++;
+			if (start + 1000 < std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count()){
+				double ave = (double) latency;
+				ave = (ave / counter) / 1000.0L;				
+				start = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+				std::cout << "Average ping took " << ave << " microseconds, over " << counter << " packets" << std::endl;
+				latency = 0;
+				counter = 0;
+			}
+		}
+	}
+	catch (Poco::Exception & ex){
+		std::cout << ex.displayText() << std::endl;
+	}
+}
+
+com::softwareag::umtransport::samples::ping::PingClient::PacketGenerator::PacketGenerator(std::shared_ptr<SynchronousTransport> transport, Writer* writer, int packetsPerSecond){
+	m_transport = transport;
+	m_writer = writer;
+	m_packetsPerSecond = packetsPerSecond;
+}
+
+com::softwareag::umtransport::samples::ping::PingClient::PacketGenerator::~PacketGenerator(){
+	delete m_writer;
+}
+
+void com::softwareag::umtransport::samples::ping::PingClient::PacketGenerator::run(){
+	std::cout << "Starting latency Calculations" << std::endl;
+	while (!m_transport->isClosed()){
+		try{
+			m_writer->send();
+			Poco::Thread::current()->sleep(m_packetsPerSecond);
+		}
+		catch (Poco::Exception &ex){
+			std::cout << ex.displayText() << std::endl;
+			m_transport->close();
+		}
+	}
+}
+
+void com::softwareag::umtransport::samples::ping::PingClient::writeValue(unsigned char* workingBuffer, int offset, long long val, int size){
+	if (size == 8){
+		workingBuffer[offset] = (unsigned char)((val >> 56) & 0xff);
+		workingBuffer[offset + 1] = (unsigned char)((val >> 48) & 0xff);
+		workingBuffer[offset + 2] = (unsigned char)((val >> 40) & 0xff);
+		workingBuffer[offset + 3] = (unsigned char)((val >> 32) & 0xff);
+		workingBuffer[offset + 4] = (unsigned char)((val >> 24) & 0xff);
+		workingBuffer[offset + 5] = (unsigned char)((val >> 16) & 0xff);
+		workingBuffer[offset + 6] = (unsigned char)((val >> 8) & 0xff);
+		workingBuffer[offset + 7] = (unsigned char)(val);
+	}
+	else if (size == 4){
+		workingBuffer[offset] = (unsigned char)((val >> 24) & 0xff);
+		workingBuffer[offset + 1] = (unsigned char)((val >> 16) & 0xff);
+		workingBuffer[offset + 2] = (unsigned char)((val >> 8) & 0xff);
+		workingBuffer[offset + 3] = (unsigned char)(val);
+	}
+
+}
+
+long long com::softwareag::umtransport::samples::ping::PingClient::readValue(unsigned char* workingBuffer, int offset, int size){	
+	long long val = 0;
+	if (size == 8){
+		val = (((long long)workingBuffer[offset] & 0xff) << 56) | val;
+		val = (((long long)workingBuffer[offset + 1] & 0xff) << 48) | val;
+		val = (((long long)workingBuffer[offset + 2] & 0xff) << 40) | val;
+		val = (((long long)workingBuffer[offset + 3] & 0xff) << 32) | val;
+		val = (((long long)workingBuffer[offset + 4] & 0xff) << 24) | val;
+		val = (((long long)workingBuffer[offset + 5] & 0xff) << 16) | val;
+		val = (((long long)workingBuffer[offset + 6] & 0xff) << 8) | val;
+		val = (((long long)workingBuffer[offset + 7] & 0xff)) | val;
+	}
+	else if (size == 4){
+		val = (((long long)workingBuffer[offset] & 0xff) << 24) | val;
+		val = (((long long)workingBuffer[offset + 1] & 0xff) << 16) | val;
+		val = (((long long)workingBuffer[offset + 2] & 0xff) << 8) | val;
+		val = (((long long)workingBuffer[offset + 3] & 0xff)) | val;
+	}
+	return (val);
+}

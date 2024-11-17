@@ -1,0 +1,437 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * This application demonstrates how to manage persistant channels, i.e. performing maintenance
+ * on them.
+ * It also demonstrates how to perform an archive operation on the audit file.
+ */
+
+public class nChannelManagement extends nSampleApp implements Observer {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realmUrl = null;
+
+  private nSessionAttributes attr = null;
+  private nRealmNode realm = null;
+
+  private Thread channelMgr = null;
+  private Thread auditMgr = null;
+  private Thread updateThread = null;
+
+  private long auditCheckInterval = 6048000000l;
+  private long channelCheckInterval = 3600000;
+
+  private Hashtable incompleteRealms = new Hashtable();
+  private Hashtable realms = new Hashtable();
+  private Hashtable myContainers = new Hashtable();
+  private Hashtable myChannels = new Hashtable();
+
+  /**
+   * Construct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nChannelManagement(String args[]) {
+    try {
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realmUrl);
+      // get the realm node
+      realm = new nRealmNode(attr);
+      if (!realm.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realmUrl);
+        return;
+      }
+
+      // wait for the namespace to be complete
+      realm.waitForEntireNameSpace();
+      // register this realm node and all child realms and look for channels
+      this.register(realm);
+      // add this object as an observer to all the realms
+      this.addObservers();
+      // construct am archive thread that periodically archives the audit file
+      auditMgr = new nAuditArchiveScheduler(auditCheckInterval);
+      // construct am channel maintenance thread that periodically performs maintenance on persistant and mixed channels
+      channelMgr = new nChannelMaintenanceScheduler(channelCheckInterval);
+      // construct a thread that will check for realms as they are added. realms are incomplete when you get the
+      // notify call so this thread checks that the namespace for new realms is complete before adding it
+      // to the realms list
+      updateThread = new nRealmAddScheduler(1000);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Search the enumeration of child nodes, and add observers to all child realms
+   * and check all channels and queues if they are mixed or persistant add to the vector.
+   */
+  private void register(Enumeration enum1) throws nBaseAdminException {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode node = ((nLeafNode) obj);
+        if ((node.getAttributes().getType() == nChannelAttributes.MIXED_TYPE) || (node.getAttributes().getType()
+            == nChannelAttributes.PERSISTENT_TYPE)) {
+          nLeafNode leaf = (nLeafNode) myChannels.get(node.getAbsolutePath());
+          if (leaf == null) {
+            System.out.println("Adding channel " + node.getAbsolutePath() + " to scheduler");
+            myChannels.put(node.getAbsolutePath(), node);
+          } else {
+            myChannels.remove(node.getAbsolutePath());
+            System.out.println("Removing channel " + node.getAbsolutePath() + " from scheduler");
+          }
+        }
+      } else if (obj instanceof nRealmNode) {
+        register((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        ((nContainer) obj).addObserver(this);
+        myContainers.put(((nContainer) obj).getAbsolutePath(), obj);
+        register(((nContainer) obj).getNodes());
+      }
+    }
+  }
+
+  /**
+   * Search the enumeration of child nodes, and remove observers to all child realms
+   * and check all channels and queues if they are mixed or persistant remove from the vector.
+   */
+  private void unRegister(Enumeration enum1) throws nBaseAdminException {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode node = ((nLeafNode) obj);
+        if ((node.getAttributes().getType() == nChannelAttributes.MIXED_TYPE) || (node.getAttributes().getType()
+            == nChannelAttributes.PERSISTENT_TYPE)) {
+          nLeafNode leaf = (nLeafNode) myChannels.get(node.getAbsolutePath());
+          System.out.println("Removing channel " + node.getAbsolutePath() + " to scheduler");
+          myChannels.remove(node.getAbsolutePath());
+        }
+      } else if (obj instanceof nRealmNode) {
+        unRegister((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        ((nContainer) obj).addObserver(this);
+        myContainers.remove(((nContainer) obj).getAbsolutePath());
+        unRegister(((nContainer) obj).getNodes());
+      }
+    }
+  }
+
+  /**
+   * Add this object as an observer to all known realms
+   */
+  private void addObservers() {
+    Enumeration enum1 = realms.elements();
+    while (enum1.hasMoreElements()) {
+      nRealmNode node = (nRealmNode) enum1.nextElement();
+      node.addObserver(this);
+    }
+  }
+
+  /**
+   * Remove this as an observer to the realm
+   */
+  private void unRegister(nRealmNode node) throws nBaseAdminException {
+    System.out.println("Unregistering realm " + node.getName() + " @ " + node.getAbsolutePath());
+    node.deleteObserver(this);
+    realms.remove(node.getAbsolutePath());
+    unRegister(node.getNodes());
+  }
+
+  /**
+   * Add this as an observer to the realm ao that any new channels can be added
+   */
+  private void register(nRealmNode node) throws nBaseAdminException {
+    System.out.println("Registering realm " + node.getName() + " @ " + node.getAbsolutePath());
+    realms.put(node.getAbsolutePath(), node);
+    register(node.getNodes());
+  }
+
+  /**
+   * If an update is received from a container, it could mean that a channel has been added or removed
+   * This method either adds or removes the leaf node from the schedule vectors
+   * depending on whether it can be found within the namespace
+   */
+  public void update(nContainer cont, nLeafNode leaf) {
+    try {
+      if ((cont.findNode(leaf, true) == null)) {
+        myChannels.remove(leaf.getAbsolutePath());
+        System.out.println("Removing channel " + leaf.getAbsolutePath() + " from scheduler");
+      } else {
+        System.out.println("Adding new channel " + leaf.getAbsolutePath() + " to scheduler");
+        myChannels.put(leaf.getAbsolutePath(), leaf);
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * If an update is received from a realm, it could mean that it has been added or removed
+   * This method either adds or removes the realm from the audit acrhive schedule vectors
+   * depending on whether it can be found within the namespace
+   */
+  public void update(nRealmNode aRealm) {
+    try {
+      if ((realm.findNode(aRealm, true) == null)) {
+        realms.remove(aRealm.getAbsolutePath());
+        System.out.println("Removing realm " + aRealm.getAbsolutePath() + " and all channels from scheduler");
+        this.unRegister(aRealm);
+      } else {
+        System.out.println("Adding new realm " + aRealm.getAbsolutePath() + " to scheduler");
+        realms.put(aRealm.getAbsolutePath(), aRealm);
+        this.register(aRealm);
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public void update(Observable obs) {
+    update(obs, null);
+  }
+
+  /**
+   * Receive updates from realms and containers for new realms
+   */
+  public void update(Observable obs, Object obj) {
+    try {
+      if (obs instanceof nRealmNode) {
+        nRealmNode realm = (nRealmNode) obs;
+        if (realms.get(realm.getAbsolutePath()) == null) {
+          System.out.println("Got new realm " + realm.getName() + " @ " + realm.getAbsolutePath());
+          realm.waitForEntireNameSpace();
+          register(realm);
+        }
+      } else {
+        if (obs instanceof nContainer) {
+          if (obj instanceof nRealmNode) {
+            nNode parent = (nNode) obs;
+            nNode node = (nNode) obj;
+            System.out.println("Looking for " + parent.getAbsolutePath() + "/" + node.getName());
+            nRealmNode aRealm = (nRealmNode) realm.findNode(parent.getAbsolutePath() + "/" + node.getName());
+            nRealmNode found = (nRealmNode) realms.get(parent.getAbsolutePath() + "/" + node.getName());
+            if (found == null) {
+              System.out.println("Got new realm " + aRealm.getAbsolutePath());
+              incompleteRealms.put(parent.getAbsolutePath() + "/" + node.getName(), aRealm);
+            } else {
+              System.out.println("Got update for realm " + found.getAbsolutePath());
+              this.update(found);
+            }
+          } else {
+            nContainer cont = (nContainer) obs;
+            nContainer found = (nContainer) myContainers.get(cont.getAbsolutePath());
+            if (found == null) {
+              System.out.println("Got new container " + cont.getAbsolutePath());
+              this.register(cont.getNodes());
+            } else {
+              System.out.println("Got update for container " + cont.getAbsolutePath());
+              this.update(cont, (nLeafNode) obj);
+            }
+          }
+        }
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-m")) {
+        try {
+          i++;
+          channelCheckInterval = Long.parseLong(args[i]);
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for channel maintenance interval");
+        }
+      } else if (args[i].equalsIgnoreCase("-a")) {
+        try {
+          i++;
+          auditCheckInterval = Long.parseLong(args[i]);
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for realm audit archive interval");
+        }
+      } else {
+        System.out.println("Unrecognized parameter passed");
+      }
+    }
+  }
+
+  /**
+   * Class used to perform channel maintenance periodically
+   */
+  private class nChannelMaintenanceScheduler extends Thread {
+
+    private long myChannelCheckInterval = 3600000;
+
+    public nChannelMaintenanceScheduler(long scheduleInterval) {
+      myChannelCheckInterval = scheduleInterval;
+      this.start();
+    }
+
+    public void run() {
+      while (true) {
+        try {
+          Thread.sleep(myChannelCheckInterval);
+          synchronized (myChannels) {
+            Enumeration enum1 = myChannels.elements();
+            while (enum1.hasMoreElements()) {
+              nLeafNode leaf = (nLeafNode) enum1.nextElement();
+              leaf.freeUnusedSpace();
+              System.out.println(
+                  new Date(System.currentTimeMillis()).toString() + " Performing maintenance on channel " + leaf
+                      .getAbsolutePath());
+            }
+          }
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+
+  }
+
+  /**
+   * Class used to perform audit archiving periodically
+   */
+  private class nAuditArchiveScheduler extends Thread {
+
+    private long myAuditCheckInterval = 6048000000l;
+
+    public nAuditArchiveScheduler(long scheduleInterval) {
+      myAuditCheckInterval = scheduleInterval;
+      this.start();
+    }
+
+
+    public void run() {
+      while (true) {
+        try {
+          Thread.sleep(myAuditCheckInterval);
+          synchronized (myChannels) {
+            Enumeration enum1 = realms.elements();
+            while (enum1.hasMoreElements()) {
+              nRealmNode aRealm = (nRealmNode) enum1.nextElement();
+              System.out.println(
+                  new Date(System.currentTimeMillis()).toString() + " Performing audit archive on realm " + aRealm
+                      .getName() + " @ " + aRealm.getAbsolutePath());
+              aRealm.rollAuditFile();
+            }
+          }
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+
+  }
+
+  /**
+   * Class used to perform update new realms when they have been added
+   */
+  private class nRealmAddScheduler extends Thread {
+
+    private long myAddCheckInterval = 1000;
+
+    public nRealmAddScheduler(long scheduleInterval) {
+      myAddCheckInterval = scheduleInterval;
+      this.start();
+    }
+
+
+    public void run() {
+      while (true) {
+        try {
+          Thread.sleep(myAddCheckInterval);
+          synchronized (realms) {
+            Enumeration enum1 = incompleteRealms.elements();
+            while (enum1.hasMoreElements()) {
+              nRealmNode aRealm = (nRealmNode) enum1.nextElement();
+              if (aRealm.isNamespaceComplete()) {
+                nChannelManagement.this.register(aRealm);
+                nChannelManagement.this.incompleteRealms.remove(aRealm.getAbsolutePath());
+                nChannelManagement.this.realms.put(aRealm.getAbsolutePath(), aRealm);
+              }
+            }
+          }
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    }
+
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * as a system property
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nChannelManagement mgr = new nChannelManagement(args);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nchannelmgr <-m maintenance interval (ms)> <-a audit archive interval (ms)>\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<-m> - Enter -m 60000 to perform channel maintenance every 60000 milliseconds");
+    System.out.println("<-a> - Enter -a 86400000 to perform audit file archive every day");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

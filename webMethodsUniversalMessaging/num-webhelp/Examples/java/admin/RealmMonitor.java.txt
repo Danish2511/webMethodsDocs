@@ -1,0 +1,1430 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionDetails;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionListener;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nInterface;
+import com.pcbsys.nirvana.nAdminAPI.nInterfaceStatus;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nLogListener;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nThreadPool;
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.List;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * This application will start multiple threads to monitor each specified Nirvana realm. Triggers can be set in the
+ * configuration file.  If these triggers are hit, information regarding this issue will be output to a CSV file.
+ */
+public class RealmMonitor {
+
+  String sampleConfig =
+      "" + "#  SAMPLE CONFIG FILE \n" + "\n" + "\n" + "#If no workingdir set then will default to current dir\n" + "\n"
+          + "#workingdir=/Users/XXX/Desktop/\n" + "runRealmMonitor=true \n" + "runConnectionMonitor=true \n"
+          + "runThreadMonitor= true \n" + "runLogMonitor= true \n" + "runChannelMonitor= true\n" + "\n"
+          + "#--------------------\n" + "monitor=connectionmonitor \n"
+          + "headings=Date,Time,Name,Last received,Queue Size,Events Received,Events Transmitted\n"
+          + "methods=getDate,getTime,getRealmName,getTimeOfLastReceive,getQueueSize,getEventsReceived,getEventsTransmitted\n"
+          + "#outputfile=/Users/XXX/Desktop/ConnectionMonitor.txt \n" + "refreshrate=5000\n"
+          + "#maxTimeOfLastTransmitt=5000 #default = keepAliveTime * 1.5\n" + "maxQueuedEvents=0\n" + "\n"
+          + "#-------------------- \n" + "monitor = threadmonitor  \n"
+          + "headings = Time,Realm Name,Name,Queued,Idle,Allocated,Tasks Executed \n"
+          + "methods = getTime, getRealmName,getName,getQueue,getIdle,getSize,getTotal\n" + "maxQueueSize=0;\n"
+          + "minIdle=0\n" + "\n" + "#---------------------\n" + "monitor = logmonitor\n"
+          + "keywords = exception,stalled,attack,Exceeded\n" + "\n" + "#---------------------\n"
+          + "monitor = realmmonitor \n" + "refreshrate=5000\n"
+          + "headings=Time,Name,Channels,Queues,Current Connections,Total Connections,Free Memory,Total Memory,Used Memory,Threads \n"
+          + "methods=getTime, getRealmName,getNoOfChannels,getNoOfQueues,getCurrentConnections,getTotalConnections,getFreeMemory,getTotalMemory,getUsedMemory,getNoOfThreads \n"
+          + "methodsError=getTime, getRealmName,print0, print0, print0, print0, print0, print0, print0, print0\n"
+          + "#methodsError lists the methods to call if there is an error.  print0 will simply output 0 so there are clear errors in any graphs\n"
+          + "\n" + "\n" + "#---------------------\n" + "monitor = channelmonitor \n" + "#debug=true\n"
+          + "refreshrate=10000\n" + "headings=Time,Name,Type, Published, Consumed, Connections, Used Space, pub rate\n"
+          + "methods = getTime,getName,getType, getTotalPublished,getTotalConsumed, getTotalNoOfConnections, getUsedSpace, getPublishRate\n"
+          + "\n" + "#int\n" + "minPercentFreeInStore = 0;\n" + "minFanoutTime         = 0;\n"
+          + "minUsedSpace          = 0;\n" + "#long\n" + "minCurrentEvents      = 0;\n" + "#float\n"
+          + "minConsumedRate       = 0.0;\n" + "minPubRate            = .0; \n" + "minCacheHitRatio      = 0;\n"
+          + "minConnectionRate     = 0;\n" + "minCurrentCons        = 0;\n" + "\n"
+          + "#maxFanoutTime         =           #Integer.MAX_VALUE; <default value if left commented\n"
+          + "#maxUsedSpace          =           #0;\n" + "#maxConsumedRate       =           #0;\n"
+          + "#maxCurrentEvents      =           #Long.MAX_VALUE;\n"
+          + "#maxPubRate            =           #Float.MAX_VALUE;\n"
+          + "#maxCacheHitRatio      =           #Float.MAX_VALUE;\n"
+          + "#maxConnectionRate     =           #Float.MAX_VALUE;\n"
+          + "#maxCurrentCons        =           #Float.MAX_VALUE;\n"
+          + "#maxPercentFreeInStore =           #Integer.MAX_VALUE;\n";
+
+  private String configloc = "";
+  private String[] rnames = new String[]{"nsp://localhost:9000"};
+
+
+  //------- What to run -------
+  private boolean runRealmMonitor = true;
+  private boolean runChannelMonitor = true;
+  private boolean runConnectionMonitor = true;
+  private boolean runThreadMonitor = true;
+  private boolean runLogMonitor = true;
+  //-------------------------
+
+  //--------MonitorObjects------
+  private List<RealmMonitor_t> realm_m = new ArrayList<RealmMonitor_t>();
+  private List<ChannelMonitor_t> chan_m = new ArrayList<ChannelMonitor_t>();
+  private List<ConnectionMonitor_t> con_m = new ArrayList<ConnectionMonitor_t>();
+  private List<ThreadMonitor_t> thread_m = new ArrayList<ThreadMonitor_t>();
+  private List<LogMonitor_t> log_m = new ArrayList<LogMonitor_t>();
+  //----------------------------
+
+  String TIME_FORMAT_NOW = "HH:mm:ss";
+  String DATE_FORMAT_NOW = "dd.MM.yyyy";
+  SimpleDateFormat timeformat = new SimpleDateFormat(TIME_FORMAT_NOW);
+  SimpleDateFormat dateformat = new SimpleDateFormat(DATE_FORMAT_NOW);
+
+  String workingdir = "";
+
+  public static void main(String[] args) {
+    new RealmMonitor(args);
+  }
+
+  /**
+   * First process the arguments (Rname and config file location)
+   * All other properties are then read in from the config file.  Config file can set properties for the individual
+   * monitor threads but also specify which methods to invoke and output to the csv files.
+   * Each monitor thread is passed a list of methods to invoke.  The connection monitor for example will try to invoke
+   * these methods on the nConnectionDetails object where as the Realm monitor will invoke the methods on the rNode.
+   * It is also possible to override these methods or define custom methods.  This is handled by the order in which the
+   * application
+   * tries to invoke the methods.  First we try to invoke on the monitor thread, then the actual object (e.g.
+   * nConnectionDetails)
+   * and finally this class.  By doing this we can override certain methods in order to return a value in a different
+   * format (e.g. a time)
+   * Also we will want to timestamp everything that is written to the csv file so there is a getTime method written for
+   * this class
+   * so we can add getTime to our methods list.
+   */
+  public RealmMonitor(String[] args) {
+    workingdir = System.getProperty("user.dir") + "/RealmMonitorOut/";
+    processArgs(args);
+    setupMonitorThreads();
+    checkConfig();
+    try {
+      getConfigDetails();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    new ExitHandler();
+    startMonitorThreads();
+  }
+
+  /**
+   * We store everything based on rname so when we get a nRealmNode for a cluster node we need to find that nodes rname.
+   *
+   * @param n a realm node
+   * @return the rname for n
+   */
+  public String getRname(nRealmNode n) {
+    nInterfaceStatus is = (nInterfaceStatus) n.getInterfaceManager().getInterfaces().get(0);
+    nInterface i = is.getInterface();
+    return i.getURL();
+  }
+
+  /**
+   * Creates one rnode for every rname passed in, also gets any other realm nodes which are part of a cluster.
+   * A new thread is then created (but not started) for every rname and every different monitor.
+   */
+  private void setupMonitorThreads() {
+    if (runRealmMonitor) {
+      for (String rname : rnames) {
+        nRealmNode rNode = getRealmNode(rname);
+        if (rNode.isClustered()) {
+          nClusterNode cNode = rNode.getCluster();
+          Enumeration nodes = cNode.getNodes();
+          while (nodes.hasMoreElements()) {
+            nRealmNode n;
+            try {
+              n = (nRealmNode) nodes.nextElement();
+              realm_m.add(new RealmMonitor_t(getRname(n)).withRnode(n));
+            } catch (Exception e) {
+              System.out.println("Error trying to get all nodes in cluster: attempting to continue");
+            }
+          }
+        } else {
+          realm_m.add(new RealmMonitor_t(rname).withRnode(rNode));
+        }
+      }
+    }
+    if (runChannelMonitor) {
+      for (String rname : rnames) {
+        nRealmNode rNode = getRealmNode(rname);
+        if (rNode.isClustered()) {
+          nClusterNode cNode = rNode.getCluster();
+          Enumeration nodes = cNode.getNodes();
+          while (nodes.hasMoreElements()) {
+            nRealmNode n;
+            try {
+              n = (nRealmNode) nodes.nextElement();
+              chan_m.add(new ChannelMonitor_t(getRname(n)).withRnode(n));
+            } catch (Exception e) {
+              System.out.println("Error trying to get all nodes in cluster: attempting to continue");
+            }
+          }
+        } else {
+          chan_m.add(new ChannelMonitor_t(rname).withRnode(rNode));
+        }
+      }
+    }
+    if (runLogMonitor) {
+      for (String rname : rnames) {
+        nRealmNode rNode = getRealmNode(rname);
+        if (rNode.isClustered()) {
+          nClusterNode cNode = rNode.getCluster();
+          Enumeration nodes = cNode.getNodes();
+          while (nodes.hasMoreElements()) {
+            nRealmNode n;
+            try {
+              n = (nRealmNode) nodes.nextElement();
+              log_m.add(new LogMonitor_t(getRname(n)).withRnode(n));
+            } catch (Exception e) {
+              System.out.println("Error trying to get all nodes in cluster: attempting to continue");
+            }
+          }
+        } else {
+          log_m.add(new LogMonitor_t(rname).withRnode(rNode));
+        }
+      }
+    }
+    if (runConnectionMonitor) {
+      for (String rname : rnames) {
+        nRealmNode rNode = getRealmNode(rname);
+        if (rNode.isClustered()) {
+          nClusterNode cNode = rNode.getCluster();
+          Enumeration nodes = cNode.getNodes();
+          while (nodes.hasMoreElements()) {
+            nRealmNode n;
+            try {
+              n = (nRealmNode) nodes.nextElement();
+              con_m.add(new ConnectionMonitor_t(getRname(n)).withRnode(n));
+            } catch (Exception e) {
+              System.out.println("Error trying to get all nodes in cluster: attempting to continue");
+            }
+          }
+        } else {
+          con_m.add(new ConnectionMonitor_t(rname).withRnode(rNode));
+        }
+      }
+    }
+    if (runThreadMonitor) {
+      for (String rname : rnames) {
+        nRealmNode rNode = getRealmNode(rname);
+        if (rNode.isClustered()) {
+          nClusterNode cNode = rNode.getCluster();
+          Enumeration nodes = cNode.getNodes();
+          while (nodes.hasMoreElements()) {
+            nRealmNode n;
+            try {
+              n = (nRealmNode) nodes.nextElement();
+              thread_m.add(new ThreadMonitor_t(getRname(n)).withRnode(n));
+            } catch (Exception e) {
+              System.out.println("Error trying to get all nodes in cluster: attempting to continue");
+            }
+          }
+        } else {
+          thread_m.add(new ThreadMonitor_t(rname).withRnode(rNode));
+        }
+      }
+    }
+  }
+
+  /**
+   * Once we have dealt with the configuration file the threads are all initialised.
+   */
+  private void startMonitorThreads() {
+    if (runRealmMonitor) {
+      for (RealmMonitor_t aRealm_m : realm_m) {
+        aRealm_m.init();
+      }
+    }
+    if (runChannelMonitor) {
+      for (ChannelMonitor_t aChan_m : chan_m) {
+        aChan_m.init();
+      }
+    }
+    if (runLogMonitor) {
+      for (LogMonitor_t aLog_m : log_m) {
+        aLog_m.init();
+      }
+    }
+    if (runConnectionMonitor) {
+      for (ConnectionMonitor_t aCon_m : con_m) {
+        aCon_m.init();
+      }
+    }
+    if (runThreadMonitor) {
+      for (ThreadMonitor_t aThread_m : thread_m) {
+        aThread_m.init();
+      }
+    }
+  }
+
+  /**
+   * This class monitors the threads of a realm
+   */
+  public class ThreadMonitor_t extends MonitorThread {
+
+    nRealmNode rNode;
+    long maxQueueSize = 0;
+    long minIdle = 0;
+
+    private ThreadMonitor_t(String rname) {
+      this.rname = rname;
+      headings = new String[]{"getTime", "getQueue", "getIdle", "getName", "getTotal"};
+    }
+
+    void init() {
+      if (rNode == null) {
+        rNode = getRealmNode(rname);
+      }
+      name = rNode.getName();
+      if (outputFile.equals("")) {
+        outputFile = workingdir + "ThreadMonitor_" + name + ".txt";
+      }
+      if (refreshRate == 0) {
+        refreshRate = 5000;
+      }
+      try {
+        FileWriter fstream = new FileWriter(outputFile, true);
+        out = new BufferedWriter(fstream);
+        printHeadings();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      this.start();
+    }
+
+    public ThreadMonitor_t withRnode(nRealmNode n) {
+      rNode = n;
+      return this;
+    }
+
+    public void run() {
+      while (true) {
+        for (Object tp : rNode.getThreadPoolDetails()) {
+          if (checkThreadPool((nThreadPool) tp)) {
+            write(printDetails(tp, this));
+          }
+        }
+        try {
+          Thread.sleep(refreshRate);
+        } catch (InterruptedException ignore) {
+        }
+      }
+    }
+
+    private boolean checkThreadPool(nThreadPool tp) {
+      return debug || tp.getQueue() > maxQueueSize || tp.getIdle() <= minIdle;
+    }
+
+    public void setMaxQueueSize(Object o) {
+      maxQueueSize = Long.parseLong((String) o);
+      if (debug) {
+        System.out.println("setting maxQueueSize = " + maxQueueSize);
+      }
+    }
+
+    public void setMinIdle(Object o) {
+      minIdle = Long.parseLong((String) o);
+      if (debug) {
+        System.out.println("setting minIdle = " + minIdle);
+      }
+    }
+  }
+
+  /**
+   * Monitors the log and writes to a csv file if a keyword is found
+   */
+  public class LogMonitor_t extends MonitorThread implements nLogListener {
+
+    nRealmNode rNode;
+    String[] keywords;
+
+    private LogMonitor_t(String rname) {
+      this.rname = rname;
+
+      headings = new String[]{"Log Listener"};
+    }
+
+    void init() {
+      if (rNode == null) {
+        rNode = getRealmNode(rname);
+      }
+      name = rNode.getName();
+      if (outputFile.equals("")) {
+        outputFile = workingdir + "LogMonitor_" + name + ".txt";
+      }
+      try {
+        FileWriter fstream = new FileWriter(outputFile, true);
+        out = new BufferedWriter(fstream);
+        printHeadings();
+        rNode.addLogListener(this);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    public LogMonitor_t withRnode(nRealmNode n) {
+      rNode = n;
+      return this;
+    }
+
+    public void setKeywords(Object o) {
+      keywords = RealmMonitor.getStringArray((String) o);
+      if (debug) {
+        System.out.println("Setting keywords = " + o);
+      }
+    }
+
+    private boolean checkForProblems(String line) {
+      if (keywords == null) {
+        return true;
+      }
+      for (String keyword : keywords) {
+        if (line.contains(keyword)) {
+          return true;
+        }
+      }
+      return false;
+    }
+
+    public void report(String message) {
+      if (checkForProblems(message)) {
+        write(message + "\n");
+      }
+    }
+  }
+
+  /**
+   * Monitors changes to realm connections
+   */
+  public class ConnectionMonitor_t extends MonitorThread implements nConnectionListener {
+
+    nRealmNode rNode;
+    final Hashtable<String, nConnectionDetails> cons = new Hashtable<String, nConnectionDetails>();
+    int maxQueuedEvents = 0;
+    long keepAliveTime = 60000;
+    Double maxTimeOfLastTransmitt = -1.0;
+
+    private ConnectionMonitor_t(String rname) {
+      this.name = rname;
+      headings = new String[]{"getTime", "getTimeOfLastReceive", "getQueueSize", "getEventsReceived",
+          "getEventsTransmitted"};
+    }
+
+    void init() {
+      if (rNode == null) {
+        rNode = getRealmNode(rname);
+      }
+      name = rNode.getName();
+      if (maxTimeOfLastTransmitt == -1.0) {
+        try {
+          keepAliveTime = Long.parseLong(rNode.getConfigGroup("Connection Config").find("KeepAlive").getValue()); //6.0
+        } catch (Exception e) {
+          try {
+            keepAliveTime = Long.parseLong(rNode.getConfigGroup("FanoutValues").find("KeepAlive").getValue()); //5.5
+          } catch (Exception e2) {
+            System.out.println("could not get keep alive value");
+          }
+          keepAliveTime = 60000;
+        }
+        maxTimeOfLastTransmitt = keepAliveTime * 1.5;
+      }
+      if (refreshRate == 0) {
+        refreshRate = 5000;
+      }
+      if (outputFile.equals("")) {
+        outputFile = workingdir + "ConnectionMonitor_" + name + ".txt";
+      }
+      try {
+        rNode.addConnectionListener(this);
+        FileWriter fstream = new FileWriter(outputFile, true);
+        out = new BufferedWriter(fstream);
+        printHeadings();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+      this.start();
+    }
+
+    public ConnectionMonitor_t withRnode(nRealmNode n) {
+      rNode = n;
+      return this;
+    }
+
+    public void run() {
+      while (true) {
+        synchronized (cons) {
+          for (nConnectionDetails details : cons.values()) {
+            if (checkForProblems(details)) {
+              write(printDetails(details, this));
+            }
+          }
+        }
+        try {
+          Thread.sleep(refreshRate);
+        } catch (InterruptedException ignore) {
+        }
+      }
+    }
+
+    public void add(nConnectionDetails details) {
+      synchronized (cons) {
+        cons.put(details.getId(), details);
+      }
+    }
+
+    public void del(nConnectionDetails details) {
+      synchronized (cons) {
+        cons.remove(details.getId());
+      }
+    }
+
+    private boolean checkForProblems(nConnectionDetails details) {
+      return details.getQueueSize() > maxQueuedEvents || details.getTimeOfLastTransmitt() > maxTimeOfLastTransmitt
+          || debug;
+
+    }
+
+    public void setMaxQueuedEvents(Object o) {
+      maxQueuedEvents = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting maxQueuedEvents = " + maxQueuedEvents);
+      }
+    }
+
+    public void setMaxTimeOfLastTransmitt(Object o) {
+      maxTimeOfLastTransmitt = Double.valueOf((String) o);
+      if (debug) {
+        System.out.println("setting maxTimeOfLastTransmitt = " + maxTimeOfLastTransmitt);
+      }
+    }
+  }
+
+  /**
+   * Monitors channels for issues.  Will write to the csv if any triggers are hit e.g. the used space reaches a
+   * certain level.
+   */
+  public class ChannelMonitor_t extends MonitorThread {
+
+    nRealmNode rNode;
+
+    int maxFanoutTime = Integer.MAX_VALUE;
+    int maxUsedSpace = 0;
+    float maxConsumedRate = 0;
+    long maxCurrentEvents = Long.MAX_VALUE;
+    float maxPubRate = Float.MAX_VALUE;
+    float maxCacheHitRatio = Float.MAX_VALUE;
+    float maxConnectionRate = Float.MAX_VALUE;
+    float maxCurrentCons = Float.MAX_VALUE;
+    int maxPercentFreeInStore = Integer.MAX_VALUE;
+
+    int minPercentFreeInStore = 0;
+    int minFanoutTime = 0;
+    int minUsedSpace = 0;
+    float minConsumedRate = 0;
+    long minCurrentEvents = 0;
+    float minPubRate = 0;
+    float minCacheHitRatio = 0;
+    float minConnectionRate = 0;
+    float minCurrentCons = 0;
+
+
+    private ChannelMonitor_t(String rname) {
+      this.rname = rname;
+    }
+
+    public void init() {
+      if (rNode == null) {
+        rNode = getRealmNode(rname);
+      }
+      name = rNode.getName();
+      if (outputFile.equals("")) {
+        outputFile = workingdir + "ChannelMonitor_" + name + ".txt";
+      }
+      try {
+        FileWriter fstream = new FileWriter(outputFile, true);
+        out = new BufferedWriter(fstream);
+        printHeadings();
+        this.start();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+    public ChannelMonitor_t withRnode(nRealmNode n) {
+      rNode = n;
+      return this;
+    }
+
+    public void run() {
+      while (true) {
+        try {
+          checkForProblems(rNode);
+          Thread.sleep(refreshRate);
+        } catch (InterruptedException ignore) {
+        }
+      }
+    }
+
+    public void checkForProblems(nRealmNode rNode) {
+      checkForProblems(rNode.getNodes());
+    }
+
+    public void checkForProblems(Enumeration nodes) {
+      while (nodes.hasMoreElements()) {
+        Object obj = nodes.nextElement();
+        if (obj instanceof nLeafNode) {
+          checkForProblems((nLeafNode) obj);
+        } else if (obj instanceof nRealmNode) {
+          checkForProblems((nRealmNode) obj);
+        } else if (obj instanceof nContainer) {
+          checkForProblems((nContainer) obj);
+        }
+      }
+    }
+
+    public void checkForProblems(nLeafNode node) {
+      if (node.getUsedSpace() < minUsedSpace || node.getUsedSpace() >= maxUsedSpace) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getConsumedRate() <= minConsumedRate || node.getConsumedRate() >= maxConsumedRate) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getPublishRate() <= minPubRate || node.getPublishRate() >= maxPubRate) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getCacheHitRatio() <= minCacheHitRatio || node.getCacheHitRatio() >= maxCacheHitRatio) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getConnectionRate() <= minConnectionRate || node.getConnectionRate() >= maxConnectionRate) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getCurrentNoOfConnections() <= minCurrentCons || node.getCurrentNoOfConnections() >= maxCurrentCons) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getCurrentNumberOfEvents() <= minCurrentEvents || node.getCurrentNumberOfEvents() >= maxCurrentEvents) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getFanoutTime() <= minFanoutTime || node.getFanoutTime() >= maxFanoutTime) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (node.getPercentageFreeInStore() <= minPercentFreeInStore
+          || node.getPercentageFreeInStore() >= maxPercentFreeInStore) {
+        write(printDetails(node, this));
+        return;
+      }
+      if (debug) {
+        write(printDetails(node, this));
+      }
+
+    }
+
+    public void checkForProblems(nContainer container) {
+      checkForProblems(container.getNodes());
+    }
+
+    public String getType(Object o) {
+      nLeafNode leaf = (nLeafNode) o;
+      if (leaf.isChannel()) {
+        return "Channel";
+      }
+      if (leaf.isQueue()) {
+        return "Queue";
+      }
+      return "unknown";
+    }
+
+    public String getUsedSpace(Object o) {
+      long used = ((nLeafNode) o).getUsedSpace();
+      used = used / 1024;
+      return used + "";
+    }
+
+    /**
+     * All these set methods are invoked if the property is set in the config file i.e if maxUsedSpace is set in the
+     * properties
+     * file then setMaxUsedSpace is invoked with the value
+     *
+     * @param o the value set in the config file.  We know this is a string so we can immediately cast it.
+     */
+    public void setMaxUsedSpace(Object o) {
+      maxUsedSpace = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting maxUsedSpace = " + maxUsedSpace);
+      }
+    }
+
+    public void setMaxConsumedRate(Object o) {
+      maxConsumedRate = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting maxConsumedRate = " + maxConsumedRate);
+      }
+    }
+
+    public void setMaxPubRate(Object o) {
+      maxPubRate = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting maxPubRate = " + maxPubRate);
+      }
+    }
+
+    public void setMaxConnectionRate(Object o) {
+      maxConnectionRate = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting maxConnectionRate = " + maxConnectionRate);
+      }
+    }
+
+    public void setMaxCacheHitRatio(Object o) {
+      maxCacheHitRatio = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting maxCacheHitRatio = " + maxCacheHitRatio);
+      }
+    }
+
+    public void setMaxCurrentCons(Object o) {
+      maxCurrentCons = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting maxCurrentCons = " + maxCurrentCons);
+      }
+    }
+
+    public void setMaxFanoutTime(Object o) {
+      maxFanoutTime = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting maxFanoutTime = " + maxFanoutTime);
+      }
+    }
+
+    public void setMaxPercentFreeInStore(Object o) {
+      maxPercentFreeInStore = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting maxPercentFreeInStore = " + maxPercentFreeInStore);
+      }
+    }
+
+    public void setMaxCurrentEvents(Object o) {
+      maxCurrentEvents = Long.parseLong((String) o);
+      if (debug) {
+        System.out.println("setting maxCurrentEvents = " + maxCurrentEvents);
+      }
+    }
+
+
+    public void setMinPercentFreeInStore(Object o) {
+      minPercentFreeInStore = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting minPercentFreeInStore = " + minPercentFreeInStore);
+      }
+    }
+
+    public void setMinUsedSpace(Object o) {
+      minUsedSpace = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting minUsedSpace = " + minUsedSpace);
+      }
+    }
+
+    public void setMinConsumedRate(Object o) {
+      minConsumedRate = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting minConsumedRate = " + minConsumedRate);
+      }
+    }
+
+    public void setMinPubRate(Object o) {
+      minPubRate = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting minPubRate = " + minPubRate);
+      }
+    }
+
+    public void setMinConnectionRate(Object o) {
+      minConnectionRate = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting minConnectionRate = " + minConnectionRate);
+      }
+    }
+
+    public void setMinCacheHitRatio(Object o) {
+      minCacheHitRatio = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting minCacheHitRatio = " + minCacheHitRatio);
+      }
+    }
+
+    public void setMinCurrentCons(Object o) {
+      minCurrentCons = Float.parseFloat((String) o);
+      if (debug) {
+        System.out.println("setting minCurrentCons = " + minCurrentCons);
+      }
+    }
+
+    public void setMinFanoutTime(Object o) {
+      minFanoutTime = Integer.parseInt((String) o);
+      if (debug) {
+        System.out.println("setting minFanoutTime = " + minFanoutTime);
+      }
+    }
+
+    public void setMinCurrentEvents(Object o) {
+      minCurrentEvents = Long.parseLong((String) o);
+      if (debug) {
+        System.out.println("setting minCurrentEvents = " + minCurrentEvents);
+      }
+    }
+  }
+
+  /**
+   * Monitors the realm.  Will continuously write to the csv file.  If we do not receive an update from the realm
+   * in more than 2*updateInterval then we write 0s to the csv.  This way any problems will be clear if the csv is
+   * used to create a graph.
+   */
+  public class RealmMonitor_t extends MonitorThread implements Observer {
+
+    nRealmNode rNode;
+    long lastUpdate;
+    String[] methodsError;
+
+    private RealmMonitor_t(String rname) {
+      this.rname = rname;
+      headings = new String[]{"getTime", "getNoOfChannels", "getNoOfQueues", "getCurrentConnections",
+          "getTotalConnections", "getFreeMemory", "getTotalMemory", "getNoOfThreads"};//need get used!
+    }
+
+    public void init() {
+      if (rNode == null) {
+        rNode = getRealmNode(rname);
+      }
+      name = rNode.getName();
+      if (outputFile.equals("")) {
+        outputFile = workingdir + "RealmMonitor_" + name + ".txt";
+      }
+      try {
+        FileWriter fstream = new FileWriter(outputFile, true);
+        out = new BufferedWriter(fstream);
+        printHeadings();
+        if (refreshRate == 0) {
+          refreshRate = Long.parseLong(rNode.getConfigGroup("Connection Config").find("KeepAlive").getValue());
+        }
+      } catch (Exception e) {
+        refreshRate = 60000;
+      }
+      rNode.addObserver(this);
+      lastUpdate = System.currentTimeMillis();
+      this.start();
+    }
+
+    public RealmMonitor_t withRnode(nRealmNode rNode) {
+      this.rNode = rNode;
+      return this;
+    }
+
+    public void run() {
+      while (true) {
+        try {
+          if (!checkForProblems(rNode)) {
+            write(printDetails(rNode, this));
+          } else {
+            print0s();
+          }
+          Thread.sleep(refreshRate);
+        } catch (InterruptedException ignore) {
+        }
+      }
+    }
+
+    public void print0s() {
+      StringBuilder sb = new StringBuilder();
+      if (methodsError == null) {
+        for (String s : headings) {
+          sb.append("0,");
+        }
+        write(sb.substring(0, sb.length() - 1) + "\n");
+      } else {
+        String[] temp = methods;
+        methods = methodsError;
+        write(printDetails(rNode, this));
+        methods = temp;
+      }
+    }
+
+    public String getTotalMemory(Object o) {
+      nRealmNode rn = (nRealmNode) o;
+      long tot = rn.getTotalMemory();
+      tot = tot / (1024 * 1024);
+      return tot + "";
+    }
+
+    public String getFreeMemory(Object o) {
+      nRealmNode rn = (nRealmNode) o;
+      long free = rn.getFreeMemory();
+      free = free / (1024 * 1024);
+      return free + "";
+    }
+
+    public String getUsedMemory(Object o) {
+      nRealmNode rn = (nRealmNode) o;
+      long totalmem = rn.getTotalMemory();
+      long freemem = rn.getFreeMemory();
+      long diff = totalmem - freemem;
+      diff = diff / (1024 * 1024);
+      return diff + "";
+    }
+
+    public void setMethodsError(Object o) {
+      methodsError = getStringArray((String) o);
+      if (debug) {
+        System.out.println("setting methodsError = " + o);
+      }
+    }
+
+    public boolean checkForProblems(nRealmNode rNode) {
+      long now = System.currentTimeMillis();
+      long diff = now - lastUpdate;
+      return diff > rNode.getUpdateInterval() * 2;
+    }
+
+    public void update(Observable o, Object arg) {
+      lastUpdate = System.currentTimeMillis();
+    }
+  }
+
+  Hashtable<String, nRealmNode> rNodes = new Hashtable<String, nRealmNode>();
+
+  /**
+   * This method is used to ensure we do not start multiple rnodes for one rname
+   *
+   * @param rname rname for the rnode to construct
+   * @return either a cached rnode or a newly constructed rnode for rname
+   */
+  private nRealmNode getRealmNode(String rname) {
+    try {
+      if (rNodes.containsKey(rname)) {
+        return rNodes.get(rname);
+      }
+      System.out.print("Establishing realm node...");
+      nSessionAttributes nsa = new nSessionAttributes(rname);
+      nRealmNode rNode = new nRealmNode(nsa);
+
+      if (!rNode.isAuthorised()) {
+        System.out.println("User not authorised on this node " + nsa);
+        System.exit(1);
+      }
+      waitForRealmNodeNameSpace (rNode);
+      System.out.println("done\n");
+      rNodes.put(rname, rNode);
+      return rNode;
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    return null;
+  }
+
+  private void waitForRealmNodeNameSpace (nRealmNode realmNode) {
+    realmNode.waitForEntireNameSpace();
+    try {
+      Thread.sleep(realmNode.getUpdateInterval());
+    } catch (InterruptedException e) {
+      System.out.println(""+e);
+    }
+  }
+
+  /**
+   * Reads the configuration details from the config file.
+   */
+  private void getConfigDetails() throws Exception {
+    BufferedReader reader = null;
+    try {
+      File f = new File(configloc);
+      reader = new BufferedReader(new FileReader(f));
+      String line;
+      String monitor = "";
+      int linenum = -1;
+      while ((line = reader.readLine()) != null) {
+        linenum++;
+        line = line.trim();
+        if (line.length() == 0 || line.charAt(0) == '#') {
+          continue;
+        }
+        if (line.contains("#")) {
+          line = line.substring(0, line.indexOf('#'));
+        }
+        if (line.endsWith(";")) {
+          line = line.substring(0, line.length() - 1);
+        }
+
+        String[] args = line.split("=");
+        if (args.length != 2) {
+          throw new Exception("Syntax error in config file at line: " + linenum + " (too many '=')");
+        }
+
+        String field = args[0].trim();
+        String value = args[1].trim();
+
+        if (field.equalsIgnoreCase("monitor")) {
+          monitor = value;
+          continue;
+        }
+        setValue(monitor, field, value);
+      }
+    } finally {
+      if (reader != null) {
+        reader.close();
+      }
+    }
+  }
+
+  /**
+   * For the given monitor object, sets the field for that monitor to the value read from the config file.
+   *
+   * @param monitor the name of the monitor class e.g. connectionmonitor
+   * @param field the field (variable) of the monitor to be set
+   * @param value the value to set the field to
+   */
+  private void setValue(String monitor, String field, String value) {
+    try {
+      String firstLetter = field.substring(0, 1);
+      field = "set" + firstLetter.toUpperCase() + field.substring(1);
+
+      if (monitor.equalsIgnoreCase("")) {
+        this.getClass().getMethod(field, Object.class).invoke(this, value);
+        return;
+      }
+      if (monitor.equalsIgnoreCase("realmmonitor")) {
+        if (runRealmMonitor) {
+          for (RealmMonitor_t m : realm_m) {
+            m.getClass().getMethod(field, Object.class).invoke(m, value);
+          }
+        }
+        return;
+      }
+      if (monitor.equalsIgnoreCase("channelmonitor")) {
+        if (runChannelMonitor) {
+          for (ChannelMonitor_t m : chan_m) {
+            m.getClass().getMethod(field, Object.class).invoke(m, value);
+          }
+        }
+        return;
+      }
+      if (monitor.equalsIgnoreCase("logmonitor")) {
+        if (runLogMonitor) {
+          for (LogMonitor_t m : log_m) {
+            m.getClass().getMethod(field, Object.class).invoke(m, value);
+          }
+        }
+        return;
+      }
+      if (monitor.equalsIgnoreCase("connectionmonitor")) {
+        if (runConnectionMonitor) {
+          for (ConnectionMonitor_t m : con_m) {
+            m.getClass().getMethod(field, Object.class).invoke(m, value);
+          }
+        }
+        return;
+      }
+      if (monitor.equalsIgnoreCase("threadmonitor")) {
+        if (runThreadMonitor) {
+          for (ThreadMonitor_t m : thread_m) {
+            m.getClass().getMethod(field, Object.class).invoke(m, value);
+          }
+        }
+        return;
+      }
+      throw new Exception("unknown monitor");
+    } catch (Exception ignore) {
+    }
+  }
+
+  /**
+   * If the user has not input a config file location then we can create a config file in the working directory
+   */
+  private void checkConfig() {
+    if (configloc.equals("")) {
+      configloc = System.getProperty("user.dir") + "/RealmMonitorOut/";
+      File f = new File(configloc);
+      f.mkdirs();
+      configloc += "config.txt";
+      f = new File(configloc);
+      if (!f.exists()) {
+        System.out.println("No config file found so generating one > " + configloc);
+        try {
+          FileWriter fstream = new FileWriter(configloc);
+          BufferedWriter out = new BufferedWriter(fstream);
+          out.write(sampleConfig);
+          out.close();
+        } catch (Exception e) {
+          System.out.println("Error generating sample config file.  Please specify one.");
+          Usage();
+          System.exit(0);
+        }
+      }
+    }
+    System.out.println("Using config file : " + configloc);
+  }
+
+  /**
+   * Each monitor class has a list of methods which should be invoked and the return value printed to the csv.
+   * This method takes a monitor thread and an object.  It then tries to invoke each method in the monitor's methods
+   * array.  First it tries to invoke the method on the monitor object (e.g. ConnectionMonitor_t),
+   * then the object passed in (e.g. nConnectionDetails) and then the enclosing class (RealmMonitor).
+   * Once a the method is found it is invoked and the returned object is added to a comma separated list.
+   * By trying to invoke the methods in this order we can override certain return types.  Some methods return an array
+   * of
+   * String so would cause us to write something like String[] to the csv which is no good.  So instead we can add a
+   * method in the monitor thread class which takes the String[] and returns a String representation.
+   *
+   * @param o an object such as nConnectionDetails or nRealmNode
+   * @param mon the calling monitor thread
+   * @return comma separated list of values to be written to the csv
+   */
+  private synchronized String printDetails(Object o, Object mon) {
+    StringBuilder sb = new StringBuilder();
+    for (String methodname : ((MonitorThread) mon).getMethods()) {
+      //getName is a method in the Thread class so need to rename to make sure we invoke this on the correct object
+      if (methodname.equals("getName")) {
+        methodname = "_getName";
+      }
+      try {
+        sb.append(tryInvoke(methodname, mon, o));
+      } catch (NoSuchMethodException e) {
+        try {
+          sb.append(tryInvoke(methodname, o, o));
+        } catch (NoSuchMethodException e1) {
+          try {
+            sb.append(tryInvoke(methodname, this, o));
+          } catch (Exception e11) {
+            e11.printStackTrace();
+          }
+        } catch (Exception e2) {
+          e2.printStackTrace();
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+    return sb.substring(0, sb.length() - 1) + "\n";
+  }
+
+  /**
+   * @param method the name of the method to invoke
+   * @param o the object to try to invoke on.  For example if this if the connection monitor, we will first try to
+   * invoke
+   * on the connection monitor thread (to allow us to override methods), then the nConnectionDetails object, then
+   * the this RealmMonitor class (e.g. getTime)
+   * @param baseobject In the case of the connection monitor this will be the nConnectionDetails object.  This is
+   * passed
+   * so that we can handle a method like getSubject differently.  getSubject returns an array of Strings so we would
+   * need to override this in the monitor thread so we can output a comma separated list.  This still requires us to
+   * pass the nConnectionDetails object to the monitor thread method.
+   */
+  public String tryInvoke(String method, Object o, Object baseobject)
+      throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    Object ret = null;
+    Method m;
+    try {
+      m = o.getClass().getMethod(method);
+      ret = m.invoke(o);
+    } catch (Exception e) {
+      try {
+        m = o.getClass().getMethod(method, Object.class);
+        ret = m.invoke(o, baseobject);
+      } catch (IllegalArgumentException e2) {
+        e2.printStackTrace();
+      }
+    }
+    //Need to make sure we can handle all return types.
+    //if the method name contains the word time we will format it as a time
+    if (ret != null) {
+      if (ret instanceof Long) {
+        if (method.toLowerCase().contains("time")) {
+          Calendar cal = Calendar.getInstance();
+          cal.setTimeInMillis((Long) ret);
+          ret = timeformat.format(cal.getTime());
+        } else {
+          ret = Long.toString((Long) ret);
+        }
+      }
+      return ret.toString() + ",";
+    }
+    return ",";
+  }
+
+  /**
+   * Super class for each of the monitor threads.  Contains methods applicable to all monitor threads.
+   */
+  public class MonitorThread extends Thread {
+
+    String rname;
+    String name;
+    String[] headings;
+    String[] methods;
+    BufferedWriter out;
+    boolean debug = false;
+    long refreshRate = 0;
+    String outputFile = "";
+
+    void write(String message) {
+      try {
+        out.write(message);
+        out.flush();
+        if (debug) {
+          System.out.print(message);
+        }
+      } catch (IOException ignored) {
+      }
+    }
+
+    String[] getHeadings() {
+      return headings;
+    }
+
+    String[] getMethods() {
+      return methods;
+    }
+
+    public void setHeadings(Object o) {
+      headings = RealmMonitor.getStringArray((String) o);
+      if (debug) {
+        System.out.println("setting headings = " + o);
+      }
+    }
+
+    public void setMethods(Object o) {
+      methods = RealmMonitor.getStringArray((String) o);
+      if (debug) {
+        System.out.println("setting methods = " + o);
+      }
+    }
+
+    public void setDebug(Object o) {
+      debug = Boolean.valueOf((String) o);
+      System.out.println("Setting debug mode = " + debug);
+    }
+
+    //log monitor is async so no refresh rate
+    public void setRefreshrate(Object o) {
+      refreshRate = Long.parseLong((String) o);
+      if (debug) {
+        System.out.println("setting refreshRate = " + o);
+      }
+    }
+
+    public void setOutputfile(Object o) {
+      outputFile = (String) o;
+      if (debug) {
+        System.out.println("outputFile = " + o);
+      }
+    }
+
+    public String getRname() {
+      return rname;
+    }
+
+    public String getRealmName() {
+      return name;
+    }
+
+    public String _getName(Object o) {
+      Method m = null;
+      try {
+        m = o.getClass().getMethod("getName");
+        Object ret = m.invoke(o);
+        return ret.toString();
+      } catch (Exception ignored) {
+      }
+      return "error";
+    }
+
+    public String getID() {
+      return name;
+    }
+
+    void printHeadings() {
+      for (int i = 0; i < headings.length; i++) {
+        write(headings[i]);
+        if (i < headings.length - 1) {
+          write(",");
+        } else {
+          write("\n");
+        }
+      }
+    }
+  }
+
+  public void setRnames(Object o) {
+    rnames = getStringArray((String) o);
+    System.out.println("Setting rnames = " + o);
+  }
+
+  public void setRunRealmMonitor(Object o) {
+    runRealmMonitor = Boolean.valueOf((String) o);
+    System.out.println("runRealmMonitor = " + runRealmMonitor);
+  }
+
+  public void setRunThreadMonitor(Object o) {
+    runThreadMonitor = Boolean.valueOf((String) o);
+    System.out.println("runThreadMonitor = " + runThreadMonitor);
+  }
+
+  public void setRunLogMonitor(Object o) {
+    runLogMonitor = Boolean.valueOf((String) o);
+    System.out.println("runLogMonitor = " + runLogMonitor);
+  }
+
+  public void setRunChannelMonitor(Object o) {
+    runChannelMonitor = Boolean.valueOf((String) o);
+    System.out.println("runChannelMonitor = " + runChannelMonitor);
+  }
+
+  public void setRunConnectionMonitor(Object o) {
+    runConnectionMonitor = Boolean.valueOf((String) o);
+    System.out.println("runConnectionMonitor = " + runConnectionMonitor);
+  }
+
+  public void setWorkingdir(Object o) {
+    workingdir = (String) o;
+    System.out.println("workingdir = " + workingdir);
+  }
+
+  public String getTime() {
+    Calendar cal = Calendar.getInstance();
+    return timeformat.format(cal.getTime());
+  }
+
+  public String getDate() {
+    Calendar cal = Calendar.getInstance();
+    return dateformat.format(cal.getTime());
+  }
+
+  public static String[] getStringArray(String o) {
+    if (o.contains(",")) {
+      String[] args = o.split(",");
+      for (int i = 0; i < args.length; i++) {
+        args[i] = args[i].trim();
+      }
+      return args;
+    }
+    return new String[]{o};
+  }
+
+
+  private void processArgs(String[] args) {
+    switch (args.length) {
+      case 2: {
+        configloc = args[1];
+      }
+      case 1: {
+        rnames = getRnames(args[0]);
+      }
+    }
+    if (args.length < 1) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  public String[] getRnames(String rnames) {
+    return rnames.split(",");
+  }
+
+  public void Usage() {
+    System.out.println("java RealmMonitor <rnames> [config file]\n");
+    System.out.println("<Required Parameters>\n");
+    System.out.println("<rname> : comma separated list of rnames to monitor.\n");
+    System.out.println("[Optional Parameters]\n");
+    System.out.println("[config file] : configuration file location e.g. c:\\config.txt\n");
+    System.out.println("All other parameters can be specified in the config file.");
+    System.out.println("If realm is clustered then other realms in cluster will");
+    System.out.println("be found automatically.");
+  }
+
+  /**
+   * Enables the user to stop the monitoring by removing a lock file.
+   * The lock file is created in the working directory.
+   */
+  private class ExitHandler extends Thread {
+
+    File lckFile = null;
+
+    public ExitHandler() {
+      try {
+        setName("LoadRunner : exit thread");
+        setDaemon(true);
+        lckFile = new File(workingdir + File.separator + "RealmMonitor.lck");
+        start();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+
+    public void run() {
+      try {
+        if (lckFile.exists()) {
+          lckFile.delete();
+          try {
+            Thread.sleep(2000);
+          } catch (InterruptedException ignored) {
+          }
+        } else {
+          try {
+            lckFile.getParentFile().mkdirs();
+          } catch (Exception ignored) {
+          }
+        }
+        lckFile.createNewFile();
+        while (lckFile.exists()) {
+          try {
+            Thread.sleep(1000);
+          } catch (Exception ignored) {
+          }
+        }
+        System.out.println("JVM exiting after lck file removal...");
+        System.exit(1);
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+  }
+}
+

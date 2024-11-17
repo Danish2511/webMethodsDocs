@@ -1,0 +1,94 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+
+namespace MyChannels.Nirvana
+{
+    internal sealed class MutableDisposable : IDisposable
+    {
+        private IDisposable current;
+        private bool disposed;
+        private readonly object gate;
+        private readonly AssignmentBehavior options;
+
+        public MutableDisposable(): this(AssignmentBehavior.ReplaceAndDisposePrevious)
+        {
+        }
+
+        public MutableDisposable(AssignmentBehavior options)
+        {
+            this.gate = new object();
+            this.options = options;
+        }
+
+        public void Dispose()
+        {
+            IDisposable current = null;
+            lock (this.gate)
+            {
+                if (!this.disposed)
+                {
+                    this.disposed = true;
+                    current = this.current;
+                    this.current = null;
+                }
+            }
+            if (current != null)
+            {
+                current.Dispose();
+            }
+        }
+
+        public IDisposable Disposable
+        {
+            get
+            {
+                return this.current;
+            }
+            set
+            {
+                bool disposed = false;
+                IDisposable current = null;
+                lock (this.gate)
+                {
+                    if ((this.options == AssignmentBehavior.SingleAssignment) && (this.current != null))
+                    {
+                        throw new InvalidOperationException("Disposable has already been assigned.");
+                    }
+                    disposed = this.disposed;
+                    if (!disposed)
+                    {
+                        current = this.current;
+                        this.current = value;
+                    }
+                }
+                if ((this.options == AssignmentBehavior.ReplaceAndDisposePrevious) && (current != null))
+                {
+                    current.Dispose();
+                }
+                if (disposed && (value != null))
+                {
+                    value.Dispose();
+                }
+            }
+        }
+
+        public bool IsDisposed
+        {
+            get
+            {
+                lock (this.gate)
+                {
+                    return this.disposed;
+                }
+            }
+        }
+    }
+}

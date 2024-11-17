@@ -1,0 +1,36 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "PingServer.h"
+#include "PingClient.h"
+
+#include <iostream>
+#include <string>
+
+int main(int argc, char** argv)
+{
+	if (argc < 3){
+		std::cout << "Expected at least 2 paramaters as follows" << std::endl;
+		std::cout << "echo <SERVER_OR_CLIENT> <URL> [<size> <No / sec>]" << std::endl;
+		std::cout << "\tSERVER_OR_CLIENT - is either server to start the server or client to start a client" << std::endl;
+		std::cout << "\tURL - protocol://host:port to bind the server transport to e.g. tcp://localhost:9000" << std::endl;
+		std::cout << "\size - Optional and client only, size if packet to send" << std::endl;
+		std::cout << "\No / sec - Optional and client only, the number of packets to send per second" << std::endl;
+		exit(1);
+	}
+	char** parameters = new char*[argc - 1];
+	parameters[0] = argv[0];
+	for (int i = 2, j = 1; i < argc; i++, j++){
+		parameters[j] = argv[i];
+	}
+	std::string isServer = argv[1];
+	if (isServer.compare("server") == 0){
+		return com::softwareag::umtransport::samples::ping::PingServer::main(argc - 1, parameters);
+	}
+	return com::softwareag::umtransport::samples::ping::PingClient::main(argc - 1, parameters);
+}

@@ -1,0 +1,218 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nACLEntryNotFoundException;
+import com.pcbsys.nirvana.nAdminAPI.nAdminIllegalArgumentException;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionDetails;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionListener;
+import com.pcbsys.nirvana.nAdminAPI.nRealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Hashtable;
+
+/*
+This example, demonstrates how the admin api can be used in order to set up
+permissions for users connecting to a realm. When a user connects, the realm acl
+will be set for the user. In reality, the program would set other permissions for
+channel & queues when connections are received and the client app would have
+to wait for some kind of application level handshake to take place before
+connecting to those objects.
+This is purely to demonstrate the idea behind writing your own authorisation
+server.
+*/
+
+public class SimpleAuth {
+
+  private nRealmNode myRealm;
+
+  public SimpleAuth(String[] args) throws Exception {
+    /*
+     Create the session attributes
+    */
+    nSessionAttributes sAttr = new nSessionAttributes(args);
+
+    /*
+     Create realm object
+    */
+    myRealm = new nRealmNode(sAttr);
+
+    /*
+     Now create the login monitor and add it to the realm node
+    */
+    LoginMonitor logMonitor = new LoginMonitor();
+    myRealm.addConnectionListener(logMonitor);
+
+    /*
+     At this point the LoginMonitor will be getting all of the
+     currently connected connections and whenever a new connection
+     is made
+    */
+  }
+
+
+  /*
+   Main entry point for the example
+  */
+  public static void main(String[] args) {
+    try {
+      SimpleAuth simple = new SimpleAuth(args);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  class LoginMonitor implements nConnectionListener {
+
+    private Hashtable myHashtable;
+
+    public LoginMonitor() {
+      myHashtable = new Hashtable();
+    }
+
+    /*
+    Call-back function. Called when a new connection is made
+    */
+    public void add(nConnectionDetails details) {
+      myHashtable.put(details.getId(), details.getSubject()[0]);
+
+      /*
+       * Perform user specific login action here
+       */
+      try {
+        if (userSpecificLoginFunction(details.getSubject()[0], details.getProtocol())) {
+          enableUser(details.getSubject()[0]);
+        } else {
+          disableUser(details.getSubject()[0]);
+        }
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    /*
+     Call-back function. Called when a connection is dropped
+    */
+    public void del(nConnectionDetails details) {
+      /*
+       * Perform user specific logout action here
+       */
+      try {
+        removeUser((String) myHashtable.get(details.getId()));
+        myHashtable.remove(details.getId());
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    /*
+    Disable the subject supplied. This will mean that the user will be disconnected automatically
+    by the server
+    */
+    private void disableUser(String subject) throws Exception {
+      nACL acls = myRealm.getACLs();
+      nRealmACLEntry entry = null;
+      try {
+        entry = (nRealmACLEntry) acls.find(subject);
+      } catch (nACLEntryNotFoundException e) {
+      } catch (nAdminIllegalArgumentException e) {
+      }
+      if (entry != null) {
+        if ((entry.getHost().equals("localhost")) || (entry.getHost().equals("127.0.0.1")) || (entry.getSubject()
+            .equals("*@*"))) {
+          return;
+        }
+      } else {
+        entry = new nRealmACLEntry(subject);
+        if ((entry.getHost().equals("localhost")) || (entry.getHost().equals("127.0.0.1")) || (entry.getSubject()
+            .equals("*@*"))) {
+          return;
+        }
+        acls.add(entry);
+      }
+      entry.setAccessTheRealm(false);
+      myRealm.setACLs(acls);
+    }
+
+    /*
+     Enable the subject supplied. This means that the subject will be allowed to connect to the server
+    */
+    private void enableUser(String subject) throws Exception {
+      nACL acls = myRealm.getACLs();
+      nRealmACLEntry entry = null;
+      try {
+        entry = (nRealmACLEntry) acls.find(subject);
+      } catch (nACLEntryNotFoundException e) {
+      } catch (nAdminIllegalArgumentException e) {
+      }
+      if (entry != null) {
+        if ((entry.getHost().equals("localhost")) || (entry.getHost().equals("127.0.0.1")) || (entry.getSubject()
+            .equals("*@*"))) {
+          return;
+        }
+      } else {
+        entry = new nRealmACLEntry(subject);
+        if ((entry.getHost().equals("localhost")) || (entry.getHost().equals("127.0.0.1")) || (entry.getSubject()
+            .equals("*@*"))) {
+          return;
+        }
+        acls.add(entry);
+      }
+      entry.setAccessTheRealm(true);
+      myRealm.setACLs(acls);
+    }
+
+    /*
+     Remove the subject from the servers ACL list
+    */
+    private void removeUser(String subject) throws Exception {
+      nACL acls = myRealm.getACLs();
+      nRealmACLEntry entry = null;
+      try {
+        entry = (nRealmACLEntry) acls.find(subject);
+      } catch (nACLEntryNotFoundException e) {
+      } catch (nAdminIllegalArgumentException e) {
+      }
+      if (entry != null) {
+        if ((entry.getHost().equals("localhost")) || (entry.getHost().equals("127.0.0.1")) || (entry.getSubject()
+            .equals("*@*"))) {
+          return;
+        }
+      } else {
+        return;
+      }
+      acls.remove(subject); // Remove from the list
+      myRealm.setACLs(acls);
+    }
+
+    /*
+     Do some user specific logon functionality here
+    */
+    private boolean userSpecificLoginFunction(String subject, String protocol) {
+
+      /*
+       Here you can add your own specific code for permitting users based on your own external permissioning system.
+       For example, make a call to a database to get the relevant permissions and setup realm and channel acls acordingly.
+      */
+
+      if (subject.equalsIgnoreCase("daffy@") && protocol.equalsIgnoreCase("nhps")) {
+        return false; // Disable daffy@* using https only
+      }
+
+      if (subject.startsWith("bugs@")) {
+        if (!protocol.equalsIgnoreCase("nsp")) {
+          return false; // disable bugs@* using http / https / ssl ONLY
+        }
+      }
+
+      return true;
+    }
+  }
+}

@@ -1,0 +1,245 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nJMSApps;
+
+import com.pcbsys.foundation.utils.fEnvironment;
+import javax.jms.BytesMessage;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.MessageProducer;
+import javax.jms.Session;
+import javax.jms.Topic;
+import javax.naming.Context;
+
+// End of QBytesMessageSubscriber Class
+
+public class BytesMessagePubSub extends Subscriber {
+
+  Session[] sessions = new Session[20];
+
+  public BytesMessagePubSub(String factoryName, String destinationName) {
+    super(factoryName, destinationName);
+  }
+
+  public static void main(String[] args) {
+    //Check to see if args were specified
+    if ((args.length == 1) && args[0].equals("-?")) {
+      UsageEnv();
+    }
+
+    if (args.length < 2) {
+      Usage();
+      System.exit(1);
+    }
+
+    //Process Environment Variables
+    processEnvironmentVariable("RNAME");
+    processEnvironmentVariable("PRINCIPAL");
+    processEnvironmentVariable("PASSWORD");
+    processEnvironmentVariable("CONTEXT_FACTORY");
+    processEnvironmentVariable("PROVIDER_URL");
+    processEnvironmentVariable("LOGLEVEL");
+    processEnvironmentVariable("HPROXY");
+    processEnvironmentVariable("HAUTH");
+    processEnvironmentVariable("CKEYSTORE");
+    processEnvironmentVariable("CKEYSTOREPASSWD");
+    processEnvironmentVariable("CAKEYSTORE");
+    processEnvironmentVariable("CAKEYSTOREPASSWD");
+
+    // Install any proxy server settings
+    fEnvironment.setProxyEnvironments();
+
+    // Install any ssl settings
+    fEnvironment.setSSLEnvironments();
+
+    //Create an instance for this class
+    BytesMessagePubSub subscriber = new BytesMessagePubSub(args[0], args[1]);
+
+    boolean transacted = false;
+    String selector = null;
+    boolean isTopic = true;
+    boolean isDurable = false;
+
+    if (args.length > 2) {
+      transacted = Boolean.parseBoolean(args[2]);
+    }
+
+    if (args.length > 3) {
+      isTopic = Boolean.parseBoolean(args[3]);
+    }
+
+    if (args.length > 4) {
+      isDurable = Boolean.parseBoolean(args[4]);
+    }
+
+    if (args.length > 5) {
+      selector = args[5];
+    }
+
+    //Subscribe to the destination specified
+    subscriber.doIt(args[0], args[1], transacted, isTopic, isDurable, selector);
+  }
+
+  /**
+   * A callback is received by the API to this method each time a message is received from
+   * the destination.
+   *
+   * @param msg A JMS Message object
+   */
+  public void onMessage(Message msg) {
+    try {
+      if (msg instanceof BytesMessage) {
+        BytesMessage bmsg = (BytesMessage) msg;
+        String data = bmsg.readUTF();
+        System.out.println("JMS MSG ID : " + bmsg.getJMSMessageID());
+        System.out.println("JMS DELIVERY MODE : " + bmsg.getJMSDeliveryMode());
+        System.out.println("JMS TIME STAMP : " + bmsg.getJMSTimestamp());
+        System.out.println("Received : " + data);
+      } else {
+        super.onMessage(msg);
+      }
+
+      if (transacted) {
+        int idx = msg.getIntProperty("Index");
+        sessions[idx].commit();
+      }
+    } catch (JMSException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * This method demonstrates the Nirvana JMS API calls necessary to subscribe to
+   * a destination whether it is a topic or a queue.
+   * It is called after all command line arguments have been received and
+   * validated
+   *
+   * @param factoryName The name of the factory to find
+   * @param destName the name of the destination
+   * @param isTransacted whether the session is transactional
+   * @param selector an optional mesage selector string
+   */
+  protected void doIt(String factoryName, String destName, boolean isTransacted, boolean isTopic, boolean isDurable,
+      String selector) {
+    try {
+      transacted = isTransacted;
+
+      // get the initial context
+      Context ctx = getInitialContext();
+      ConnectionFactory cf = (ConnectionFactory) ctx.lookup(factoryName);
+
+      // Create a Connection from the Connection Factory
+      Connection c = cf.createConnection();
+
+      // set the exceptionlistener
+      c.setExceptionListener(this);
+
+      // Start the connection
+      c.start();
+
+      for (int x = 0; x < 20; x++) {
+        // Create a Sesson from the Connection
+        Session sess = c.createSession(transacted, Session.AUTO_ACKNOWLEDGE);
+        sessions[x] = sess;
+
+        // create the queue / topic
+        Destination d;
+        if (isTopic) {
+          d = sess.createTopic(destName + x);
+        } else {
+          d = sess.createQueue(destName + x);
+        }
+
+        // Create a Subscriber from the Session
+        MessageConsumer consumer;
+        if (isDurable) {
+          consumer = sess.createDurableSubscriber((Topic) d, "consumer" + x);
+        } else {
+          consumer = sess.createConsumer(d, selector);
+        }
+
+        MessageProducer p = sess.createProducer(d);
+
+        for (int y = 0; y < 10; y++) {
+          BytesMessage bm = sess.createBytesMessage();
+          bm.writeUTF(new String("Test Message" + y));
+          bm.setIntProperty("Index", x);
+          p.send(bm);
+        }
+
+        if (transacted) {
+          sess.commit();
+        }
+        // Set the message listener to receive messages asynchronously
+        consumer.setMessageListener(this);
+
+        Thread.sleep(2000);
+
+        p.close();
+        p = null;
+        if (isDurable) {
+          sess.unsubscribe("consumer" + x);
+        }
+        consumer.close();
+        consumer = null;
+
+      }
+
+      System.in.read();
+
+      System.out.println("Closing sessions.");
+
+      for (int x = 0; x < 20; x++) {
+        sessions[x].close();
+        sessions[x] = null;
+      }
+
+      System.in.read();
+
+      System.out.println("Closing connection.");
+
+      c.close();
+
+      ctx.close();
+
+      c = null;
+      ctx = null;
+      cf = null;
+
+      System.in.read();
+
+      System.out.println("Closed connection.");
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  protected static void Usage() {
+    System.out.println("Usage ...\n\n");
+    System.out.println("jmsbytesqsub <factoryname> <destinationName> <transacted> <isTopic> <isDurable> <selector>\n");
+
+    System.out.println("<Required Arguments> \n");
+    JMSClient.printFactoryNameUsage();
+    JMSClient.printDestinationNameUsage();
+    System.out.println("<transacted> - Whether the session is transacted");
+    System.out.println("<whether the destination is a topic (queue if false)>");
+    System.out.println("<transacted> - whether the topic consumer is durable");
+    System.out.println("<selector> - An optional message selector");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

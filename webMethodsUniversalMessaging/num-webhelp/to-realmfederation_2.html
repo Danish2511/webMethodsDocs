@@ -1,0 +1,87 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Realm Federation</title><link rel="Prev" href="co-realm_profiles_em.html" title="Previous" /><link rel="Next" href="to-realmcfg.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/to-realmfederation_2.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pePDz_002fG_002bLsxl6Twn4Ue0t_002fw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/to-realmfederation_2.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_administration_guide.html#wwconnect_header">Administration Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-overview_enterprise_manager.html#wwconnect_header">Universal Messaging Enterprise Manager</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-overview-realmadmin.html#wwconnect_header">Realm Administration</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Realm Federation</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E4SLR" class="Heading_3">Realm Federation</div><div id="wwID0EFTLR" class="Body">As well as clustering technology, Universal Messaging supports the concept of a federated namespace which enables realm servers that are in different physical locations to be viewed within one logical namespace.</div><div id="wwID0EKTLR" class="Note"><span class="Bold">Note:<br /></span>Clustering and Realm Federation are mutually exclusive. If a realm is a member of a cluster, you cannot use the realm for federation. Similarly, if a realm is part of a federation, the realm cannot be used for clustering.</div><div id="wwID0EAULR" class="Body">If you consider that a Universal Messaging namespace consists of a logical representation of the objects contained within the realm, such as resources and services: a federated namespace is an extension to the namespace that allows remote realms to be visible within the namespace of other realms.</div><div id="wwID0EFULR" class="Body">For example, if we had a realm located in the UK (United Kingdom), and 2 other realms located in the US (United States) and DE (Germany), we can view the realms located in DE and US within the namespace of the UK realm. Federation allows us to access the objects within the DE and US realms from within the namespace of the UK realm.</div><div id="wwID0EKULR" class="Body">It is possible to add realms to a Universal Messaging namespace using the Universal Messaging Administration API or by using the Enterprise Manger as described below.</div><div id="wwID0EWULR" class="Section_Title">Adding Realms</div><div id="wwID0E2ULR" class="Body">The first step in order to provide federation is to add the realms. Adding a realm to another realm can be achieved in two ways. The first way simply makes a communication connection from one realm to another, so the realms are aware of each other and can communicate. This enables you to create a channel join between these realms.</div><div id="wwID0EAVLR" class="Note"><span class="Bold">Note:<br /></span>For a description of the general principles involved in creating channel joins, see the section 
+    <a href="../num-webhelp/ta-create_channel_joins.html#wwID0EWABS"
+   
+     title="Creating Channel Joins"
+    ><span class="ph_002c_heading-page">Creating Channel Joins</span></a>. The description details the usage based on the Enterprise Manager, but the same general principles apply if you are using the API.</div><div id="wwID0EGWLR" class="Body">The second option also makes a new communication connection, but if you specify a <span class="emphasis">mount point</span>, the realm you add will also be visible within the namespace of the realm you added it to.</div><div id="wwID0EZWLR" class="Section_Title">Mount Points</div><div id="wwID0E5WLR" class="Body">Providing a mount point for added realms is similar to the mount point used by file systems when you mount a remote file system into another. It specifies a logical name that can be used to access the resources within the mounted realm. The mount point is therefore the entry point (or reference) within the namespace for the realm's resources and services.</div><div id="wwID0EDXLR" class="Body">For example, if I have a realm in the UK, an wish to add to it a realm in the US, I could provide a mount point of '/us' when adding the US realm to the UK realm. Using the mount point of '/us', I can then access the channels within the US realm from my session with the UK realm. For example, if I wanted to find a channel from my session with the UK realm, and provided the channel name '/us/customer/sales', I would be able to get a local channel reference to the '/customer/sales' channel within the US realm.</div><div id="wwID0EQXLR" class="Section_Title">Using the Enterprise Manager to Add Realms</div><div id="wwID0EVXLR" class="Body">To add a realm to another realm, first of all you need to select the realm node from the namespace that you wish to add the realm to. Then, right-click on the realm node to display the menu options available for a realm node. One of the menu options is labelled 'Add Realm to Namespace', clicking on this menu option will display a dialog that allows you to enter the RNAME of the realm you wish to add and an optional mount point.</div><div id="wwID0E1XLR" class="Body">The RNAME value in the dialog corresponds to the realm interface that you want the two realms to use for communication. The mount point corresponds to the point within the namespace that the realm will be referenceable.</div><div id="wwID0E6XLR" class="Body">For example, you can have a realm named 'node1' that has two realms mounted within its namespace, named 'eur' and 'us'. The resources within both the mounted realms are also displayed as part of the namespace of the 'node1' realm.</div><div id="wwID0EEYLR" class="Body">Sessions connected to the 'node1' realm now have access to three channels. These channels are:</div><div id="wwID0EPYLR" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>'/global/orders', which is a local channel</div><div id="wwID0ECZLR" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>'/eur/orders,' which is actually a channel on another Universal Messaging realm that has been added to this namespace under the mount point '/eur'</div><div id="wwID0EVZLR" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>'/us/orders', which is actually a channel on another Universal Messaging Realm that has been added to this namespace under the mount point '/us'</div><div id="wwID0ER1LR" class="Section_Title">Example Use of Federation: Remote Joins</div><div id="wwID0EW1LR" class="Body">Once you have added the realms to one another, it is possible to create remote joins between the channels of the realms. This is very useful when considering the physical distance and communications available between the different realms. For example, if you wish all events published to the /customer/sales channel in the UK realm to be available on the /customer/sales channel in the US realm, one would create a join from the /customer/sales channel in the UK to the /customer/sales channel on the US realm, so all events published onto the uk channel would be sent to the us channel.</div><div id="wwID0E21LR" class="Body">Federation and remote joins provide a huge benefit for your organization. Firstly, any consumers wishing to consume events from the uk channel would not need to do so over a WAN link, but simply subscribe to their local sales channel in the us. This reduces the required bandwidth between the us and uk for your organization, since the data is only sent by the source realm once to the joined channel in the us, as opposed to 1...n times where n is the number of consumers in the us. Remote joins are much more efficient in this respect, and ensure the data is available as close (physically) to the consumers as possible.</div><div id="wwID0EA2LR" class="Note"><span class="Bold">Note:<br /></span>For a description of the general principles involved in creating channel joins, see the section 
+    <a href="../num-webhelp/ta-create_channel_joins.html#wwID0EWABS"
+   
+     title="Creating Channel Joins"
+    ><span class="ph_002c_heading-page">Creating Channel Joins</span></a>. The description details the usage based on the Enterprise Manager, but the same general principles apply if you are using the API.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

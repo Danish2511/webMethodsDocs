@@ -1,0 +1,6 @@
+SET (SRC 
+../nSampleApp/nSampleApp.cpp
+PingClient.cpp
+PingServer.cpp
+main.cpp
+)

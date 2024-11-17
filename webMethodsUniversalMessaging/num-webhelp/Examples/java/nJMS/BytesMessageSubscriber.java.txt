@@ -1,0 +1,219 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nJMSApps;
+
+import com.pcbsys.foundation.utils.fEnvironment;
+import java.util.Date;
+import javax.jms.BytesMessage;
+import javax.jms.Connection;
+import javax.jms.ConnectionFactory;
+import javax.jms.Destination;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.MessageConsumer;
+import javax.jms.Topic;
+import javax.naming.Context;
+import javax.naming.NamingException;
+
+public class BytesMessageSubscriber extends Subscriber {
+
+  public BytesMessageSubscriber(String factoryName, String destinationName) {
+    super(factoryName, destinationName);
+  }
+
+  public static void main(String[] args) {
+    System.out.println("START: BytesMessageSubscriber");
+    //Check to see if args were specified
+    if ((args.length == 1) && args[0].equals("-?")) {
+      UsageEnv();
+    }
+
+    if (args.length < 2) {
+      Usage();
+      System.exit(1);
+    }
+
+    //Process Environment Variables
+    processEnvironmentVariable("RNAME");
+    processEnvironmentVariable("PRINCIPAL");
+    processEnvironmentVariable("PASSWORD");
+    processEnvironmentVariable("CONTEXT_FACTORY");
+    processEnvironmentVariable("PROVIDER_URL");
+    processEnvironmentVariable("LOGLEVEL");
+    processEnvironmentVariable("HPROXY");
+    processEnvironmentVariable("HAUTH");
+    processEnvironmentVariable("CKEYSTORE");
+    processEnvironmentVariable("CKEYSTOREPASSWD");
+    processEnvironmentVariable("CAKEYSTORE");
+    processEnvironmentVariable("CAKEYSTOREPASSWD");
+
+    // Install any proxy server settings
+    fEnvironment.setProxyEnvironments();
+
+    // Install any ssl settings
+    fEnvironment.setSSLEnvironments();
+
+    //Create an instance for this class
+    BytesMessageSubscriber subscriber = new BytesMessageSubscriber(args[0], args[1]);
+
+    boolean transacted = false;
+    String durablename = null;
+
+    String selector = null;
+
+    if (args.length > 2) {
+      transacted = Boolean.parseBoolean(args[2]);
+    }
+
+    if (args.length > 3) {
+      selector = args[3];
+    }
+
+    if (args.length > 4) {
+      durablename = args[4];
+    }
+
+    //Subscribe to the destination specified
+    subscriber.doIt(args[0], args[1], transacted, selector, durablename);
+  }
+
+  /**
+   * This method demonstrates the Nirvana JMS API calls necessary to subscribe to
+   * a destination whether it is a topic or a queue.
+   * It is called after all command line arguments have been received and
+   * validated
+   *
+   * @param factoryName The name of the factory to find
+   * @param destName the name of the destination
+   * @param isTransacted whether the session is transactional
+   * @param selector an optional mesage selector string
+   */
+  private void doIt(String factoryName, String destName, boolean isTransacted, String durablename, String selector) {
+    try {
+      transacted = isTransacted;
+
+      String demo_user = System.getenv(ENV_USERNAME);
+      String demo_pass = System.getenv(ENV_PASSWORD);
+      System.out.println("Sub: User=" + demo_user + "/" + demo_pass + " - transacted=" + transacted);
+
+      // get the initial context
+      Context ctx = getInitialContext();
+      ConnectionFactory cf = (ConnectionFactory) ctx.lookup(factoryName);
+      System.out.println("Sub: Context=" + ctx.getClass().getName() + ", ConnectionFactory=" + cf.getClass().getName());
+
+      // Create a Connection from the Connection Factory
+      Connection c;
+      if (demo_user == null) {
+        c = cf.createConnection();
+      } else {
+        c = cf.createConnection(demo_user, demo_pass);
+      }
+
+      // set the exceptionlistener
+      c.setExceptionListener(this);
+
+      // Start the connection
+      c.start();
+
+      // Create a Session from the Connection
+      s = c.createSession(transacted, 1);
+
+      // create the destination, and bind if necessary
+      Destination d = getDestination(ctx, s, destName);
+      ctx.close();
+      System.out.println(
+          "Sub: Connection=" + c.getClass().getName() + ", Session=" + s.getClass().getName() + ", Dest=" + d.getClass()
+              .getName());
+
+      // Create a Subscriber from the Session
+      MessageConsumer consumer;
+      if (durablename != null) {
+        consumer = s.createDurableSubscriber((Topic) d, durablename, selector, false);
+      } else {
+        consumer = s.createConsumer(d, selector);
+      }
+      System.out.println("Sub: Consumer=" + consumer.getClass().getName());
+
+      // Set the message listener to receive messages asynchronously
+      consumer.setMessageListener(this);
+
+      //Stay subscribed until the user presses any key
+      System.out.println("Ready - hit any key to exit");
+      System.in.read();
+      c.close();
+      s.close();
+      System.out.println("Sub: Closing connection. Consumed a total of " + count);
+    } catch (NamingException ex) {
+      System.out.println("Naming Exception : Please ensure you have created the connection factory " + factoryName);
+      System.out.println(
+          "Naming Exception : This can be done using the Enterprise Manager JNDI panel or the jmsadmin command line application");
+      System.exit(0);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.exit(0);
+    }
+  }
+
+  /**
+   * A callback is received by the API to this method each time a message is received from
+   * the destination.
+   *
+   * @param msg A JMS Message object
+   */
+  @Override
+  public void onMessage(Message msg) {
+    System.out.println("Sub: Received msg #" + count + " - " + msg.getClass().getName());
+    boolean success = false;
+    while (!success) {
+      try {
+        if (msg instanceof BytesMessage) {
+          BytesMessage bmsg = (BytesMessage) msg;
+          byte[] buf = new byte[(int) bmsg.getBodyLength()];
+          bmsg.readBytes(buf);
+          String data = new String(buf);
+          System.out.println("JMS MSG ID : " + bmsg.getJMSMessageID());
+          System.out.println("JMS DELIVERY MODE : " + bmsg.getJMSDeliveryMode());
+          System.out.println("JMS TIME STAMP : " + new Date(bmsg.getJMSTimestamp()));
+          System.out.println("Received : " + data);
+        } else {
+          super.onMessage(msg);
+        }
+        if (transacted) {
+          s.commit();
+        }
+        count++;
+        success = true;
+      } catch (JMSException e) {
+        e.printStackTrace();
+        try {
+          Thread.sleep(500);
+        } catch (InterruptedException e1) {
+        }
+      }
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  protected static void Usage() {
+    System.out.println("Usage ...\n\n");
+    System.out.println("jmsbytessub <factoryname> <destinationName> <transacted> <durablename> <selector>\n");
+
+    System.out.println("<Required Arguments> \n");
+    JMSClient.printFactoryNameUsage();
+    JMSClient.printDestinationNameUsage();
+    System.out.println("<transacted> - Whether the session is transacted");
+    System.out.println("<durablename> - The name of a durable subscriber");
+    System.out.println("<selector> - An optional message selector");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}
+// End of BytesMessageSubscriber Class

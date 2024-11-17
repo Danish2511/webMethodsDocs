@@ -1,0 +1,79 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nDurableConnectionNode;
+import com.pcbsys.nirvana.nAdminAPI.nDurableNode;
+import com.pcbsys.nirvana.nAdminAPI.nNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nTopicNode;
+import java.util.Collection;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
+
+public class nDurableWatch implements Observer {
+
+  private nRealmNode myRealm;
+
+  public nDurableWatch(String[] args) throws Exception {
+    myRealm = new nRealmNode(new nSessionAttributes(args[0]));
+    myRealm.waitForNameSpace();
+    registerNode(myRealm);
+  }
+
+  private void registerNode(nNode node) {
+    if (node instanceof nContainer) {
+      Enumeration enumeration = ((nContainer) node).getNodes();
+      while (enumeration.hasMoreElements()) {
+        nNode nodes = (nNode) enumeration.nextElement();
+        registerNode(nodes);
+      }
+    } else if (node instanceof nTopicNode) {
+      node.addObserver(this);
+      Collection<nDurableNode> durables = ((nTopicNode) node).getDurableList();
+      for (nDurableNode durable : durables) {
+        durable.addObserver(this);
+        Iterator<nDurableConnectionNode> conItr = durable.getConnections();
+        while (conItr.hasNext()) {
+          conItr.next().addObserver(this);
+        }
+      }
+    }
+  }
+
+  @Override
+  public void update(Observable o, Object arg) {
+    if (o instanceof nTopicNode) {
+      if (arg != null) {
+        System.err.println("Argument supplied : " + arg.getClass().getName());
+      }
+    } else if (o instanceof nDurableNode) {
+      nDurableNode durable = (nDurableNode) o;
+      System.err.println(durable.toString());
+    } else if (o instanceof nDurableConnectionNode) {
+      System.err.println(o.toString());
+    } else {
+      System.err.println("Update for " + o.getClass().getName());
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      new nDurableWatch(args);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+
+}

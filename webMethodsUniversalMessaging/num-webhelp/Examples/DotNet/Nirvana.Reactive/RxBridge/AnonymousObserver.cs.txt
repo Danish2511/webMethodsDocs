@@ -1,0 +1,42 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+
+namespace MyChannels.Nirvana
+{
+    internal class AnonymousObserver<T> : AbstractObserver<T>
+    {
+        private Action onCompleted;
+        private Action<Exception> onError;
+        private Action<T> onNext;
+
+        public AnonymousObserver(Action<T> onNext, Action<Exception> onError, Action onCompleted)
+        {
+            this.onNext = onNext;
+            this.onError = onError;
+            this.onCompleted = onCompleted;
+        }
+
+        protected override void Completed()
+        {
+            this.onCompleted();
+        }
+
+        protected override void Error(Exception exception)
+        {
+            this.onError(exception);
+        }
+
+        protected override void Next(T value)
+        {
+            this.onNext(value);
+        }
+    }
+}

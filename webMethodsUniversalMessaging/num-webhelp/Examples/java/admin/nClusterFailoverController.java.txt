@@ -1,0 +1,229 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nClusterEventListener;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nClusterSite;
+import com.pcbsys.nirvana.nAdminAPI.nClusterStatus;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+
+import java.util.Iterator;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
+
+public class nClusterFailoverController implements nClusterEventListener, Observer {
+
+  private static nRealmNode myNode;
+  private static String rname;
+  private static String masterName;
+  private static String siteName;
+  private static String masterScript;
+  private static String slaveScript;
+  private static Runtime rt;
+  private static boolean isMaster = false;
+  private static nClusterNode cluster;
+  private Vector mySiteNodes;
+
+  public nClusterFailoverController(String[] args) {
+    try {
+      rt = Runtime.getRuntime();
+      cluster = myNode.getCluster();
+
+      if (cluster == null) {
+        logit("nClusterFailoverController() : No Cluster Node !!");
+        System.exit(69);
+      }
+
+      logit("nClusterFailoverController() : Got cluster node");
+
+      while (cluster.getMaster(5000) == null) {
+        try {
+          logit("nClusterFailoverController() : Master is null");
+        } catch (Exception e) {
+          e.printStackTrace(); //To change body of catch statement use File | Settings | File Templates.
+        }
+      }
+
+      this.buidSiteVector();
+      cluster.addListener(this);
+      logit("nClusterFailoverController() : Current master node : " + masterName);
+    } catch (Exception e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
+  }
+
+  private synchronized void buidSiteVector() {
+    masterName = cluster.getMaster().getName();
+
+    nClusterSite site = cluster.getSite(siteName);
+
+    if (site == null) {
+      logit("buildSiteVector() : Site not defined !!");
+      System.exit(1);
+    }
+
+    isMaster = false;
+    logit("buildSiteVector() : Got cluster site node for site : " + siteName);
+    mySiteNodes = new Vector();
+
+//    Enumeration enum1 = site.getNodes();
+    Iterator siteItr = site.getIterator();
+
+    while (siteItr.hasNext()) {
+      nRealmNode anode = (nRealmNode) siteItr.next();
+      logit("buidSiteVector() : Adding realm : " + anode.getName() + " to internal site map for " + siteName);
+      mySiteNodes.add(anode.getName());
+
+      // Add listeners to get updates from local site realms
+      //anode.addObserver(this);
+      if (anode.getName().equals(masterName)) {
+        isMaster = true;
+      }
+    }
+  }
+
+  public static void main(String[] args) {
+    rname = System.getProperty("RNAME");
+
+    if (rname == null) {
+      usage();
+      System.exit(1);
+    }
+
+    siteName = System.getProperty("SITENAME");
+
+    if (siteName == null) {
+      usage();
+      System.exit(2);
+    }
+
+    masterScript = System.getProperty("MASTERSCRIPT");
+
+    if (masterScript == null) {
+      usage();
+      System.exit(3);
+    }
+
+    slaveScript = System.getProperty("SLAVESCRIPT");
+
+    if (slaveScript == null) {
+      usage();
+      System.exit(4);
+    }
+
+    try {
+      myNode = new nRealmNode(new nSessionAttributes(rname));
+      myNode.waitForEntireNameSpace();
+
+      //Thread.sleep();
+      new nClusterFailoverController(args);
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+  private void logit(String msg) {
+    System.out.println(new java.util.Date(System.currentTimeMillis()).toString() + ", " + msg);
+  }
+
+  private static void usage() {
+    System.out.println("Usage....");
+    System.out.println(
+        "java -DRNAME=your_rname -DSITENAME=site_name -DMASTERSCRIPT=your_master_script -DSLAVESCRIPT=your_slave_script com.pcbsysnirvana.nAdminAPI.apps.nClusterFailoverController");
+    System.exit(1);
+  }
+
+  public void memberAdded(nRealmNode node) {
+    logit("Member " + node.getName() + " added to cluster");
+    this.buidSiteVector();
+  }
+
+  public void memberDeleted(nRealmNode node) {
+    logit("Member " + node.getName() + " removed from cluster");
+    this.buidSiteVector();
+  }
+
+  public void quorumReached(nRealmNode masterNode) {
+    if (!cluster.hasquorum()) {
+      logit("quorumReached() : Cluster does not have quorum!!");
+
+      return;
+    }
+
+    logit("quorumReached() : Cluster status changed ");
+
+    String newMaster = masterNode.getName();
+
+    if (newMaster == null) {
+      return;
+    }
+
+    if (masterName.equals(newMaster)) { // if old and new are the same do nothing
+      logit(" quorumReached() : Nothing changed");
+
+      return;
+    }
+
+    if (!mySiteNodes.contains(newMaster)) { // Check to see if master has switched sites
+      logit(" quorumReached() : new master " + newMaster + " not part of our site.. executing slave script : "
+          + slaveScript);
+
+      try {
+        Process slaveScriptProcess = rt.exec(slaveScript);
+        slaveScriptProcess.waitFor(); // Wait for script to finish execution
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+
+      this.buidSiteVector();
+    }
+
+    if (mySiteNodes.contains(newMaster)) { // Check to see if we are now site with master
+
+      try {
+        if (!isMaster) {
+          logit(" quorumReached() : new master now part of our site.. executing master script : " + masterScript);
+
+          Process masterScriptProcess = rt.exec(masterScript);
+          masterScriptProcess.waitFor(); // Wait for script to finish execution
+        } else {
+          logit(" quorumReached() : we were already the master site");
+        }
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+
+      this.buidSiteVector();
+    }
+  }
+
+  public void quorumLost() {
+  }
+
+  public void statusUpdate(nClusterStatus update) {
+    this.buidSiteVector();
+  }
+
+  public void stateChange(nRealmNode node, String newState) {
+    this.buidSiteVector();
+  }
+
+  public void report(String source, String message) {
+  }
+
+  public void update(Observable o, Object arg) {
+    if (arg instanceof nClusterNode) {
+      ((nClusterNode) arg).addListener(this);
+    }
+  }
+}

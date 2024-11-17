@@ -1,0 +1,75 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "EchoServer.h"
+#include "ServerTransportContextFactory.h"
+#include "TransportFactory.h"
+#include "SynchronousClient.h"
+#include "SimpleMessage.h"
+
+using namespace com::softwareag::umtransport;
+
+
+com::softwareag::umtransport::samples::echo::EchoServer::EchoServer(std::string url) :  stopped(false){	
+	//The factory will create the correct context based on the protocol in the url
+	//Because we have not passed an AcceptHandler into the bind method, we are returned
+	//a SynchronousServerTransport. This means we have to call accept on the transport
+	//to accept new client transports.
+	m_transport = TransportFactory::bind(ServerTransportContextFactory::build(url));
+}
+
+com::softwareag::umtransport::samples::echo::EchoServer::~EchoServer(){
+
+}
+
+int com::softwareag::umtransport::samples::echo::EchoServer::main(int argc, char** argv){
+	if (argc < 2){
+		std::cout << "EchoServer <URL>" << std::endl << "EchoServer <URL>" << std::endl << "\tURL - protocol://host:port to bind the server transport to e.g. tcp://localhost:9000" << std::endl;
+		exit(1);
+	}
+	EchoServer echoServer(argv[1]);
+	Poco::Thread th;
+	th.start(echoServer);
+
+	std::cout << "Press any key to finish" << std::endl;
+	std::cin.ignore();
+
+	echoServer.close();
+	th.tryJoin(10000);
+	return 0;
+}
+
+void com::softwareag::umtransport::samples::echo::EchoServer::close(){
+	stopped = true;
+	m_transport->close();
+}
+
+void com::softwareag::umtransport::samples::echo::EchoServer::run(){
+	try{
+		while (!stopped){
+			std::cout << "Waiting for a client" << std::endl;
+			//accept() will block until a client makes a connection to our server
+			std::shared_ptr<SynchronousTransport> syncTrShared(std::move(m_transport->accept()));
+			SynchronousClient<SimpleMessage> client(syncTrShared);
+			//Client connected echo servcie started
+			try{
+				while (!stopped){
+					SimpleMessage msg;
+					client.read(msg);
+					client.write(msg);
+				}
+			}
+			catch (Poco::Exception & ex){
+				std::cout << "Connection Closed" << std::endl;
+			}
+		}
+	}
+	catch (Poco::Exception &ex){
+		std::cout << ex.displayText() << std::endl;
+	}
+}

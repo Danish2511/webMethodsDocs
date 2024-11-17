@@ -1,0 +1,479 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nChannel;
+import com.pcbsys.nirvana.client.nChannelAlreadyExistsException;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nConsumeEvent;
+import com.pcbsys.nirvana.client.nEventListener;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdmin.nRemoteInterestEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nRemoteInterestManager;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+
+
+public class InterestManagerUtility {
+
+  private static InterestManagerUtility mySelf = null;
+  private String[] rnameList;
+  private String rnameListEnvVar = null;
+  private final Map<String, nRealmNode> connections = new HashMap<String, nRealmNode>();  //rname to rnode mapping
+  private boolean keepAlive = false;
+  private static BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
+
+
+  private InterestManagerUtility() {
+  }
+
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("InterestManagerUtility <comma-separated rname list> \n");
+
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<comma-separated rname list> - List of rnames to connect to");
+
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("ka - keep alive");
+    System.out.println("addRealm([rname number],[rname number])");
+    System.out.println("removeRealm([rname number],[rname number])");
+    System.out.println("removeAllRealms()");
+    System.out.println("addInterest([rname number],[channel name],[R|W|RW])");
+    System.out.println("removeInterest([rname number],[channel name])");
+    System.out.println("createChannels([channel name])");
+    System.out.println("publish([rname number],[channel name])");
+    System.out.println("lastEid([channel name])");
+    System.out.println("subscribe([rname number],[channel name])");
+    System.out.println("removeChannels([channel name])");
+
+    System.out.println("exit()");
+  }
+
+
+  public static void main(String[] args) {
+
+    //Create an instance for this class
+    mySelf = new InterestManagerUtility();
+
+    InterestManagerUtility.Usage();
+
+    //Process command line arguments
+    mySelf.processArgs(args);
+
+    while (mySelf.getKeepAlive()) {
+      System.out.print("> ");
+      try {
+        args = new String[]{br.readLine()};
+        mySelf.processArgs(args);
+      } catch (IOException ioe) {
+        System.out.println("IO error trying to read your arg!");
+        System.exit(1);
+      }
+    }
+    mySelf.shutDown();
+    System.exit(2);
+  }
+
+  private void process(String arg) {
+    if (arg.equals("ka")) {
+      keepAlive = true;
+      return;
+    }
+
+    if (arg.equals("exit()")) {
+      shutDown();
+      System.exit(2);
+    }
+
+    if (arg.startsWith("addrealm")) {
+      addRealm(arg);
+      System.out.println("Realms added");
+      return;
+    }
+
+    if (arg.startsWith("removerealm")) {
+      removeRealm(arg);
+      System.out.println("Realms removed");
+      return;
+    }
+
+    if (arg.startsWith("removeallrealms")) {
+      removeAllRealms();
+      System.out.println("All Realms remove");
+      return;
+    }
+
+    if (arg.startsWith("addinterest")) {
+      addInterest(arg);
+      System.out.println("Interest Added");
+      return;
+    }
+
+    if (arg.startsWith("removeinterest")) {
+      removeInterest(arg);
+      System.out.println("Interest Removed");
+      return;
+    }
+
+    if (arg.startsWith("createchannels")) {
+      createChannels(arg);
+      System.out.println("Channels Created");
+      return;
+    }
+
+    if (arg.startsWith("subscribe")) {
+      addSubscriber(arg);
+      return;
+    }
+
+    if (arg.startsWith("lasteid")) {
+      lastEid(arg);
+      return;
+    }
+
+    if (arg.startsWith("publish")) {
+      publish(arg);
+      return;
+    }
+
+    if (arg.startsWith("removechannels")) {
+      removeChannels(arg);
+      System.out.println("Channels Removed");
+      return;
+    }
+
+    if (arg.trim().equals("")) {
+      return;
+    }
+    System.out.println("Command not recognized");
+    Usage();
+  }
+
+
+  protected void processArgs(String[] args) {
+    try {
+
+      processEnvironmentVariable();
+
+      if (args.length < 1 && rnameListEnvVar == null) {
+        return;
+      }
+
+      if (keepAlive == false) {
+        Usage();
+
+        String rnameListArg = args[0];
+
+        if (rnameListArg.contains(",")) {
+          rnameList = rnameListArg.split(",");
+        } else {
+          rnameList = new String[]{rnameListArg};
+        }
+
+        int nodeNumber = 0;
+        for (String rname : rnameList) {
+          connections.put(rname, new nRealmNode(new nSessionAttributes(rname)));
+          connections.get(rname).waitForEntireNameSpace();
+          System.out.println("Connected to " + nodeNumber + " -> " + rname);
+          nodeNumber++;
+        }
+      }
+
+      int startNum;
+      if (args.length > 1 && keepAlive == false) {
+        startNum = 1;
+      } else if (keepAlive == true) {
+        startNum = 0;
+      } else {
+        shutDown();
+        return;
+      }
+
+      for (int index = startNum; index < args.length; index++) {
+        process(args[index].toLowerCase());
+      }
+
+    } catch (Exception e) {
+    }
+  }
+
+  protected void shutDown() {
+    for (String rname : connections.keySet()) {
+      try {
+        connections.get(rname).close();
+      } catch (Exception ignore) {
+
+      }
+    }
+
+    try {
+      Thread.sleep(1000);
+    } catch (InterruptedException e) {
+      e.printStackTrace();  //To change body of catch statement use File | Settings | File Templates.
+    }
+
+    connections.clear();
+    rnameList = null;
+  }
+
+  protected boolean getKeepAlive() {
+    return keepAlive;
+  }
+
+  protected void addRealm(String command) {
+    String[] rnames;
+
+    try {
+      rnames = getrnames(command);
+    } catch (Exception e) {
+      System.out.println("Could not add realms due to problem with command (debug me please) -> " + command);
+      return;
+    }
+
+    try {
+      connections.get(rnames[0]).getSession().addRealm(connections.get(rnames[1]).getRealm());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    try {
+      connections.get(rnames[1]).getSession().addRealm(connections.get(rnames[0]).getRealm());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  protected void removeRealm(String command) {
+    String[] rnames;
+
+    try {
+      rnames = getrnames(command);
+    } catch (Exception e) {
+      System.out.println("Could not add realms due to problem with command (debug me please) -> " + command);
+      return;
+    }
+
+    try {
+      connections.get(rnames[0]).getSession().deleteRealm(connections.get(rnames[1]).getRealm());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    try {
+      connections.get(rnames[1]).getSession().deleteRealm(connections.get(rnames[0]).getRealm());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  protected void removeAllRealms() {
+    for (nRealmNode rnode1 : connections.values()) {
+      for (nRealmNode rnode2 : connections.values()) {
+        if (rnode1 == rnode2) {
+          continue;
+        }
+
+        try {
+          rnode1.getSession().deleteRealm(rnode2.getRealm());
+        } catch (Exception ex) {
+        }
+      }
+    }
+  }
+
+  protected void addInterest(String command) {
+    String[] methodArgs = command.split("\\(")[1].split("\\)")[0].split(",");
+    int rnameNumber = Integer.parseInt(methodArgs[0]);
+    nRealmNode realmNode = connections.get(rnameList[rnameNumber]);
+    String channelName = methodArgs[1];
+
+    try {
+      if (methodArgs[2].equals("r")) {
+        setUpInterest(realmNode, false, true, channelName);
+      }
+
+      if (methodArgs[2].equals("w")) {
+        setUpInterest(realmNode, true, false, channelName);
+      }
+
+      if (methodArgs[2].equals("rw")) {
+        setUpInterest(realmNode, true, true, channelName);
+      }
+
+    } catch (Exception ex) {
+      System.out.println("Problem with app: ");
+      ex.printStackTrace();
+    }
+  }
+
+  protected void removeInterest(String command) {
+    String[] methodArgs = command.split("\\(")[1].split("\\)")[0].split(",");
+    int rnameNumber = Integer.parseInt(methodArgs[0]);
+    nRealmNode realmNode = connections.get(rnameList[rnameNumber]);
+    String channelName = methodArgs[1];
+
+    try {
+      tearDownInterest(realmNode, channelName);
+    } catch (Exception ex) {
+      System.out.println("Problem with app: ");
+      ex.printStackTrace();
+    }
+  }
+
+  protected void createChannels(String command) {
+    String channelName = getChannelName(command);
+
+    for (nRealmNode rnode : connections.values()) {
+      try {
+        nChannelAttributes attrib = new nChannelAttributes(channelName);
+        attrib.useJMSEngine(true);
+        attrib.setType(nChannelAttributes.PERSISTENT_TYPE);
+        rnode.createChannel(attrib);
+      } catch (nChannelAlreadyExistsException exists) {
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
+
+  protected void addSubscriber(String command) {
+    int rnodeNumber = Integer.parseInt(getSubscriberNode(command));
+    String channelName = getSubscriberChannel(command);
+    nRealmNode rnode = connections.get(rnameList[rnodeNumber]);
+
+    try {
+      nChannelAttributes attrib = new nChannelAttributes(channelName);
+      rnode.getSession().findChannel(attrib).addSubscriber(new CustomeEventListener(rnode.getRealm().getName()));
+
+      System.out.println("Subscriber added to channel " + channelName + " on realm " + rnodeNumber);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  protected void lastEid(String command) {
+    String channelName = getChannelName(command);
+
+    for (int rnumber = 0; rnumber < rnameList.length; rnumber++) {
+      nRealmNode rnode = connections.get(rnameList[rnumber]);
+      try {
+        nChannelAttributes attrib = new nChannelAttributes(channelName);
+        nChannel chan = rnode.getSession().findChannel(attrib);
+        System.out.println("realm: " + rnumber + " : last eid:" + chan.getLastEID());
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
+
+
+  protected void publish(String command) {
+    int rnodeNumber = Integer.parseInt(getPublishNode(command));
+    String channelName = getPublishChannel(command);
+    nRealmNode rnode = connections.get(rnameList[rnodeNumber]);
+
+    try {
+      nChannelAttributes attrib = new nChannelAttributes(channelName);
+      rnode.getSession().findChannel(attrib).publish(new nConsumeEvent("Testing App", new byte[256]));
+
+      System.out.println("realm: " + rnodeNumber + " published 1 message to " + channelName);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  protected void removeChannels(String command) {
+    String channelName = getChannelName(command);
+
+    for (nRealmNode rnode : connections.values()) {
+      try {
+        nChannelAttributes attrib = new nChannelAttributes(channelName);
+        rnode.getSession().deleteChannel(attrib);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+  }
+
+  protected String[] getrnames(String command) throws Exception {
+    int[] rnameNumbers = new int[2];
+    String[] rnameNumbersString = command.split("\\(")[1].split("\\)")[0].split(",");
+
+    rnameNumbers[0] = Integer.parseInt(rnameNumbersString[0]);
+    rnameNumbers[1] = Integer.parseInt(rnameNumbersString[1]);
+
+    return new String[]{rnameList[rnameNumbers[0]], rnameList[rnameNumbers[1]]};
+  }
+
+  protected String getChannelName(String command) {
+    return command.split("\\(")[1].split("\\)")[0];
+  }
+
+  protected String getSubscriberNode(String command) {
+    return command.split("\\(")[1].split("\\)")[0].split(",")[0].trim();
+  }
+
+  protected String getPublishNode(String command) {
+    return command.split("\\(")[1].split("\\)")[0].split(",")[0].trim();
+  }
+
+  protected String getSubscriberChannel(String command) {
+    return command.split("\\(")[1].split("\\)")[0].split(",")[1].trim();
+  }
+
+  protected String getPublishChannel(String command) {
+    return command.split("\\(")[1].split("\\)")[0].split(",")[1].trim();
+  }
+
+  private void setUpInterest(nRealmNode node, boolean canSend, boolean canReceive, String channelName)
+      throws Exception {
+    nRemoteInterestManager interestManager = node.getRemoteInterestManager();
+    nRemoteInterestEntry rie = new nRemoteInterestEntry(channelName, canSend, canReceive, true);
+    interestManager.add(rie);
+  }
+
+  private void tearDownInterest(nRealmNode node, String channelName) throws Exception {
+    nRemoteInterestManager interestManager = node.getRemoteInterestManager();
+    interestManager.remove(channelName);
+  }
+
+
+  protected void processEnvironmentVariable() {
+    String laxVAR = System.getProperty("lax.nl.env.RNAME");
+    if (laxVAR != null) {
+      System.getProperties().put("RNAME", laxVAR);
+      rnameListEnvVar = laxVAR;
+    }
+  }
+
+
+  public class CustomeEventListener implements nEventListener {
+
+    private String _rname;
+
+    public CustomeEventListener(String _rname) {
+      this._rname = _rname;
+    }
+
+    @Override
+    public void go(nConsumeEvent evt) {
+      System.out.println("Event received on " + _rname + " with tag: " + evt.getEventTag());
+    }
+  }
+
+
+}

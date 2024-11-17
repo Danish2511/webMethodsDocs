@@ -1,0 +1,219 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to copy channels from one realm to another.
+ */
+
+public class nJoinChannel extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String fromRealm = null;
+  private String toRealm = null;
+
+  private nSessionAttributes attr = null;
+  private String fromChannelName = null;
+  private String toChannelName = null;
+  private nLeafNode fromChan = null;
+  private nLeafNode toChan = null;
+  private nRealmNode from = null;
+  private nRealmNode to = null;
+  private String joinArgs[] = null;
+  private String selector = null;
+  private int hops = 1;
+
+  /**
+   * Consruct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nJoinChannel(String args[]) {
+    try {
+      joinArgs = args;
+      // set the parameters required for this operation
+      processArgs(joinArgs);
+      System.out.println("Connecting to " + fromRealm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(fromRealm);
+      // get the root realm node from the realm admin
+      from = new nRealmNode(attr);
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      System.out.print("waiting for namepsace construction..... ");
+      from.waitForEntireNameSpace();
+      System.out.println("finished");
+      // call the method to search from the root realm node
+      searchNode(from);
+      // close the realm node which will close all connections to child nodes
+      if (fromChan != null) {
+        if (toChan != null) {
+          try {
+            fromChan.join(toChan, selector);
+          } catch (nBaseAdminException e) {
+            e.printStackTrace();
+          }
+        } else {
+          System.out.println("Could not find channel join outgoing channel : " + toChannelName);
+        }
+      } else {
+        System.out.println("Could not find channel join incoming channel : " + fromChannelName);
+      }
+      from.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of child nodes for other realms and channels
+   */
+  private void searchNodes(nRealmNode p_node, Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      nNode obj = (nNode) enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode leaf = (nLeafNode) obj;
+        String fullyQualifiedName = leaf.getAbsolutePath();
+        if (leaf.isChannel()) {
+          System.out.println("Found channel " + fullyQualifiedName);
+        } else {
+          System.out.println("Found queue " + fullyQualifiedName);
+        }
+        if ((leaf.isChannel()) && (fullyQualifiedName.equals(fromChannelName))) {
+          // we have found a channel that matches the name specified, so join the channel
+          fromChan = leaf;
+        } else if ((leaf.isChannel()) && (fullyQualifiedName.equals(toChannelName))) {
+          toChan = leaf;
+        }
+      } else if (obj instanceof nRealmNode) {
+        // we have found another realm node, so search this node for channels
+        nRealmNode nextRealm = (nRealmNode) obj;
+        searchNode(nextRealm);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNodes(p_node, cont.getNodes());
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      System.out.println("Found node " + p_node.getName());
+      searchNodes(p_node, p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    fromRealm = System.getProperty("RNAME", null);
+    if (fromRealm == null) {
+      Usage();
+      System.exit(1);
+    }
+    fromChannelName = System.getProperty("FROMCHANNEL", null);
+    if (fromChannelName == null) {
+      Usage();
+      System.exit(1);
+    }
+    // set the channel name to lower case as the nirvana namespace is all lowercase
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-n")) {
+        try {
+          i++;
+          toChannelName = args[i];
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for channel name for copied channel");
+        }
+      } else if (args[i].equalsIgnoreCase("-s")) {
+        try {
+          i++;
+          selector = args[i];
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for selector");
+        }
+      } else if (args[i].equalsIgnoreCase("-h")) {
+        try {
+          i++;
+          hops = Integer.parseInt(args[i]);
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for number of hops");
+        }
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+          getOptions(null);
+          break;
+        } else {
+          System.setProperty("FROMCHANNEL", args[0]);
+          getOptions(args);
+          break;
+        }
+      default:
+        System.setProperty("FROMCHANNEL", args[0]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * FROMCHANNEL
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nJoinChannel copy = new nJoinChannel(args);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println(
+        "nadminjoinchan <channel> <-n Outgoing Join Channel> [-s join selector] [-h number of channel hops]\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel> - Channel name parameter for the channel to join from");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("<-n Outgoing Join Channel> - The name of the channel you wish to join to");
+    System.out.println("<-s join selector> - The optional selector string for filtered join");
+    System.out.println("<-h number of channel hops> - The maximum number of hops for each event to take through joins");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

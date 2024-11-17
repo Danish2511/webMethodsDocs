@@ -1,0 +1,275 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nAbstractChannel;
+import com.pcbsys.nirvana.client.nChannel;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nChannelPublishKeys;
+import com.pcbsys.nirvana.client.nConsumeEvent;
+import com.pcbsys.nirvana.client.nFindResult;
+import com.pcbsys.nirvana.client.nQueue;
+import com.pcbsys.nirvana.client.nRealmUnreachableException;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.client.nSessionPausedException;
+import com.pcbsys.nirvana.client.nStoreProperties;
+import java.util.HashMap;
+
+public class BatchedPublish extends nSampleApp {
+
+  private static BatchedPublish mySelf = null;
+
+  private static final int sChannels = 0;
+  private static final int sQueues = 1;
+
+  private static final int sPersist = 0;
+  private static final int sMixed = 1;
+  private static final int sReliable = 2;
+
+  private static final int totTypes = 3;
+  private static int[][] mySummary = new int[2][totTypes];
+
+  /**
+   * This class demonstrates the Nirvana API calls necessary to locate and publish to multiple nChannel and nQueue
+   * objects in 1 method call
+   *
+   * @param realmDetails a String[] containing the possible RNAME values
+   * @param names a String[] containing the names of the channels / queue objects
+   */
+  private void doit(String[] realmDetails, String[] names) throws nRealmUnreachableException {
+
+    mySelf.constructSession(realmDetails);
+
+    try {
+      nChannelAttributes[] att = new nChannelAttributes[names.length];
+      for (int x = 0; x < att.length; x++) {
+        att[x] = new nChannelAttributes(names[x]);
+      }
+      nFindResult[] arr = mySession.find(att);
+      if (arr != null) {
+        for (int x = 0; x < arr.length; x++) {
+          displayFindResultDetails(arr[x]);
+        }
+      }
+
+      // now publish a message on each of the channels / queues
+      boolean publishToAll = false;
+      if (!publishToAll) {
+        HashMap<nConsumeEvent, nAbstractChannel> map = new HashMap<nConsumeEvent, nAbstractChannel>();
+        for (int x = 0; x < arr.length; x++) {
+          nConsumeEvent event = new nConsumeEvent("" + x, ("Message : " + x).getBytes());
+          map.put(event, ((arr[x].isChannel()) ? arr[x].getChannel() : arr[x].getQueue()));
+          System.out.println(
+              "Writing event " + new String(event.getEventData()) + " to " + arr[x].getAttributes().getName());
+        }
+        mySession.write(map, false);
+      } else {
+        int batchSize = 10;
+        nConsumeEvent[] events = new nConsumeEvent[batchSize];
+        nAbstractChannel[] destinations = new nAbstractChannel[arr.length];
+        for (int y = 0; y < batchSize; y++) {
+          events[y] = new nConsumeEvent("" + y, ("Message : " + y).getBytes());
+        }
+        for (int x = 0; x < arr.length; x++) {
+          System.out.println("Writing " + batchSize + " events to " + arr[x].getAttributes().getName());
+          destinations[x] = ((arr[x].isChannel()) ? arr[x].getChannel() : arr[x].getQueue());
+        }
+        mySession.write(events, destinations);
+        Thread.sleep(2000);
+      }
+
+    }
+    //Handle errors
+    catch (nSessionPausedException ex1) {
+    } catch (Exception se) {
+      System.out.println("Insufficient permissions for the requested operation.");
+      System.out.println("Please check the ACL settings on the server.");
+      return;
+    }
+    try {
+      nSessionFactory.close(mySession);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 0:
+        Usage();
+        UsageEnv();
+        System.exit(0);
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+          System.exit(0);
+        }
+    }
+  }
+
+  public static void main(String[] args) {
+
+    //Create an instance for this class
+    mySelf = new BatchedPublish();
+
+    //Process Environment Variables
+    nSampleApp.processEnvironmentVariables();
+
+    //Check the local realm details
+    int idx;
+    String RNAME = null;
+    if (System.getProperty("RNAME") != null) {
+      RNAME = System.getProperty("RNAME");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+    //Process the local REALM RNAME details
+    String[] rproperties = parseRealmProperties(RNAME);
+
+    try {
+      //Display the details of channels and queues in all known realm
+      mySelf.doit(rproperties, args);
+      nSessionFactory.shutdown();
+    } catch (Exception ex) {
+    }
+    int grandTotal;
+    int count = 0;
+
+    System.out.println("\nSummary\n");
+    idx = sQueues;
+    System.out.println("Queue Summary");
+    System.out.println("  Reliable   : " + mySummary[idx][sReliable]);
+    System.out.println("  Persistent : " + mySummary[idx][sPersist]);
+    System.out.println("  Mixed      : " + mySummary[idx][sMixed]);
+    System.out.print("\nTotal Queues = ");
+    for (int x = 0; x < totTypes; x++) {
+      count += mySummary[sQueues][x];
+    }
+    grandTotal = count;
+    System.out.println(count);
+    idx = sChannels;
+    System.out.println("\nChannel Summary");
+    System.out.println("  Reliable   : " + mySummary[idx][sReliable]);
+    System.out.println("  Persistent : " + mySummary[idx][sPersist]);
+    System.out.println("  Mixed      : " + mySummary[idx][sMixed]);
+    System.out.print("\nTotal Channels = ");
+    count = 0;
+    for (int x = 0; x < totTypes; x++) {
+      count += mySummary[sChannels][x];
+    }
+    System.out.println(count);
+    grandTotal += count;
+    System.out.println("\n\nGrand Total    = " + grandTotal + "\n\n");
+  }
+
+  /**
+   * This method displays the details of a channel found in a realm
+   *
+   * @param results the attributes for the channel
+   */
+  private void displayFindResultDetails(nFindResult results) {
+    if (!results.wasSuccessful()) {
+      displayException(results);
+    } else if (results.isChannel()) {
+      nChannel chan = results.getChannel();
+      displayChannelDetails(chan.getChannelAttributes());
+    } else if (results.isQueue()) {
+      nQueue queue = results.getQueue();
+      displayChannelDetails(queue.getQueueAttributes());
+    }
+  }
+
+
+  private void displayChannelDetails(nChannelAttributes attr) {
+    int idx = sChannels;
+    String type = "Channel";
+    if (attr.getChannelMode() == nChannelAttributes.QUEUE_MODE) {
+      type = "Queue  ";
+      idx = sQueues;
+    }
+    System.out.println("******************************");
+    System.out.println("  Type is a " + type);
+    System.out.println("  " + type + " Name         : " + attr.getName());
+    System.out.println("  " + type + " Capacity     : " + attr.getMaxEvents());
+    System.out.println("  " + type + " Time to live : " + attr.getTTL());
+    String store = "";
+    switch (attr.getType()) {
+      case nChannelAttributes.MIXED_TYPE:
+        store = "MIXED";
+        mySummary[idx][sMixed]++;
+        break;
+      case nChannelAttributes.PERSISTENT_TYPE:
+        store = "PERSISTENT";
+        mySummary[idx][sPersist]++;
+        break;
+      case nChannelAttributes.RELIABLE_TYPE:
+        store = "RELIABLE";
+        mySummary[idx][sReliable]++;
+        break;
+    }
+    System.out.println("  " + type + " Storage type : " + store);
+    nStoreProperties props = attr.getProperties();
+    System.out.println("Displaying Store Properties:");
+    if (props.getClientMergeEngineClassname() != null) {
+      System.out.println("\tClient Merge Engine Classname : " + props.getClientMergeEngineClassname());
+    }
+
+    System.out.println("\tCache on reload : " + props.getCacheOnReload());
+    if (props.canSyncOnEachWrite()) {
+      System.out.println("\tSync file system on write : " + props.canSyncOnEachWrite());
+      System.out.println("\tSync batch size : " + props.getSyncMaxBatchSize());
+      System.out.println("\tSync batch time : " + props.getSyncBatchTime());
+    }
+
+    System.out.println("\tCache enabled : " + props.getEnableCaching());
+
+
+    System.out.println("\tHonour capacity when full : " + props.getHonorCapacityWhenFull());
+    System.out.println("\tAutomatic maintenance enabled : " + props.getPerformAutomaticMaintenance());
+
+    System.out.println("  Displaying Publish Keys");
+    nChannelPublishKeys keys[] = attr.getPublishKeys();
+    if (keys != null && keys.length > 0) {
+      for (int x = 0; x < keys.length; x++) {
+        System.out.println("    Key " + keys[x].getName() + " depth " + keys[x].getDepth());
+      }
+    }
+    System.out.println("  End Of Publish Keys");
+    System.out.println("******************************");
+    System.out.println("");
+  }
+
+  private void displayException(nFindResult result) {
+    System.err.println("******************************");
+    System.err.println("  Request generated an exception for " + result.getAttributes().getName());
+    System.err.println("   : " + result.getException().getMessage());
+    System.err.println("******************************");
+    System.err.println("");
+  }
+
+  /**
+   * Prints the usage string for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("BatchedPublish <name> <name> <name>.....\n");
+
+    System.out.println("<Arguments> \n");
+    System.out.println("<name> - The name(s) of the channels to find");
+
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+} // End of getChannels Class
+
+

@@ -1,0 +1,109 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "SynchronousServer.h"
+#include "ClientTransportContextFactory.h"
+#include "ServerSocketTransportContext.h"
+#include "SynchronousClient.h"
+#include "BroadcastMessage.h"
+#include "Poco/Exception.h"
+
+
+#include <iostream>
+#include <stdlib.h> 
+#include <string>
+
+using namespace com::softwareag::umtransport;
+
+Poco::Mutex com::softwareag::umtransport::samples::broadcaster::SynchronousServer::clientListMutex;
+std::vector<com::softwareag::umtransport::samples::SynchronousClient<com::softwareag::umtransport::samples::broadcaster::BroadcastMessage>*> com::softwareag::umtransport::samples::broadcaster::SynchronousServer::clientList;
+
+int com::softwareag::umtransport::samples::broadcaster::SynchronousServer::main(int argc, char** argv){	
+	if (argc < 3){
+		std::cout << "Invalid parameter's requires ip address and port as seperate parameters/n";
+	}	
+	
+	try{
+		ServerSocketTransportContext::Builder builder;
+		builder.withAdapter(argv[1]).withPort(std::atoi(argv[2]));		
+		SocketAcceptor acceptor(TransportFactory::bind(builder.build()));
+
+		Poco::Thread acceptorThread;
+		acceptorThread.start(acceptor);
+		bool canRun = true;
+		while (canRun){
+			std::cout << "Enter a message or type quit to exit > ";
+			std::string input;
+			std::getline(std::cin, input);
+			if (input == "quit"){
+				canRun = false;
+			}
+			else{
+				BroadcastMessage bm(input, "SynchronousServerApp");
+				fanout(bm);
+			}
+		}
+		acceptor.stop();
+		acceptorThread.tryJoin(10000);
+		Poco::Mutex::ScopedLock lock(clientListMutex);
+		auto client = clientList.begin();
+		while (client != clientList.end()){
+			(*client)->close();
+			delete *client;
+			++client;
+		}
+		clientList.empty();
+	}catch(Poco::Exception& ex){
+		std::cout<<ex.displayText() << std::endl;
+	}
+	return 0;
+}
+
+void com::softwareag::umtransport::samples::broadcaster::SynchronousServer::fanout(BroadcastMessage & message){
+	Poco::Mutex::ScopedLock lock(clientListMutex);
+	auto client = clientList.begin();
+	while (client != clientList.end()){
+		try{
+			(*client)->write(message);
+			++client;
+		}
+		catch (Poco::Exception &ex){
+			delete (*client);
+			client = clientList.erase(client);			
+		}
+	}
+}
+
+com::softwareag::umtransport::samples::broadcaster::SynchronousServer::SocketAcceptor::SocketAcceptor(std::unique_ptr<SynchronousServerTransport> transport) : stopped(false){
+	m_serverTransport= std::move(transport);
+}
+
+com::softwareag::umtransport::samples::broadcaster::SynchronousServer::SocketAcceptor::~SocketAcceptor(){
+	
+}
+
+void com::softwareag::umtransport::samples::broadcaster::SynchronousServer::SocketAcceptor::stop(){
+	stopped = true;
+	m_serverTransport->close();
+}
+
+void com::softwareag::umtransport::samples::broadcaster::SynchronousServer::SocketAcceptor::run(){
+	try{
+		while(!stopped) {				
+			//This accept method will block until a new client connects
+			std::shared_ptr<SynchronousTransport> syncTrShared(std::move(m_serverTransport->accept()));
+			auto client = new SynchronousClient<BroadcastMessage>(syncTrShared);
+			Poco::Mutex::ScopedLock lock(clientListMutex);
+			clientList.push_back(client);
+			std::cout << "Client Connected" << std::endl;
+		}
+	}
+	catch (Poco::Exception& e) {
+		std::cout << e.displayText() << std::endl;
+	}
+}

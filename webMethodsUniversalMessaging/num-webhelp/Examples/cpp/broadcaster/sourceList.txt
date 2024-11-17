@@ -1,0 +1,7 @@
+SET (SRC 
+../nSampleApp/nSampleApp.cpp
+BroadcastMessage.cpp
+SynchronousBroadcasterClient.cpp
+SynchronousServer.cpp
+main.cpp
+)

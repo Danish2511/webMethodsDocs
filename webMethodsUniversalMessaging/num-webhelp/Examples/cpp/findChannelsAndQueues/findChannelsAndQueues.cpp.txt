@@ -1,0 +1,253 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nFindResult.h"
+#include "nChannelAttributes.h"
+#include "nSession.h"
+#include "nSessionPausedException.h"
+#include "nSessionFactory.h"
+#include "nChannel.h"
+#include "nQueue.h"
+#include "nStoreProperties.h"
+#include "nChannelPublishKeys.h"
+
+#include <sys/timeb.h>
+
+using namespace com::pcbsys::nirvana::client;
+using namespace com::pcbsys::nirvana::apps;
+
+class findChannelsAndQueues : public nSampleApp {
+  private:
+    static findChannelsAndQueues *m_pSelf;
+
+    static const int sChannels = 0;
+    static const int sQueues = 1;
+
+    static const int sPersist = 0;
+    static const int sMixed = 1;
+    static const int sReliable = 2;
+
+    static const int totTypes = 3;
+    static int m_summary[totTypes*2];
+
+    void doit(std::string *pRealmDetails, int nRealmDetail, const std::string *pNames, int nName) {
+        m_pSelf->constructSession(pRealmDetails, nRealmDetail);
+
+        try {
+            nChannelAttributes **ppAtt = new nChannelAttributes*[nName];
+            for (int x = 0; x < nName; x++) {
+                ppAtt[x] = new nChannelAttributes(pNames[x]);
+            }
+            fSortedList<std::string, nFindResult*> *pArr = m_pSession->find(ppAtt, nName);
+            if (pArr != NULL) {
+                for (fSortedList<std::string, nFindResult*>::iterator iterator = pArr->begin();
+                        iterator != pArr->end(); iterator++) {
+                    displayFindResultDetails(iterator->second);
+                    delete iterator->second;
+                }
+
+                delete pArr;
+            }
+        }
+        //Handle errors
+        catch (nSessionPausedException ex1) {
+        } catch (Exception se) {
+            printf("Insufficient permissions for the requested operation.\n");
+            printf("Please check the ACL settings on the server.\n");
+            return;
+        }
+        try {
+            nSessionFactory::close(m_pSession);
+        } catch (Exception ex) {
+        }
+    }
+
+  protected:
+    virtual void processArgs(int argc, char** argv) {
+        //
+        // Need a min of 2, rname, channel names
+        if (argc < 2) {
+            Usage();
+            exit(2);
+        }
+
+        std::string RNAME = argv[1];
+
+        std::string *pChannelNames = new std::string[argc - 2];
+
+        for (int x = 2; x < argc; x++) {
+            pChannelNames[x - 2] = argv[x];
+        }
+
+        int nRproperty = 0;
+        std::string *pRproperties = parseRealmProperties(RNAME, nRproperty);
+
+        m_pSelf->doit(pRproperties, nRproperty, pChannelNames, argc - 2);
+
+        delete[] pRproperties;
+        delete[] pChannelNames;
+    }
+
+  public:
+    static int Main(int argc, char** argv) {
+        //Create an instance for this class
+        m_pSelf = new findChannelsAndQueues();
+
+        try {
+            //Display the details of channels and queues in all known realm
+            m_pSelf->processArgs(argc, argv);
+            nSessionFactory::shutdown();
+        } catch (Exception ex) {
+        }
+
+        int grandTotal;
+        int count = 0;
+
+        printf("\nSummary\n\n");
+        int idx = sQueues;
+        printf("Queue Summary\n");
+        printf("  Reliable   : %d\n", m_summary[idx*totTypes + sReliable]);
+        printf("  Persistent : %d\n", m_summary[idx*totTypes + sPersist]);
+        printf("  Mixed      : %d\n", m_summary[idx*totTypes + sMixed]);
+        printf("\nTotal Queues = ");
+
+        for (int x = 0; x < totTypes; x++) {
+            count += m_summary[sQueues*totTypes + x];
+        }
+        grandTotal = count;
+        printf("%d\n", count);
+
+        idx = sChannels;
+        printf("\nChannel Summary\n");
+        printf("  Reliable   : %d\n", m_summary[idx*totTypes + sReliable]);
+        printf("  Persistent : %d\n", m_summary[idx*totTypes+ sPersist]);
+        printf("  Mixed      : %d\n", m_summary[idx*totTypes + sMixed]);
+        printf("\nTotal Channels = ");
+        count = 0;
+        for (int x = 0; x < totTypes; x++) {
+            count += m_summary[sChannels*totTypes + x];
+        }
+        printf("%d\n", count);
+        grandTotal += count;
+        printf("\n\nGrand Total    = %d\n\n\n", grandTotal);
+
+
+        return 0;
+    }
+
+    ///
+    ///   <summary> This method displays the details of a channel found in a realm
+    ///   </summary>
+    ///   <param name="results"> the attributes for the channel </param>
+    ///
+  private:
+    void displayFindResultDetails(nFindResult *pResults) {
+        if (!pResults->wasSuccessful()) {
+            displayException(pResults);
+        } else if (pResults->isChannel()) {
+            nChannel *pChan = pResults->getChannel();
+            displayChannelDetails(pChan->getChannelAttributes());
+        } else if (pResults->isQueue()) {
+            nQueue *pQueue = pResults->getQueue();
+            displayChannelDetails(pQueue->getQueueAttributes());
+        }
+    }
+
+    void displayChannelDetails(nChannelAttributes *pAttr) {
+        int idx = sChannels;
+        std::string type = "Channel";
+        if (pAttr->getChannelMode() == nChannelAttributes::QUEUE_MODE) {
+            type = "Queue  ";
+            idx = sQueues;
+        }
+        printf("******************************\n");
+        printf("  Type is a %s\n", type.c_str());
+        printf("  %s Name         : %s\n", type.c_str(), pAttr->getName().c_str());
+        printf("  %s Capacity     : %d\n", type.c_str(), pAttr->getMaxEvents());
+#ifdef WIN32
+        printf("  %s Time to live : %I64d\n", type.c_str(), pAttr->getTTL());
+#else
+        printf("  %s Time to live : %lld\n", type.c_str(), pAttr->getTTL());
+#endif
+        std::string store = "";
+
+        switch (pAttr->getType()) {
+        case nChannelAttributes::MIXED_TYPE:
+            store = "MIXED";
+            m_summary[idx*totTypes + sMixed]++;
+            break;
+        case nChannelAttributes::PERSISTENT_TYPE:
+            store = "PERSISTENT";
+            m_summary[idx*totTypes + sPersist]++;
+            break;
+        case nChannelAttributes::RELIABLE_TYPE:
+            store = "RELIABLE";
+            m_summary[idx*totTypes + sReliable]++;
+            break;
+        }
+
+        printf("  %s Storage type : %s\n", type.c_str(), store.c_str());
+        nStoreProperties *pProps = pAttr->getProperties();
+        printf("Displaying Store Properties:\n");
+        if (pProps->getClientMergeEngineClassname() != "")
+            printf("\tClient Merge Engine Classname : %s\n", pProps->getClientMergeEngineClassname().c_str());
+        printf("\tCache on reload : %d\n", pProps->getCacheOnReload());
+        if (pProps->canSyncOnEachWrite()) {
+            printf("\tSync file system on write : %d\n", pProps->canSyncOnEachWrite());
+            printf("\tSync batch size : %d\n", pProps->getSyncMaxBatchSize());
+            printf("\tSync batch time : %d\n", pProps->getSyncBatchTime());
+        }
+
+        printf("\tCache enabled : %d\n", + pProps->getEnableCaching());
+
+        printf("\tHonour capacity when full : %d\n", pProps->getHonorCapacityWhenFull());
+        printf("\tAutomatic maintenance enabled : %d\n", pProps->getPerformAutomaticMaintenance());
+
+        printf("  Displaying Publish Keys");
+        int numKey = 0;
+        nChannelPublishKeys **ppKeys = pAttr->getPublishKeys(numKey);
+        if (numKey > 0) {
+            for (int x = 0; x < numKey; x++) {
+                printf("    Key %s depth %d\n", ppKeys[x]->getName().c_str(), ppKeys[x]->getDepth());
+            }
+        }
+        printf("  End Of Publish Keys\n");
+        printf("******************************\n");
+        printf("\n");
+    }
+
+    void displayException(nFindResult *pResult) {
+        printf("******************************\n");
+        printf("  Request generated an exception for %s\n", pResult->getAttributes()->getName().c_str());
+        printf("   : %s\n", pResult->getException()->message().c_str());
+        printf("******************************\n");
+        printf("\n");
+    }
+
+    ///
+    ///   <summary> Prints the usage string for this class </summary>
+    ///
+    static void Usage() {
+        printf("Usage ...\n\n");
+        printf("findChannelsAndQueues <RNAME> <name> <name> <name>.....\n\n");
+
+        printf("<Required Arguments> \n\n");
+        printf("<RNAME> - The RNAME of the realm you wish to connect to\n");
+        printf("<name> - The name(s) of the channels to find\n");
+
+        printf("\n\nNote: -? provides help on environment variables \n\n");
+    }
+}; // End of findChannelAndQueues Class
+
+findChannelsAndQueues* findChannelsAndQueues::m_pSelf = NULL;
+int findChannelsAndQueues::m_summary[totTypes*2];
+
+int main (int argc, char** argv) {
+    return findChannelsAndQueues::Main (argc, argv);
+}

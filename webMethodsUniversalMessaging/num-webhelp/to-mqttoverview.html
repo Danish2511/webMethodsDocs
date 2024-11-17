@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>MQTT: An Overview</title><link rel="Prev" href="co-disaster_recovery.html" title="Previous" /><link rel="Next" href="to-amqp_header.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/to-mqttoverview.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pYS0eS6EOpVx79QV_002bmcNabA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/to-mqttoverview.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_concepts.html#wwconnect_header">Concepts</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">MQTT: An Overview</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EEFDQ" class="Heading_1">MQTT: An Overview</div><div id="wwID0EMFDQ" class="Body">MQTT (Message Queuing Telemetry Transport), is a publish/subscribe, simple and lightweight messaging protocol, designed for constrained devices and low-bandwidth by IBM / Eurotech in 1999. The simplicity and low overhead of the protocol make it ideal for the emerging "machine-to-machine" (M2M) or "Internet of Things" (IoT) world of connected devices, and for mobile applications where bandwidth and battery power are at a premium. The protocol is openly published with a royalty-free license, and a variety of client libraries have been developed especially on popular embedded hardware platforms such as arduino/netduino, mbed and Nanode.</div><div id="wwID0ERFDQ" class="Body">In addition to Universal Messaging's own protocol, NSP and NHP interfaces are capable of also accepting MQTT connections over TCP sockets, while NSPS and NHPS interfaces can accept MQTT connections over SSL/TLS for client implementations that support it.</div><div id="wwID0E4FDQ" class="Section_Title">Connecting</div><div id="wwID0ECGDQ" class="Body">In order to connect to a Universal Messaging server using MQTT, your application needs to use a tcp://host:port URL (NSP and NHP interfaces) or ssl://host:port URL (NSPS and NHPS interfaces). MQTT connections are treated in the same way as any other connections by the Universal Messaging realm. If the username is present, the Universal Messaging subject is <span class="codeph">username@hostname</span>, otherwise the subject is <span class="codeph">anonymous@hostname</span>.</div><div id="wwID0EXGDQ" class="Figure_Title">Figure 1: Connection List with an MQTT connection</div><div class="ww_skin_page_overflow"><div id="wwID0EQGDQ-2" class="Figure"><img class="ScaleFit" src="../num-webhelp/images/mqtt1.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 85px; max-width: 1190px; top: 0pt" alt="" /></div></div><div id="wwID0EGHDQ" class="Body">This way you can define realm and channel or queue ACLs as you would for any Universal Messaging connection. For example using the IBM WMQTT sample application without a username/password to connect to <span class="codeph">tcp://localhost:1883</span> will result in a Universal Messaging subject of <span class="codeph">anonymous@localhost</span>.</div><div id="wwID0E3HDQ" class="Section_Title">Publishing</div><div id="wwID0EBIDQ" class="Body">MQTT applications can publish events to channels. If the specified channels do not already exist in the Universal Messaging realm, they will be automatically created by the server as MIXED type with a JMS engine.</div><div id="wwID0EGIDQ" class="Body">These channels are regular Universal Messaging channels but all events published from MQTT will be persisted to disk. While it is possible to create other channel types using the Administration API / Enterprise Manager, the mixed type with JMS engine is the recommended combination.</div><div id="wwID0ELIDQ" class="Note"><span class="Bold">Note:<br /></span>The set of permissible characters you can use to name a channel is the same as for standard Universal Messaging channels. This character set is described in the section 
+    <a href="../num-webhelp/ta-create_channel.html#wwID0E4G6R"
+   
+     title="Creating Channels"
+    ><span class="ph_002c_heading-page">Creating Channels</span></a> in the Enterprise Manager section of the <span class="Citation">Administration Guide</span>. Therefore it is possible that a channel name could be valid according to MQTT naming rules but invalid, and therefore would be rejected, according to Universal Messaging naming rules.</div><div id="wwID0EWJDQ" class="Body">Events published via MQTT only contain a byte[] payload and are tagged MQTT. They are fully interoperable with any Universal Messaging subscriber on any client platform supported and can be snooped using the Universal Messaging Enterprise Manager:</div><div id="wwID0ECKDQ" class="Figure_Title">Figure 2: Snooping an MQTT message</div><div class="ww_skin_page_overflow"><div id="wwID0E2JDQ-2" class="Figure"><img class="ScaleFit" src="../num-webhelp/images/mqtt2.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 646px; max-width: 1195px; top: 0pt" alt="" /></div></div><div id="wwID0EPKDQ" class="Body">All messages published from MQTT are flagged as JMS BytesMessage objects.</div><div id="wwID0EUKDQ" class="Note"><span class="Bold">Note:<br /></span>Publishing to queues via MQTT is not supported.</div><div id="wwID0ESLDQ" class="Section_Title">Subscribing</div><div id="wwID0EXLDQ" class="Body">MQTT applications can subscribe to channels. If the specified channels do not already exist in the Universal Messaging realm, they will be automatically created by the server as MIXED type with a JMS engine.</div><div id="wwID0E3LDQ" class="Body">These channels are regular Universal Messaging channels with all messages being persistent, regardless of whether they are published by MQTT or Universal Messaging applications.</div><div id="wwID0EBMDQ" class="Note"><span class="Bold">Note:<br /></span>Subscribing to queues via MQTT is not supported.</div><div id="wwID0E6MDQ" class="Section_Title">Quality of Service</div><div id="wwID0EENDQ" class="Body">Universal Messaging supports QOS levels 0 and 1 as defined by the MQTT standard. This is driven by the MQTT client connection and describes the effort the server and client will make to ensure that a message is received, as follows:</div><div id="wwID0EPNDQ" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>QOS 0 (<span class="Italic">At most once delivery</span>): The Universal Messaging realm will deliver the message once with no confirmation</div><div id="wwID0EHODQ" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>QOS 1 (<span class="Italic">At least once delivery</span>): The Universal Messaging realm will deliver the message at least once, with confirmation required.</div><div id="wwID0EAPDQ" class="Note"><span class="Bold">Note:<br /></span>Universal Messaging does not support QOS level 2 (<span class="Italic">Exactly once delivery</span>). Connections requesting QoS level 2 will be downgraded to QoS level 1 at connection time, as allowed by the MQTT specification.</div><div id="wwID0EDQDQ" class="Section_Title">Will</div><div id="wwID0EIQDQ" class="Body">Universal Messaging supports connections with Will settings, which indicate messages that need to be published automatically if the MQTT application disconnects unexpectedly.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,87 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>nRealmNode</title><link rel="Prev" href="to-header_for_management_information.html" title="Previous" /><link rel="Next" href="to-clusterinfo.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/to-nrealminfo.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pM4vmwnJNTyUECKm2HVRdJQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/to-nrealminfo.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_administration_guide.html#wwconnect_header">Administration Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-overview-admin-api.html#wwconnect_header">Universal Messaging Administration API</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_for_management_information.html#wwconnect_header">Management Information</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">nRealmNode</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EHR1U" class="Heading_3">nRealmNode</div><div id="wwID0EPR1U" class="Body">The Universal Messaging admin API provides real time asynchronous management information on all objects within a realm server. By creating an nRealmNode (see 
+    <a href="../num-webhelp/to-nrealmnode.html#wwID0EFJXU"
+   
+     title="nRealmNode"
+    ><span class="heading-page">nRealmNode</span></a>), and connecting to a realm, information is automatically delivered to the nRealmNode object from the realm. This information is delivered periodically in summary form, and also as and when the state changes for one or all of the objects managed within a realm.</div><div id="wwID0E5R1U" class="Body">Before reading this section it may be useful to look at the management information available via the Universal Messaging enterprise manager. A full description of all Realm management screens is available in the enterprise manager guide. All functionality seen in the enterprise manager can be easily added to bespoke admin and monitoring processes as it is written entirely using the Universal Messaging Admin API.</div><div id="wwID0EDS1U" class="Body">This section discusses the following different types of information that can be obtained through the nAdmin API for the nRealmNode object:</div><div id="wwID0EPS1U" class="Section_Title">Status Information</div><div id="wwID0EUS1U" class="Body">The nRealmNode extends nContainer, that extends nNode which is a subclass of Observable, so when the status information is received for a realm node, (by default this is every 5 seconds although it is configurable (see 
+    <a href="../num-webhelp/to-realmcfg.html#wwID0ED5LR"
+   
+     title="Realm Configuration"
+    ><span class="heading-page">Realm Configuration</span></a>) by setting the StatusBroadcast property under the Global Values config group) the nRealmNode will trigger the update callback on any known Observers. For example, if you write a class that implements the Observer interface, it can be added as an observer as follows:</div><div id="wwID0EDT1U" class="Preformatted">realm.addObserver(this); </div><div id="wwID0EJT1U" class="Body">Assuming 'this' is the instance of the class implementing Observer, then the implementation of the <span class="apiname">update(Observable obs, Object obj)</span> will be notified that the realm node has changed.</div><div id="wwID0EUT1U" class="Body">When regular status events are sent, the Observable object referenced in the update method will be the realm node that you added your observer to, and the Object will be null.</div><div id="wwID0EBU1U" class="Section_Title">State Change Events</div><div id="wwID0EGU1U" class="Body">When events occur on a realm node that you have added an observer to, the Observable/Observer mechanism will notify you of the details of that event. For example, the following implementation of the update method of the Observer interface demonstrates how to detect that a new channel or queue has been created or deleted :</div><div id="wwID0ELU1U" class="Preformatted">public void update(Observable obs, Object obj){<br />  if (obs instanceof nContainer) {<br />    if (obj instanceof nLeafNode) {<br />      nLeafNode leaf = (nLeafNode)obj;<br />      nContainer cont = (nContainer)obs;<br />      if (cont.findNode(leaf) == null) {<br />        // node has been deleted<br />        System.out.println("Node "+leaf.getName()+" removed");<br />      } else {<br />        // node has been added<br />        System.out.println("Node "+leaf.getName()+" added");<br />      }<br />    }<br />  }<br />}</div><div id="wwID0ERU1U" class="Body">Any changes to the realm ACL will also use the same notification mechanism. For example, if an ACL entry was changed for a realm, the update method would be fired calling with the realm node object and the nACLEntry that had been modified.</div><div id="wwID0E5U1U" class="Section_Title">Logging and Audit</div><div id="wwID0EDV1U" class="Body">An nRealmNode allows you to asynchronously receive realm log file entries as well as audit file entries as they occur.</div><div id="wwID0EIV1U" class="Body">Firstly, for receiving asynchronous log file entries, there is an interface called nLogListener which your class must implement. This interface defines a callback method called report(String) that will deliver each new log entry as a string. Once implemented, the following call will add your log listener to the realm node:</div><div id="wwID0ENV1U" class="Preformatted">realm.addLogListener(this);</div><div id="wwID0ETV1U" class="Body">Assuming 'this' is the instance of the class implementing the nLogListener interface.</div><div id="wwID0EYV1U" class="Body">The following is an example of the report(String) method implementation:</div><div id="wwID0E4V1U" class="Preformatted">public void report(String msg) {<br />  System.out.println("LOG "+msg);<br />}</div><div id="wwID0EDW1U" class="Body">Secondly, realm servers provide an audit file that tracks object creations and deletions, acl changes, connection attempts and failures. This information can be very useful for tracking who has created ACL entries for example and when they were done.</div><div id="wwID0EIW1U" class="Body">This information, as with log file entries can be asynchronously received by implementing an interface called nAuditListener. This interface defines a callback method called audit(nAuditEvent) that delivers contains the details of the audit entry. Once implemented, the following call will add your log listener to the realm node:</div><div id="wwID0ENW1U" class="Preformatted">realm.addAuditListener(this);</div><div id="wwID0ETW1U" class="Body">Assuming 'this' is the instance of the class implementing the nAuditListener.</div><div id="wwID0EYW1U" class="Body">For more information on Universal Messaging Administration, please see the API documentation, and the Enterprise Manager Guide.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

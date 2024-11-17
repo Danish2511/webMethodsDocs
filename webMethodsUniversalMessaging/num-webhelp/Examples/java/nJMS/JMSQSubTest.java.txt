@@ -1,0 +1,267 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nJMSApps;
+
+import com.pcbsys.foundation.utils.fEnvironment;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import javax.jms.BytesMessage;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.ObjectMessage;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueReceiver;
+import javax.jms.QueueSession;
+import javax.jms.StreamMessage;
+import javax.jms.TextMessage;
+import javax.naming.Context;
+import javax.naming.InitialContext;
+
+public class JMSQSubTest {
+
+  public JMSQSubTest() {
+  }
+
+  public static void main(String[] args) {
+    JMSQSubTest jmsTest = new JMSQSubTest();
+    if (args.length == 1 && args[0].equals("-?")) {
+      UsageEnv();
+    }
+    if (args.length < 2) {
+      usage();
+    }
+
+    //Process Environment Variables
+    processEnvironmentVariable("RNAME");
+    processEnvironmentVariable("PRINCIPAL");
+    processEnvironmentVariable("PASSWORD");
+    processEnvironmentVariable("CONTEXT_FACTORY");
+    processEnvironmentVariable("PROVIDER_URL");
+    processEnvironmentVariable("LOGLEVEL");
+    processEnvironmentVariable("HPROXY");
+    processEnvironmentVariable("HAUTH");
+    processEnvironmentVariable("CKEYSTORE");
+    processEnvironmentVariable("CKEYSTOREPASSWD");
+    processEnvironmentVariable("CAKEYSTORE");
+    processEnvironmentVariable("CAKEYSTOREPASSWD");
+    processEnvironmentVariable("TRANSACTIONAL");
+
+    // Install any proxy server settings
+    fEnvironment.setProxyEnvironments();
+
+    // Install any ssl settings
+    fEnvironment.setSSLEnvironments();
+
+    try {
+      jmsTest.doIt(args[0], args[1]);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private static void UsageEnv() {
+    System.out.println("\n\n(Environment Variables) \n");
+
+    System.out.println("(RNAME) - One or more RNAME entries in the form protocol://host:port");
+    System.out.println("   protocol - Can be one of nsp, nhp, nsps, or nhps, where:");
+    System.out.println("   nsp - Specifies Nirvana Socket Protocol (nsp)");
+    System.out.println("   nhp - Specifies Nirvana HTTP Protocol (nhp)");
+    System.out.println("   nsps - Specifies Nirvana Socket Protocol Secure (nsps), i.e. using SSL/TLS");
+    System.out.println("   nhps - Specifies Nirvana HTTP Protocol Secure (nhps), i.e. using SSL/TLS");
+    System.out.println("   port - The port number of the server");
+    System.out.println(
+        "\nHint: - For multiple RNAME entries, use comma separated values which will be attempted in connection weight order\n");
+
+    System.out.println(
+        "(PRINCIPAL) - This specifies the principal to be used to authenticate with the JNDI provider (Default: anon)\n");
+    System.out.println(
+        "(PASSWORD) - This specifies the password to be used to authenticate with the JNDI provider (Default: anon)\n");
+    System.out.println(
+        "(CONTEXT_FACTORY) - This specifies the JNDI provider context factory (Default: com.pcbsys.nirvana.nSpace.NirvanaContextFactory)\n");
+    System.out.println("(PROVIDER_URL) - This specifies the JNDI provider URL (Default: nsp://127.0.0.1:9000)\n");
+    System.out.println("(TRANSACTIONAL) - This determines if the session should be transactional (Default: false)\n");
+    System.out.println(
+        "(LOGLEVEL) - This determines how much information the nirvana api will output 0 = verbose 7 = quiet\n");
+
+    System.out.println("(CKEYSTORE) - If using SSL, the location of the keystore containing the client cert\n");
+    System.out.println("(CKEYSTOREPASSWD) - If using SSL, the password for the keystore containing the client cert\n");
+    System.out.println("(CAKEYSTORE) - If using SSL, the location of the ca truststore\n");
+    System.out.println("(CAKEYSTOREPASSWD) - If using SSL, the password for the ca truststore\n");
+
+    System.out.println("(HPROXY) - HTTP Proxy details in the form proxyhost:proxyport, where:");
+    System.out.println("   proxyhost - The HTTP proxy host");
+    System.out.println("   proxyport - The HTTP proxy port\n");
+    System.out.println("(HAUTH) - HTTP Proxy authentication details in the form user:pass, where:");
+    System.out.println("   user - The HTTP proxy authentication username");
+    System.out.println("   pass - The HTTP proxy authentication password\n");
+    System.exit(1);
+  }
+
+  public void doIt(String factoryName, String queueName) throws Exception {
+    Hashtable env = new Hashtable();
+    env.put(Context.INITIAL_CONTEXT_FACTORY,
+        System.getProperty("CONTEXT_FACTORY", "com.pcbsys.nirvana.nSpace.NirvanaContextFactory"));
+    env.put(Context.PROVIDER_URL, System.getProperty("PROVIDER_URL", "nsp://127.0.0.1:9000"));
+    env.put(Context.SECURITY_AUTHENTICATION, "simple");
+    env.put(Context.SECURITY_PRINCIPAL, System.getProperty("PRINCIPAL", "simple"));
+    env.put(Context.SECURITY_CREDENTIALS, System.getProperty("PASSWORD", "simple"));
+    Context ctx = new InitialContext(env);
+    Queue q = (Queue) ctx.lookup(queueName);
+    QueueConnectionFactory qcf = (QueueConnectionFactory) ctx.lookup(factoryName);
+    QueueConnection qc = qcf.createQueueConnection();
+    qc.start();
+    QueueSession qs = qc.createQueueSession(false, 1);
+    QueueReceiver qrec = qs.createReceiver(q);
+    while (true) {
+      Message m = qrec.receive();
+      if (m != null) {
+        onMessage(m);
+      } else {
+        try {
+          Thread.sleep(1000);
+        } catch (Exception e) {
+        }
+      }
+    }
+  }
+
+  public void onMessage(Message m) {
+    try {
+      byte[] data;
+      System.out.println("JMS MSG ID : " + m.getJMSMessageID());
+      System.out.println("JMS DELIVERY MODE : " + m.getJMSDeliveryMode());
+      System.out.println("JMS TIME STAMP : " + m.getJMSTimestamp());
+      if (m instanceof MapMessage) {
+        System.out.println("Consumed MapMessage");
+        MapMessage mm = (MapMessage) m;
+        Enumeration enum1 = mm.getMapNames();
+        while (enum1.hasMoreElements()) {
+          String key = (String) enum1.nextElement();
+          Object o = mm.getObject(key);
+          if (o instanceof Integer) {
+            Integer i = (Integer) o;
+            System.out.println("Integer Value");
+            System.out.println("Key : " + key + "/ Value : " + i.intValue());
+          } else if (o instanceof Long) {
+            Long l = (Long) o;
+            System.out.println("Long Value");
+            System.out.println("Key : " + key + "/ Value : " + l.longValue());
+          } else if (o instanceof Short) {
+            Short s = (Short) o;
+            System.out.println("Short Value");
+            System.out.println("Key : " + key + "/ Value : " + s.shortValue());
+          } else if (o instanceof Double) {
+            Double d = (Double) o;
+            System.out.println("Double Value");
+            System.out.println("Key : " + key + "/ Value : " + d.doubleValue());
+          } else if (o instanceof Character) {
+            Character c = (Character) o;
+            System.out.println("Character Value");
+            System.out.println("Key : " + key + "/ Value : " + c.charValue());
+          } else if (o instanceof String) {
+            String st = (String) o;
+            System.out.println("String Value");
+            System.out.println("Key : " + key + "/ Value : " + st);
+          } else if (o instanceof Byte) {
+            Byte b = (Byte) o;
+            System.out.println("Byte Value");
+            System.out.println("Key : " + key + "/ Value : " + b.byteValue());
+          } else {
+            System.out.println("Found non primitive value for key: " + key);
+          }
+        }
+      }
+
+      if (m instanceof BytesMessage) {
+        System.out.println("Consumed BytesMessage");
+        BytesMessage mm = (BytesMessage) m;
+        int x = 0;
+        int size = 0;
+        byte[] scratch = new byte[1];
+        while (x != -1) {
+          x = mm.readBytes(scratch, 1);
+          size++;
+        }
+
+        mm.reset();
+        data = new byte[size];
+        System.out.println("Data : " + data);
+      }
+
+      if (m instanceof ObjectMessage) {
+        System.out.println("Consumed ObjectMessage");
+        ObjectMessage mm = (ObjectMessage) m;
+        System.out.println("Object : " + mm.getObject().toString());
+      }
+
+      if (m instanceof StreamMessage) {
+        System.out.println("Consumed StreamMessage");
+        StreamMessage mm = (StreamMessage) m;
+        int x = 0;
+        int size = 0;
+        byte[] scratch = new byte[1];
+        while (x != -1) {
+          x = mm.readBytes(scratch);
+          size++;
+        }
+
+        mm.reset();
+        data = new byte[size];
+        System.out.println("Data : " + data);
+      }
+
+      if (m instanceof TextMessage) {
+        System.out.println("Consumed TextMessage");
+        TextMessage mm = (TextMessage) m;
+        System.out.println("Data : " + mm.getText());
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private static void usage() {
+    System.out.println("Usage ...\n\n");
+    System.out.println("jmsproviderqsub <factoryName> <queueName>\n\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<factoryName> - JMS QueueFactory to use");
+    System.out.println("<queueName> - JMS Queue to subscribe");
+
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+
+    System.exit(1);
+  }
+
+  private static void processEnvironmentVariable(String variable) {
+    String laxVAR = System.getProperty("lax.nl.env." + variable);
+    if (laxVAR == null) {
+      laxVAR = System.getenv(variable);
+    }
+    if (laxVAR != null) {
+      if (fEnvironment.CKEYSTORE.equals(variable)) {
+        variable = nSessionAttributes.KEYSTORE_PATH;
+        System.clearProperty(fEnvironment.CKEYSTORE);
+      } else if (fEnvironment.CKEYSTOREPASSWD.equals(variable)) {
+        variable = nSessionAttributes.KEYSTORE_PASSWORD;
+        System.clearProperty(fEnvironment.CKEYSTOREPASSWD);
+      } else if (fEnvironment.CAKEYSTORE.equals(variable)) {
+        variable = nSessionAttributes.TRUSTSTORE_PATH;
+        System.clearProperty(fEnvironment.CAKEYSTORE);
+      } else if (fEnvironment.CAKEYSTOREPASSWD.equals(variable)) {
+        variable = nSessionAttributes.TRUSTSTORE_PASSWORD;
+        System.clearProperty(fEnvironment.CAKEYSTOREPASSWD);
+      }
+      System.setProperty(variable, laxVAR);
+    }
+  }
+}

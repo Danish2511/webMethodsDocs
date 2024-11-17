@@ -1,0 +1,221 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nClusterSite;
+import com.pcbsys.nirvana.nAdminAPI.nNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+import java.util.Iterator;
+import java.util.Vector;
+
+public class nSiteManager extends nSampleApp {
+
+  private static nRealmNode myNode;
+
+
+  protected nSiteManager(String[] args) throws Exception {
+    String cmd = args[0].trim().toLowerCase();
+    if (cmd.equals("show")) {
+      show();
+    } else if (cmd.equals("add")) {
+      add(args);
+    } else if (cmd.equals("del")) {
+      if (args.length >= 2) {
+        delete(args);
+      } else {
+        handleInvalidArguments();
+      }
+
+    } else if (cmd.equals("set")) {
+      if (args.length == 3) {
+        set(args);
+      } else {
+        handleInvalidArguments();
+      }
+    } else {
+      handleInvalidArguments();
+    }
+  }
+
+  private void handleInvalidArguments() {
+    usage();
+    throw new IllegalArgumentException();
+  }
+
+  private void add(String[] args) throws Exception {
+    nClusterNode cluster = myNode.getCluster();
+    String siteName = args[1];
+    nClusterSite site = cluster.getSite(siteName);
+    int idx = 2;
+    if (site == null) {
+      System.out.println("Creating new site " + siteName + " with initial realm " + args[2]);
+      site = cluster.createSite(siteName, args[2]);
+      idx = 3;
+    }
+    for (int x = idx; x < args.length; x++) {
+      System.out.println("Adding " + args[x] + " to site " + siteName);
+      site.addMember(args[x]);
+    }
+  }
+
+  private void delete(String[] args) throws Exception {
+    nClusterNode cluster = myNode.getCluster();
+    String siteName = args[1];
+    String realm = null;
+    if (args.length > 2) {
+      realm = args[2];
+    }
+    nClusterSite site = cluster.getSite(siteName);
+    if (site != null) {
+      if (realm != null) {
+        String node = site.findNode(realm);
+        if (node != null) {
+          System.out.println("Deleting " + node + " from site " + site.getName());
+          site.delMember(node);
+        } else {
+          System.out.println("Can not locate " + realm + " in site " + siteName);
+        }
+      } else {
+        Iterator itr = site.getIterator();
+        while (itr.hasNext()) {
+          String node = itr.next().toString();
+          System.out.println("Deleting " + node + " from site " + site.getName());
+          itr.remove();
+        }
+      }
+    } else {
+      System.out.println("Site not defined in cluster");
+    }
+  }
+
+  private void set(String[] args) throws Exception {
+    nClusterNode cluster = myNode.getCluster();
+    String siteName = args[1];
+    boolean flag = Boolean.valueOf(args[2]);
+    if (cluster != null) {
+      if (cluster.hasSites()) {
+        nClusterSite site = cluster.getSite(siteName);
+        if (site != null) {
+          System.out.println("Setting site : " + siteName + " prime site flag to " + flag);
+          site.setPrime(flag);
+        } else {
+          System.out.println("Unable to locate site : " + siteName);
+        }
+
+      } else {
+        System.out.println("No sites defined on cluster");
+      }
+    } else {
+      System.out.println("No cluster defined on realm");
+    }
+  }
+
+  private void show() {
+    nClusterNode cluster = myNode.getCluster();
+    if (cluster != null) {
+      if (cluster.hasSites()) {
+        System.out.println("Sites defined on cluster : " + cluster.getName() + "\n");
+        Vector<String> knownRealms = new Vector<String>();
+        Enumeration enm = cluster.getNodes();
+        while (enm.hasMoreElements()) {
+          knownRealms.add(((nNode) enm.nextElement()).getName());
+        }
+        Iterator itr = cluster.getSites();
+        while (itr.hasNext()) {
+          nClusterSite site = (nClusterSite) itr.next();
+          System.out.println("\tSite Name : " + site.getName() + " Prime Site Flag : " + site.isPrime());
+          Iterator members = site.getIterator();
+          while (members.hasNext()) {
+            String member = members.next().toString();
+            for (int x = 0; x < knownRealms.size(); x++) {
+              if (knownRealms.elementAt(x).equalsIgnoreCase(member)) {
+                knownRealms.removeElementAt(x);
+                break;
+              }
+            }
+            System.out.println("\t\t" + member);
+          }
+          System.out.println();
+        }
+        if (knownRealms.size() != 0) {
+          System.out.println("\tRealms not configured within a site");
+          for (int x = 0; x < knownRealms.size(); x++) {
+            System.out.println("\t\t" + knownRealms.elementAt(x));
+          }
+        }
+      } else {
+        System.out.println("No sites defined on cluster");
+      }
+    } else {
+      System.out.println("No cluster defined on realm");
+    }
+  }
+
+  @Override
+  protected void processArgs(String[] args) {
+
+  }
+
+  public static void main(String[] args) {
+    if (args.length == 0) {
+      usage();
+      System.exit(1);
+    }
+
+    //Process Environment Variables
+    processEnvironmentVariables();
+
+    String rname = System.getProperty("RNAME");
+    if (rname == null) {
+      UsageEnv();
+      usage();
+      System.exit(1);
+    }
+    try {
+      myNode = new nRealmNode(new nSessionAttributes(rname));
+      myNode.waitForEntireNameSpace(20000);
+      Thread.sleep(5000);
+      new nSiteManager(args);
+      myNode.close();
+      System.exit(0);
+    }
+    catch (Exception e) {
+      System.out.println(e.getMessage());  //To change body of catch statement use File | Settings | File Templates.
+      System.exit(1);
+    }
+  }
+
+  private static void usage() {
+    System.out.println("Usage :- ");
+    System.out.println("nSiteManager <cmd> [site name] [realm] [realm]");
+    System.out.println("");
+    System.out.println("Commands : add del set show");
+    System.out.println("");
+    System.out.println("Example:");
+    System.out.println("");
+    System.out.println(
+        "nSiteManager add newSite realm0 realm1            : Adds a new site called newSite and adds realm0 and realm1 to it");
+    System.out.println(
+        "nSiteManager add newSite realm2                   : Adds a realm realm2 to the existing site newSite");
+    System.out.println(
+        "nSiteManager del newSite                          : Deletes all nodes in the site called newSite and deletes the site");
+    System.out.println(
+        "nSiteManager del newSite realm1                   : Deletes the realm realm1 from the site called newSite");
+    System.out
+        .println("nSiteManager set newSite true                     : Sets the site newSite to become the prime site");
+    System.out
+        .println("nSiteManager set newSite false                    : Removes the site newSite as the prime site");
+    System.out
+        .println("nSiteManager show                                 : shows the current configuration of the sites");
+  }
+}

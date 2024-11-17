@@ -1,0 +1,152 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nConfigEntry;
+import com.pcbsys.nirvana.nAdminAPI.nConfigGroup;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.io.BufferedInputStream;
+import java.util.Enumeration;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * This class demonstrates how you can set the configuration parameters for a realm server using
+ * the admin api.
+ * It also demonstrates how to observe the realm for changes to the realm configuration.
+ * Using the observable / observer pattern, this application is notifed of any changes
+ * to the realm configuration.
+ */
+public class nSettingConfig extends nSampleApp implements Observer {
+
+  private String realmUrl = null;
+
+  /**
+   * Consructor for the nSettingConfig program takes a realm URL
+   */
+  public nSettingConfig(String[] args) {
+    try {
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+      // construct the the realm node
+      nRealmNode node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + attr);
+        return;
+      }
+
+      // get the configuration groups from the realm node
+      Enumeration enum1 = node.getConfigGroups();
+      // output the enumeration of config groups
+      while (enum1.hasMoreElements()) {
+        // call the method that will display the config elements for a donfig group
+        displayGroups((nConfigGroup) enum1.nextElement());
+      }
+      System.out.println("Press any key to quit !");
+      BufferedInputStream bis = new BufferedInputStream(System.in);
+      try {
+        bis.read();
+      } catch (Exception read) {
+      }
+      node.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Display the entries for a config group
+   */
+  private void displayGroups(nConfigGroup grp) {
+    System.out.println("Group Name : " + grp.getName());
+    System.out.println("Group Desc : " + grp.getDescription());
+    // get the enumeration of config entries
+    Enumeration enum1 = grp.getItems();
+    // add this instance as an observer for the group which will ensure that when the group is
+    // updated, this class will be notified by the realm
+    grp.addObserver(this);
+    while (enum1.hasMoreElements()) {
+      // display the entry
+      displayEntry((nConfigEntry) enum1.nextElement());
+    }
+    System.out.println("");
+  }
+
+  private void displayEntry(nConfigEntry ent) {
+    System.out.println("  Entry Name =" + ent.getName());
+    System.out.println("  Entry Desc =" + ent.getDescription());
+    System.out.println("  Entry Warn = " + ent.getWarning());
+    System.out.println("  Entry Value= " + ent.getValue());
+    // add this instance as an observer to this entry
+    ent.addObserver(this);
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length != 0) {
+      switch (args.length) {
+        case 1:
+          if (args[0].equals("-?")) {
+            UsageEnv();
+          }
+          getOptions(null);
+          break;
+        default:
+          getOptions(args);
+      }
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Main program thread for this application
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nSettingConfig dump = new nSettingConfig(args);
+  }
+
+  /**
+   * This method is called when a change has occurred on any of the config groups or entries
+   * to which this instance has added itself as an observer.
+   */
+  public void update(Observable obs, Object data) {
+    if (obs instanceof nConfigEntry) {
+      System.out.println("Change received: " + ((nConfigEntry) obs).getName() + "=" + data.toString());
+      displayEntry((nConfigEntry) obs);
+    } else if (obs instanceof nConfigGroup) {
+      System.out.println("New ConfigEntry for " + ((nConfigGroup) obs).getName());
+      displayEntry((nConfigEntry) data);
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nrealmconfig \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

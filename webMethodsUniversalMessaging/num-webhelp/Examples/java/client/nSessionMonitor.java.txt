@@ -1,0 +1,176 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nConnectionQueueListener;
+import com.pcbsys.nirvana.client.nIllegalArgumentException;
+import com.pcbsys.nirvana.client.nSession;
+import java.util.Date;
+import java.util.GregorianCalendar;
+import java.util.Vector;
+
+public class nSessionMonitor extends Thread {
+
+  private static nSessionMonitor ourInstance = new nSessionMonitor();
+
+  private Vector mySessions;
+  private long myReportingInterval = 1000;
+
+
+  public long getReportingInterval() {
+    return myReportingInterval;
+  }
+
+  public void setReportingInterval(long myReportingInterval) {
+    this.myReportingInterval = myReportingInterval;
+  }
+
+  public static nSessionMonitor getInstance() {
+    return ourInstance;
+  }
+
+  public void addSession(nSession sess) {
+    nSessionStatistics stats = new nSessionStatistics(sess);
+    mySessions.addElement(stats);
+    try {
+      sess.addConnectionQueueListener(stats);
+    } catch (nIllegalArgumentException e) {
+    }
+  }
+
+  public void delSession(nSession sess) {
+    for (int x = 0; x < mySessions.size(); x++) {
+      nSessionStatistics stats = (nSessionStatistics) mySessions.elementAt(x);
+      if (stats.mySession == sess) {
+        try {
+          sess.removeConnectionQueueListener(stats);
+        } catch (nIllegalArgumentException e) {
+        }
+        mySessions.removeElementAt(x);
+        return;
+      }
+    }
+  }
+
+  public void run() {
+    System.out.println(
+        "Date,Session Id,Current Queue Size,Total Events Sent,Total Events Received,Send Rate,ReadRate, High Water Mark Count");
+    while (true) {
+      try {
+        Thread.sleep(myReportingInterval);
+      } catch (InterruptedException e) {
+      }
+      for (int x = 0; x < mySessions.size(); x++) {
+        nSessionStatistics sess = (nSessionStatistics) mySessions.elementAt(x);
+        sess.update();
+        sess.report();
+      }
+    }
+  }
+
+  private nSessionMonitor() {
+    mySessions = new Vector();
+    setDaemon(true);
+    setName("Nirvana Session Monitor");
+    start();
+  }
+
+  class nSessionStatistics implements nConnectionQueueListener {
+
+    nSession mySession;
+    long lastQueueSize;
+    long lastSentEvent;
+    long lastReadEvent;
+    long lastReportTime = 0;
+    long HWMHitCount = 0;
+    long LWMHitCount = 0;
+    long myWaitTime = 0;
+
+    long lastHWMHitCount = 0;
+    float sendRate;
+    float readRate;
+    float blockRate;
+
+    public nSessionStatistics(nSession sess) {
+      mySession = sess;
+      update();
+    }
+
+    public void report() {
+      try {
+        System.out.println(
+            timeToExcel(lastReportTime) + "," + mySession.getId() + "," + lastQueueSize + "," + lastSentEvent + ","
+                + lastReadEvent + "," + sendRate + "," + readRate + "," + blockRate);
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+    public void update() {
+      long time = System.currentTimeMillis();
+      if (lastReportTime != 0) {
+        long interval = (time - lastReportTime);
+        if (interval == 0) {
+          return; // No time has yet elapsed
+        }
+        sendRate = mySession.getSentEventCount() - lastSentEvent;
+        readRate = mySession.getReceivedEventCount() - lastReadEvent;
+        sendRate = (sendRate * 1000) / ((float) interval); // Convert to Messages/Second
+        readRate = (readRate * 1000) / ((float) interval); // Convert to Messages/Second
+        blockRate = HWMHitCount - lastHWMHitCount;
+        blockRate = (blockRate * 1000) / ((float) interval);
+      }
+      lastQueueSize = mySession.getQueueSize();
+      lastSentEvent = mySession.getSentEventCount();
+      lastReadEvent = mySession.getReceivedEventCount();
+      lastHWMHitCount = HWMHitCount;
+      lastReportTime = time;
+    }
+
+    public void reachedLWM(long lwm, int queueSize) {
+      LWMHitCount++;
+    }
+
+    public void reachedHWM(long hwm, int queueSize) {
+      HWMHitCount++;
+    }
+
+    public void reachedAccessWaitLimit(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      myWaitTime = waitTime;
+    }
+
+    public void reachedPushWaitLimit(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      myWaitTime = waitTime;
+    }
+
+    public void reachedQueueBlockLimit(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      myWaitTime = waitTime;
+    }
+
+    public void queueUnBlocked(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      myWaitTime = 0;
+    }
+  }
+
+  private static double timeToExcel(long tm) {
+    Date time = new Date(tm);
+    GregorianCalendar gc = new GregorianCalendar();
+    gc.setTime(time);
+    int tmp = gc.get(GregorianCalendar.SECOND);
+    tmp += gc.get(GregorianCalendar.MINUTE) * 60;
+    tmp += gc.get(GregorianCalendar.HOUR_OF_DAY) * 60 * 60;
+
+    long day = time.getTime() / (24 * 60 * 60 * 1000) + 25569;
+    double tmpf = day;
+    tmpf = tmpf + tmp / (24.0 * 60.0 * 60.0);
+    return tmpf;
+  }
+
+
+}

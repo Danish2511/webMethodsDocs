@@ -1,0 +1,493 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.nAdminAPI.nLogListener;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nThreadPool;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.util.Iterator;
+import java.util.Vector;
+
+/**
+ * Displays live information on thread pools, event status, memory usage, connection status and also the log file.
+ * The user can switch between the information being viewed by pressing a character key for example pressing 'm' will
+ * switch the system to monitoring the memory usage.
+ */
+public class nTop implements Runnable, nLogListener {
+
+  private static nTop myself = null;
+  private nRealmNode rNode = null;
+  private char option = 'l';
+  private long totConsumed = -1;
+  private long totPublished = 0;
+  private int refreshRate = 2000;
+  private long totMem = 0;
+  private long freeMem = -1;
+  // initialised to -1 for rate calculations.  We do not want to calculate the change in free memory
+  // when there is no previous calculation of free memory so we set the variable to an impossible value for free memory
+  private int curCons = -1;
+  private Object change = new Object();
+  private long prevTime;
+
+
+  /**
+   * This function creates a session based on RNAME and establishes the nRealmNode for that realm
+   */
+  private void getRealmNode(String RNAME) {
+    try {
+      System.out.print("Establishing realm node...");
+      nSessionAttributes nsa = new nSessionAttributes(RNAME);
+      nRealmNode rNode = new nRealmNode(nsa);
+
+      if (!rNode.isAuthorised()) {
+        System.out.println("User not authorised on this node " + nsa);
+        System.exit(1);
+      }
+      System.out.println("done\n");
+      this.rNode = rNode;
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * @return The Vector of thread pool details for the realm
+   */
+  private Vector getThreadPools() {
+    return rNode.getThreadPoolDetails();
+  }
+
+  /**
+   * This method takes a vector of thread pool and prints out information from each in a table
+   *
+   * @param threadPools A vector of thread pools
+   */
+  private void printThreadPools(Vector threadPools) {
+    System.out.println("\n\n\n\n\n");
+
+    //The names of the thread pools vary in size, to longest name is 23 characters.  In case other names are
+    //added at a later date, this length variable can be adjusted
+    int nameLength = 25;
+
+    System.out.print("Name");
+    //this function is used to print multiple spaces at a time for alignment purposes
+    printSpaces(nameLength - 4);
+    System.out.println("Idle    Allocated Queued Tasks");
+    printSpaces(nameLength);
+    System.out.println("Threads Threads   Tasks  Executed\n");
+
+    Iterator it = threadPools.iterator();
+
+    while (it.hasNext()) {
+      nThreadPool thread = (nThreadPool) it.next();
+
+      int idle = thread.getIdle();
+      String name = thread.getName();
+      int queue = thread.getQueue();
+      int size = thread.getSize();
+      long total = thread.getTotal();
+
+      System.out.print(name + "  ");
+      printSpaces(nameLength - name.length());
+      System.out.println(idle + "\t    " + size + "\t     " + queue + "\t  " + total);
+    }
+  }
+
+  /**
+   * The class nTop implements nLogListener.  By adding this class as a listener of the rNode, whenever a new
+   * log entry is added to the rNode, the report method is called which prints out the log.
+   */
+  private void getLog() {
+    rNode.addLogListener(this);
+  }
+
+  /**
+   * This method is called when a new log entry is added to the realm
+   *
+   * @param rep The log entry
+   */
+  public void report(String rep) {
+    System.out.println(rep);
+  }
+
+  /**
+   * Prints information on the events in the realm
+   */
+  private void printEventsTable() {
+    System.out.println("\n\n\n\n\n");
+
+    long conPerSec = 0;
+    long pubPerSec = 0;
+    /**
+     * if totConsumed is -1 then it means this is the first iteration of calculating the subscribers and consumers
+     * therefore it is not possible to calculate the rate at which consumers and subscribers are increasing/decreasing
+     */
+    if (totConsumed != -1) {
+      long timeChange = System.currentTimeMillis() - prevTime;
+      conPerSec = (rNode.getTotalSubscribed() - totConsumed) / (timeChange / 1000);
+      pubPerSec = (rNode.getTotalPublished() - totPublished) / (timeChange / 1000);
+    }
+
+    prevTime = System.currentTimeMillis();
+    totConsumed = rNode.getTotalSubscribed();
+    totPublished = rNode.getTotalPublished();
+
+    System.out.println("~~~~~~~~Event Status~~~~~~~\n");
+    System.out.println("Consumed      - " + totConsumed + "\n");
+    System.out.println("Published     - " + totPublished + "\n");
+    System.out.println("Consumed/sec  - " + conPerSec + "\n");
+    System.out.println("Published/sec - " + pubPerSec + "\n");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+
+  }
+
+  /**
+   * This method resets variables back to there initial values each time the option variable is changed.  This is
+   * necessary so that for example the consumed/sec rate is not calculated based on previous values.
+   */
+  private void reset() {
+    totConsumed = -1;
+    totPublished = -1;
+    freeMem = -1;
+    curCons = -1;
+
+    //try to remove the logListener.  A log listener may not have been added however so must catch exception if it
+    //has not.
+    try {
+      rNode.delLogListener(this);
+    } catch (Exception e) {
+    }
+    ;
+
+  }
+
+  /**
+   * This method prints the details of memory usage
+   */
+  private void printMemoryUsage() {
+    System.out.println("\n\n\n\n\n");
+
+    long change = 0;
+    if (freeMem != -1) {
+      if ((change = rNode.getFreeMemory() - freeMem) < 0) {
+        change = freeMem - rNode.getFreeMemory();
+      }
+    }
+    freeMem = rNode.getFreeMemory();
+    long usedMem = totMem - freeMem;
+
+    /**
+     * dividing by (1024*1024) gives the values in terms of mega bytes
+     */
+    System.out.println("~~Memory Usage (M)~~\n");
+    System.out.println("Total  - " + (totMem / (1024 * 1024)));
+    System.out.println("Free   - " + (freeMem / (1024 * 1024)));
+    System.out.println("Used   - " + (usedMem / (1024 * 1024)));
+    System.out.println("Change - " + (change / (1024 * 1024)));
+    System.out.println("~~~~~~~~~~~~~~~~~~~~\n");
+
+
+  }
+
+  /**
+   * Prints details of connections to the realm.
+   */
+  private void printConnectionStatus() {
+    System.out.println("\n\n\n\n\n");
+
+    long totCons = rNode.getTotalConnections();
+    double rate = 0;
+
+    if (curCons != -1) {
+      long timeChange = System.currentTimeMillis() - prevTime;
+      //must cast to double otherwise the result of 3/2 = 1 rather than 1.5
+      rate = (double) (rNode.getCurrentConnections() - curCons) / (double) (timeChange / 1000);
+
+    }
+
+    curCons = rNode.getCurrentConnections();
+    prevTime = System.currentTimeMillis();
+
+    System.out.println("~~Connection Status~~\n");
+    System.out.println("Total   - " + totCons);
+    System.out.println("Current - " + curCons);
+    System.out.println("Rate    - " + rate);
+    //System.out.println("Allowed - In config");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~\n");
+  }
+
+  /**
+   * In order to align the tables being printed, it is often necessary to print out multiple spaces based on the length
+   * of a name for example.
+   *
+   * @param length The number of spaces to be printed.
+   */
+  private void printSpaces(int length) {
+    for (int i = 0; i < length; i++) {
+      System.out.print(" ");
+    }
+  }
+
+  /**
+   * This method gives details of how to use the program.  It describes what information is displayed when certain keys
+   * are pressed.
+   */
+  private void helpMessage() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~Help~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+    System.out.println("                   nTop [refreshRate] \n");
+    System.out.println("In order to view different Information, press one of the");
+    System.out.println("character keys specified below");
+    char plural = ' ';
+    if (refreshRate != 1000) {
+      plural = 's';
+    }
+    System.out.println("All information is updated every " + (refreshRate / 1000) + " second" + plural + ".  Once you");
+    System.out.println("have chosen an option and the information is displayed,");
+    System.out.println("simply press another character key to change the");
+    System.out.println("information shown.\n");
+    System.out.println("t : realm thread pools");
+    System.out.println("e : event status");
+    System.out.println("m : memory usage");
+    System.out.println("c : connection status");
+    System.out.println("l : log file");
+    System.out.println("h : show this help message");
+    System.out.println("q : exit the system\n");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+
+  }
+
+  /**
+   * Initially prints the help message to show the user the options available then reads the option from the input
+   * and start a thread to display the required information.  The method then monitors the keyboard for key presses
+   * and updates the option variable depending on the input character.
+   */
+  private void doit() {
+
+    helpMessage();
+
+    BufferedReader bis = new BufferedReader(new InputStreamReader(System.in));
+    int buffer = '\n';
+    while (buffer == '\n') {
+      try {
+        buffer = bis.read();
+        option = Character.toLowerCase((char) buffer);
+      } catch (Exception read) {
+        System.exit(1);
+      }
+    }
+
+    Thread screenWriter = new Thread(this);
+    screenWriter.setDaemon(true);
+    screenWriter.start();
+    while (true) {
+      try {
+        buffer = bis.read();
+        if (buffer != '\n') {
+          reset();
+          option = Character.toLowerCase((char) buffer);
+
+          /**
+           * The information will refresh every refreshRate milliseconds however, if the user requests to see new
+           * information, then they should not have to wait refreshRate milliseconds for the new information to appear.
+           * To solve this, rather than the thread sleeping, it waits for a maximum of refreshrate milliseconds and
+           * then continues.  If within this time the option is changed, we notify the thread here and it immediately
+           * continues
+           */
+          synchronized (change) {
+            change.notify();
+          }
+
+
+        }
+
+      } catch (Exception read) {
+        read.printStackTrace();
+        System.exit(1);
+      }
+    }
+
+  }
+
+  /**
+   * When a new thread is started, this method is called.  The thread displays information depending on the character
+   * in the option variable.
+   */
+  public void run() {
+    while (true) {
+      switch (option) {
+        case 't': {
+          Vector threadPools = getThreadPools();
+          printThreadPools(threadPools);
+          break;
+        }
+
+        case 'e': {
+          printEventsTable();
+          break;
+        }
+
+        //The logListener will print to the screen everytime a new log report is received.  Therefore it is not
+        //necessary to continue looping calling getLog() hence the option is set to X
+        case 'l': {
+          getLog();
+          option = 'X';
+          break;
+        }
+
+        case 'm': {
+          printMemoryUsage();
+          break;
+        }
+
+        case 'c': {
+          printConnectionStatus();
+          break;
+        }
+
+        case 'h': {
+          helpMessage();
+          //The help message will not update so only needs to be printed once hence the option variable is changed to X.
+          option = 'X';
+          break;
+        }
+
+        case 'q': {
+          System.out.println("System exiting");
+          System.exit(0);
+        }
+
+        //This case can only be reached if the code sets option to X.  If the user enters X into the terminal,
+        //it will be converted to lower case.  This means the X case can be used whenever
+        //you want to print something only once rather than in the loop but you want the loop to continue.
+        case 'X': {
+          break;
+        }
+
+        default: {
+          helpMessage();
+          option = 'X';
+        }
+      }
+
+      /**
+       * the thread waits for a maximum of refreshRate milliseconds then continues (loops again and refreshes the
+       * information).  The thread may continue before this time is up if it received notification.
+       */
+      synchronized (change) {
+        try {
+          change.wait(refreshRate);
+        } catch (InterruptedException ie) {
+          ie.printStackTrace();
+        }
+      }
+    }
+  }
+
+  /**
+   * This program displays status information for the realm specified in the environment variable RNAME.  The
+   * information displayed on screen refreshes according to a program parameter (default:1000ms).  Once the program is
+   * running, the user can press keys to change the information being displayed.
+   *
+   * @param args An array of program parameters
+   */
+  public static void main(String[] args) {
+
+    myself = new nTop();
+    if ((args.length != 0)) {
+
+      if (args[0].equals("-?")) {
+        usageEnv();
+        System.exit(1);
+      } else {
+        try {
+          myself.refreshRate = Integer.parseInt(args[0]);
+        } catch (Exception e) { //If the paramater entered is not a numerical value the usage will be printed out
+          usage();
+          System.exit(1);
+        }
+      }
+    }
+
+    /**
+     * The RNAME variable is required as an environment variable, if the RNAME is not specifed then the
+     * program cannot proceed.  In this situation the usageEnv function is called and the system exits.
+     */
+    String RNAME = null;
+    if (System.getProperty("RNAME") != null) {
+      RNAME = System.getProperty("RNAME");
+    } else {
+      usageEnv();
+      System.exit(1);
+    }
+
+    //this function establishes a realm node and assigns it to global variable called rNode
+    myself.getRealmNode(RNAME);
+
+    //update total memory as this value is constant
+    myself.totMem = myself.rNode.getTotalMemory();
+
+    myself.doit();
+
+    try {
+      myself.rNode.close();
+    } catch (Exception e) {
+    }
+    //Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+
+  }
+
+  private static void usage() {
+    System.out.println("Usage...\n");
+    System.out.println("nTop [refreshRate]");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[refreshRate] - the rate at which the information is reloaded on screen (milliseconds) \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+  /**
+   * If the environment variables are not correctly specified or the user requests informations, this method
+   * will print the correct usage for the environment variables
+   */
+  private static void usageEnv() {
+    System.out.println("\n\n(Environment Variables) \n");
+
+    System.out.println("(RNAME) - One or more RNAME entries in the form protocol://host:port");
+    System.out.println("   protocol - Can be one of nsp, nhp, nsps, or nhps, where:");
+    System.out.println("   nsp - Specifies Nirvana Socket Protocol (nsp)");
+    System.out.println("   nhp - Specifies Nirvana HTTP Protocol (nhp)");
+    System.out.println("   nsps - Specifies Nirvana Socket Protocol Secure (nsps), i.e. using SSL/TLS");
+    System.out.println("   nhps - Specifies Nirvana HTTP Protocol Secure (nhps), i.e. using SSL/TLS");
+    System.out.println("   port - The port number of the server");
+    System.out.println(
+        "\nHint: - For multiple RNAME entries, use comma separated values which will be attempted in connection weight order\n");
+
+    System.out.println(
+        "(LOGLEVEL) - This determines how much information the nirvana api will output 0 = verbose 7 = quiet\n");
+
+    System.out.println("(CKEYSTORE) - If using SSL, the location of the keystore containing the client cert\n");
+    System.out.println("(CKEYSTOREPASSWD) - If using SSL, the password for the keystore containing the client cert\n");
+    System.out.println("(CAKEYSTORE) - If using SSL, the location of the ca truststore\n");
+    System.out.println("(CAKEYSTOREPASSWD) - If using SSL, the password for the ca truststore\n");
+
+    System.out.println("(HPROXY) - HTTP Proxy details in the form proxyhost:proxyport, where:");
+    System.out.println("   proxyhost - The HTTP proxy host");
+    System.out.println("   proxyport - The HTTP proxy port\n");
+    System.out.println("(HAUTH) - HTTP Proxy authentication details in the form user:pass, where:");
+    System.out.println("   user - The HTTP proxy authentication username");
+    System.out.println("   pass - The HTTP proxy authentication password\n");
+    System.exit(1);
+  }
+}

@@ -1,0 +1,294 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nChannelPublishKeys;
+import com.pcbsys.nirvana.client.nRealm;
+import com.pcbsys.nirvana.client.nRealmUnreachableException;
+import com.pcbsys.nirvana.client.nRequestTimedOutException;
+import com.pcbsys.nirvana.client.nSecurityException;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.client.nSessionNotConnectedException;
+import com.pcbsys.nirvana.client.nSessionPausedException;
+import com.pcbsys.nirvana.client.nStoreProperties;
+import com.pcbsys.nirvana.client.nUnexpectedResponseException;
+import java.util.Vector;
+
+/**
+ * Display all channels and queues in a realm
+ */
+public class getChannels extends nSampleApp {
+
+  private static getChannels mySelf = null;
+
+  private static final int sChannels = 0;
+  private static final int sQueues = 1;
+
+  private static final int sPersist = 0;
+  private static final int sMixed = 1;
+  private static final int sReliable = 2;
+
+  private static int[][] mySummary = new int[2][3];
+  private static int sRealmCount = 0;
+  private static int sMissedRealms = 0;
+
+  private static Vector realms = new Vector();
+
+  /**
+   * This method demonstrates the Nirvana API calls necessary to display a realms channels
+   * It is called after all command line arguments have been received and
+   * validated
+   *
+   * @param realmDetails a String[] containing the possible RNAME values
+   * @param traverseNameSpace whether to traverse remote realms
+   * @param factory mount point of the realm
+   */
+  private void doit(String[] realmDetails, boolean traverseNameSpace, String factory)
+      throws nRealmUnreachableException {
+
+    mySelf.constructSession(realmDetails);
+
+    //Add the remote realm object to the local realm. The object contains all the
+    //necessary information for the 2 realms to start communicating.
+    try {
+      String realmName = mySession.getServerRealmName();
+      if (realms.contains(realmName)) {
+        return; // Already parsed this realm
+      } else {
+        System.out.println("Displaying channels for realm " + realmName);
+        realms.addElement(realmName);
+        sRealmCount++;
+      }
+      com.pcbsys.nirvana.client.nChannelAttributes[] arr = mySession.getChannels(factory);
+      if (arr != null) {
+        for (int x = 0; x < arr.length; x++) {
+          displayChannelDetails(arr[x], factory);
+        }
+      }
+    }
+    //Handle errors
+    catch (nSessionPausedException ex1) {
+    } catch (nSecurityException se) {
+      System.out.println("Insufficient permissions for the requested operation.");
+      System.out.println("Please check the ACL settings on the server.");
+      return;
+    } catch (nSessionNotConnectedException snce) {
+      System.out.println("The session object used is not physically connected to the Nirvana realm.");
+      System.out.println("Please ensure the realm is up and check your RNAME value.");
+      return;
+    } catch (nUnexpectedResponseException ure) {
+      System.out.println("The Nirvana REALM has returned an unexpected response.");
+      System.out.println("Please ensure the Nirvana REALM and client API used are compatible.");
+      return;
+    } catch (nRequestTimedOutException rtoe) {
+      System.out.println("The requested operation has timed out waiting for a response from the REALM.");
+      System.out.println("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+      return;
+    }
+    if (traverseNameSpace) {
+      try {
+        nRealm[] arr = mySession.getRealms();
+        for (int x = 0; x < arr.length; x++) {
+          if (!realms.contains(arr[x].getName())) {
+            System.out.println("");
+            try {
+              doit(arr[x].getProtocols(), traverseNameSpace, factory + arr[x].getMountPoint() + "/");
+            } catch (nRealmUnreachableException unreachable) {
+              sMissedRealms++;
+              System.out.println("Realm is not currently contactable : " + arr[x].getName());
+            }
+          }
+        }
+      } catch (Exception ex) {
+        System.out.println("Failed to retrieve information from child realms");
+        return;
+      }
+    }
+    //Close the session we opened
+    try {
+      nSessionFactory.close(mySession);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+        }
+        System.getProperties().put("FACTORY", args[0]);
+        break;
+      case 2:
+        System.getProperties().put("FACTORY", args[0]);
+        System.getProperties().put("TRAVERSE", args[1]);
+        break;
+    }
+  }
+
+  public static void main(String[] args) {
+
+    //Create an instance for this class
+    mySelf = new getChannels();
+
+    //Process command line arguments
+    mySelf.processArgs(args);
+
+    //Process Environment Variables
+    nSampleApp.processEnvironmentVariables();
+
+    //Check the local realm details
+    int idx;
+    String RNAME = null;
+    if (System.getProperty("RNAME") != null) {
+      RNAME = System.getProperty("RNAME");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+    String factoryName = null;
+    if (System.getProperty("FACTORY") != null) {
+      factoryName = System.getProperty("FACTORY", "/");
+    }
+
+    boolean traverseNameSpace = false;
+    if (System.getProperty("TRAVERSE") != null) {
+      traverseNameSpace = (System.getProperty("TRAVERSE").equalsIgnoreCase("true"));
+    }
+    //Process the local REALM RNAME details
+    String[] rproperties = parseRealmProperties(RNAME);
+
+    try {
+      //Display the details of channels and queues in all known realm
+      mySelf.doit(rproperties, traverseNameSpace, factoryName);
+      nSessionFactory.shutdown();
+    } catch (Exception ex) {
+    }
+    int grandTotal;
+    int count = 0;
+
+    if (sRealmCount > 1) {
+      System.out.println("Scanned " + sRealmCount + " realms, missed " + sMissedRealms);
+    } else {
+      System.out.println("Scanned " + sRealmCount + " realm, missed " + sMissedRealms);
+    }
+    System.out.println("\nSummary\n");
+    idx = sQueues;
+    System.out.println("Queue Summary");
+    System.out.println("  Reliable   : " + mySummary[idx][sReliable]);
+    System.out.println("  Persistent : " + mySummary[idx][sPersist]);
+    System.out.println("  Mixed      : " + mySummary[idx][sMixed]);
+    System.out.print("\nTotal Queues = ");
+    for (int x = 0; x < mySummary[sQueues].length; x++) {
+      count += mySummary[sQueues][x];
+    }
+    grandTotal = count;
+    System.out.println(count);
+    idx = sChannels;
+    System.out.println("\nChannel Summary");
+    System.out.println("  Reliable   : " + mySummary[idx][sReliable]);
+    System.out.println("  Persistent : " + mySummary[idx][sPersist]);
+    System.out.println("  Mixed      : " + mySummary[idx][sMixed]);
+    System.out.print("\nTotal Channels = ");
+    count = 0;
+    for (int x = 0; x < mySummary[sChannels].length; x++) {
+      count += mySummary[sChannels][x];
+    }
+    System.out.println(count);
+    grandTotal += count;
+    System.out.println("\n\nGrand Total    = " + grandTotal + "\n\n");
+  }
+
+  /**
+   * This method displays the details of a channel found in a realm
+   *
+   * @param aChannel the attributes for the channel
+   * @param mount the mount point for the channel
+   */
+  private void displayChannelDetails(nChannelAttributes aChannel, String mount) {
+    int idx = sChannels;
+    String type = "Channel";
+    if (aChannel.getChannelMode() == nChannelAttributes.QUEUE_MODE) {
+      type = "Queue  ";
+      idx = sQueues;
+    }
+    System.out.println("******************************");
+    System.out.println("  Type is a " + type);
+    System.out.println("  " + type + " Name         : " + aChannel.getName());
+    System.out.println("  " + type + " Capacity     : " + aChannel.getMaxEvents());
+    System.out.println("  " + type + " Time to live : " + aChannel.getTTL());
+    String store = "";
+    switch (aChannel.getType()) {
+      case nChannelAttributes.MIXED_TYPE:
+        store = "MIXED";
+        mySummary[idx][sMixed]++;
+        break;
+      case nChannelAttributes.PERSISTENT_TYPE:
+        store = "PERSISTENT";
+        mySummary[idx][sPersist]++;
+        break;
+      case nChannelAttributes.RELIABLE_TYPE:
+        store = "RELIABLE";
+        mySummary[idx][sReliable]++;
+        break;
+    }
+    System.out.println("  " + type + " Storage type : " + store);
+    nStoreProperties props = aChannel.getProperties();
+    System.out.println("Displaying Store Properties:");
+    if (props.getClientMergeEngineClassname() != null) {
+      System.out.println("\tClient Merge Engine Classname : " + props.getClientMergeEngineClassname());
+    }
+
+    System.out.println("\tCache on reload : " + props.getCacheOnReload());
+    if (props.canSyncOnEachWrite()) {
+      System.out.println("\tSync file system on write : " + props.canSyncOnEachWrite());
+      System.out.println("\tSync batch size : " + props.getSyncMaxBatchSize());
+      System.out.println("\tSync batch time : " + props.getSyncBatchTime());
+    }
+
+    System.out.println("\tCache enabled : " + props.getEnableCaching());
+
+
+    System.out.println("\tHonour capacity when full : " + props.getHonorCapacityWhenFull());
+    System.out.println("\tAutomatic maintenance enabled : " + props.getPerformAutomaticMaintenance());
+
+    System.out.println("  Displaying Publish Keys");
+    nChannelPublishKeys keys[] = aChannel.getPublishKeys();
+    if (keys != null && keys.length > 0) {
+      for (int x = 0; x < keys.length; x++) {
+        System.out.println("    Key " + keys[x].getName() + " depth " + keys[x].getDepth());
+      }
+    }
+    System.out.println("  End Of Publish Keys");
+    System.out.println("******************************");
+    System.out.println("");
+  }
+
+
+  /**
+   * Prints the usage string for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("ngetchannels [traverse]  \n");
+
+    System.out.println("[Optional Arguments] \n");
+    System.out
+        .println("[traverse] - Whether to traverse remote realms in the namespace (true | false), defaults to false");
+
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+} // End of getChannels Class
+
+

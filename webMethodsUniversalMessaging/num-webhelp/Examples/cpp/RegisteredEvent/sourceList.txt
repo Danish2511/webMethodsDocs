@@ -1,0 +1,4 @@
+SET (SRC 
+../nSampleApp/nSampleApp.cpp
+RegisteredEvent.cpp
+)

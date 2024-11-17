@@ -1,0 +1,76 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nSession;
+import java.util.Vector;
+
+public class nSessionLatencyAgent extends Thread {
+
+  private Vector mySessionList;
+  private boolean run = true;
+  private double delayTime = 70000; // 70 seconds, 10 seconds after a default heart beat
+
+  private static nSessionLatencyAgent myInstance;
+
+  public static nSessionLatencyAgent getInstance() {
+    if (myInstance == null) {
+      myInstance = new nSessionLatencyAgent();
+    }
+    return myInstance;
+  }
+
+  protected nSessionLatencyAgent() {
+    mySessionList = new Vector();
+    setName("Latency Agent");
+    setDaemon(true);
+    start();
+  }
+
+  public void addSession(nSession sess) {
+    mySessionList.add(sess);
+  }
+
+  public void delSession(nSession sess) {
+    mySessionList.remove(sess);
+  }
+
+  public long getDelayTime() {
+    return (long) delayTime;
+  }
+
+  public void setDelayTime(long delayTime) {
+    if (delayTime < 60000) {     // MUST be greater than the heart beat else no heat beat would be sent
+      delayTime = 61000;     // and no latency will be updated.
+    }
+    this.delayTime = delayTime;
+  }
+
+  public void close() {
+    run = false;
+  }
+
+  public void run() {
+    while (run) {
+      try {
+        Thread.sleep((long) delayTime);
+        for (int x = 0; x < mySessionList.size(); x++) {
+          nSession sess = (nSession) mySessionList.elementAt(x);
+          if (sess.isConnected()) {
+            sess.getServerTime(); // This is a synchronous command and returns the realm servers current time
+            // Which forces the update of the latency calculation which is then sent back
+            // to the server
+            //System.out.println("latency->"+sess.getCurrentLatency()+"ms");
+          }
+        }
+      } catch (Throwable ex) {
+      }
+    }
+  }
+}

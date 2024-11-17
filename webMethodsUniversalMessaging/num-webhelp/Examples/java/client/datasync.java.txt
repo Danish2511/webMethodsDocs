@@ -1,0 +1,362 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nBaseClientException;
+import com.pcbsys.nirvana.client.nChannel;
+import com.pcbsys.nirvana.client.nChannelAlreadySubscribedException;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nChannelNotFoundException;
+import com.pcbsys.nirvana.client.nConsumeEvent;
+import com.pcbsys.nirvana.client.nEventListener;
+import com.pcbsys.nirvana.client.nRequestTimedOutException;
+import com.pcbsys.nirvana.client.nSecurityException;
+import com.pcbsys.nirvana.client.nSelectorParserException;
+import com.pcbsys.nirvana.client.nSession;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.client.nSessionNotConnectedException;
+import com.pcbsys.nirvana.client.nSessionPausedException;
+import com.pcbsys.nirvana.client.nTransaction;
+import com.pcbsys.nirvana.client.nTransactionAttributes;
+import com.pcbsys.nirvana.client.nTransactionFactory;
+import com.pcbsys.nirvana.client.nUnexpectedResponseException;
+import com.pcbsys.nirvana.client.nUnknownRemoteRealmException;
+import java.io.BufferedInputStream;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.Vector;
+
+/**
+ * Subscribes to a nirvana channel
+ */
+public class datasync extends nSampleApp implements nEventListener, Runnable {
+
+  private String[] excludeList = null;
+
+  private Object mutex = new Object();
+
+  private LinkedHashMap localchannels = new LinkedHashMap();
+  private LinkedHashMap remotechannels = new LinkedHashMap();
+
+  private nSession myRemoteSession = null;
+  private Vector events = new Vector();
+
+  private Thread runner = null;
+
+  private static datasync mySelf = null;
+
+  /**
+   * This method demonstrates the Nirvana API calls necessary to subscribe to
+   * a channel. It is called after all command line arguments have been
+   * received and validated
+   *
+   * @param realmDetails a String[] containing the possible RNAME values
+   * @param achannelName the channel name to create
+   * @param exclude the subscription selector filter
+   */
+  private void doit(String[] realmDetails, String achannelName, String exclude) {
+    mySelf.constructSession(realmDetails);
+
+    // Subscribes to the specified channel
+    try {
+      // Create a channel attributes object
+      nChannelAttributes nca[] = null;
+
+      String folders[] = achannelName.split(",");
+      excludeList = exclude.split(",");
+
+      for (int y = 0; y < folders.length; y++) {
+        nca = mySession.getChannels(folders[y]);
+
+        myRemoteSession = nSessionFactory.create(new nSessionAttributes(System.getProperty("RNAME2")));
+        myRemoteSession.init();
+
+        runner = new Thread(this);
+        runner.setDaemon(true);
+        runner.setName("Runner - event queue processing");
+        runner.start();
+
+        for (int x = 0; x < nca.length; x++) {
+          if (isExcluded(nca[x].getName())) {
+            continue;
+          }
+          // Obtain the channel reference
+          nChannel local = mySession.findChannel(nca[x]);
+          nChannelAttributes rNca = new nChannelAttributes();
+          String rchan = System.getProperty("RCHANNAME", nca[x].getName());
+          rNca.setName(rchan);
+          rNca.setTTL(nca[x].getTTL());
+          rNca.setMaxEvents(nca[x].getMaxEvents());
+          rNca.setPublishKeys(nca[x].getPublishKeys());
+          rNca.setType(nca[x].getType());
+
+          nChannel remote = null;
+
+          try {
+            remote = myRemoteSession.findChannel(rNca);
+          } catch (nChannelNotFoundException ex) {
+            remote = myRemoteSession.createChannel(rNca);
+          }
+
+          localchannels.put(nca[x].getName(), local);
+          remotechannels.put(nca[x].getName(), remote);
+
+          // Add this object as a subscribe to the channel with the
+          // specified message selector
+          // and start eid
+          local.addSubscriber(this);
+          System.out.println("Added channel " + nca[x].getName() + " to sync hash");
+        }
+      }
+
+      // Stay subscribed until the user presses any key
+      System.out.println("Added a total of " + remotechannels.size() + " channels");
+      System.out.println("Press any key to quit !");
+      BufferedInputStream bis = new BufferedInputStream(System.in);
+      try {
+        bis.read();
+      } catch (Exception read) {
+      } // Ignore this
+
+    }
+    // Handle errors
+    catch (nChannelNotFoundException cnfe) {
+      System.out.println("The channel specified could not be found.");
+      System.out.println("Please ensure that the channel exists in the REALM you connect to.");
+      cnfe.printStackTrace();
+      System.exit(1);
+    } catch (nSecurityException se) {
+      System.out.println("Insufficient permissions for the requested operation.");
+      System.out.println("Please check the ACL settings on the server.");
+      se.printStackTrace();
+      System.exit(1);
+    } catch (nSessionNotConnectedException snce) {
+      System.out.println("The session object used is not physically connected to the Nirvana Realm.");
+      System.out.println("Please ensure the realm is running and check your RNAME value.");
+      snce.printStackTrace();
+      System.exit(1);
+    } catch (nUnexpectedResponseException ure) {
+      System.out.println("The Nirvana REALM has returned an unexpected response.");
+      System.out.println("Please ensure the Nirvana REALM and client API used are compatible.");
+      ure.printStackTrace();
+      System.exit(1);
+    } catch (nUnknownRemoteRealmException urre) {
+      System.out.println("The channel specified resided in a remote realm which could not be found.");
+      System.out.println("Please ensure the channel name specified is correct.");
+      urre.printStackTrace();
+      System.exit(1);
+    } catch (nRequestTimedOutException rtoe) {
+      System.out.println("The requested operation has timed out waiting for a response from the REALM.");
+      System.out.println("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+      rtoe.printStackTrace();
+      System.exit(1);
+    } catch (nChannelAlreadySubscribedException chase) {
+      System.out.println("You are already subscribed to this channel.");
+      chase.printStackTrace();
+      System.exit(1);
+    } catch (nBaseClientException nbce) {
+      System.out.println("An error occured while creating the Channel Attributes object.");
+      nbce.printStackTrace();
+      System.exit(1);
+    }
+    // Close the session we opened
+    try {
+      stop();
+      nSessionFactory.close(mySession);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+    // Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+  }
+
+  protected boolean isExcluded(String name) {
+    boolean excluded = false;
+    for (int x = 0; x < excludeList.length; x++) {
+      if (name.indexOf(excludeList[x]) != -1) {
+        excluded = true;
+        break;
+      }
+    }
+    return excluded;
+  }
+
+  protected void stop() throws Exception {
+    Iterator local = localchannels.values().iterator();
+    while (local.hasNext()) {
+      Object obj = local.next();
+      nChannel chan = (nChannel) obj;
+      chan.removeSubscriber(this);
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+        }
+        System.getProperties().put("CHANNAME", args[0]);
+        break;
+      case 2:
+        System.getProperties().put("CHANNAME", args[0]);
+        System.getProperties().put("EXCLUDE", args[1]);
+        break;
+    }
+  }
+
+  public static void main(String[] args) {
+
+    // Create an instance for this class
+    mySelf = new datasync();
+
+    // Process command line arguments
+    mySelf.processArgs(args);
+
+    nSampleApp.processEnvironmentVariables();
+
+    // Check the channel name specified
+    String channelName = null;
+    if (System.getProperty("CHANNAME") != null) {
+      channelName = System.getProperty("CHANNAME");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+
+    // Check the channel name specified
+    String exclude = null;
+    if (System.getProperty("EXCLUDE") != null) {
+      exclude = System.getProperty("EXCLUDE");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+
+    // Check the local realm details
+    int idx = 0;
+    String RNAME = null;
+    if (System.getProperty("RNAME") != null) {
+      RNAME = System.getProperty("RNAME");
+    } else {
+      Usage();
+      System.exit(1);
+    }
+
+    // Process the local REALM RNAME details
+    String[] rproperties = new String[4];
+    rproperties = parseRealmProperties(RNAME);
+
+    // Subscribe to the channel specified
+    mySelf.doit(rproperties, channelName, exclude);
+  }
+
+  /**
+   * A callback is received by the API to this method each time an event is
+   * received from the nirvana channel. Be carefull not to spend too much time
+   * processing the message inside this method, as until it exits the next
+   * message can not be pushed.
+   *
+   * @param evt An nConsumeEvent object containing the message received from
+   * the channel
+   */
+  public void go(nConsumeEvent evt) {
+    // If this is the first message we receive
+    synchronized (mutex) {
+      while (events.size() > 500) {
+        try {
+          mutex.wait(1000);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      if (evt.getProperties().containsKey("nrvjoin.orig.chan")) {
+        String joinkey = evt.getProperties().getString("nrvjoin.orig.chan");
+        if (joinkey != null && joinkey.length() > 0) {
+          return;
+        }
+      } else {
+        events.add(evt);
+      }
+    }
+  }
+
+  public void run() {
+    int count = 0;
+    while (true) {
+      nConsumeEvent evt = null;
+      while (events.size() == 0) {
+        synchronized (mutex) {
+          try {
+            mutex.wait(1000);
+          } catch (InterruptedException e) {
+          }
+        }
+      }
+      synchronized (mutex) {
+        evt = (nConsumeEvent) events.elementAt(0);
+        events.removeElementAt(0);
+      }
+      if (evt == null) {
+        try {
+          Thread.sleep(1000);
+          continue;
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      }
+      try {
+        synchronized (mutex) {
+
+          nChannel remote = (nChannel) remotechannels.get(evt.getFullChannelName());
+          nTransactionAttributes TXAttrib = new nTransactionAttributes(remote, 1000);
+
+          // Define a transaction object
+          nTransaction tx = null;
+          // Create a new transaction object
+          tx = nTransactionFactory.create(TXAttrib);
+
+          // Publish the vector of messages create previously
+          tx.publish(evt);
+
+          // Commit the transaction
+          tx.commit();
+          count++;
+          System.out.println(evt.getChannelName() + " eid " + evt.getEventID() + " published ok (" + count + ")");
+        }
+      } catch (nSessionNotConnectedException e) {
+        e.printStackTrace();
+      } catch (nSessionPausedException e) {
+        e.printStackTrace();
+      } catch (nSecurityException e) {
+        e.printStackTrace();
+      } catch (Exception e) {
+        e.printStackTrace();
+      }
+    }
+
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nsubchan <channel factories> <exclude list> \n");
+
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel factories> - comma separated list of factories to copy channels from");
+    System.out.println("<exclude list> - comma separated list of exclusion patterns");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+} // End of subscriber Class

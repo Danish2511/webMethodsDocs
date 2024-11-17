@@ -1,0 +1,29 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "SimpleMessage.h"
+
+
+com::softwareag::umtransport::samples::echo::SimpleMessage::SimpleMessage(){
+}
+
+com::softwareag::umtransport::samples::echo::SimpleMessage::SimpleMessage(std::string text) : m_text(text){
+
+}
+
+
+com::softwareag::umtransport::samples::echo::SimpleMessage::~SimpleMessage(){
+}
+
+void com::softwareag::umtransport::samples::echo::SimpleMessage::writeOut(com::softwareag::umtransport::SynchronousTransport::OutputStream &outputStream){
+	sendString(outputStream, m_text);
+}
+
+void com::softwareag::umtransport::samples::echo::SimpleMessage::readIn(com::softwareag::umtransport::SynchronousTransport::InputStream &inputStream){
+	m_text = readString(inputStream);
+}

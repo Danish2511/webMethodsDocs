@@ -1,0 +1,81 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+
+namespace MyChannels.Nirvana
+{
+    internal class AnonymousObservable<T> : IObservable<T>
+    {
+        private readonly Func<IObserver<T>, IDisposable> subscribe;
+
+        public AnonymousObservable(Func<IObserver<T>, IDisposable> subscribe)
+        {
+            this.subscribe = subscribe;
+        }
+
+        public IDisposable Subscribe(IObserver<T> observer)
+        {
+            if (observer == null)
+            {
+                throw new ArgumentNullException("observer");
+            }
+            var autoDetachObserver = new AutoDetachObserver(observer);
+            autoDetachObserver.Disposable = this.subscribe(autoDetachObserver);
+            return autoDetachObserver;
+        }
+
+        private class AutoDetachObserver : AbstractObserver<T>
+        {
+            private readonly MutableDisposable m;
+            private readonly IObserver<T> observer;
+
+            public AutoDetachObserver(IObserver<T> observer)
+            {
+                this.m = new MutableDisposable(AssignmentBehavior.SingleAssignment);
+                this.observer = observer;
+            }
+
+            protected override void Completed()
+            {
+                this.observer.OnCompleted();
+                this.m.Dispose();
+            }
+
+            public override void Dispose()
+            {
+                base.Dispose();
+                this.m.Dispose();
+            }
+
+            protected override void Error(Exception exception)
+            {
+                this.observer.OnError(exception);
+                this.m.Dispose();
+            }
+
+            protected override void Next(T value)
+            {
+                this.observer.OnNext(value);
+            }
+
+            public IDisposable Disposable
+            {
+                get
+                {
+                    return this.m.Disposable;
+                }
+                set
+                {
+                    this.m.Disposable = value;
+                }
+            }
+        }
+    }
+}

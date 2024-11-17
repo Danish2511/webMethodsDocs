@@ -1,0 +1,68 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "SynchronousBroadcasterClient.h"
+#include "ClientSocketTransportContext.h"
+#include "SynchronousTransport.h"
+#include "TransportFactory.h"
+#include "SynchronousClient.h"
+#include "BroadcastMessage.h"
+
+#include <iostream>
+#include <stdlib.h> 
+
+
+com::softwareag::umtransport::samples::broadcaster::SynchronousBroadcasterClient::SynchronousBroadcasterClient(std::shared_ptr<SynchronousClient<BroadcastMessage>> client) : m_client(client), canRun(true)
+{
+}
+
+
+com::softwareag::umtransport::samples::broadcaster::SynchronousBroadcasterClient::~SynchronousBroadcasterClient()
+{
+}
+
+void com::softwareag::umtransport::samples::broadcaster::SynchronousBroadcasterClient::shutdown(){
+	canRun = false;
+	m_client->close();
+}
+
+void com::softwareag::umtransport::samples::broadcaster::SynchronousBroadcasterClient::run(){
+	try{
+		while (canRun){		
+			BroadcastMessage message;
+			m_client->read(message);
+			std::cout << message;
+		}
+	}
+	catch (Poco::Exception &ex){
+		std::cout << ex.displayText() << std::endl;
+	}
+}
+
+int com::softwareag::umtransport::samples::broadcaster::SynchronousBroadcasterClient::main(int argc, char** argv){
+	if(argc < 3){
+		std::cout<<"Invalid parameter's requires ip address and port as seperate parameters/n";
+	}
+	ClientSocketTransportContext::Builder context;
+	context.withHost(argv[1]).withPort(std::atoi(argv[2]));
+	
+	std::shared_ptr<SynchronousTransport> syncTrShared(std::move(TransportFactory::connect(context.build())));
+	std::shared_ptr<SynchronousClient<BroadcastMessage> > client(new SynchronousClient<BroadcastMessage>(syncTrShared));
+	
+	SynchronousBroadcasterClient broadcasterClient(client);
+	Poco::Thread th;
+	th.start(broadcasterClient);
+
+	std::cout << "Press any key to finish" << std::endl;
+	std::cin.ignore(); 
+
+	broadcasterClient.shutdown();
+	th.tryJoin(10000);	
+
+	return 0;
+}

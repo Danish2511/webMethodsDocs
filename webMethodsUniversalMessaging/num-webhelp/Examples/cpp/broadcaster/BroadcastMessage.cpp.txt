@@ -1,0 +1,36 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "BroadcastMessage.h"
+#include <chrono>
+
+
+com::softwareag::umtransport::samples::broadcaster::BroadcastMessage::BroadcastMessage(){
+
+}
+
+com::softwareag::umtransport::samples::broadcaster::BroadcastMessage::BroadcastMessage(std::string body, std::string from):m_body(body), m_from(from){
+	m_time = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+}
+
+com::softwareag::umtransport::samples::broadcaster::BroadcastMessage::~BroadcastMessage(){
+
+}
+
+void com::softwareag::umtransport::samples::broadcaster::BroadcastMessage::writeOut(com::softwareag::umtransport::SynchronousTransport::OutputStream &outputStream){
+	sendString(outputStream, m_from);
+	sendString(outputStream, m_body);
+	sendLong(outputStream, m_time);	
+}
+
+void com::softwareag::umtransport::samples::broadcaster::BroadcastMessage::readIn(com::softwareag::umtransport::SynchronousTransport::InputStream &inputStream){
+	m_from = readString(inputStream);
+	m_body = readString(inputStream);
+	m_time = readLong(inputStream);
+}
+

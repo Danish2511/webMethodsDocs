@@ -1,0 +1,103 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>WebSocket Delivery Mode</title><link rel="Prev" href="co-drivers_6.html" title="Previous" /><link rel="Next" href="co-websocketforwardproxy.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-websocket_6.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pWf2QgRqMQh_002b4xKO0nAYvcA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-websocket_6.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_developer_guide.html#wwconnect_header">Developer Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_web_client_apis.html#wwconnect_header">Web Client APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_javascript.html#wwconnect_header">Web Developer's Guide for Javascript</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_js_communication_methods.html#wwconnect_header">JavaScript Communication Drivers and Protocols</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">WebSocket Delivery Mode</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ELMTW" class="Heading_4">WebSocket Delivery Mode</div><div id="wwID0E1MTW" class="Section_Title">An Introduction to WebSockets</div><div id="wwID0E6MTW" class="Body">WebSocket is an emerging HTML5 protocol which provides full-duplex communication over a TCP socket. The WebSocket API is currently being developed by W3C and the WebSocket Protocol standardized by IETF.</div><div id="wwID0EENTW" class="Body">WebSocket is supported by all major browser vendors. It is currently enabled in <span class="Keyword">Google</span> <span class="Keyword">Chrome</span> (6+), <span class="Keyword">Mozilla</span> <span class="Keyword">Firefox</span> (6+), <span class="Keyword">Apple</span> <span class="Keyword">Safari</span> (5+), <span class="Keyword">Microsoft</span> <span class="Keyword">Internet Explorer</span> (HTML5 Labs only) and <span class="Keyword">Microsoft</span> Edge.</div><div id="wwID0EXOTW" class="Body">WebSockets serve as an effective low-latency alternative to comet based solutions such as 
+    <a href="../num-webhelp/co-longpoll_6.html#wwID0ECIUW"
+   
+     title="Comet LongPolling Delivery Mode"
+    ><span class="heading-page">XMLHTTPRequest LongPoll</span></a> or 
+    <a href="../num-webhelp/co-iframe_6.html#wwID0EQMUW"
+   
+     title="Comet Forever IFrame Delivery Mode"
+    ><span class="heading-page">Forever IFrame</span></a>. It provides browser-based communication which does not rely on opening multiple HTTP communications, unlike the aforementioned comet based techniques.</div><div id="wwID0EZPTW" class="Section_Title">WebSockets in Universal Messaging</div><div id="wwID0E5PTW" class="Body">Universal Messaging supports WebSocket browser-based communication through our JavaScript API. In addition to WebSockets our JavaScript API offers both 
+    <a href="../num-webhelp/co-longpoll_6.html#wwID0ECIUW"
+   
+     title="Comet LongPolling Delivery Mode"
+    ><span class="heading-page">LongPolling</span></a> and 
+    <a href="../num-webhelp/co-iframe_6.html#wwID0EQMUW"
+   
+     title="Comet Forever IFrame Delivery Mode"
+    ><span class="heading-page">Forever IFrame</span></a> communication modes. In situations where it is possible to use WebSocket however there are significant performance gains to be had.</div><div id="wwID0EWQTW" class="Body">In some cases it is desirable to communicate in a secure manner using WebSocket secure (wss) instead of unencrypted WebSocket (ws). To do this using our JavaScript API, the following snippet is used:</div><div id="wwID0E2QTW" class="Preformatted">var mySession = Nirvana.createSession({ <br />realms : [ "https://host.softwareag.com:443" ], <br />});</div><div id="wwID0EBRTW" class="Body">Sometimes unsecured WebSocket connections cannot be established because of intermediary network infrastructure such as proxies or firewalls. Some anti-virus software may also block or restrict the creation of a WebSocket on some ports. These problems can often be overcome by using WebSocket over an SSL connection.</div><div id="wwID0EORTW" class="Section_Title">WebSocket interaction with Proxy Servers</div><div id="wwID0ETRTW" class="Body">As the adoption of WebSocket becomes more widespread an increasing number of proxy vendors are supporting communication over WebSocket. There still remain cases however where WebSocket connections cannot be established because of a proxy server or firewall which blocks this connection.</div><div id="wwID0EYRTW" class="Body">The reasons for this are twofold. Some proxy servers have not been updated to handle the protocol, treating requests to establish the connection as normal HTTP traffic. WebSocket requests are also known not to conform with the HTTP 1.0 spec, causing some proxies to reject them.</div><div id="wwID0E4RTW" class="Body">Please see JavaScript API Documentation for Drivers for more details of WebSocket and other drivers.</div><div id="wwID0EKSTW" class="Section_Title">WebSocket communication over a Forward Proxy</div><div id="wwID0EPSTW" class="Body">A Forward Proxy (often just referred to as a proxy) acts as an intermediary between a client and a browser. If the proxy is explicitly configured it is usually possible to establish a WebSocket connection to a server without the need for further configuration.</div><div id="wwID0EUSTW" class="Body">This generally works because in cases where a browser is configured to use an explicit proxy server it will issue an <span class="codeph">HTTP CONNECT</span> request to the proxy when establishing the WebSocket connection. The Connect method enables the proxy to act as a tunnel between the client and server.</div><div id="wwID0E5STW" class="Body">There are two cases where this method may not work. In some situations the proxy may be configured to restrict use of the <span class="codeph">HTTP CONNECT</span> method. In other situations the request may travel through a proxy which is not explicitly configured (a transparent proxy). As the browser has no knowledge of the proxy, it will not issue the <span class="codeph">HTTP CONNECT</span> request.</div><div id="wwID0EMTTW" class="Body">One approach that will likely grant connectivity in both of these situations would be to use the secure version of the protocol. As the data sent is encrypted when sent the proxy server it is unable to manipulate it in any way. In these situations it will often forward the request from the client to the server intact and a connection can be established.</div><div id="wwID0ERTTW" class="Body">An example on configuring a forward proxy which works with WebSocket is available in the section 
+    <a href="../num-webhelp/co-websocketforwardproxy.html#wwID0ETXTW"
+   
+     title="WebSocket over a Forward Proxy"
+    ><span class="heading-page">WebSocket over a Forward Proxy</span></a>.</div><div id="wwID0EJUTW" class="Section_Title">WebSocket communication over a Reverse Proxy</div><div id="wwID0EOUTW" class="Body">A reverse proxy is a server which appears to clients to be an ordinary server. The client issues requests directly to this proxy. Based on a set of rules the proxy server will then forward this request to one or more origin servers which handle the request. The response is sent back through the proxy and it appears to the client that this response originated directly from the reverse proxy itself.</div><div id="wwID0ETUTW" class="Body">WebSocket communication through reverse proxy servers using the application layer (HTTP in this case) may work in some but not all scenarios. The proxy server must provide support for WebSockets (HAProxy for example, does). Furthermore the client wishing to communicate using WebSockets must use a version greater than 8 of the protocol.</div><div id="wwID0EYUTW" class="Body">WebSocket communication through a reverse proxy using clients which use a previous version of the protocol is generally not possible. This is because of a recognised flaw corrected after version 8 of the protocol. This flaw manifests itself because older versions of the protocol included 8 bytes of key data after the header during a connection upgrade request. This data was not advertised in the Content-Length header. Because of this most application layer proxies will discard this data.</div><div id="wwID0E4UTW" class="Body">Reverse proxies which support forwarding at the Transport layer (layer 4 of the OSI model) can still be used with older versions of the WebSocket protocol. As layer 4 proxies do not inspect the contents of a HTTP requests header (whereas application layer proxies do) the key data is not removed when traversing over them.</div><div id="wwID0ECVTW" class="Body">When traversing reverse proxies which forward at the transport layer both secure and non-secure communication modes are likely to work. When specifying a WebSocket port to connect to when using a reverse proxy, the client must use the port which the reverse proxy is listening to connections on. It should not attempt to connect to the port which the Universal Messaging realm interface is listening on.</div><div id="wwID0EHVTW" class="Body">Examples of configured reverse proxies which work with WebSocket are available in the section 
+    <a href="../num-webhelp/co-websocketreverseproxy.html#wwID0ES5TW"
+   
+     title="WebSocket over a Reverse Proxy"
+    ><span class="heading-page">WebSocket over a Reverse Proxy</span></a>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

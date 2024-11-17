@@ -1,0 +1,91 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Load Balancing</title><link rel="Prev" href="to-num-connections.html" title="Previous" /><link rel="Next" href="to-title_horizontal_scalability.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-load_balancing.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pzxY65TqbzMQAwG2y4tscww" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-load_balancing.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_concepts.html#wwconnect_header">Concepts</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_performance.html#wwconnect_header">Performance, Scalability and Resilience</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Load Balancing</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EMDXO" class="Heading_2">Load Balancing</div><div id="wwID0EUDXO" class="Body">Universal Messaging can work in environments where a third-party load balancer is in use. The main requirement is that the load balancer must support so-called "session stickiness". This means that when a load balancer assigns a client to a server in the cluster when initializing the client session, the load balancer will preferentially assign all subsequent communication from the client to the same server during the same client session.</div><div id="wwID0EZDXO" class="Body">From a technical point of view, load balancing for Universal Messaging can be used with either a single node or an active/active cluster. Before you choose to use a dedicated third-party load balancer to balance the load between Universal Messaging clients and servers, you should consider the following load balancing features already available in Universal Messaging:</div><div id="wwID0ETEXO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Round-robin connections to Universal Messaging servers</span></div><div id="wwID0EJFXO" class="List_1_Continued">If a load balancer is needed to force clients to establish connections to multiple Universal Messaging servers instead of just one server, then this feature can be used. Universal Messaging clients support a feature where connections to Universal Messaging servers will be done in a round-robin fashion. You can define the set of available servers using a semicolon(;) separated RNAME list. See the section 
+    <a href="../num-webhelp/to-communicationprotocols.html#wwID0EX1PM"
+   
+     title="Communication Protocols and RNAMEs"
+    ><span class="heading-page">Communication Protocols and RNAMEs</span></a> for details.</div><div id="wwID0EMGXO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Horizontal Scalability</span></div><div id="wwID0ECHXO" class="List_1_Continued">If a load balancer is needed to improve the event throughput by splitting the Universal Messaging server load to multiple servers, then the Horizontal Scalability feature of Universal Messaging should be considered. It allows a single client session to connect to multiple servers/clusters simultaneously. See the section 
+    <a href="../num-webhelp/to-title_horizontal_scalability.html#wwID0EOMXO"
+   
+     title="Horizontal Scalability"
+    ><span class="heading-page">Horizontal Scalability</span></a> for details.</div><div id="wwID0EFIXO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Follow The Master: Applicable for active/active Universal Messaging cluster</span></div><div id="wwID0E2IXO" class="List_1_Continued">If a load balancer is needed to improve the performance of an active/active Universal Messaging cluster by balancing the connections through all Universal Messaging cluster nodes, this feature should be considered.</div><div id="wwID0EAJXO" class="List_1_Continued">In an active/active cluster, best performance is achieved when client connections are established to the master node (refer to the section 
+    <a href="../num-webhelp/to-clientconcepts.html#wwID0EYI6O"
+   
+     title="Client Connection"
+    ><span class="heading-page">The "Follow the Master" feature</span></a>). Thus, having all clients connected to the master node will normally give better performance than when connections are balanced through all cluster nodes equally.</div><div id="wwID0E1JXO" class="Section_Title">Limitations of using a Load Balancer with Active/Active Universal Messaging cluster</div><div id="wwID0E6JXO" class="Body">The Universal Messaging feature "follow-the-master" will not work in an optimal way if a load balancer is in use. Follow-the-master is an important Universal Messaging setting, as in most cases this is the most performant way to use an active/active cluster.</div><div id="wwID0EEKXO" class="Body">With a load balancer, when the client is redirected to connect to a slave node and follow-the-master is activated, the slave node will send the address of the master back to the client and will disconnect. Then the client will try to connect to the master, using the master's URL returned by the slave node, bypassing the load balancer. In that case, the client should be able to establish a direct connection to the master, otherwise the connect will always fail.</div><div id="wwID0EJKXO" class="Body">If the client doesn't have direct access to the cluster nodes and connection should always be done through the load balancer, then follow-the-master should not be set on clients.</div><div id="wwID0EOKXO" class="Body">To allow the follow-the-master behavior in this case, a possible solution would be to run a separate Universal Messaging Admin API client tool/script on the load balancer itself, whose sole purpose would be to get information from the Universal Messaging cluster about which node is the current master, then re-direct all the client connections to this node. This workaround can also be used by clients which don't support the "follow-the-master" feature.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

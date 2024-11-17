@@ -1,0 +1,262 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using System.Collections.Generic;
+
+using com.pcbsys.nirvana.client;
+
+namespace com.pcbsys.nirvana.apps
+{
+
+    public class findChannelsAndQueues : nSampleApp
+    {
+
+        private static findChannelsAndQueues mySelf = null;
+
+        private const int sChannels = 0;
+        private const int sQueues = 1;
+
+        private const int sPersist = 0;
+        private const int sMixed = 1;
+        private const int sReliable = 2;
+
+        private const int totTypes = 3;
+        private static int[,] mySummary = new int[2, totTypes];
+
+        ///  
+        ///   <summary> This class demonstrates the Nirvana API calls necessary to locate multiple nChannel and nQueue objects in 1 method call
+        ///   </summary>
+        ///   <param name="realmDetails"> a String[] containing the possible RNAME values </param>
+        ///   <param name="names"> a String[] containing the names of the channels / queue objects
+        ///   </param>
+        private void doit(string[] realmDetails, string[] names)
+        {
+
+            mySelf.constructSession(realmDetails);
+
+            try
+            {
+                nChannelAttributes[] att = new nChannelAttributes[names.Length];
+                for (int x = 0; x < att.Length; x++)
+                {
+                    att[x] = new nChannelAttributes(names[x]);
+                }
+                IEnumerable<nFindResult> arr = mySession.find(att);
+                if (arr != null)
+                {
+                    foreach (nFindResult res in arr)
+                    {
+                        displayFindResultDetails(res);
+                    }
+                }
+            }
+            //Handle errors
+            catch (nSessionPausedException )
+            {
+            }
+            catch (Exception )
+            {
+                Console.WriteLine("Insufficient permissions for the requested operation.");
+                Console.WriteLine("Please check the ACL settings on the server.");
+                return;
+            }
+            try
+            {
+                nSessionFactory.close(mySession);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.StackTrace);
+            }
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            //
+            // Need a min of 2, rname, channel names
+            if (args.Length < 2)
+            {
+                Usage();
+                Environment.Exit(2);
+            }
+            String RNAME = args[0]; ;
+
+            string[] channelNames = new string[args.Length - 1];
+
+            for (int x = 1; x < args.Length; x++)
+            {
+                channelNames[x - 1] = args[x];
+            }
+            mySelf.doit(parseRealmProperties(RNAME), channelNames);
+        }
+
+        static void Main(string[] args)
+        {
+
+            //Create an instance for this class
+            mySelf = new findChannelsAndQueues();
+
+            try
+            {
+                //Display the details of channels and queues in all known realm
+                mySelf.processArgs(args);
+                nSessionFactory.shutdown();
+            }
+            catch (Exception )
+            {
+            }
+            int grandTotal;
+            int count = 0;
+
+            Console.WriteLine("\nSummary\n");
+            int idx = sQueues;
+            Console.WriteLine("Queue Summary");
+            Console.WriteLine("  Reliable   : " + mySummary[idx, sReliable]);
+            Console.WriteLine("  Persistent : " + mySummary[idx, sPersist]);
+            Console.WriteLine("  Mixed      : " + mySummary[idx, sMixed]);
+            Console.Write("\nTotal Queues = ");
+            for (int x = 0; x < totTypes; x++)
+            {
+                count += mySummary[sQueues, x];
+            }
+            grandTotal = count;
+            Console.WriteLine(count);
+            idx = sChannels;
+            Console.WriteLine("\nChannel Summary");
+            Console.WriteLine("  Reliable   : " + mySummary[idx, sReliable]);
+            Console.WriteLine("  Persistent : " + mySummary[idx, sPersist]);
+            Console.WriteLine("  Mixed      : " + mySummary[idx, sMixed]);
+            Console.Write("\nTotal Channels = ");
+            count = 0;
+            for (int x = 0; x < totTypes; x++)
+            {
+                count += mySummary[sChannels, x];
+            }
+            Console.WriteLine(count);
+            grandTotal += count;
+            Console.WriteLine("\n\nGrand Total    = " + grandTotal + "\n\n");
+        }
+
+        ///  
+        ///   <summary> This method displays the details of a channel found in a realm
+        ///   </summary>
+        ///   <param name="results"> the attributes for the channel </param>
+        ///   
+        private void displayFindResultDetails(nFindResult results)
+        {
+            if (!results.wasSuccessful())
+            {
+                displayException(results);
+            }
+            else if (results.isChannel())
+            {
+                nChannel chan = results.getChannel();
+                displayChannelDetails(chan.getChannelAttributes());
+            }
+            else if (results.isQueue())
+            {
+                nQueue queue = results.getQueue();
+                displayChannelDetails(queue.getQueueAttributes());
+            }
+        }
+
+
+        private void displayChannelDetails(nChannelAttributes attr)
+        {
+            int idx = sChannels;
+            string type = "Channel";
+            if (attr.getChannelMode() == nChannelAttributes.QUEUE_MODE)
+            {
+                type = "Queue  ";
+                idx = sQueues;
+            }
+            Console.WriteLine("******************************");
+            Console.WriteLine("  Type is a " + type);
+            Console.WriteLine("  " + type + " Name         : " + attr.getName());
+            Console.WriteLine("  " + type + " Capacity     : " + attr.getMaxEvents());
+            Console.WriteLine("  " + type + " Time to live : " + attr.getTTL());
+            string store = "";
+            switch (attr.getType())
+            {
+                case nChannelAttributes.MIXED_TYPE:
+                    store = "MIXED";
+                    mySummary[idx, sMixed]++;
+                    break;
+                case nChannelAttributes.PERSISTENT_TYPE:
+                    store = "PERSISTENT";
+                    mySummary[idx, sPersist]++;
+                    break;
+                case nChannelAttributes.RELIABLE_TYPE:
+                    store = "RELIABLE";
+                    mySummary[idx, sReliable]++;
+                    break;
+            }
+            Console.WriteLine("  " + type + " Storage type : " + store);
+            nStoreProperties props = attr.getProperties();
+            Console.WriteLine("Displaying Store Properties:");
+            if (props.getClientMergeEngineClassname() != null)
+                Console.WriteLine("\tClient Merge Engine Classname : " + props.getClientMergeEngineClassname());
+            Console.WriteLine("\tCache on reload : " + props.getCacheOnReload());
+            if (props.canSyncOnEachWrite())
+            {
+                Console.WriteLine("\tSync file system on write : " + props.canSyncOnEachWrite());
+                Console.WriteLine("\tSync batch size : " + props.getSyncMaxBatchSize());
+                Console.WriteLine("\tSync batch time : " + props.getSyncBatchTime());
+            }
+
+            Console.WriteLine("\tCache enabled : " + props.getEnableCaching());
+
+
+            Console.WriteLine("\tHonour capacity when full : " + props.getHonorCapacityWhenFull());
+            Console.WriteLine("\tAutomatic maintenance enabled : " + props.getPerformAutomaticMaintenance());
+
+
+            Console.WriteLine("  Displaying Publish Keys");
+            nChannelPublishKeys[] keys = attr.getPublishKeys();
+            if (keys != null && keys.Length > 0)
+            {
+                for (int x = 0; x < keys.Length; x++)
+                {
+                    Console.WriteLine("    Key " + keys[x].getName() + " depth " + keys[x].getDepth());
+                }
+            }
+            Console.WriteLine("  End Of Publish Keys");
+            Console.WriteLine("******************************");
+            Console.WriteLine("");
+        }
+
+        private void displayException(nFindResult result)
+        {
+            Console.WriteLine("******************************");
+            Console.WriteLine("  Request generated an exception for " + result.getAttributes().getName());
+            Console.WriteLine("   : " + result.getException().Message);
+            Console.WriteLine("******************************");
+            Console.WriteLine("");
+        }
+
+        ///  
+        ///   <summary> Prints the usage string for this class </summary>
+        ///   
+        private static void Usage()
+        {
+
+            Console.WriteLine("Usage ...\n");
+            Console.WriteLine("findChannelsAndQueues <RNAME> <name> <name> <name>.....\n");
+
+            Console.WriteLine("<Required Arguments> \n");
+            Console.WriteLine("<RNAME> - The RNAME of the realm you wish to connect to");
+            Console.WriteLine("<name> - The name(s) of the channels to find");
+
+            Console.WriteLine("\n\nNote: -? provides help on environment variables \n");
+        }
+
+    } // End of findChannelAndQueues Class
+
+
+}

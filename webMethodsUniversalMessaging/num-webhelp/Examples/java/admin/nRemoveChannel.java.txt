@@ -1,0 +1,181 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nRemovable;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to remove channels from one or more realms.
+ */
+
+public class nRemoveChannel extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String fromRealm = null;
+
+  private nRealmNode fromNode = null;
+  private nSessionAttributes attr = null;
+  private String channelName = null;
+  private String removeArgs[] = null;
+
+  private boolean recursive = false;
+
+  /**
+   * Consruct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nRemoveChannel(String args[]) {
+    try {
+      removeArgs = args;
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("Connecting to " + fromRealm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(fromRealm);
+      // get the root realm node from the realm admin
+      fromNode = new nRealmNode(attr);
+      if (!fromNode.isAuthorised()) {
+        System.out.println("User not authorised on this node " + attr);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed
+      System.out.print("waiting for namepsace construction..... ");
+      fromNode.waitForEntireNameSpace();
+      System.out.println("finished");
+      // call the method to search from the root realm node
+      searchNode(fromNode);
+      // close the realm node which will close all connections to child nodes
+      fromNode.close();
+      // ensure that all sessions in this process are properly closed
+      nSessionFactory.shutdown();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * remove the channel calling the remove method
+   */
+  private void removeChannel(nLeafNode p_leaf) {
+    try {
+      nRemovable channel = (nRemovable) p_leaf;
+      channel.remove(false);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of child nodes for other realms and channels
+   */
+  private void searchNodes(nRealmNode p_node, Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode leaf = (nLeafNode) obj;
+        if ((leaf.isChannel()) && (leaf.getAbsolutePath().equals(channelName))) {
+          // we have found a channel that matches the name specified, so call the remove method
+          System.out.println("Found channel " + leaf.getAbsolutePath());
+          removeChannel(leaf);
+          System.out.println("Removed channel " + leaf.getAbsolutePath());
+        }
+      } else if (obj instanceof nRealmNode) {
+        // we have found another realm node, so search this node for channels if recurisve
+        // option has been entered
+        searchNode((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNodes(p_node, cont.getNodes());
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      System.out.println("Found node " + p_node.getName());
+      searchNodes(p_node, p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    fromRealm = System.getProperty("RNAME", null);
+    // set the channel name to lower case as the nirvana namespace is all lowercase
+    channelName = System.getProperty("CHANNEL", null);
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-r")) {
+        recursive = true;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+          getOptions(null);
+          break;
+        } else {
+          System.setProperty("CHANNEL", args[0]);
+          getOptions(args);
+          break;
+        }
+      default:
+        System.setProperty("CHANNEL", args[0]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * CHANNEL
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nRemoveChannel remove = new nRemoveChannel(args);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nadmindelchan <channel>\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel> - Channel name parameter for the channel to delete");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

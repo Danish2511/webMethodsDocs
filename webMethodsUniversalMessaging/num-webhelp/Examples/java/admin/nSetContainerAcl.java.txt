@@ -1,0 +1,187 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to apply an acl from a channel within the namespace to all
+ * channels within a particular container node
+ */
+
+public class nSetContainerAcl extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realm = null;
+  private String containerName = null;
+  private String channelName = null;
+  private nACL acl = null;
+
+  /**
+   * Construct and instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  private nSetContainerAcl(String args[]) {
+
+    //Process command line arguments
+    processArgs(args);
+    try {
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      nSessionAttributes attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      nRealmNode node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + attr);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed 
+      System.out.print("waiting for namepsace construction..... ");
+      node.waitForEntireNameSpace();
+      System.out.println("finished");
+      nLeafNode leaf = (nLeafNode) node.findNode(channelName);
+      if (leaf != null) {
+        acl = leaf.getACLs();
+        searchNode(node);
+      } else {
+        System.out.println("Cannot find leaf node " + channelName);
+      }
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * recursively search through the realm node looking for channel nodes
+   */
+  void setContainer(nContainer p_node) {
+    try {
+      // set the acl for the container nodes
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Applying acl to container node " + p_node.getAbsolutePath());
+      // set the acl on the container 
+      p_node.setACL(acl);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of child nodes for other realms and containers
+   */
+  private void searchNodes(Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nRealmNode) {
+        searchNode((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        String fullyQualifiedName = cont.getAbsolutePath();
+        if (fullyQualifiedName.equals(containerName)) {
+          System.out.println("Found container " + fullyQualifiedName);
+          setContainer(cont);
+        } else {
+          searchNodes(cont.getNodes());
+        }
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a parameter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      searchNodes(p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Set the program variables and permissions flags based on command line args
+   */
+  void getOptions() {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    channelName = System.getProperty("CHANNEL", null);
+    if (channelName == null) {
+      Usage();
+      System.exit(1);
+    }
+    containerName = System.getProperty("CONTAINER", null);
+    if (containerName == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("CHANNEL", args[0]);
+        getOptions();
+        break;
+      default:
+        System.setProperty("CHANNEL", args[0]);
+        System.setProperty("CONTAINER", args[1]);
+        getOptions();
+        break;
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * CHANNEL
+   * CONTAINER
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    new nSetContainerAcl(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nsetcontaineracl <channel name> <container name> \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel name> - channel name parameter used to obtaine the ACL to set the container nodes to");
+    System.out.println("<container name> - Container name parameter for the container to set the ACL to");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

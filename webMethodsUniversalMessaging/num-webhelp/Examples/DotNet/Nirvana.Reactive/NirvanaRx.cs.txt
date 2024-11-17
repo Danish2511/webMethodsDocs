@@ -1,0 +1,33 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+using System.Linq;
+
+namespace MyChannels.Nirvana
+{
+    /// <summary>
+    /// Provides a set of static methods for adapting MyChannels.Nirvana objects to observable sequences.
+    /// </summary>
+    public static class NirvanaRx
+    {
+        /// <summary>
+        /// Converts MessageReceived events to an observable sequence.
+        /// </summary>
+        public static IObservable<MessageEventArgs> ToObservable(this IConsumer source)
+        {
+            return RxBridge.Create<MessageEventArgs>(o =>
+            {
+                EventHandler<MessageEventArgs> h = (s, e) => o.OnNext(e);
+                source.MessageReceived += h;
+                return () => source.MessageReceived -= h;
+            });
+        }
+    }
+}

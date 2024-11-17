@@ -1,0 +1,103 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Java Client: Realm Monitor</title><link rel="Prev" href="re-java_console_based_realm_monitor.html" title="Previous" /><link rel="Next" href="re-java_create_cluster.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/re-java_realm_monitor_1.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pMXbE65u_002f_002f69bIFCk9eHluw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/re-java_realm_monitor_1.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_developer_guide.html#wwconnect_header">Developer Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_enterprise_apis.html#wwconnect_header">Enterprise APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/co-index_dg_17.html#wwconnect_header">Enterprise Developer's Guide for Java</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/co-index_dg_18.html#wwconnect_header">Code Examples</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/re-java_add_queue_acl_entry_1.html#wwconnect_header">Administration API</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Java Client: Realm Monitor</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E6SOV" class="Heading_5">Java Client: Realm Monitor</div><div id="wwID0EMTOV" class="Body">Monitors a Universal Messaging Realm and output results to CSV files.</div><div id="wwID0EXTOV" class="Section_Title">Usage</div><div id="wwID0E3TOV" class="Preformatted">java RealmMonitor &lt;rnames&gt; [config file]<br /><br />&lt;Required Parameters&gt;<br /><br />&lt;rname&gt; : comma separated list of rnames to monitor.<br /><br />[Optional Parameters]<br /><br />[config file] : configuration file location e.g. c:\\config.txt<br /><br />All other parameters can be specified in the config file.<br />If realm is clustered then other realms in cluster will<br />be found automatically.</div><div id="wwID0EIUOV" class="Example_Title">Application Source Code</div><div id="wwID0EDUOV-2" class="Example">
+    <a href="Examples/java/admin/RealmMonitor.java.txt"
+   
+     target="external_window"
+    ><span class="heading-page">Click here for a code example</span></a></div><div id="wwID0EOVOV" class="Section_Title">Description of Classes and Output</div><div id="wwID0ETVOV" class="Body">Contained within the application are 5 separate classes each set up to monitor different aspects of a Universal Messaging Realm:</div><div id="wwID0E3VOV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../num-webhelp/re-java_realm_monitor_1.html#wwID0EV4OV"
+   
+     title="Java Client: Realm Monitor"
+    ><span class="heading-page">Connection Monitor</span></a> - monitors all connections to the realm</div><div id="wwID0EVWOV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../num-webhelp/re-java_realm_monitor_1.html#wwID0EY6OV"
+   
+     title="Java Client: Realm Monitor"
+    ><span class="heading-page">Realm Monitor</span></a> - regularly outputs current state of the realm</div><div id="wwID0EOXOV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../num-webhelp/re-java_realm_monitor_1.html#wwID0EPAPV"
+   
+     title="Java Client: Realm Monitor"
+    ><span class="heading-page">Thread Monitor</span></a> - monitors for unexpected thread behaviour</div><div id="wwID0EHYOV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../num-webhelp/re-java_realm_monitor_1.html#wwID0ENCPV"
+   
+     title="Java Client: Realm Monitor"
+    ><span class="heading-page">Log Monitor</span></a> - listens for key words in the Realm log</div><div id="wwID0EAZOV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../num-webhelp/re-java_realm_monitor_1.html#wwID0EEDPV"
+   
+     title="Java Client: Realm Monitor"
+    ><span class="heading-page">Channel Monitor</span></a> - monitors channel and queue state for potential issues</div><div id="wwID0E1ZOV" class="Body">The application takes 2 arguments:</div><div id="wwID0ED1OV" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>RNAMEs</div><div id="wwID0EU1OV" class="Numbered_1_Continued">Comma separated list of RNAMEs of the realms to monitor.</div><div id="wwID0EZ1OV" class="Numbered_1_Continued">If the realm is part of a cluster, the application will also monitor the cluster members so there is no need to list the RNAMEs of the other cluster members.</div><div id="wwID0E61OV" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>Configuration file</div><div id="wwID0EQ2OV" class="Numbered_1_Continued">[optional] the location of the configuration file (including the name of the file).</div><div id="wwID0EV2OV" class="Numbered_1_Continued">If this is not specified, a default file will be created.</div><div id="wwID0E32OV" class="Body">Each monitor will output different information and at different intervals. The information to be output can be specified in the 'methods' field in the configuration file for each monitor. The data is written to CSV files so that it can be easily plugged into graphing tools or other monitoring applications. Most of the monitors will only output data if a certain condition is met for example the log monitor will only write data if a keyword is found in a line of the Universal Messaging Realm log. The realm monitor on the other hand will constantly output data to the CSV every X seconds. If a realm goes down, the realm monitor will output 0s which will make any problems apparent if the data is put into a graph.</div><div id="wwID0EJ3OV" class="Section_Title">Configuration File</div><div id="wwID0EO3OV" class="Body">The configuration file provides flexibility to change when and what data is output for each monitor. The application will generate a default configuration file if no command line argument is specified. This default file contains all the necessary parameters to start monitoring but all parameters are customisable. Each monitor has different triggers for when to output data. These triggers can all be specified in this file. More detail on the monitor specific parameters can be found in the relevant sections below. You can also specify the working directory for the tests [default: ./RealmMonitorOut/] and which tests to run.</div><div id="wwID0ES3OV" class="Section_Division">'methods' parameter</div><div id="wwID0EX3OV" class="Body">Each monitor requires this parameter to be set in the configuration file. This is a comma separated list of method names to be invoked on the object that the monitor is observing. The result of each of these methods will be output to the CSV file under the corresponding heading in the 'headings' parameter.</div><div id="wwID0E33OV" class="Body">For example the connection monitor is monitoring connections so will invoke the methods on the nConnectionDetails object. You can specify any methods here that are a member of the nConnectionDetails class. It is possible that the return type of these methods will not be a type that is easily represented as a string or you may wish to display the object in a certain way. Most of these cases have been dealt with already but in order to change the behaviour you can simply override the method name in the relevant monitor class. For example the channel monitor invokes the methods on nLeafNode which has a method called getUsedSpace. getUsedSpace returns a long representing the number of bytes used, however this application will return the used space in kilobytes because the method is overridden:</div><div id="wwID0EB4OV" class="Preformatted"><br />     public String getUsedSpace(Object o){<br />       long used = ((nLeafNode)o).getUsedSpace();<br />       used = used/1024;<br />       return used+"";<br />     }<br /></div><div id="wwID0EH4OV" class="Body">The above method overrides the getUsedSpace method on the nLeafNode. By simply creating this method inside the ChannelMonitor class, whenever getUsedSpace is required, this method will be called instead with the nLeafNode as a parameter.</div><div id="wwID0EV4OV" class="Section_Title">Connection Monitor</div><div id="wwID0E14OV" class="Body">The connection monitor maintains a list of the current connections to the realm. Every x seconds the monitor will check each connection for potential problems and write the details of that connection to the CSV file if any trigger is hit.</div><div id="wwID0E64OV" class="Body">There are two triggers currently available:</div><div id="wwID0EI5OV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>maxQueuedEvents - maximum number of events allowed to be queued for a connection before the monitor will output to the CSV</div><div id="wwID0EZ5OV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>maxTimeOfLastTransmit - maximum time taken to transmit the last event.</div><div id="wwID0EL6OV" class="Body">This monitor invokes the method in the 'methods' parameter on the nConnectionDetails object.</div><div id="wwID0EY6OV" class="Section_Title">Realm Monitor</div><div id="wwID0E46OV" class="Body">The realm monitor prints to the CSV file every x seconds (configurable by the refreshRate parameter). There are no triggers for this monitor as the information should be available at all times. If no data is available (realm is down) then by default the monitor will output 0s to the CSV.</div><div id="wwID0ECAPV" class="Body">This monitor invokes the method in the 'methods' parameter on the nRealmNode object.</div><div id="wwID0EPAPV" class="Section_Title">Thread Monitor</div><div id="wwID0EUAPV" class="Body">The thread monitor constantly checks the thread pools for unexpected values. There are 2 triggers which will cause the monitor to write to the CSV:</div><div id="wwID0E4APV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>maxQueueSize - if the number of queued tasks in the thread pool exceeds this value then the information on this tread pool will be output to the CSV</div><div id="wwID0EOBPV" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>minIdle - the minimum number of idle threads available before the monitor will output to the CSV</div><div id="wwID0EACPV" class="Body">This monitor invokes the method in the 'methods' parameter on the nThreadPool object.</div><div id="wwID0ENCPV" class="Section_Title">Log Monitor</div><div id="wwID0ESCPV" class="Body">This monitor listens to the Universal Messaging log and will write to the CSV whenever any line of the log contains a keyword. The list of keywords can be specified in the config file.</div><div id="wwID0EXCPV" class="Body">The 'methods' parameter in the configuration file will be invoked on the LogMonitor class or the enclosing RealmMonitor class e.g. getTime.</div><div id="wwID0EEDPV" class="Section_Title">Channel Monitor</div><div id="wwID0EJDPV" class="Body">The channel monitor keeps track of the current channels and queues on the realm. If any triggers are hit for a leaf node then the details of that leaf node are output to the CSV.</div><div id="wwID0EODPV" class="Body">There are many triggers that can be set for this monitor. For example there is a parameter called 'minCurrentCons' and an associated 'maxCurrentCons'. If the number of current connections falls outside of this range then the details of the leaf node are printed to the CSV.</div><div id="wwID0ETDPV" class="Body">This monitor invokes the method in the 'methods' parameter on the nLeafNode object.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

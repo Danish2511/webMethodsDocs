@@ -1,0 +1,116 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nBaseClientException;
+import com.pcbsys.nirvana.client.nIllegalArgumentException;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.client.nSubject;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nSecurityGroup;
+import com.pcbsys.nirvana.nAdminAPI.nSecurityGroupManager;
+
+public class AddSecurityGroupSubject extends nSampleApp {
+
+  public static void main(String[] args) {
+    AddSecurityGroupSubject addSecurityGroupSubject = new AddSecurityGroupSubject();
+    addSecurityGroupSubject.processArgs(args);
+    nSampleApp.processEnvironmentVariables();
+
+    // Check the local realm details
+    String rname = System.getProperty("RNAME");
+    if (rname == null) {
+      System.out.println(
+          "Please specify rname as a system property. E.g. -Dlax.nl.env.RNAME=nsp://127.0.0.1:9000 or -DRNAME=nsp://127.0.0.1:9000");
+      Usage();
+      System.exit(1);
+    }
+
+    addSecurityGroupSubject.doit(rname, args[0], args[1]);
+  }
+
+  private static void Usage() {
+    System.out.println("Usage:\n");
+    System.out.println("naddsecgrpsubject <security group name> <subject>\n");
+
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<security group name> - The name of the security group");
+    System.out.println("<subject> - The subject to be added in the format user@host");
+  }
+
+  void doit(String rname, String groupName, String subject) {
+    nRealmNode realmNode = null;
+    try {
+      //Create realm node as security group creation is part of the Admin API
+      realmNode = new nRealmNode(new nSessionAttributes(rname));
+      //Find the group and add the subject
+      nSecurityGroupManager securityGroupManager = realmNode.getSecurityGroupManager();
+      nSecurityGroup group = securityGroupManager.getGroup(groupName);
+      if (group == null) {
+        showUsageAndExit("The specified group cannot be found");
+      }
+      securityGroupManager.registerGroupMember(group, new nSubject(subject));
+      System.out.printf("%s was added to %s", subject, groupName);
+      // Handle errors
+    } catch (nBaseAdminException e) {
+      showErrorAndExit(e);
+    } catch (nBaseClientException e) {
+      showErrorAndExit(e);
+    } finally {
+      closeSession(realmNode);
+    }
+  }
+
+  private void closeSession(nRealmNode realmNode) {
+    // Close the session with the remote Realm
+    if (realmNode != null) {
+      realmNode.close();
+    }
+
+    // Close the session we opened
+    try {
+      nSessionFactory.close(mySession);
+    } catch (nIllegalArgumentException ex) {
+      //This exception indicates that the session is invalid (either null or missing from the list of known sessions)
+      //In this case there is not much we can do
+    }
+    // Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+  }
+
+  private void showErrorAndExit(Exception e) {
+    System.out.println(e.getLocalizedMessage());
+    e.printStackTrace();
+    System.exit(1);
+  }
+
+  private void showUsageAndExit(String message) {
+    System.out.println(message);
+    Usage();
+    System.exit(1);
+  }
+
+
+  @Override
+  protected void processArgs(String[] args) {
+    if (args.length < 2) {
+      showUsageAndExit("Missing required parameters. Please check the usage");
+    }
+
+    final String delimiter = "@";
+    String subject = args[1];
+    if (subject == null || !subject.contains(delimiter) || subject.startsWith(delimiter) || subject
+        .endsWith(delimiter)) {
+      showUsageAndExit("The subject is not in proper format. The expected format is user@host");
+    }
+  }
+}

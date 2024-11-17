@@ -1,0 +1,91 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Basic Attributes for an Interface</title><link rel="Prev" href="ta-em_create_interface_2.html" title="Previous" /><link rel="Next" href="ta-em-start_interface.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/re-em_interface_config.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pRChm_002bt0PQgV2xMCPyYuxZA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/re-em_interface_config.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_administration_guide.html#wwconnect_header">Administration Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-overview_enterprise_manager.html#wwconnect_header">Universal Messaging Enterprise Manager</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-overview-communicationmechanisms.html#wwconnect_header">Administering TCP Interfaces, IP Multicast, and Shared Memory</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Basic Attributes for an Interface</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EAINS" class="Heading_3">Basic Attributes for an Interface</div><div id="wwID0EPINS" class="Body">Each interface on a Universal Messaging realm has a number of configurable attributes that determine the interface behavior. The following sections describe the attributes that you can configure on the <span class="uicontrol">Basic</span> tab for an nsp, nsps, nhp, or nhps interface.</div><div id="wwID0EBJNS" class="Section_Title">Accept Threads</div><div id="wwID0EGJNS" class="Body">Each Universal Messaging realm interface contains a server socket. The <span class="uicontrol">Accept Threads</span> attribute corresponds to the number of threads that are able to perform the <span class="codeph">accept()</span> for a client connection. The <span class="codeph">accept()</span> operation on a Universal Messaging interface performs the handshake and authentication for the client connection. For more heavily utilised interfaces, the accept threads will need to be increased. For example, on an nhp (http) or nhps (https) interface, each client request corresponds to a socket <span class="codeph">accept()</span> on the interface, and so the more requests being made, the busier the interface will be, so the accept threads needs to be much higher than that of say an nsp (socket) interface. Socket interfaces maintain a permanent socket connection, and so the <span class="codeph">accept()</span> is only performed once when the connection is first authenticated.</div><div id="wwID0EIKNS" class="Section_Title">Advertise Interface</div><div id="wwID0ENKNS" class="Body">All interfaces that are advertised by a realm server are available to users (with the correct permissions) of the Universal Messaging Admin API. This property specifies whether the interface is indeed advertised to such users.</div><div id="wwID0E1KNS" class="Section_Title">Alias</div><div id="wwID0E6KNS" class="Body">Each interface on a Universal Messaging realm server can have an associated alias in the form of <span class="varname">host:port</span>. This alias can be specified here.</div><div id="wwID0EKLNS" class="Body">For information on interface plugins, see 
+    <a href="../num-webhelp/to-overview-plugins.html#wwID0EXNQS"
+   
+     title="Plugins"
+    ><span class="heading-page">Plugins</span></a>.</div><div id="wwID0E2LNS" class="Body">For information on adding VIA rules for an interface, see 
+    <a href="../num-webhelp/co-em_inetrface_acl.html#wwID0EQ4JS"
+   
+     title="About Interface VIA Lists"
+    ><span class="heading-page">About Interface VIA Lists</span></a>.</div><div id="wwID0EUMNS" class="Section_Title">Allow Client Connections</div><div id="wwID0EZMNS" class="Body">If this attribute is activated, clients are allowed to connect to the realm over this interface.</div><div id="wwID0E5MNS" class="Body">If this attribute is deactivated, clients are not allowed to connect to the realm over this interface. Note that Administration API connections, such as the Enterprise Manager, count as client connections, so at least one of the available interfaces should allow such Administration API connections. If a realm has been defined with only one interface and you deactivate the <span class="uicontrol">Allow Client Connections</span> attribute on the interface, this setting will be ignored. This is because essential administration tools like the Enterprise Manager would not otherwise be able to access the realm.</div><div id="wwID0EQNNS" class="Section_Title">Allow for InterRealm</div><div id="wwID0EVNNS" class="Body">If this attribute is activated, the interface can be used for any of the following kinds of internal communication (i.e. Universal Messaging's own message passing) between realms:</div><div id="wwID0E5NNS" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Inter-realm communication: between realms in the same cluster.</div><div id="wwID0EPONS" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Inter-zone communication: between realms in a zone.</div><div id="wwID0EAPNS" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Inter-cluster communication: between realms in connected clusters.</div><div id="wwID0ESPNS" class="Important"><span class="Bold">Important:<br /></span>If you do not activate this attribute for the interface, the interface cannot be used for any of the above scenarios.</div><div id="wwID0EJQNS" class="Body">If you activate <span class="uicontrol">Allow for InterRealm</span> and deactivate <span class="uicontrol">Allow Client Connections</span> for the same interface, the interface can <span class="Bold">only</span> be used for internal communication between realms, so no communication with an external client is possible using such an interface. There are situations in which this configuration can be useful. For more information, see the section 
+    <a href="../num-webhelp/co-setting_up_inter_realm_communication.html#wwID0E121R"
+   
+     title="Setting Up Inter-Realm Communication"
+    ><span class="heading-page">Setting Up Inter-Realm Communication</span></a>.</div><div id="wwID0EPRNS" class="Section_Title">Autostart Interface</div><div id="wwID0EURNS" class="Body">The <span class="uicontrol">Autostart</span> attribute specifies whether the interface is started automatically when the Universal Messaging realm server is started. When this option is not selected, the interface must be started manually in order for it to be used by connecting clients. Please note that if <span class="uicontrol">Autostart</span> is not set it must be started either manually or using the Universal Messaging Administration API whenever after the realm is started.</div><div id="wwID0ECSNS" class="Body">If <span class="uicontrol">Autostart</span> is selected then the interface will be started once the <span class="uicontrol">Apply</span> button is pressed.</div><div id="wwID0EYSNS" class="Section_Title">Auth Time</div><div id="wwID0E4SNS" class="Body">The <span class="uicontrol">Auth Time</span> attribute corresponds to the amount of time a client connection using this interface can take to perform the correct handshake with the realm server. For example, the default is 10000 milliseconds, but for some clients connecting on slow modems, and who are using the nhps (https) protocol, this default <span class="uicontrol">Auth Time</span> may need to be increased. If any client connection fails to perform the handshake in the correct timeframe, the connection is closed by the realm server.</div><div id="wwID0ETTNS" class="Section_Title">Backlog</div><div id="wwID0EYTNS" class="Body">The <span class="uicontrol">Backlog</span> attribute specifies the maximum size of the incoming IP socket request queue. The operating system that the realm server is running on may specify a maximum value for this property. When the maximum queue size is reached the operating system will refuse incoming connections until the request queue reduces in size and more requests can be serviced. For more information on this value, please see the system administration documentation for your Operating System.</div><div id="wwID0EKUNS" class="Section_Title">Enable HTTP 1.1</div><div id="wwID0EPUNS" class="Body">Enable the usage of HTTP 1.1 protocol on this interface.</div><div id="wwID0E3UNS" class="Section_Title">Enable NIO</div><div id="wwID0EBVNS" class="Body">Specify whether NIO should be used for this interface.</div><div id="wwID0EOVNS" class="Section_Title">Receive Buffersize</div><div id="wwID0ETVNS" class="Body">This specifies the size of the receive buffer on the socket.</div><div id="wwID0EAWNS" class="Section_Title">Select Threads</div><div id="wwID0EFWNS" class="Body">The <span class="uicontrol">Select Threads</span> option specifies the number of threads allocated to monitor socket reads/writes on the interface if NIO is enabled. When a socket needs to be read, these threads will fire and pass on the request to the read thread pool. If the socket is blocked during a write, then when the socket is available to be written to, these threads will fire and the request will be passed on to the write thread pool. The number of select threads should not typically exceed the number of cores available.</div><div id="wwID0EXWNS" class="Section_Title">Send Buffersize</div><div id="wwID0E3WNS" class="Body">This specifies the size of the send buffer on the socket.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

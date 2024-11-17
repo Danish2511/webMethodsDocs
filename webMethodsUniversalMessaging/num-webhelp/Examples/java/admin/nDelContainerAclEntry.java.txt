@@ -1,0 +1,220 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nAdminIllegalArgumentException;
+import com.pcbsys.nirvana.nAdminAPI.nChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to delete a subject from all nodes within a container
+ */
+
+public class nDelContainerAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private nSessionAttributes attr = null;
+  private String containerName = null;
+  private nRealmNode node = null;
+
+  /**
+   * Construct and instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nDelContainerAclEntry(String args[]) {
+
+    //Process command line arguments
+    processArgs(args);
+    try {
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed 
+      System.out.print("waiting for namespace construction..... ");
+      node.waitForEntireNameSpace();
+      System.out.println("finished");
+      searchNode(node);
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * recursively search through the realm node looking for channel nodes
+   */
+  public void setContainer(nContainer p_node) {
+    try {
+      // get the acl for the channel node
+      System.out.println("Creating new entry for " + name + "@" + host);
+      // create a new acl entry with the name and host
+      nChannelACLEntry newEntry = createNewACLEntry(name, host);
+      // remove the acl entry from all nodes within the container
+      p_node.removeACLEntry(newEntry);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Removing ACL entry from " + p_node.getAbsolutePath() + " in realm " + p_node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of child nodes for other realms and containers
+   */
+  private void searchNodes(nContainer p_node, Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nRealmNode) {
+        searchNode((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        String fullyQualifiedName = cont.getAbsolutePath();
+        if (fullyQualifiedName.equals(containerName)) {
+          System.out.println("Found container " + fullyQualifiedName);
+          setContainer(cont);
+        } else {
+          searchNodes(cont, cont.getNodes());
+        }
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      searchNodes(p_node, p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Create a new acl entry and set the permissions based on the permissions flags
+   */
+  public nChannelACLEntry createNewACLEntry(String p_name, String p_host) {
+    nChannelACLEntry aclEntry = null;
+    try {
+      aclEntry = new nChannelACLEntry(p_name, p_host);
+    } catch (nAdminIllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+    return aclEntry;
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * Set the program variables and permissions flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    }
+    containerName = System.getProperty("CONTAINER", null);
+    if (containerName == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("CONTAINER", args[0]);
+        getOptions(null);
+        break;
+      case 2:
+        System.setProperty("CONTAINER", args[0]);
+        System.setProperty("NAME", args[1]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("CONTAINER", args[0]);
+        System.setProperty("NAME", args[1]);
+        System.setProperty("HOST", args[2]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * CONTAINER
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nDelContainerAclEntry setAcl = new nDelContainerAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("ndelcontaineracl <container name> <user> <host>\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<container name> - Container name parameter for the container to add the ACL entry to");
+    System.out.println("<user> - User name parameter for the channel to add the ACL entry to");
+    System.out.println("<host> - Host name parameter for the channel to add the ACL entry to");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

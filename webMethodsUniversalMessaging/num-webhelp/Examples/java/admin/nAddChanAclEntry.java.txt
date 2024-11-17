@@ -1,0 +1,323 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nAdminIllegalArgumentException;
+import com.pcbsys.nirvana.nAdminAPI.nChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to add a new subject to a channel, and assign permissions
+ * for operations performed on the channel.
+ */
+
+public class nAddChanAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private boolean canListAcl = false;
+  private boolean canModifyAcl = false;
+  private boolean fullPrivileges = false;
+  private boolean canGetLastEid = false;
+  private boolean canRead = false;
+  private boolean canWrite = false;
+  private boolean canPurge = false;
+  private boolean canNamed = false;
+  private nSessionAttributes attr = null;
+  private String channelName = null;
+  private nRealmNode node = null;
+
+  /**
+   * Construct and instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nAddChanAclEntry(String args[]) {
+
+    //Process command line arguments
+    processArgs(args);
+    try {
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      System.out.print("waiting for namepsace construction..... ");
+      node.waitForEntireNameSpace();
+      System.out.println("finished");
+      dump();
+      searchNode(node);
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * recursively search through the realm node looking for channel nodes
+   */
+  public void setChannel(nRealmNode p_node, nLeafNode p_leaf) {
+    try {
+      System.out.println("Creating new entry for " + name + "@" + host);
+      // create a new acl entry with the name and host
+      nChannelACLEntry newEntry = createNewACLEntry(name, host);
+      // add the new entry to the acl
+      p_leaf.addACLEntry(newEntry);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Added ACL for " + p_leaf.getName() + " in realm " + p_node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump(newEntry);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of chil nodes for other realms and channels
+   */
+  private void searchNodes(nRealmNode p_node, Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode leaf = (nLeafNode) obj;
+        String fullyQualifiedName = leaf.getAbsolutePath();
+        System.out.println("Found channel " + fullyQualifiedName);
+        if ((leaf.isChannel()) && (fullyQualifiedName.equals(channelName))) {
+          setChannel(p_node, leaf);
+        }
+      } else if (obj instanceof nRealmNode) {
+        searchNode((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNodes(p_node, cont.getNodes());
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      searchNodes(p_node, p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Create a new acl entry and set the permissions based on the permissions flags
+   */
+  public nChannelACLEntry createNewACLEntry(String p_name, String p_host) {
+    nChannelACLEntry aclEntry = null;
+    try {
+      aclEntry = new nChannelACLEntry(p_name, p_host);
+      this.setPermissions(aclEntry);
+    } catch (nAdminIllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+    return aclEntry;
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * Set the permissions on the channel acl entry
+   */
+  public void setPermissions(nChannelACLEntry aclEntry) {
+    aclEntry.setList(canListAcl);
+    aclEntry.setModify(canModifyAcl);
+    aclEntry.setFullPrivileges(fullPrivileges);
+    aclEntry.setGetLastEID(canGetLastEid);
+    aclEntry.setRead(canRead);
+    aclEntry.setWrite(canWrite);
+    aclEntry.setPurge(canPurge);
+    aclEntry.setUseNamedSubscription(canNamed);
+  }
+
+  /**
+   * Output to system.out the permissions that have been set
+   */
+  public void dump(nChannelACLEntry entry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL               : " + entry.canList());
+    System.out.println("Set ACL                : " + entry.canModify());
+    System.out.println("Full Privileges        : " + entry.hasFullPrivileges());
+    System.out.println("Get Last EID           : " + entry.canGetLastEID());
+    System.out.println("Read channel           : " + entry.canRead());
+    System.out.println("Write to channel       : " + entry.canWrite());
+    System.out.println("Purge channel          : " + entry.canPurge());
+    System.out.println("Use named subscription : " + entry.canUseNamedSubscription());
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Output to system.out the permissions that will be set
+   */
+  public void dump() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("ACL will be set to.... ");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL               : " + canListAcl);
+    System.out.println("Set ACL                : " + canModifyAcl);
+    System.out.println("Full Privileges        : " + fullPrivileges);
+    System.out.println("Get Last EID           : " + canGetLastEid);
+    System.out.println("Read channel           : " + canRead);
+    System.out.println("Write to channel       : " + canWrite);
+    System.out.println("Purge channel          : " + canPurge);
+    System.out.println("Use named subscription : " + canNamed);
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Set the program variables and permissions flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    }
+    channelName = System.getProperty("CHANNEL", null);
+    if (channelName == null) {
+      Usage();
+      System.exit(1);
+    }
+    channelName = makeFullyQualified(channelName);
+    if (args != null) {
+      for (int i = 0; i < args.length; i++) {
+        if (args[i].equalsIgnoreCase("list_acl")) {
+          canListAcl = true;
+        } else if (args[i].equalsIgnoreCase("modify_acl")) {
+          canModifyAcl = true;
+        } else if (args[i].equalsIgnoreCase("full")) {
+          fullPrivileges = true;
+        } else if (args[i].equalsIgnoreCase("last_eid")) {
+          canGetLastEid = true;
+        } else if (args[i].equalsIgnoreCase("read")) {
+          canRead = true;
+        } else if (args[i].equalsIgnoreCase("write")) {
+          canWrite = true;
+        } else if (args[i].equalsIgnoreCase("purge")) {
+          canPurge = true;
+        } else if (args[i].equalsIgnoreCase("named")) {
+          canNamed = true;
+        }
+      }
+    }
+  }
+
+  private String makeFullyQualified(String s) {
+    if (!s.startsWith("/")) {
+      s = '/' + s;
+    }
+    if (s.endsWith("/")) {
+      s = s.substring(0, s.length() - 1);
+    }
+    return s;
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("CHANNEL", args[0]);
+        getOptions(null);
+        break;
+      case 2:
+        System.setProperty("CHANNEL", args[0]);
+        System.setProperty("NAME", args[1]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("CHANNEL", args[0]);
+        System.setProperty("NAME", args[1]);
+        System.setProperty("HOST", args[2]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * CHANNEL
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nAddChanAclEntry setAcl = new nAddChanAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println(
+        "naddchanacl <channel name> <user> <host> [list_acl] [modify_acl] [full] [last_eid] [read] [write] [purge] [named]\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel name> - Channel name parameter for the channel to add the ACL entry to");
+    System.out.println("<user> - User name parameter for the channel to add the ACL entry to");
+    System.out.println("<host> - Host name parameter for the channel to add the ACL entry to");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[list_acl] - Specifies that the list acl permission should be added");
+    System.out.println("[modify_acl] - Specifies that the modify acl permission should be added");
+    System.out.println("[full] - Specifies that the full permission should be added");
+    System.out.println("[last_eid] - Specifies that the get last EID permission should be added");
+    System.out.println("[read] - Specifies that the read permission should be added");
+    System.out.println("[write] - Specifies that the write permission should be added");
+    System.out.println("[purge] - Specifies that the purge permission should be added");
+    System.out.println("[named] - Specifies that the used named subscriber permission should be added");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

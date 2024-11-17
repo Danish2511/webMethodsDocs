@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Serving From Another Webserver</title><link rel="Prev" href="co-httpsdelivery.html" title="Previous" /><link rel="Next" href="to-header_web_client_development_in_javascript.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-servingfromotherwebserver.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN_002fi_002bMJMLGk_002f3CKAc97gLmfg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-servingfromotherwebserver.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_developer_guide.html#wwconnect_header">Developer Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_web_client_apis.html#wwconnect_header">Web Client APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_javascript.html#wwconnect_header">Web Developer's Guide for Javascript</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_server_configuration_for_javascript.html#wwconnect_header">Server Configuration for JavaScript</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Serving From Another Webserver</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ESHNW" class="Heading_4">Serving From Another Webserver</div><div id="wwID0E1HNW" class="Body">The Universal Messaging JavaScript API consists of two files:</div><div id="wwID0EFINW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">nirvana.js</span> (which can be served from any webserver)</div><div id="wwID0E2INW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">crossDomainProxy.html</span> (needed only if using one of the <span class="apiname">postMessage</span> drivers, and which must be served from a file plugin on the Universal Messaging realm server)</div><div id="wwID0EXJNW" class="Body">Universal Messaging Realm Servers provide the option of exposing an HTTP web server interface for serving files to clients, removing the need to install a third party web server for hosting applications. Of course, it is possible to use a third party web server to host applications too.</div><div id="wwID0E3JNW" class="Body">Here we will explain how to deploy applications in both scenarios.</div><div id="wwID0EIKNW" class="Section_Title">Web Applications on a Realm File Plugin</div><div id="wwID0ENKNW" class="Body">Your application source code, and the Universal Messaging library files shown above, need to be deployed to one or more directories on the Realm Server, and File Plugins configured to provide access to these directories.</div><div id="wwID0ESKNW" class="Note"><span class="Bold">Note:<br /></span>Universal Messaging ships with an HTTP Interface enabled by default. This HTTP Interface is pre-configured with a file plugin with the base path <span class="codeph">/lib/js</span> which points to the directory containing the above library files.</div><div id="wwID0EMLNW" class="Body">As a result, both files are accessible via a browser at the following paths on the realm:</div><div id="wwID0EXLNW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">/lib/js/nirvana.js</span></div><div id="wwID0ENMNW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">/lib/js/crossDomainProxy.html</span></div><div id="wwID0EENNW" class="Body">To use Universal Messaging, applications then simply need to include nirvana.js as follows:</div><div id="wwID0EJNNW" class="Preformatted"><br />&lt;script src="/lib/js/nirvana.js"&gt;&lt;/script&gt;<br /></div><div id="wwID0EPNNW" class="Body">There is no need to reference the crossDomainProxy.html file directly (the nirvana.js library will load it automatically if it is required).</div><div id="wwID0EUNNW" class="Body">Your Universal Messaging session can be started with a relatively simple configuration, as follows:</div><div id="wwID0EZNNW" class="Preformatted"><br />var mySession = Nirvana.createSession({<br />        applicationName : "myExampleApplication",<br />        sessionName     : "myExampleSession",<br />        username        : "testuser"<br />});<br />mySession.start();<br /></div><div id="wwID0EHONW" class="Section_Title">Web Applications on a Third Party Web Server</div><div id="wwID0EMONW" class="Body">Your application source code and HTML files, and optionally the <span class="codeph">nirvana.js</span> library (which may in fact be served from any server, including a CDN), are deployed to a third party web server, such as Apache.</div><div id="wwID0EWONW" class="Body">If there is any chance that your client will use a <span class="apiname">postMessage</span> drivers, then you must ensure that the <span class="codeph">crossDomainProxy.html</span> file is accessible on the realm via a file plugin.</div><div id="wwID0EFPNW" class="Body">If you use the default file plugin configuration mentioned above, then no further configuration is required. If instead you decide to make the <span class="codeph">crossDomainProxy.html</span> file available at a different path by using a different file plugin, then you will need to specify this path as a <span class="codeph">crossDomainPath</span> key in the session configuration object passed to <span class="codeph">Nirvana.createSession()</span>.</div><div id="wwID0EXPNW" class="Body">For any driver other than WEBSOCKET, the third party web server must be using the <span class="emphasis">same protocol</span> (i.e. http or https) as the Universal Messaging Realm interface file plugin, and running on the <span class="emphasis">same port</span>. The WEBSOCKET driver does not have this restriction.</div><div id="wwID0EHQNW" class="Body">To use Universal Messaging:</div><div id="wwID0EFRNW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Applications need to include nirvana.js as follows:</div><div id="wwID0EXRNW" class="Preformatted_1"><br />&lt;script src="/front/end/server/lib/nirvana.js"&gt;&lt;/script&gt;<br /></div><div id="wwID0ERSNW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>The <span class="codeph">Nirvana.createSession()</span> call must use a configuration object that includes the following key/value pair:</div><div id="wwID0EAUNW" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">realms</span> : <span class="varname">An array of URLs of the realm servers in use, e.g.</span></div><div id="wwID0E1UNW" class="List_2_Continued"><span class="codeph">["http://node1.um.softwareag.com:80", "http://node2.um.softwareag.com:80"]</span></div><div id="wwID0EZVNW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span>Your Universal Messaging session can then be started with a configuration such as:</div><div id="wwID0ELWNW" class="Preformatted_1"><br />var mySession = Nirvana.createSession({<br />        realms : ["http://node1.um.softwareag.com:80", <br />                  "http://node2.um.softwareag.com:80"],<br />        applicationName : "myExampleApplication",<br />        sessionName     : "myExampleSession",<br />        username        : "testuser"<br />});<br />mySession.start();<br /></div><div id="wwID0ETWNW" class="Body">For more information, please see Universal Messaging Sessions in JavaScript, which describes in more detail the options that can be set using the Universal Messaging session configuration object.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,326 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using System.IO;
+
+using com.pcbsys.nirvana.client;
+
+namespace com.pcbsys.nirvana.apps
+{
+    /**
+     * Creates a synchronous queue reader and pops the queue
+     */
+
+    class qpeek : nSampleApp, nEventListener
+    {
+        private static System.Text.UTF8Encoding encoding = new System.Text.UTF8Encoding();
+
+        static String selector;
+
+        private long lastEID;
+        private DateTime startTime;
+        private long byteCount;
+
+        private int logLevel;
+        private int count = -1;
+        private int reportCount = 1000;
+
+        private static qpeek mySelf;
+
+
+
+        /**
+         * This method demonstrates the Nirvana API calls necessary to peek a queue.
+         * It is called after all command line arguments have been received and
+         * validated
+         *
+         * @param realmDetails a String[] containing the possible RNAME values
+         * @param aqueueName the queue name to peek
+         * @param selector the peek selector filter
+         * @param loglvl the specified debug level
+         * @param repCount the specified report count
+         */
+        private void doit(String[] realmDetails, String aqueueName, String selector, int loglvl, int repCount)
+        {
+            {
+                logLevel = loglvl;
+                reportCount = repCount;
+
+                mySelf.constructSession(realmDetails);
+
+                //peeks the specified queue
+                try
+                {
+                    //Create a channel attributes object
+                    nChannelAttributes nca = new nChannelAttributes();
+                    nca.setName(aqueueName);
+
+                    //Obtain the queue reference
+                    nQueue myQueue = mySession.findQueue(nca);
+                    nQueueDetails details = myQueue.getDetails();
+                    Console.WriteLine("Current queue size = " + details.getNoOfEvents());
+                    Console.WriteLine("Current queue age  = " +
+                                      (details.getLastEventTime() - details.getFirstEventTime()));
+                    Console.WriteLine("Current storage size = " + details.getTotalMemorySize());
+                    Console.WriteLine("Current readers    = " + details.getNoOfReaders());
+                    nQueueReader reader = myQueue.createReader(new nQueueReaderContext());
+                    nQueuePeekContext ctx = nQueueReader.createContext(5, selector);
+                    nConsumeEvent[] queue = reader.peek(ctx);
+                    if (queue != null)
+                    {
+                        for (int x = 0; x < queue.Length; x++)
+                        {
+                            go(queue[x]);
+                        }
+                        // continue browsing the queue
+                        while (ctx.hasMore())
+                        {
+                            queue = reader.peek(ctx);
+                            if (queue != null)
+                            {
+                                for (int x = 0; x < queue.Length; x++)
+                                {
+                                    go(queue[x]);
+                                }
+                            }
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("No events received...");
+                    }
+                }
+                //Handle errors
+                catch (nChannelNotFoundException)
+                {
+                    Console.WriteLine("The queue specified could not be found.");
+                    Console.WriteLine("Please ensure that the queue exists in the REALM you connect to.");
+                    Environment.Exit(1);
+                }
+                catch (nSecurityException)
+                {
+                    Console.WriteLine("Unsufficient permissions for the requested operation.");
+                    Console.WriteLine("Please check the ACL settings on the server.");
+                    Environment.Exit(1);
+                }
+                catch (nSessionNotConnectedException)
+                {
+                    Console.WriteLine("The session object used is not physically connected to the Nirvana realm.");
+                    Console.WriteLine("Please ensure the realm is up and check your RNAME value.");
+                    Environment.Exit(1);
+                }
+                catch (nUnexpectedResponseException)
+                {
+                    Console.WriteLine("The Nirvana REALM has returned an unexpected response.");
+                    Console.WriteLine("Please ensure the Nirvana REALM and client API used are compatible.");
+                    Environment.Exit(1);
+                }
+                catch (nUnknownRemoteRealmException)
+                {
+                    Console.WriteLine("The queue specified resided in a remote realm which could not be found.");
+                    Console.WriteLine("Please ensure the queue name specified is correct.");
+                    Environment.Exit(1);
+                }
+                catch (nRequestTimedOutException)
+                {
+                    Console.WriteLine("The requested operation has timed out waiting for a response from the REALM.");
+                    Console.WriteLine(
+                        "If this is a very busy REALM ask your administrator to increase the client timeout values.");
+                    Environment.Exit(1);
+                }
+                catch (nBaseClientException)
+                {
+                    Console.WriteLine("An error occured while creating the Channel Attributes object.");
+                    Environment.Exit(1);
+                }
+                catch (IOException e)
+                {
+                    Console.WriteLine(e.StackTrace);
+                }
+
+                //Close the session we opened
+                try
+                {
+                    nSessionFactory.close(mySession);
+                }
+                catch (Exception)
+                {
+                }
+                //Close any other sessions so that we can exit
+                nSessionFactory.shutdown();
+            }
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            //
+            // Need a min of 2, rname, channel name
+            if (args.Length < 2)
+            {
+                Usage();
+                Environment.Exit(2);
+            }
+
+            String queueName = args[1];
+            int loglvl = 1;
+            reportCount = 1000;
+            if (args.Length > 2)
+            {
+                loglvl = Convert.ToInt32(args[2]);
+            }
+            //Check for a selector message filter value
+            if (args.Length > 3)
+            {
+                selector = args[3];
+            }
+            if (args.Length > 4)
+            {
+                reportCount = Convert.ToInt32(args[4]);
+            }
+
+            String RNAME = args[0];
+
+            mySelf.doit(parseRealmProperties(RNAME), queueName, selector, loglvl, reportCount);
+        }
+
+        public static void Main(String[] args)
+        {
+
+            //Create an instance for this class
+            mySelf = new qpeek();
+
+            mySelf.processArgs(args);
+        }
+
+        /**
+         * This method is invoked from the queue receive thread each time an event is received from
+         * the nirvana channel. 
+         *
+         * @param evt An nConsumeEvent object containing the message received from the channel
+         */
+        public void go(nConsumeEvent evt)
+        {
+            //If this is the first message we receive
+            if (count == -1)
+            {
+                //Get a timestamp to be used for message rate calculations
+                startTime = DateTime.Now;
+                count = 0;
+            }
+
+            //Increment the counter
+            count++;
+
+            //Have we reached the point where we need to report the rates?
+            if (count == reportCount)
+            {
+
+                //Reset the counter
+                count = 0;
+
+                //Get a timestampt to calculate the rates
+                DateTime end = DateTime.Now;
+
+                // Does the specified log level permits us to print on the screen?
+                if (logLevel >= 1)
+                {
+
+                    //Dump the rates on the screen
+                    if (!end.Equals(startTime))
+                    {
+                        TimeSpan ts = end - startTime;
+                        Console.WriteLine("Received " + reportCount + " in " + (ts.Milliseconds) + " Evt/Sec = " + ((reportCount * 1000) / (ts.Milliseconds)) + " Bytes/sec=" + ((byteCount * 1000) / (ts.Milliseconds)));
+                        Console.WriteLine("Bandwidth data : Bytes Tx [" + mySession.getOutputByteCount() + "] Bytes Rx [" + mySession.getInputByteCount() + "]");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Received " + reportCount + " faster than the system millisecond counter");
+                    }
+                }
+                //Set the startTime for the next report equal to the end timestamp for the previous one
+                startTime = end;
+
+                //Reset the byte counter
+                byteCount = 0;
+            }
+
+            //If the last EID counter is not equal to the current event ID
+            if (lastEID != evt.getEventID())
+            {
+                //Reset the last eid counter
+                lastEID = evt.getEventID() + 1;
+            }
+            else
+            {
+
+                //Increment the last eid counter
+                lastEID++;
+            }
+            //Get the data of the message
+            byte[] buffer = evt.getEventData();
+            if (buffer != null)
+            {
+                //Add its length to the byte counter
+                byteCount += buffer.Length;
+            }
+            //If the loglevel permits printing on the screen
+            if (logLevel >= 2)
+            {
+                //Print the eid
+                Console.WriteLine("Event id : " + evt.getEventID());
+                if (evt.isEndOfChannel())
+                {
+                    Console.WriteLine("End of channel reached");
+                }
+                //If the loglevel permits printing on the screen
+                if (logLevel >= 3)
+                {
+                    //Print the message tag
+                    Console.WriteLine("Event tag : " + evt.getEventTag());
+                    //Print the message data
+                    Console.WriteLine("Event data : " + encoding.GetString(evt.getEventData()));
+                    if (evt.hasAttributes())
+                    {
+                        displayEventAttributes(evt.getAttributes());
+                    }
+
+                    nEventProperties prop = evt.getProperties();
+                    if (prop != null)
+                    {
+                        displayEventProperties(prop);
+                    }
+                }
+            }
+        }
+
+        /**
+         * Prints the usage message for this class
+         */
+        private static void Usage()
+        {
+
+            Console.WriteLine("qpeek <rname> <queue name> [debug] [selecter] [count] \n");
+            Console.WriteLine(
+              "<Required Arguments> \n");
+            Console.WriteLine(
+              "<rname> - the rname of the server to connect to");
+            Console.WriteLine(
+              "<queue name> - Queue name on which to peek");
+            Console.WriteLine(
+              "\n[Optional Arguments] \n");
+            Console.WriteLine(
+              "[debug] - The level of output from each event, 0 - none, 1 - summary, 2 - EIDs, 3 - All");
+            Console.WriteLine(
+              "[selector] - The event filter string to use");
+            Console.WriteLine(
+              "[count] - The number of events to wait before printing out summary information");
+
+        }
+    }
+}

@@ -1,0 +1,135 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+using System.Reflection;
+
+namespace MyChannels.Nirvana
+{
+    internal static class RxBridge
+    {
+        private static readonly MethodInfo prepForRemoting;
+
+        static RxBridge()
+        {
+            prepForRemoting = typeof(Exception).GetMethod("PrepForRemoting", BindingFlags.NonPublic | BindingFlags.Instance);
+        }
+
+        public static IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, IDisposable> subscribe)
+        {
+            if (subscribe == null) throw new ArgumentNullException("subscribe");
+            return new AnonymousObservable<TSource>(subscribe);
+        }
+
+        public static IObservable<TSource> Create<TSource>(Func<IObserver<TSource>, Action> subscribe)
+        {
+            if (subscribe == null) throw new ArgumentNullException("subscribe");
+            return Create<TSource>(o => Disposable.Create(subscribe(o)));
+        }
+
+        public static IDisposable Subscribe<TSource>(this IObservable<TSource> source)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+            return source.Subscribe(_ =>
+            {
+            }, ex =>
+            {
+                throw ex.PrepareForRethrow();
+            }, () => { });
+        }
+
+        public static IDisposable Subscribe<TSource>(this IObservable<TSource> source, Action<TSource> onNext)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+            if (onNext == null)
+            {
+                throw new ArgumentNullException("onNext");
+            }
+            return source.Subscribe(onNext, ex =>
+            {
+                throw ex.PrepareForRethrow();
+            }, () => { });
+        }
+
+
+
+
+
+
+        public static IDisposable Subscribe<TSource>(this IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError)
+        {
+            if (onNext == null)
+            {
+                throw new ArgumentNullException("onNext");
+            }
+            if (onError == null)
+            {
+                throw new ArgumentNullException("onError");
+            }
+            return source.Subscribe(onNext, onError, () => { });
+        }
+
+
+
+        public static IDisposable Subscribe<TSource>(this IObservable<TSource> source, Action<TSource> onNext, Action onCompleted)
+        {
+            if (onNext == null)
+            {
+                throw new ArgumentNullException("onNext");
+            }
+            if (onCompleted == null)
+            {
+                throw new ArgumentNullException("onCompleted");
+            }
+            return source.Subscribe(onNext, ex =>
+            {
+                throw ex.PrepareForRethrow();
+            }, onCompleted);
+        }
+
+
+
+        public static IDisposable Subscribe<TSource>(this IObservable<TSource> source, Action<TSource> onNext, Action<Exception> onError, Action onCompleted)
+        {
+            if (source == null)
+            {
+                throw new ArgumentNullException("source");
+            }
+            if (onNext == null)
+            {
+                throw new ArgumentNullException("onNext");
+            }
+            if (onError == null)
+            {
+                throw new ArgumentNullException("onError");
+            }
+            if (onCompleted == null)
+            {
+                throw new ArgumentNullException("onCompleted");
+            }
+            return source.Subscribe(new AnonymousObserver<TSource>(onNext, onError, onCompleted));
+        }
+
+        public static Exception PrepareForRethrow(this Exception exception)
+        {
+            if (exception == null)
+            {
+                throw new ArgumentNullException("exception");
+            }
+            prepForRemoting.Invoke(exception, new object[0]);
+            return exception;
+        }
+    }
+}

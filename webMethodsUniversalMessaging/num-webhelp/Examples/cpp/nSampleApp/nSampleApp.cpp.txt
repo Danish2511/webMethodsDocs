@@ -1,0 +1,324 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nSession.h"
+#include "nSessionAttributes.h"
+#include "nSessionFactory.h"
+#include "nIllegalArgumentException.h"
+#include "nConstants.h"
+#include "nSecurityException.h"
+#include "nRealmUnreachableException.h"
+#include "nSessionNotConnectedException.h"
+#include "nSessionAlreadyInitialisedException.h"
+#include "nEventProperties.h"
+#include "nEventAttributes.h"
+#include "nEventPropertiesIterator.h"
+
+#include <time.h>
+#include <iostream>
+#include <vector>
+
+using namespace com::pcbsys::nirvana::apps;
+
+nSampleApp::nSampleApp(void) : m_pSession(NULL), m_pNsa(NULL) {
+}
+
+nSampleApp::~nSampleApp(void) {
+    if (m_pNsa && m_pNsa->delRef()) {
+        delete m_pNsa;
+    }
+}
+
+void nSampleApp::UsageEnv() {
+    std::cout <<"\n\n(Environment Variables) \n\n"
+
+              <<"(RNAME) - One or more RNAME entries in the form protocol://host:port\n"
+              <<"   protocol - Can be one of nsp, nhp, nsps, or nhps, where:\n"
+              <<"   nsp - Specifies UM Socket Protocol (nsp)\n"
+              <<"   nhp - Specifies UM HTTP Protocol (nhp)\n"
+              <<"   nsps - Specifies UM Socket Protocol Secure (nsps), i.e. using SSL/TLS\n"
+              <<"   nhps - Specifies UM HTTP Protocol Secure (nhps), i.e. using SSL/TLS\n"
+              <<"   port - The port number of the server\n"
+              <<"\nHint: - For multiple RNAME entries, use comma separated values which will be attempted in connection weight order\n\n"
+              <<"(LOGLEVEL) - This determines how much information the UM api will output 0 = verbose 7 = quiet\n"
+
+              <<"(CKEYSTORE) - If using SSL, the location of the keystore containing the client cert\n"
+              <<"(CKEYSTOREPASSWD) - If using SSL, the password for the keystore containing the client cert\n"
+              <<"(CAKEYSTORE) - If using SSL, the location of the ca truststore\n"
+              <<"(CAKEYSTOREPASSWD) - If using SSL, the password for the ca truststore\n"
+              <<"(HPROXY) - HTTP Proxy details in the form proxyhost:proxyport, where:\n"
+              <<"   proxyhost - The HTTP proxy host\n"
+              <<"   proxyport - The HTTP proxy port\n"
+              <<"(HAUTH) - HTTP Proxy authentication details in the form user:pass, where:\n"
+              <<"   user - The HTTP proxy authentication username\n"
+              <<"   pass - The HTTP proxy authentication password\n" << std::endl;
+
+    exit (1);
+}
+
+void nSampleApp::processEnvironmentVariables() {
+}
+
+std::string* nSampleApp::parseRealmProperties(std::string& realmdetails, int& nURL) {
+    std::vector<std::string> findRnames;
+    std::string RNAME;
+
+    int index = 0;
+    int comma = realmdetails.find (','); //Look for multiple rnames
+
+    while (comma != -1) {
+        int length = comma - index;
+
+        if (length > 0)
+            findRnames.push_back(realmdetails.substr (index, length));
+
+        index = comma + 1;
+        comma = realmdetails.find (',', index);
+    }
+
+    comma = realmdetails.size ();
+
+    int length = comma - index;
+
+    if (length > 0)
+        findRnames.push_back(realmdetails.substr (index, length));
+
+    for (int x = 0; x < findRnames.size(); x++) {
+        size_t first = findRnames[x].find_first_not_of (" \t");
+
+        if (first > 0)
+            findRnames[x] = findRnames[x].substr (first);
+
+        size_t last = findRnames[x].find_last_not_of (" \t");
+
+        if (last < (findRnames[x].size() - 1))
+            findRnames[x] = findRnames[x].substr (0, last + 1);
+    }
+
+    nURL = findRnames.size();
+
+    std::string* arr = new std::string[findRnames.size()];
+    std::copy(findRnames.begin(), findRnames.end(), arr);
+    return arr;
+}
+
+void nSampleApp::disconnected(nSession *pSession) {
+    try {
+        std::cout <<"You have been disconnected from " << m_lastSessionID <<std::endl;
+    }
+
+    catch (Exception ex) {
+        std::cout << "Error while disconnecting " << ex.message() << std::endl;
+    }
+}
+
+void nSampleApp::reconnected(nSession *pSession) {
+    try {
+        m_lastSessionID = m_pSession->getId();
+        std::cout << "You have been Reconnected to " << m_lastSessionID.c_str() << std::endl;
+    }
+
+    catch (Exception ex) {
+        std::cout << "Error while reconnecting " << ex.message() << std::endl;
+    }
+}
+
+bool nSampleApp::tryAgain(nSession *pSession) {
+    try {
+        std::cout << "Attempting to reconnect to " << m_lastSessionID << std::endl;
+    }
+
+    catch (Exception ex) {
+        std::cout << "Error while trying to reconnect " << ex.message() << std::endl;
+    }
+
+    return true;
+}
+
+void nSampleApp::handleException(nBaseClientException *pEx) {
+    std::cout << "An Asynchronous Exception was received from the Universal Messaging realm\n";
+    std::cout << "Exception: " << pEx->displayText() << std::endl;
+}
+
+void nSampleApp::constructSession(std::string *pRealmDetails, int nRealmDetail) {
+    try {
+        m_pNsa = new nSessionAttributes(pRealmDetails, nRealmDetail);
+    }
+
+    catch (Exception ex) {
+        std::cout << "Error creating Session Attributes. Please check your RNAME" << std::endl;
+    }
+
+    try {
+        m_pSession = nSessionFactory::create(m_pNsa, this);
+        m_pSession->addAsyncExceptionListener(this);
+    }
+
+    catch (nIllegalArgumentException ex) {
+    }
+
+    try {
+        nConstants::setClientLogLevel(1);
+        nConstants::setReconnectImmediately(true);
+        nConstants::setReconnectInterval(500);
+        m_pSession->init();
+        m_lastSessionID = m_pSession->getId();
+    }
+
+    catch (nSecurityException sec) {
+        std::cout << "The current user is not authorised to connect to the specified Realm Server\n"
+                  << "Please check the realm acls or contact support" << std::endl;
+        exit(1);
+    }
+
+    catch (nRealmUnreachableException rue) {
+        std::cout << "The Universal Messaging Realm specified by the RNAME value is not reachable."
+                  << "Please ensure the Realm is running and check your RNAME value" <<std::endl;
+        exit(1);
+    }
+
+    catch (nSessionNotConnectedException snce) {
+        std::cout << "The session object used is not physically connected to the Universal Messaging Realm.\n"
+                  <<"Please ensure the Realm is up and check your RNAME value" << std::endl;
+        exit(1);
+    }
+
+    catch (nSessionAlreadyInitialisedException ex) {
+        std::cout << "The session object has already been initialised.\n"
+                  << "Please make only one call to the .init() function" <<std::endl;
+        exit(1);
+    }
+}
+
+void nSampleApp::displayEventProperties(nEventProperties *pProp) {
+    std::cout << "Event Prop : " <<std::endl;
+    nEventPropertiesIterator *pIterator = pProp->getIterator ();
+
+    while (pIterator->hasNext ()) {
+        std::string key = pIterator->getKey ();
+        nObject *pObject = pIterator->getValue();
+        int type = pObject->getType ();
+
+        if (type == nObject::EVENTPROPERTIES) {
+            nEventProperties *pvalue = (nEventProperties*)pObject;
+            std::cout << "[" << key << "(event prop)]:\n";
+            displayEventProperties(pvalue);
+        }
+
+        else if (type == nObject::EVENTPROPERTIESARRAY) {
+            nEventProperties** pvalue = (nEventProperties**)pObject;
+            int size = pObject->getSize ();
+            std::cout << "[" << key << "(event prop[])]:\n";
+
+            for (int x = 0; x < size; x++) {
+                displayEventProperties(pvalue[x]);
+            }
+        }
+
+        else if (type == nObject::STRINGARRAY) {
+            std::string *pvalue = (std::string *)pObject;
+            std::cout << "[" << key << "(String[])]:\n";
+
+            for (int x = 0; x < pObject->getSize(); x++) {
+                std::cout << "   ["<< key << "]:[" << x<< "]="<<pvalue[x]<<"\n";
+            }
+        }
+
+        else if (type == nObject::LONGARRAY) {
+            long *pvalue = (long *)pObject;
+            std::cout << "[" <<key <<"(long[])]:\n";
+
+            for (int x = 0; x < pObject->getSize(); x++) {
+                std::cout << "   ["<< key << "]:[" << x<< "]="<<pvalue[x]<<"\n";
+            }
+        }
+
+        else if (type == nObject::INTARRAY) {
+            int *pvalue = (int *)pObject;
+            std::cout << "[" <<key <<"(int[])]:\n";
+
+            for (int x = 0; x < pObject->getSize(); x++) {
+                std::cout << "   ["<< key << "]:[" << x<< "]="<<pvalue[x]<<"\n";
+            }
+        }
+
+        else if (type == nObject::BYTEARRAY) {
+            unsigned char *pvalue = (unsigned char *)pObject;
+            std::cout << "[" <<key <<"(byte[])]:\n";
+
+            for (int x = 0; x < pObject->getSize(); x++) {
+                std::cout << "   ["<< key << "]:[" << x<< "]="<<pvalue[x]<<"\n";
+            }
+        }
+
+        else if (type == nObject::BOOLARRAY) {
+            bool *pvalue = (bool *)pObject;
+            std::cout << "[" <<key <<"(bool[])]:\n";
+
+            for (int x = 0; x < pObject->getSize(); x++) {
+                std::cout << "   ["<< key << "]:[" << x<< "]="<<pvalue[x]<<"\n";
+            }
+        }
+
+        else {
+            std::string str;
+            pObject->toString(str);
+
+            std::cout << key << " = " <<str << "\n";
+        }
+
+        pIterator->increment();
+    }
+    std::cout.flush();
+}
+
+void nSampleApp::displayEventAttributes(nEventAttributes *pAttributes) {
+    if (pAttributes->getApplicationId() != NULL) {
+        std::string applicationid;
+        nConstants::decode(pAttributes->getApplicationId(), pAttributes->getApplicationIdLength(), applicationid);
+
+        std::cout << "Application Id : " << applicationid << std::endl;
+    }
+
+    if (pAttributes->getCorrelationId() != NULL) {
+        std::string correlationid;
+        nConstants::decode (pAttributes->getCorrelationId(), pAttributes->getCorrelationIdLength(), correlationid);
+
+        std::cout << "Correlation Id : " << correlationid<< std::endl;
+    }
+
+    if (pAttributes->getMessageId() != NULL) {
+        std::string messageId;
+        nConstants::decode (pAttributes->getMessageId(), pAttributes->getMessageIdLength(), messageId);
+
+        std::cout << "Message Id     : " << messageId<< std::endl;
+    }
+
+    if (pAttributes->getPublisherHost() != NULL) {
+        std::string publisherHost;
+        nConstants::decode (pAttributes->getPublisherHost(), pAttributes->getPublisherHostLength(), publisherHost);
+
+        std::cout << "Published from : " << publisherHost<< std::endl;;
+    }
+
+    if (pAttributes->getPublisherName() != NULL) {
+        std::string publisherName;
+        nConstants::decode (pAttributes->getPublisherName(), pAttributes->getPublisherNameLength(), publisherName);
+
+        std::cout << "Published by   : "<< publisherName<< std::endl;;
+    }
+
+    longlong timestamp = pAttributes->getTimestamp ();
+
+    time_t seconds = timestamp / 1000;
+    struct tm *pTm = localtime (&seconds);
+
+    if (seconds != 0)
+        std::cout << "Published on   : "<< asctime(pTm) << std::endl;
+}

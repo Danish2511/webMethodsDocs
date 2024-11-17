@@ -1,0 +1,162 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using com.pcbsys.nirvana.client;
+
+namespace com.pcbsys.nirvana.apps
+{
+    class deletequeue : nSampleApp
+    {
+
+        private static deletequeue mySelf = null;
+        private String queueName;
+        private String RNAME;
+        /**
+         * This method demonstrates the Nirvana API calls necessary to delete
+         * a queue.
+         * It is called after all command line arguments have been received and
+         * validated
+         *
+         * @param realmDetails a String[] containing the possible RNAME values
+         * @param queueName the queue name to delete
+         */
+        private void doit(String[] realmDetails, String queueName)
+        {
+
+            mySelf.constructSession(realmDetails);
+
+            //Deletes the specified queue
+            try
+            {
+                //Create a queue attributes object
+                nChannelAttributes nca = new nChannelAttributes();
+                nca.setName(queueName);
+
+                //Delete the queue
+                mySession.deleteQueue(nca);
+
+            }
+            //Handle errors
+            catch (nChannelNotFoundException cnfe)
+            {
+                Console.WriteLine("The queue specified could not be found.");
+                Console.WriteLine("Please ensure that the queue exists in the REALM you connect to.");
+                Console.WriteLine(cnfe.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nSecurityException se)
+            {
+                Console.WriteLine("Unsufficient permissions for the requested operation.");
+                Console.WriteLine("Please check the ACL settings on the server.");
+                Console.WriteLine(se.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nSessionNotConnectedException snce)
+            {
+                Console.WriteLine("The session object used is not physically connected to the Nirvana realm.");
+                Console.WriteLine("Please ensure the realm is up and check your RNAME value.");
+                Console.WriteLine(snce.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nUnexpectedResponseException ure)
+            {
+                Console.WriteLine("The Nirvana REALM has returned an unexpected response.");
+                Console.WriteLine("Please ensure the Nirvana REALM and client API used are compatible.");
+                Console.WriteLine(ure.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nUnknownRemoteRealmException urre)
+            {
+                Console.WriteLine("The queue specified resided in a remote realm which could not be found.");
+                Console.WriteLine("Please ensure the queue name specified is correct.");
+                Console.WriteLine(urre.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nRequestTimedOutException rtoe)
+            {
+                Console.WriteLine("The requested operation has timed out waiting for a response from the REALM.");
+                Console.WriteLine("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+                Console.WriteLine(rtoe.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nBaseClientException nbce)
+            {
+                Console.WriteLine("An error occured while creating the Channel Attributes object.");
+                Console.WriteLine(nbce.StackTrace);
+                Environment.Exit(1);
+            }
+            //Close the session we opened
+            try
+            {
+                nSessionFactory.close(mySession);
+            }
+            catch (Exception) { }
+
+            //Close any other sessions so that we can exit
+            nSessionFactory.shutdown();
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            switch (args.Length)
+            {
+                case 0:
+                    Usage();
+                    Environment.Exit(0);
+                    break;
+                case 1:
+                    Usage();
+                    Environment.Exit(0);
+                    break;
+                case 2:
+                    RNAME = args[0];
+                    queueName = args[1];
+                    break;
+
+            }
+        }
+
+        public static void Main(String[] args)
+        {
+
+            //Create an instance for this class
+            mySelf = new deletequeue();
+
+            //Process command line arguments
+            mySelf.processArgs(args);
+
+            //Process Environment Variables
+            processEnvironmentVariables();
+
+            //Process the local REALM RNAME details
+            String[] rproperties = new String[4];
+            rproperties = parseRealmProperties(mySelf.RNAME);
+
+            //delete the queue specified
+            mySelf.doit(rproperties, mySelf.queueName);
+        }
+
+        /**
+         * Prints the usage message for this class
+         */
+        private static void Usage()
+        {
+
+            Console.WriteLine("Usage ...\n");
+            Console.WriteLine("deletequeue <rname> <queue name>  \n");
+
+            Console.WriteLine(
+              "<Required Arguments> \n");
+            Console.WriteLine(
+              "<rname> - the rname of the server to connect to");
+            Console.WriteLine(
+              "<queue name> - queue name parameter for the queue to delete");
+        }
+    }
+}

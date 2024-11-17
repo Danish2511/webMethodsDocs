@@ -1,0 +1,225 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nJoinDetails;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * This application demonstrates how to manage persistant / mixed channels, i.e. performing maintenance
+ * on them.
+ */
+
+public class nGetChannelJoins extends nSampleApp implements Observer {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realmUrl = null;
+
+  private nSessionAttributes attr = null;
+  private nRealmNode realm = null;
+
+  private Hashtable myChannels = new Hashtable();
+  private int myCheckCount = 3;
+
+  /**
+   * Construct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nGetChannelJoins(String args[]) {
+    try {
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("[" + new Date(System.currentTimeMillis()).toString() + "],Connecting to " + realmUrl);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realmUrl);
+      // get the realm node
+      realm = new nRealmNode(attr);
+      if (!realm.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realmUrl);
+        return;
+      }
+
+      // wait for the namespace to be complete
+      realm.waitForEntireNameSpace();
+      if (!realm.isEntireNamespaceComplete()) {
+        System.out.println("Entire NS is aparrently complete but iscomplete returns false");
+      }
+      // register this realm node and all child realms and look for channels
+      realm.addObserver(this);
+      this.register(realm);
+      //channelMgr = new nChannelMaintenanceScheduler();
+      int count = 0;
+      while (count < myCheckCount) {
+        System.out.println(
+            "[" + new Date(System.currentTimeMillis()).toString() + "] Starting Join Check Cycle [" + (count + 1) + "/"
+                + myCheckCount + "]");
+        Thread.sleep(5000);
+        Enumeration allchans = myChannels.elements();
+        boolean hasjoins = false;
+        while (allchans.hasMoreElements()) {
+          nLeafNode node = (nLeafNode) allchans.nextElement();
+          Enumeration outboundjoins = node.getOutboundJoins();
+          while (outboundjoins.hasMoreElements()) {
+            hasjoins = true;
+            nJoinDetails information = (nJoinDetails) outboundjoins.nextElement();
+            System.out.println(
+                "[" + new Date(System.currentTimeMillis()).toString() + "] Node " + node.getAbsolutePath()
+                    + " has an Outbound Join: " + information.toString());
+          }
+          Enumeration inboundjoins = node.getInboundJoins();
+          while (inboundjoins.hasMoreElements()) {
+            hasjoins = true;
+            nJoinDetails information = (nJoinDetails) inboundjoins.nextElement();
+            System.out.println(
+                "[" + new Date(System.currentTimeMillis()).toString() + "] Node " + node.getAbsolutePath()
+                    + " has an Inbound Join: " + information.toString());
+          }
+          if (hasjoins) {
+            System.out.println("***\n");
+            hasjoins = false;
+          }
+        }
+        System.out.println(
+            "[" + new Date(System.currentTimeMillis()).toString() + "] Completed Join Check Cycle [" + (count + 1) + "/"
+                + myCheckCount + "]");
+        count++;
+      }
+      realm.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Search the enumeration of child nodes, and add observers to all child realms
+   * and check all channels and queues if they are mixed or persistant add to the vector.
+   */
+  private void register(Enumeration enum1) throws nBaseAdminException {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode node = ((nLeafNode) obj);
+
+        nLeafNode leaf = (nLeafNode) myChannels.get(node.getAbsolutePath());
+        if (leaf == null) {
+          if (node.isChannel()) {
+            System.out.println(
+                "[" + new Date(System.currentTimeMillis()).toString() + "],Adding channel " + node.getAbsolutePath()
+                    + " to hash");
+          } else {
+            System.out.println(
+                "[" + new Date(System.currentTimeMillis()).toString() + "],Adding queue " + node.getAbsolutePath()
+                    + " to hash");
+          }
+          myChannels.put(node.getAbsolutePath(), node);
+
+        } else {
+          System.out.println(
+              "[" + new Date(System.currentTimeMillis()).toString() + "],Ignoring node " + node.getAbsolutePath()
+                  + " as not mixed/persistent");
+        }
+
+         /*System.out.println("Join info for node "+node.getAbsolutePath());
+          Enumeration outboundjoins=node.getOutboundJoins();
+          while (outboundjoins.hasMoreElements()) {
+              nJoinDetails information = (nJoinDetails) outboundjoins.nextElement();
+              System.out.println("Outbound Join: "+information.toString());
+          }
+          Enumeration inboundjoins=node.getInboundJoins();
+          while (inboundjoins.hasMoreElements()) {
+              nJoinDetails information = (nJoinDetails) inboundjoins.nextElement();
+              System.out.println("Inbound Join: "+information.toString());
+          }
+          System.out.println("\n***\n");    */
+
+      } else if (obj instanceof nRealmNode) {
+        register((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        register(((nContainer) obj).getNodes());
+      } else {
+        System.out.println("Unhandled node, obj: " + obj.getClass().getName());
+      }
+    }
+  }
+
+  /**
+   * Add this as an observer to the realm ao that any new channels can be added
+   */
+  private void register(nRealmNode node) throws nBaseAdminException {
+    register(node.getNodes());
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    myCheckCount = Integer.parseInt(System.getProperty("JOIN_CHECK_COUNT", "3"));
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  public void update(Observable o, Object arg) {
+    System.out.println(
+        "[" + new Date(System.currentTimeMillis()).toString() + "] Got observable update " + o.getClass().getName()
+            + " obj: " + arg.getClass().getName());
+  }
+
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * as a system property
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nGetChannelJoins mgr = new nGetChannelJoins(args);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nchannelmaintenance \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

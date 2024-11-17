@@ -1,0 +1,101 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using MyChannels.Nirvana;
+using com.pcbsys.nirvana.client;
+
+namespace MyChannels.Nirvana.Samples
+{
+    class ExBatchPublisher
+    {
+        private string rName = null;
+
+        public ExBatchPublisher(string[] args)
+        {
+            // Check arguments: <rname> <isTopics> <broadcastToAll>
+            if (args.Length < 2)
+            {
+                Console.WriteLine("realm name and boolean flags indicating:");
+                Console.WriteLine("1) Topics or Queues required");
+                Console.WriteLine("2) whether to broadcast an identical message to all Topics/Queues");
+                Environment.Exit(2);
+            }
+            rName = args[0];
+            bool isTopics = bool.Parse(args[1]);
+            bool broadcastToAll = bool.Parse(args[2]);
+            String[] destinations = new string[args.Length - 3];
+            System.Array.Copy(args, 3, destinations, 0, args.Length - 3);
+            start(destinations, isTopics, broadcastToAll);
+        }
+
+        private void start(String[] destinations, bool isTopics, bool broadcastToAll)
+        {
+            var session = new Session(rName);
+            // Initialize the session
+            session.Initialize();
+            Console.WriteLine("Initialized...");
+
+            if (broadcastToAll)
+            {
+                var batch = isTopics
+                                ? session.Topics.CreateBatch(destinations)
+                                : session.Queues.CreateBatch(destinations);
+
+                int msgCount = 0;
+                while (true)
+                {
+                    string msg = "Message: " + msgCount;
+                    batch.Send(new Message(msg, new byte[] {}));
+                    Console.WriteLine("Sent Message : " + msg);
+                    msgCount++;
+                    batch.Execute();
+
+                    // wait for 'q' key press before closing
+                    string command = Console.ReadLine();
+                    if (command.Equals("q"))
+                    {
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                var batch = isTopics
+                                ? session.Topics.CreateBatch(null)
+                                : session.Queues.CreateBatch(null);
+
+                int msgCount = 0;
+                while (true)
+                {
+                    for (int i = 0; i < destinations.Length; i++)
+                    {
+                        string msg = destinations[i] + " : " + msgCount;
+                        batch.Send(destinations[i], new Message(msg, new byte[] {}));
+                        Console.WriteLine("Sent Message : " + msg);
+                    }
+                    msgCount++;
+                    batch.Execute();
+
+                    // wait for 'q' key press before closing
+                    string command = Console.ReadLine();
+                    if (command.Equals("q"))
+                    {
+                        break;
+                    }
+                }
+            }
+            session.Dispose();
+        }
+
+        static void Main(string[] args)
+        {
+            new ExBatchPublisher(args);
+        }
+    }
+}

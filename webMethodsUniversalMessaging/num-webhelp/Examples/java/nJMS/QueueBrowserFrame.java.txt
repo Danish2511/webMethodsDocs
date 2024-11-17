@@ -1,0 +1,244 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nJMSApps;
+
+import java.awt.Button;
+import java.awt.Frame;
+import java.awt.Rectangle;
+import java.awt.TextArea;
+import java.awt.event.MouseEvent;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import javax.jms.BytesMessage;
+import javax.jms.MapMessage;
+import javax.jms.Message;
+import javax.jms.ObjectMessage;
+import javax.jms.QueueBrowser;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.jms.QueueSession;
+import javax.jms.StreamMessage;
+import javax.jms.TextMessage;
+import javax.swing.JTextField;
+
+public class QueueBrowserFrame extends Frame {
+
+  QueueSession qs = null;
+  javax.jms.Queue q = null;
+  QueueConnection qc = null;
+  Hashtable h = null;
+  java.awt.List eventList = new java.awt.List();
+  TextArea eventDetails = new TextArea();
+  Button quitBtn = new Button();
+  Button conBtn = new Button();
+  JTextField msgSelector = new JTextField();
+  JTextField qname = new JTextField();
+  JTextField rname = new JTextField();
+  Button browseBtn = new Button();
+
+  public QueueBrowserFrame() {
+    try {
+      jbInit();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  void dumpDictionary(Message m) throws Exception {
+    Enumeration enum1 = m.getPropertyNames();
+    while (enum1.hasMoreElements()) {
+      String key = (String) enum1.nextElement();
+      Object o = m.getObjectProperty(key);
+      if (o instanceof Integer) {
+        Integer i = (Integer) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + i.intValue());
+      } else if (o instanceof Long) {
+        Long l = (Long) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + l.longValue());
+      } else if (o instanceof Short) {
+        Short s = (Short) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + s.shortValue());
+      } else if (o instanceof Double) {
+        Double d = (Double) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + d.doubleValue());
+      } else if (o instanceof Character) {
+        Character c = (Character) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + c.charValue());
+      } else if (o instanceof String) {
+        String st = (String) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + st);
+      } else if (o instanceof Byte) {
+        Byte b = (Byte) o;
+        eventDetails.append("\nKey : " + key + "/ Value : " + b.byteValue());
+      } else {
+        eventDetails.append("\nFound non primitive value for key: " + key);
+      }
+    }
+  }
+
+  void eventList_mouseClicked(MouseEvent e) throws Exception {
+    eventDetails.setText("");
+    Object selected = eventList.getSelectedItem();
+    if (selected == null) {
+      return;
+    }
+    Message m = (Message) h.get(selected);
+
+    if (m instanceof javax.jms.BytesMessage) {
+      BytesMessage am = (BytesMessage) m;
+      eventDetails.append("BytesMessage");
+      eventDetails.append("\nJMSMessageID : " + am.getJMSMessageID());
+      eventDetails.append("\nJMSTimestamp : " + am.getJMSTimestamp());
+      eventDetails.append("\nJMSDeliveryMode : " + am.getJMSDeliveryMode());
+    }
+
+    if (m instanceof javax.jms.MapMessage) {
+      MapMessage am = (MapMessage) m;
+      eventDetails.append("MapMessage");
+      eventDetails.append("\nJMSMessageID : " + am.getJMSMessageID());
+      eventDetails.append("\nJMSTimestamp : " + am.getJMSTimestamp());
+      eventDetails.append("\nJMSDeliveryMode : " + am.getJMSDeliveryMode());
+    }
+
+    if (m instanceof javax.jms.StreamMessage) {
+      StreamMessage am = (StreamMessage) m;
+      eventDetails.append("StreamMessage");
+      eventDetails.append("\nJMSMessageID : " + am.getJMSMessageID());
+      eventDetails.append("\nJMSTimestamp : " + am.getJMSTimestamp());
+      eventDetails.append("\nJMSDeliveryMode : " + am.getJMSDeliveryMode());
+    }
+
+    if (m instanceof javax.jms.TextMessage) {
+      TextMessage am = (TextMessage) m;
+      eventDetails.append("TextMessage");
+      eventDetails.append("\nJMSMessageID : " + am.getJMSMessageID());
+      eventDetails.append("\nJMSTimestamp : " + am.getJMSTimestamp());
+      eventDetails.append("\nJMSDeliveryMode : " + am.getJMSDeliveryMode());
+    }
+
+    if (m instanceof javax.jms.ObjectMessage) {
+      ObjectMessage am = (ObjectMessage) m;
+      eventDetails.append("ObjectMessage");
+      eventDetails.append("\nJMSMessageID : " + am.getJMSMessageID());
+      eventDetails.append("\nJMSTimestamp : " + am.getJMSTimestamp());
+      eventDetails.append("\nJMSDeliveryMode : " + am.getJMSDeliveryMode());
+    }
+
+    dumpDictionary(m);
+  }
+
+  private void jbInit() throws Exception {
+    this.setTitle("Sample JMS Queue Browser Application");
+    this.setResizable(false);
+    this.setSize(400, 320);
+    this.setLayout(null);
+    quitBtn.setLabel("Quit");
+    quitBtn.setBounds(new Rectangle(301, 274, 76, 22));
+    quitBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        quitBtn_mouseClicked(e);
+      }
+    });
+    conBtn.setLabel("Connect");
+    conBtn.setBounds(new Rectangle(165, 275, 85, 22));
+    conBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        try {
+          conBtn_mouseClicked(e);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+    msgSelector.setText("Optional Message Selector");
+    msgSelector.setBounds(new Rectangle(12, 182, 377, 27));
+    qname.setText("Enter Queue name");
+    qname.setBounds(new Rectangle(12, 218, 183, 23));
+    rname.setText("Enter RNAME ");
+    rname.setBounds(new Rectangle(207, 218, 183, 23));
+    browseBtn.setEnabled(false);
+    browseBtn.setLabel("Browse");
+    browseBtn.setBounds(new Rectangle(14, 274, 85, 22));
+    browseBtn.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        try {
+          browseBtn_mouseClicked(e);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+    eventList.setEnabled(false);
+    eventList.setBounds(new Rectangle(12, 34, 128, 134));
+    eventList.addMouseListener(new java.awt.event.MouseAdapter() {
+      public void mouseClicked(MouseEvent e) {
+        try {
+          eventList_mouseClicked(e);
+        } catch (Exception ex) {
+          ex.printStackTrace();
+        }
+      }
+    });
+    eventDetails.setEditable(false);
+    eventDetails.setEnabled(false);
+    eventDetails.setBounds(new Rectangle(150, 33, 239, 136));
+    this.add(rname, null);
+    this.add(eventList, null);
+    this.add(eventDetails, null);
+    this.add(msgSelector, null);
+    this.add(qname, null);
+    this.add(conBtn, null);
+    this.add(quitBtn, null);
+    this.add(browseBtn, null);
+    this.setVisible(true);
+  }
+
+  void quitBtn_mouseClicked(MouseEvent e) {
+    System.exit(0);
+  }
+
+  void conBtn_mouseClicked(MouseEvent e) throws Exception {
+    if ((qname.getText().equals("Enter Queue name")) || (qname.getText().equals(""))) {
+      return;
+    }
+    if ((rname.getText().equals("Enter RNAME ")) || (qname.getText().equals(""))) {
+      return;
+    }
+    this.conBtn.setEnabled(false);
+    QueueConnectionFactory qcf = new com.pcbsys.nirvana.nJMS.QueueConnectionFactoryImpl(this.rname.getText());
+    qc = qcf.createQueueConnection();
+    qc.setExceptionListener(new nJMSExceptionListener());
+    //Start the connection
+    qc.start();
+    qs = qc.createQueueSession(false, 1);
+    q = qs.createQueue(this.qname.getText());
+    this.browseBtn.setEnabled(true);
+    this.eventList.setEnabled(true);
+    this.eventDetails.setEnabled(true);
+  }
+
+  void browseBtn_mouseClicked(MouseEvent e) throws Exception {
+    h = new Hashtable();
+    this.eventList.removeAll();
+    QueueBrowser qb = null;
+    if ((!msgSelector.getText().equalsIgnoreCase("Optional Message Selector")) && (!msgSelector.getText().equals(""))) {
+      qb = qs.createBrowser(q, msgSelector.getText());
+    } else {
+      qb = qs.createBrowser(q);
+    }
+
+    Enumeration enum1 = qb.getEnumeration();
+    while (enum1.hasMoreElements()) {
+      Message m = (Message) enum1.nextElement();
+      this.eventList.add(m.getJMSMessageID());
+      h.put(m.getJMSMessageID(), m);
+    }
+  }
+}

@@ -1,0 +1,242 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nChannelConnectionDetails;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionDetails;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionListener;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.io.BufferedInputStream;
+import java.util.Enumeration;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * This class demonstrates how to watch for connections to a realm and be notified of
+ * new connections, or connections closing
+ */
+
+public class nConnectionWatch extends nSampleApp implements Observer {
+
+  private String realmUrl = null;
+
+  /**
+   * Constructor takes a realm URL
+   */
+  public nConnectionWatch(String[] args) {
+    try {
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+      // construct the real node
+      nRealmNode node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realmUrl);
+        return;
+      }
+
+      // add a new Realm watch instance as a watcher for connections to this root realm
+      // call the method to add listeners to the channel and queue nodes
+      register(node);
+      System.out.println("Press any key to quit !");
+      BufferedInputStream bis = new BufferedInputStream(System.in);
+      try {
+        bis.read();
+      } catch (Exception read) {
+      } //Ignore this
+      node.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nConnectionWatch dump = new nConnectionWatch(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+
+  /**
+   * Search the enumeration of child nodes, and add realm watchers to all child realms,
+   * and watchers to all channel and queue nodes
+   */
+  private void register(Enumeration enum1) throws nBaseAdminException {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        ((nLeafNode) obj).addListener(new nChannelWatch((nLeafNode) obj));
+      } else if (obj instanceof nContainer) {
+        register(((nContainer) obj).getNodes());
+      } else if (obj instanceof nRealmNode) {
+        // add a new realm watch instance as a watcher for connections to this realm
+        register((nRealmNode) obj);
+      }
+    }
+  }
+
+  private synchronized void newConnection(String target, nConnectionDetails cd) {
+    System.out.println(target);
+    if (cd.getSubject().length == 1) {
+      System.out.println(
+          new java.util.Date(System.currentTimeMillis()) + " User [" + cd.getSubject()[0] + "] New Connection: " + cd
+              .getId() + " Subject: " + cd.getSubject()[0]);
+      System.out.println("Java Version: " + cd.getLanguageVersion());
+      System.out.println("OS: " + cd.getOSName() + ", version " + cd.getOSVersion());
+      System.out.println("Build Name: " + cd.getBuildNumber() + " Build Date: " + cd.getBuildDate());
+
+    } else {
+      System.out.println(
+          new java.util.Date(System.currentTimeMillis()) + " User [" + cd.getSubject()[0] + "] New Connection :" + cd
+              .getId());
+
+      for (int x = 0; x < cd.getSubject().length; x++) {
+        System.out
+            .println(new java.util.Date(System.currentTimeMillis()) + " Subject[" + x + "] " + cd.getSubject()[x]);
+      }
+
+      System.out.println("Java Version: " + cd.getLanguageVersion());
+      System.out.println("OS: " + cd.getOSName() + ", version " + cd.getOSVersion());
+      System.out.println("Build Name: " + cd.getBuildNumber() + " Build Date: " + cd.getBuildDate());
+    }
+    System.out.println();
+  }
+
+  private void delConnection(String target, nConnectionDetails cd) {
+    System.out.println(target);
+    System.out.println(
+        new java.util.Date(System.currentTimeMillis()) + " User [" + cd.getSubject()[0] + "] Del Connection : " + cd
+            .getId() + " Subject: " + cd.getSubject()[0]);
+    System.out.println("Java Version: " + cd.getLanguageVersion());
+    System.out.println("OS: " + cd.getOSName() + ", version " + cd.getOSVersion());
+    System.out.println("Build Name: " + cd.getBuildNumber() + " Build Date: " + cd.getBuildDate());
+    System.out.println();
+  }
+
+  private void register(nRealmNode node) throws nBaseAdminException {
+    nRealmNode rNode = (nRealmNode) node;
+    rNode.addObserver(this);
+    rNode.addConnectionListener(new nRealmWatch());
+    register(rNode.getNodes());
+  }
+
+  public void update(Observable obs) {
+    update(obs, null);
+  }
+
+  public void update(Observable obs, Object obj) {
+    try {
+      if (obj instanceof nLeafNode) {
+        ((nLeafNode) obj).addListener(new nChannelWatch((nLeafNode) obj));
+      } else if (obj instanceof nContainer) {
+        register(((nContainer) obj).getNodes());
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Class that implements the connection lister interface.
+   * This internal class will receive notifications when a sesison is added to
+   * or removed from a channel
+   */
+  public class nChannelWatch implements nConnectionListener {
+
+    nLeafNode myChannel;
+
+    /**
+     * Construct the channel watch with the channel leaf node
+     */
+    public nChannelWatch(nLeafNode chan) {
+      myChannel = chan;
+    }
+
+    /**
+     * Notification of a new channel connection
+     */
+    public void add(nConnectionDetails cd) {
+      if (cd instanceof nChannelConnectionDetails) {
+        nChannelConnectionDetails ccd = (nChannelConnectionDetails) cd;
+        nConnectionWatch.this
+            .newConnection("Chan: " + myChannel.getAbsolutePath() + " with name [" + ccd.getNamedSubscriber() + "]",
+                ccd);
+      }
+    }
+
+    /**
+     * Notification of a channel connection being removed
+     */
+    public void del(nConnectionDetails cd) {
+      nConnectionWatch.this.delConnection("Chan: " + myChannel.getAbsolutePath(), cd);
+    }
+  }
+
+  /**
+   * Class that implements the connection lister interface.
+   * This internal class will receive notifications when a subject connection
+   * is added or removed from the realm
+   */
+  public class nRealmWatch implements nConnectionListener {
+
+    /**
+     * Notification of a new session connection to the realm
+     */
+    public void add(nConnectionDetails cd) {
+      nConnectionWatch.this.newConnection("Realm: New Connection : ", cd);
+    }
+
+    /**
+     * Notification of a session connection being removed from the realm
+     */
+    public void del(nConnectionDetails cd) {
+      nConnectionWatch.this.delConnection("Realm: Del Connection : ", cd);
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nconnectionwatch\n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

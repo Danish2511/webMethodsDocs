@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>What's New In Universal Messaging 10.0</title><link rel="Prev" href="co-relnotes101_whats_new.html" title="Previous" /><link rel="Next" href="co-relnotes912_whats_new.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-relnotes100_whats_new.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN9IZifO0DPtT5ko_002fzrKSFHg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-relnotes100_whats_new.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_release_notes.html#wwconnect_header">Release Notes</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">What's New In Universal Messaging 10.0</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ECCFM" class="Heading_1">What's New In Universal Messaging 10.0</div><div id="wwID0EKCFM" class="Body">Universal Messaging 10.0 is the successor of Universal Messaging 9.12.</div><div id="wwID0EPCFM" class="Body">Universal Messaging 10.0 includes new features, enhancements, and changes as described in the following topics.</div><div id="wwID0E2CFM" class="Section_Title">Durable subscribers can be browsed in Command Central</div><div id="wwID0EADFM" class="Body">Command Central can now be used to browse individual messages in durable subscribers in a Universal Messaging server instance, including messages waiting to be received by Integration Server triggers. You can view the size of individual messages and some properties of each message. You can also view the payload of string messages. All or individual messages can be deleted from the durable subscriber (for some durable subscriber types).</div><div id="wwID0ENDFM" class="Section_Title">Enhanced Command Central support for Universal Messaging</div><div id="wwID0ESDFM" class="Body">Command Central can now be used to configure realm ACLs for Universal Messaging, allowing you to control which users can perform what actions at the realm level. You can also use Command Central to configure Java system properties for Universal Messaging. For Universal Messaging clusters, Command Central now displays whether each running instance is a master or slave in the cluster.</div><div id="wwID0EXDFM" class="Body">These capabilities can be accessed using the Command Central web user interface, command-line interface, REST API, and composite templates.</div><div id="wwID0EEEFM" class="Section_Title">Utility for migrating webMethods Broker gateways configurations to Universal Messaging</div><div id="wwID0EJEFM" class="Body">For webMethods Broker users who have configured territories and gateways and have large numbers of document types (topics) configured in the gateway connections, migrating these to equivalent remote joins in Universal Messaging previously involved a lot of manual effort. Now, you can use a new utility that can read the gateway configuration from webMethods Broker and automatically establish the same remote joins in Universal Messaging.</div><div id="wwID0EWEFM" class="Section_Title">Servers can be instructed not to restrict incoming messages from specific clients in low memory situations</div><div id="wwID0E2EFM" class="Body">A client session can request to bypass the existing server-side low-memory throttling. This is intended to allow administrators or administrative services to continue to be able to connect in order to resolve the low-memory situation.</div><div id="wwID0EIFFM" class="Section_Title">JNDI assets can now be stored in existing (non-Universal Messaging) JNDI providers</div><div id="wwID0ENFFM" class="Body">Users who wish to use a JNDI provider for binding JNDI assets such as Connection Factories and Destinations can now store their Universal Messaging JNDI assets in a JNDI provider of their choice. This capability is only available through the respective API.</div><div id="wwID0E1FFM" class="Section_Title">Cluster side-by-side upgrades to new machines are easier to manage</div><div id="wwID0E6FFM" class="Body">You can now use a migration utility to migrate cluster configurations to machines that are on different hosts from the original cluster.</div><div id="wwID0EMGFM" class="Section_Title">Shared durables re-architected to improve efficiency and robustness</div><div id="wwID0ERGFM" class="Body">The implementation of shared durables has been re-written to improve efficiency. The new implementation performs tracking of durable objects in-place on the channel, rather than relying on additional internal stores. This approach saves memory and reduces the complexity of the solution, improving robustness. A new API has been developed to manage durable objects through the Universal Messaging native API. The Universal Messaging JMS library has also been updated to utilize the new durable implementation.</div><div id="wwID0E5GFM" class="Section_Title">Configuration using Enterprise Manager is simplified</div><div id="wwID0EDHFM" class="Body">Enterprise Manager hides a number of configuration settings behind an <span class="uicontrol">Advanced</span> button. These hidden settings are ones that are rarely recommended to be modified.</div><div id="wwID0EVHFM" class="Section_Title">Additional tools are now available showing how to use the API with datagroups and illustrating how to publish and subscribe</div><div id="wwID0E1HFM" class="Body">Tools are provided that allow management of datagroups and illustrate how to use publish and subscribe.</div><div id="wwID0EHIFM" class="Section_Title">Robustness improvements for installations using the default out-of-the-box configuration</div><div id="wwID0EMIFM" class="Body">The default configuration for new installations has been reviewed and tested to ensure Universal Messaging is robust.</div><div id="wwID0EZIFM" class="Section_Title">Named object ID is a concatenation of client ID and durable subscriber ID</div><div id="wwID0E5IFM" class="Body">Named objects IDs are now a concatenation of the client ID and the durable subscriber ID. Previously Universal Messaging just used the durable subscriber ID provided by the client.</div><div id="wwID0ELJFM" class="Section_Title">Removed and deprecated features in 10.0</div><div id="wwID0EQJFM" class="Body">The following Universal Messaging features are now deprecated or have been removed in Universal Messaging 10.0:</div><div id="wwID0EKKFM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The <span class="uicontrol">SharedDurableFilterBound</span> option, found in the <span class="uicontrol">Durable Config</span> group in the administrative API and Enterprise Manager/Command Central, has been migrated to be a System Property (<span class="uicontrol">-DQueuedSharedDurableFilterBound</span>). This new system property is deprecated and will be removed in a future release.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

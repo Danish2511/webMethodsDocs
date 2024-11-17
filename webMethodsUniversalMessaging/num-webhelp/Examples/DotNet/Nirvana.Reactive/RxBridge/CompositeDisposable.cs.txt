@@ -1,0 +1,192 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+using System.Collections;
+using System.Collections.Generic;
+
+namespace MyChannels.Nirvana
+{
+    internal sealed class CompositeDisposable : ICollection<IDisposable>, IEnumerable<IDisposable>, IEnumerable, IDisposable
+    {
+        private readonly List<IDisposable> disposables;
+        private bool disposed;
+
+        public CompositeDisposable()
+        {
+            this.disposables = new List<IDisposable>(0x10);
+        }
+
+        public CompositeDisposable(IEnumerable<IDisposable> disposables)
+        {
+            if (disposables == null)
+            {
+                throw new ArgumentNullException("disposables");
+            }
+            this.disposables = new List<IDisposable>(disposables);
+        }
+
+        public CompositeDisposable(params IDisposable[] disposables)
+        {
+            if (disposables == null)
+            {
+                throw new ArgumentNullException("disposables");
+            }
+            this.disposables = new List<IDisposable>(disposables);
+        }
+
+        public CompositeDisposable(int capacity)
+        {
+            if (capacity < 0)
+            {
+                throw new ArgumentOutOfRangeException("capacity");
+            }
+            this.disposables = new List<IDisposable>(capacity);
+        }
+
+        public void Add(IDisposable item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+            bool disposed = false;
+            lock (this.disposables)
+            {
+                disposed = this.disposed;
+                if (!this.disposed)
+                {
+                    this.disposables.Add(item);
+                }
+            }
+            if (disposed)
+            {
+                item.Dispose();
+            }
+        }
+
+        public void Clear()
+        {
+            IDisposable[] disposableArray = null;
+            lock (this.disposables)
+            {
+                disposableArray = this.disposables.ToArray();
+                this.disposables.Clear();
+            }
+            foreach (IDisposable disposable in disposableArray)
+            {
+                disposable.Dispose();
+            }
+        }
+
+        public bool Contains(IDisposable item)
+        {
+            lock (this.disposables)
+            {
+                return this.disposables.Contains(item);
+            }
+        }
+
+        public void CopyTo(IDisposable[] array, int arrayIndex)
+        {
+            if (array == null)
+            {
+                throw new ArgumentNullException("array");
+            }
+            if ((arrayIndex < 0) || (arrayIndex >= array.Length))
+            {
+                throw new ArgumentOutOfRangeException("arrayIndex");
+            }
+            lock (this.disposables)
+            {
+                Array.Copy(this.disposables.ToArray(), 0, array, arrayIndex, array.Length - arrayIndex);
+            }
+        }
+
+        public void Dispose()
+        {
+            IDisposable[] disposableArray = null;
+            lock (this.disposables)
+            {
+                if (!this.disposed)
+                {
+                    this.disposed = true;
+                    disposableArray = this.disposables.ToArray();
+                    this.disposables.Clear();
+                }
+            }
+            if (disposableArray != null)
+            {
+                foreach (IDisposable disposable in disposableArray)
+                {
+                    disposable.Dispose();
+                }
+            }
+        }
+
+        public IEnumerator<IDisposable> GetEnumerator()
+        {
+            lock (this.disposables)
+            {
+                return ((IEnumerable<IDisposable>)this.disposables.ToArray()).GetEnumerator();
+            }
+        }
+
+        public bool Remove(IDisposable item)
+        {
+            if (item == null)
+            {
+                throw new ArgumentNullException("item");
+            }
+            bool flag = false;
+            lock (this.disposables)
+            {
+                if (!this.disposed)
+                {
+                    flag = this.disposables.Remove(item);
+                }
+            }
+            if (flag)
+            {
+                item.Dispose();
+            }
+            return flag;
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return this.GetEnumerator();
+        }
+
+        // Properties
+        public int Count
+        {
+            get
+            {
+                return this.disposables.Count;
+            }
+        }
+
+        public bool IsDisposed
+        {
+            get
+            {
+                return this.disposed;
+            }
+        }
+
+        public bool IsReadOnly
+        {
+            get
+            {
+                return false;
+            }
+        }
+    }
+}

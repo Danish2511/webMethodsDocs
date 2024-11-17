@@ -1,0 +1,167 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Glossary</title><link rel="Prev" href="co-overview_reference_guide.html" title="Previous" /><link rel="Next" href="co-javadoc_overview.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/to-glossary.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN7KHCIW2CLszuWOCQoDlZAA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/to-glossary.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_reference_guide.html#wwconnect_header">Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Glossary</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EV2AX" class="Heading_1">Glossary</div><div id="wwID0E42AX" class="Body">This glossary provides an overview of technical terms used in the product documentation.</div><div id="wwID0EJ3AX" class="Section_Title">ACL</div><div id="wwID0EO3AX" class="Body">Universal Messaging's Access Control List (ACL) controls client connection requests and subsequent Universal Messaging operations. By default, a realm will always perform access control checks.</div><div id="wwID0ET3AX" class="Body">The Universal Messaging realm has an ACL associated with it. The ACL contains a list of 
+    <a href="../num-webhelp/to-glossary.html#wwID0ECMBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">subjects</span></a> and the operations that each subject can perform on the realm.</div><div id="wwID0EC4AX" class="Body">Each channel, queue and service also has an associated ACLs that defines subjects and the operations the subjects can perform. Each type of acl entry has a number of flags that can be set to true or false in order to specify whether the subject can or can't perform the operation.</div><div id="wwID0EP4AX" class="Section_Title">Channel</div><div id="wwID0EU4AX" class="Body">A channel is the distribution mechanism for an asynchronous <span class="term">publish/subscribe</span> messaging model.</div><div id="wwID0E54AX" class="Body">In this model, the 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGKBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">publisher</span></a> and 
+    <a href="../num-webhelp/to-glossary.html#wwID0E66AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">consumer</span></a> of an 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGEBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">event</span></a> (or "message") are decoupled, but are both connected to a common channel which exists within the Universal Messaging realm server.</div><div id="wwID0E65AX" class="Body">The publisher publishes its data as events to the channel. As messages arrive on a channel, the server automatically sends them to all consumers subscribed to the channel.</div><div id="wwID0EE6AX" class="Body">Universal Messaging supports multiple publishers and consumers on a single channel.</div><div id="wwID0EJ6AX" class="Body">Note: the terms "<span class="term">channel</span>" and "<span class="term">topic</span>" are used interchangeably throughout this documentation.</div><div id="wwID0E66AX" class="Section_Title">Consumer</div><div id="wwID0EEABX" class="Body">A consumer is a Universal Messaging client that receives 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGEBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">events</span></a> from a Universal Messaging 
+    <a href="../num-webhelp/to-glossary.html#wwID0EP4AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">channel</span></a> or 
+    <a href="../num-webhelp/to-glossary.html#wwID0ENRBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">queue</span></a>.</div><div id="wwID0EFBBX" class="Body">Note: the terms "<span class="term">consumer</span>" and "<span class="term">subscriber</span>" are used interchangeably throughout this documentation.</div><div id="wwID0E2BBX" class="Section_Title">Dictionary</div><div id="wwID0EACBX" class="Body">Event Dictionaries provide an accessible and flexible way to store any number of message properties for delivery within a Universal Messaging 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGEBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">event</span></a>.</div><div id="wwID0EPCBX" class="Body">Event Dictionaries are quite similar to a hash table, supporting primitive types, arrays, and nested dictionaries.</div><div id="wwID0EUCBX" class="Body">
+    <a href="../num-webhelp/to-glossary.html#wwID0ERGBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">Filtering</span></a> allows subscribers to receive only specific subsets of a channel's events by applying the server's advanced filtering capabilities to the contents of each event's dictionary.</div><div id="wwID0EKDBX" class="Section_Title">Enterprise Manager</div><div id="wwID0EPDBX" class="Body">Universal Messaging's Enterprise Manager is a powerful GUI management tool that allows you to control, configure and administer all aspects of any Universal Messaging realm or clusters of realms.</div><div id="wwID0EUDBX" class="Body">When you connect to a Universal Messaging realm in the Enterprise Manager, all resources and services found within the realm namespace are displayed in a tree structure under the realm node itself. It is also possible to connect to and view multiple Universal Messaging realm servers from a single Enterprise Manager instance.</div><div id="wwID0EZDBX" class="Body">Enterprise Manager is completely implemented using the Universal Messaging Management API, so any of its features can be easily integrated into bespoke or 3rd party systems management services.</div><div id="wwID0EGEBX" class="Section_Title">Event (Message)</div><div id="wwID0ELEBX" class="Body">An event is the message object in which a 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGKBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">publisher</span></a> inserts data to be published. Events are published to either a Universal Messaging 
+    <a href="../num-webhelp/to-glossary.html#wwID0EP4AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">channel</span></a> or 
+    <a href="../num-webhelp/to-glossary.html#wwID0ENRBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">queue</span></a>. From there, it is passed on to 
+    <a href="../num-webhelp/to-glossary.html#wwID0E66AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">consumers</span></a>. Events are language agnostic, which means that clients using different languages can interact seamlessly.</div><div id="wwID0EVFBX" class="Body">An event may be a simple byte array or contain more complex structures such as 
+    <a href="../num-webhelp/to-glossary.html#wwID0E2BBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">dictionaries</span></a>, Google Protocol Buffers, JSON or JMS events.</div><div id="wwID0EEGBX" class="Body">Note: the terms "event" and "message" are used interchangeably throughout this documentation.</div><div id="wwID0ERGBX" class="Section_Title">Filtering</div><div id="wwID0EWGBX" class="Body">Universal Messaging provides a server side filtering engine that allows only 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGEBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">events</span></a> meeting certain criteria to be delivered to consumers.</div><div id="wwID0EFHBX" class="Body">Standard filtering, as defined by JMS, allows events to be evaluated based on the value of the 
+    <a href="../num-webhelp/to-glossary.html#wwID0E2BBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">dictionary</span></a> keys prior to delivering the event to the consumer. Universal Messaging supports not only standard filtering, but also filtering based on arrays and nested dictionaries contained within event dictionaries. There is no limit to the depth of nested properties that can be filtered.</div><div id="wwID0EUHBX" class="Body">Universal Messaging events can contain not only an event dictionary and a tag, but also a byte array payload of data. Universal Messaging consequently supports a yet more advanced form of filtering based on the content of the byte array data itself. In addition, filtering is possible based on time and consumer location.</div><div id="wwID0EBIBX" class="Section_Title">Fragmentation</div><div id="wwID0EGIBX" class="Body">Although there is no specific limit to the size of events that can be published to Universal Messaging, from a network perspective it is usually more efficient to publish several smaller messages than one large one.</div><div id="wwID0ELIBX" class="Body">Publishers using the Universal Messaging Enterprise APIs can choose to transparently fragment large events into smaller chunks for publishing. The Universal Messaging client API will transparently reconstitute the event at delivery.</div><div id="wwID0EYIBX" class="Section_Title">Forever IFrame</div><div id="wwID0E4IBX" class="Body">Forever IFrame is a technique which allows a web server to stream data into a client browser. This is done through a hidden inline frame in the page source which is declared to be infinitely long. It is one of many push technologies under the umbrella term Comet.</div><div id="wwID0ECJBX" class="Body">Universal Messaging's API for JavaScript supports Forever IFrame, allowing it to communicate with a server using this delivery mode.</div><div id="wwID0EPJBX" class="Section_Title">LongPolling</div><div id="wwID0EUJBX" class="Body">LongPolling is a technique which allows a web browser running as a client to asynchronously receive updates from a server machine. It is one of many push technologies under the umbrella term Comet.</div><div id="wwID0EZJBX" class="Body">Universal Messaging's API for JavaScript supports LongPolling, allowing it to communicate with a server using this delivery mode.</div><div id="wwID0EGKBX" class="Section_Title">Publisher</div><div id="wwID0ELKBX" class="Body">A publisher is a Universal Messaging client that sends data or messages as 
+    <a href="../num-webhelp/to-glossary.html#wwID0EGEBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">events</span></a> to a Universal Messaging 
+    <a href="../num-webhelp/to-glossary.html#wwID0EP4AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">channel</span></a> or 
+    <a href="../num-webhelp/to-glossary.html#wwID0ENRBX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">queue</span></a>.</div><div id="wwID0EMLBX" class="Body">Note: the terms "<span class="term">publisher</span>" and "<span class="term">sender</span>" are used interchangeably throughout this documentation.</div><div id="wwID0ECMBX" class="Section_Title">Subject</div><div id="wwID0EHMBX" class="Body">A subject corresponds to the user information for a publisher or subscriber's realm connection. Subjects are used when defining 
+    <a href="../num-webhelp/to-glossary.html#wwID0EJ3AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">ACLs</span></a>.</div><div id="wwID0EWMBX" class="Body">A subject is comprised of a <span class="term">username</span> and a <span class="term">host</span>:</div><div id="wwID0EZNBX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The username component of the subject is the name of the user taken from either the operating system of the machine they are connecting from, or the certificate name if they are using an SSL protocol.</div><div id="wwID0E4OBX" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The host component of the subject is either the IP address or the hostname of the machine from which they are connecting.</div><div id="wwID0ERPBX" class="Body">The subject takes the form of <span class="codeph">username@host</span>; for example:</div><div id="wwID0E2PBX" class="Preformatted"><br />johnsmith@192.168.1.2<br /></div><div id="wwID0EJQBX" class="Section_Title">Topic</div><div id="wwID0EOQBX" class="Body">A topic is a JMS term which translates directly to a Universal Messaging 
+    <a href="../num-webhelp/to-glossary.html#wwID0EP4AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">channel</span></a>. Consequently, the terms "<span class="term">channel</span>" and "<span class="term">topic</span>" are used interchangeably throughout this documentation.</div><div id="wwID0ENRBX" class="Section_Title">Queue</div><div id="wwID0ESRBX" class="Body">A queue is much like a 
+    <a href="../num-webhelp/to-glossary.html#wwID0EP4AX"
+   
+     title="Glossary"
+    ><span class="heading-no-quotes">channel</span></a>; the primary difference is that only one consumer can read any individual event from a queue. Consumed events are immediately removed from the queue, and are no longer available for consumption by any other consumer. Thus, a queue guarantees that each event is delivered only once.</div><div id="wwID0EBSBX" class="Body">If more than one consumer is subscribed to a queue, then queued events are distributed amongst consumers in a round-robin fashion.</div><div id="wwID0EOSBX" class="Section_Title">Realm</div><div id="wwID0ETSBX" class="Body">A Universal Messaging realm is the name given to a single Universal Messaging server. Universal Messaging realms can support multiple network interfaces, optionally supporting different Universal Messaging protocols. Each such interface is represented by a URL, known as an RNAME. Thus a single realm server can have more than one RNAME.</div><div id="wwID0EYSBX" class="Body">Each Universal Messaging realm defines a namespace of its own resources (such as channels and queues), but it is possible to merge the namespaces of multiple realms into one large federated namespace for transparent client access to resources on different realms.</div><div id="wwID0E4SBX" class="Body">Universal Messaging also provides the ability to create clusters of realms that share common resources within the namespace.</div><div id="wwID0EKTBX" class="Section_Title">RNAME</div><div id="wwID0EPTBX" class="Body">An RNAME is used by Universal Messaging Clients to specify how a connection should be made to a Universal Messaging realm server. The URL describes a particular interface on the Universal Messaging realm server.</div><div id="wwID0E3TBX" class="Section_Title">WebSockets</div><div id="wwID0EBUBX" class="Body">WebSocket is a technology for providing full-duplex connections over a TCP socket within the web browser. The WebSocket API is currently being developed by W3C and the protocol standardised by IETF.</div><div id="wwID0EGUBX" class="Body">Universal Messaging's API for JavaScript currently supports WebSockets for all browsers which implement the standard.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,390 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to change permissions for a subject on a channel
+ */
+
+public class nChangeChanAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  public static final String everyone = "everyone";
+  public static final String everywhere = "everywhere";
+
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private boolean pattern = false;
+  private boolean factory = false;
+  private boolean canListAcl = false;
+  private boolean canModifyAcl = false;
+  private boolean fullPrivileges = false;
+  private boolean canGetLastEid = false;
+  private boolean canRead = false;
+  private boolean canWrite = false;
+  private boolean canPurge = false;
+  private boolean canNamed = false;
+  private nSessionAttributes attr = null;
+  private String channelName = null;
+  private nRealmNode node = null;
+  private nACL acl = null;
+  private String changeArgs[] = null;
+
+  /**
+   * Construct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nChangeChanAclEntry(String args[]) {
+    try {
+      changeArgs = args;
+      // set the parameters required for this operation
+      processArgs(changeArgs);
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      System.out.print("waiting for namepsace construction..... ");
+      node.waitForEntireNameSpace();
+      System.out.println("finished");
+      // call the method to search from the root realm node
+      searchNode(node);
+      // close the realm node which will close all connections to child nodes
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * set the permissions on the channel
+   */
+  public void setChannel(nLeafNode p_leaf) {
+    try {
+      // get the acl for the channel node
+      acl = p_leaf.getACLs();
+      System.out.println("Creating new entry for " + name + "@" + host);
+      // create a new acl entry with the name and host
+      nChannelACLEntry lookup = (nChannelACLEntry) acl.find(name + "@" + host);
+      // set the current permissions from the acl entry
+      setCurrent(lookup);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Current ACL Settings for " + p_leaf.getName() + " on realm " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump(lookup);
+      // now set those which have changed
+      setChanges();
+      // change the entry in the acl
+      p_leaf.modACLEntry(changeACLEntry(lookup));
+      // set the node acl to the new acl list
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("New ACL Settings for " + p_leaf.getName() + " on realm " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump(lookup);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of child nodes for other realms and channels
+   */
+  private void searchNodes(Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode leaf = (nLeafNode) obj;
+        String fullyQualifiedName = leaf.getAbsolutePath();
+        System.out.println("Found channel " + fullyQualifiedName);
+        if (pattern) {
+          if ((leaf.isChannel()) && (fullyQualifiedName.indexOf(channelName) != -1)) {
+            // we have found a channel that matches the name specified, so set the permissions
+            setChannel(leaf);
+          }
+        } else if (factory) {
+          if ((leaf.isChannel()) && (fullyQualifiedName.startsWith(channelName))) {
+            // we have found a channel that matches the name specified, so set the permissions
+            setChannel(leaf);
+          }
+        } else if ((leaf.isChannel()) && (fullyQualifiedName.equals(channelName))) {
+          // we have found a channel that matches the name specified, so set the permissions
+          setChannel(leaf);
+        }
+      } else if (obj instanceof nRealmNode) {
+        // we have found another realm node, so search this node for channels
+        searchNode((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNodes(cont.getNodes());
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      System.out.println("Found node " + p_node.getName());
+      searchNodes(p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Change an acl entry and set the permissions based on the permissions flags
+   */
+  public nChannelACLEntry changeACLEntry(nChannelACLEntry aclEntry) {
+    return this.setPermissions(aclEntry);
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * This will set the permissions flags to what the current acl settings are
+   * This is so that only those permissions that you wish to change are changed
+   */
+  public void setCurrent(nChannelACLEntry entry) {
+    canListAcl = entry.canList();
+    canModifyAcl = entry.canModify();
+    fullPrivileges = entry.hasFullPrivileges();
+    canGetLastEid = entry.canGetLastEID();
+    canRead = entry.canRead();
+    canWrite = entry.canWrite();
+    canPurge = entry.canPurge();
+    canNamed = entry.canUseNamedSubscription();
+  }
+
+  /**
+   * Set the permissions on the channel acl entry
+   */
+  public nChannelACLEntry setPermissions(nChannelACLEntry aclEntry) {
+    aclEntry.setList(canListAcl);
+    aclEntry.setModify(canModifyAcl);
+    aclEntry.setFullPrivileges(fullPrivileges);
+    aclEntry.setGetLastEID(canGetLastEid);
+    aclEntry.setRead(canRead);
+    aclEntry.setWrite(canWrite);
+    aclEntry.setPurge(canPurge);
+    aclEntry.setUseNamedSubscription(canNamed);
+    return aclEntry;
+  }
+
+  /**
+   * Output to system.out the permissions the current permissions on the acl entry
+   */
+  public void dump(nChannelACLEntry entry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL               : " + entry.canList());
+    System.out.println("Set ACL                : " + entry.canModify());
+    System.out.println("Full Privileges        : " + entry.hasFullPrivileges());
+    System.out.println("Get Last EID           : " + entry.canGetLastEID());
+    System.out.println("Read channel           : " + entry.canRead());
+    System.out.println("Write to channel       : " + entry.canWrite());
+    System.out.println("Purge channel          : " + entry.canPurge());
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Output to system.out the permissions that will be set
+   */
+  public void dump() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("ACL will be set to.... ");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL               : " + canListAcl);
+    System.out.println("Set ACL                : " + canModifyAcl);
+    System.out.println("Full Privileges        : " + fullPrivileges);
+    System.out.println("Get Last EID           : " + canGetLastEid);
+    System.out.println("Read channel           : " + canRead);
+    System.out.println("Write to channel       : " + canWrite);
+    System.out.println("Purge channel          : " + canPurge);
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String[] args) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    } else if (name.equals(everyone)) {
+      name = "*";
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    } else if (host.equals(everywhere)) {
+      host = "*";
+    }
+    channelName = System.getProperty("CHANNEL", null);
+    if (channelName == null) {
+      Usage();
+      System.exit(1);
+    }
+    if (channelName.indexOf("%") != -1) {
+      if (channelName.startsWith("%") && channelName.endsWith("%")) {
+        channelName = channelName.substring(1);
+        channelName = channelName.substring(0, channelName.length() - 1);
+        pattern = true;
+      }
+      if (channelName.endsWith("%")) {
+        channelName = channelName.substring(0, channelName.length() - 1);
+        factory = true;
+      }
+    }
+  }
+
+  /**
+   * This method will set the permissions flags, if the command line arguments have been
+   * passed for specific permissions.
+   * The command line arguments are + or - for either add or remove permission, followed
+   * by the actual permission flag
+   */
+  public void setChanges() {
+    for (int i = 0; i < changeArgs.length; i++) {
+      boolean hasPermission;
+      if (changeArgs[i].startsWith("+")) {
+        hasPermission = true;
+      } else if (changeArgs[i].startsWith("-")) {
+        hasPermission = false;
+      } else {
+        continue;
+      }
+      String permission = changeArgs[i].substring(1);
+      System.out.println("operation " + hasPermission + " for permission " + permission);
+      if (permission.equalsIgnoreCase("list_acl")) {
+        canListAcl = hasPermission;
+      } else if (permission.equalsIgnoreCase("modify_acl")) {
+        canModifyAcl = hasPermission;
+      } else if (permission.equalsIgnoreCase("full")) {
+        fullPrivileges = hasPermission;
+      } else if (permission.equalsIgnoreCase("read")) {
+        canRead = hasPermission;
+      } else if (permission.equalsIgnoreCase("write")) {
+        canWrite = hasPermission;
+      } else if (permission.equalsIgnoreCase("purge")) {
+        canPurge = hasPermission;
+      } else if (permission.equalsIgnoreCase("named")) {
+        canNamed = hasPermission;
+      } else if (permission.equalsIgnoreCase("all_perms")) {
+        canListAcl = hasPermission;
+        canModifyAcl = hasPermission;
+        canGetLastEid = hasPermission;
+        canRead = hasPermission;
+        canWrite = hasPermission;
+        canPurge = hasPermission;
+        canNamed = hasPermission;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("CHANNEL", args[0]);
+        getOptions(null);
+        break;
+      case 2:
+        System.setProperty("CHANNEL", args[0]);
+        System.setProperty("NAME", args[1]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("CHANNEL", args[0]);
+        System.setProperty("NAME", args[1]);
+        System.setProperty("HOST", args[2]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * CHANNEL
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nChangeChanAclEntry setAcl = new nChangeChanAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println(
+        "nchangechanacl <channel name> <user> <host> [+/-list_acl] [+/-modify_acl] [+/-full] [+/-last_eid] [+/-read] [+/-write] [+/-purge] [+/-named] [+/-all_perms]\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<channel name> - Channel name parameter for the channel to change the ACL entry for");
+    System.out.println("<user> - User name parameter for the channel to change the ACL entry for");
+    System.out.println("<host> - Host name parameter for the channel to change the ACL entry for");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[+/-] - Prepending + or - specifies whether to add or remove a permission");
+    System.out.println("[list_acl] - Specifies that the list acl permission should be added/removed");
+    System.out.println("[modify_acl] - Specifies that the modify acl permission should be added/removed");
+    System.out.println("[full] - Specifies that the full permission should be added/removed");
+    System.out.println("[last_eid] - Specifies that the get last EID permission should be added/removed");
+    System.out.println("[read] - Specifies that the read permission should be added/removed");
+    System.out.println("[write] - Specifies that the write permission should be added/removed");
+    System.out.println("[purge] - Specifies that the purge permission should be added/removed");
+    System.out.println("[named] - Specifies that the used named subscriber permission should be added/removed");
+    System.out.println("[all_perms] - Specifies that all permissions should be added/removed");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

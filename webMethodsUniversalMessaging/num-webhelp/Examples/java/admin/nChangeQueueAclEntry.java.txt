@@ -1,0 +1,382 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to change permissions for a subject on a queue
+ */
+
+public class nChangeQueueAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  public static final String everyone = "everyone";
+  public static final String everywhere = "everywhere";
+
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private boolean pattern = false;
+  private boolean factory = false;
+  private boolean canListAcl = false;
+  private boolean canModifyAcl = false;
+  private boolean fullPrivileges = false;
+  private boolean canGetLastEid = false;
+  private boolean canPeek = false;
+  private boolean canPush = false;
+  private boolean canPurge = false;
+  private boolean canPop = false;
+  private nSessionAttributes attr = null;
+  private String queueName = null;
+  private nRealmNode node = null;
+  private nACL acl = null;
+  private String changeArgs[] = null;
+
+  /**
+   * Consruct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nChangeQueueAclEntry(String args[]) {
+    try {
+      changeArgs = args;
+      // set the parameters required for this operation
+      processArgs(changeArgs);
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      System.out.print("waiting for namepsace construction..... ");
+      node.waitForEntireNameSpace();
+      System.out.println("finished");
+      // begin searching the root realm node
+      searchNode(node);
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * set the permissions on this queue to whatever is passed as command line args
+   */
+  public void setQueue(nLeafNode p_leaf) {
+    try {
+      // get the acl for the queue node
+      acl = p_leaf.getACLs();
+      System.out.println("Creating new entry for " + name + "@" + host);
+      // create a new acl entry with the name and host
+      nChannelACLEntry lookup = (nChannelACLEntry) acl.find(name + "@" + host);
+      // set the current permissions from the acl entry
+      setCurrent(lookup);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Current ACL Settings for " + p_leaf.getName() + " on realm " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump(lookup);
+      // now set those which have changed
+      setChanges();
+      p_leaf.modACLEntry(changeACLEntry(lookup));
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("New ACL Settings for " + p_leaf.getName() + " on realm " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump(lookup);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of chil nodes for other realms and queues
+   */
+  private void searchNodes(Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode leaf = (nLeafNode) obj;
+        String fullyQualifiedName = leaf.getAbsolutePath();
+        System.out.println("Found queue " + fullyQualifiedName);
+        if (pattern) {
+          if ((leaf.isQueue()) && (fullyQualifiedName.indexOf(queueName) != -1)) {
+            // we have found a queue that matches the name specified, so set the permissions
+            setQueue(leaf);
+          }
+        } else if (factory) {
+          if ((leaf.isQueue()) && (fullyQualifiedName.startsWith(queueName))) {
+            // we have found a queue that matches the name specified, so set the permissions
+            setQueue(leaf);
+          }
+        } else if ((leaf.isQueue()) && (fullyQualifiedName.equals(queueName))) {
+          // we have found a queue that matches the name specified, so set the permissions
+          setQueue(leaf);
+        }
+      } else if (obj instanceof nRealmNode) {
+        // we have found another realm node, so search this node for queues
+        searchNode((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNodes(cont.getNodes());
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      System.out.println("Found node " + p_node.getName());
+      searchNodes(p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Change an acl entry and set the permissions based on the permissions flags
+   */
+  public nChannelACLEntry changeACLEntry(nChannelACLEntry aclEntry) {
+    return this.setPermissions(aclEntry);
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * This will set the permissions flags to what the current acl settings are
+   * This is so that only those permissions that you wish to change are changed
+   */
+  public void setCurrent(nChannelACLEntry entry) {
+    canListAcl = entry.canList();
+    canModifyAcl = entry.canModify();
+    fullPrivileges = entry.hasFullPrivileges();
+    canGetLastEid = entry.canGetLastEID();
+    canPeek = entry.canRead();
+    canPush = entry.canWrite();
+    canPurge = entry.canPurge();
+  }
+
+  /**
+   * Set the permissions on the queue acl entry
+   */
+  public nChannelACLEntry setPermissions(nChannelACLEntry aclEntry) {
+    aclEntry.setList(canListAcl);
+    aclEntry.setModify(canModifyAcl);
+    aclEntry.setFullPrivileges(fullPrivileges);
+    aclEntry.setGetLastEID(canGetLastEid);
+    aclEntry.setRead(canPeek);
+    aclEntry.setWrite(canPush);
+    aclEntry.setPurge(canPurge);
+    aclEntry.setPop(canPop);
+    return aclEntry;
+  }
+
+  /**
+   * Output to system.out the permissions that have been set
+   */
+  public void dump(nChannelACLEntry entry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL              : " + entry.canList());
+    System.out.println("Set ACL               : " + entry.canModify());
+    System.out.println("Full Privileges       : " + entry.hasFullPrivileges());
+    System.out.println("Get Last EID          : " + entry.canGetLastEID());
+    System.out.println("Peek queue            : " + entry.canRead());
+    System.out.println("Push to queue         : " + entry.canWrite());
+    System.out.println("Purge queue           : " + entry.canPurge());
+    System.out.println("Pop queue             : " + entry.canPop());
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Output to system.out the permissions that will be set
+   */
+  public void dump() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("ACL will be set to.... ");
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL              : " + canListAcl);
+    System.out.println("Set ACL               : " + canModifyAcl);
+    System.out.println("Full Privileges       : " + fullPrivileges);
+    System.out.println("Get Last EID          : " + canGetLastEid);
+    System.out.println("Peek queue            : " + canPeek);
+    System.out.println("Push to queue         : " + canPush);
+    System.out.println("Purge queue           : " + canPurge);
+    System.out.println("Pop queue             : " + canPop);
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    }
+    queueName = System.getProperty("QUEUE", null);
+    if (queueName == null) {
+      Usage();
+      System.exit(1);
+    }
+    if (queueName.indexOf("%") != -1) {
+      if (queueName.startsWith("%") && queueName.endsWith("%")) {
+        queueName = queueName.substring(1);
+        queueName = queueName.substring(0, queueName.length() - 1);
+        pattern = true;
+      }
+      if (queueName.endsWith("%")) {
+        queueName = queueName.substring(0, queueName.length() - 1);
+        factory = true;
+      }
+    }
+  }
+
+  /**
+   * This method will set the permissions flags, if the command line arguments have been
+   * passed for specific permissions.
+   * The command line arguments are + or - for either add or remove permission, followed
+   * by the actual permission flag
+   */
+  public void setChanges() {
+    for (int i = 0; i < changeArgs.length; i++) {
+      boolean hasPermission;
+      if (changeArgs[i].startsWith("+")) {
+        hasPermission = true;
+      } else if (changeArgs[i].startsWith("-")) {
+        hasPermission = false;
+      } else {
+        continue;
+      }
+      String permission = changeArgs[i].substring(1);
+      System.out.println("operation " + hasPermission + " for permission " + permission);
+      if (permission.equalsIgnoreCase("list_acl")) {
+        canListAcl = hasPermission;
+      } else if (permission.equalsIgnoreCase("modify_acl")) {
+        canModifyAcl = hasPermission;
+      } else if (permission.equalsIgnoreCase("full")) {
+        fullPrivileges = hasPermission;
+      } else if (permission.equalsIgnoreCase("peek")) {
+        canPeek = hasPermission;
+      } else if (permission.equalsIgnoreCase("push")) {
+        canPush = hasPermission;
+      } else if (permission.equalsIgnoreCase("purge")) {
+        canPurge = hasPermission;
+      } else if (permission.equalsIgnoreCase("pop")) {
+        canPop = hasPermission;
+      } else if (permission.equalsIgnoreCase("all_perms")) {
+        canListAcl = hasPermission;
+        canModifyAcl = hasPermission;
+        canPeek = hasPermission;
+        canPush = hasPermission;
+        canPurge = hasPermission;
+        canPop = hasPermission;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("QUEUE", args[0]);
+        getOptions(null);
+        break;
+      case 2:
+        System.setProperty("QUEUE", args[0]);
+        System.setProperty("NAME", args[1]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("QUEUE", args[0]);
+        System.setProperty("NAME", args[1]);
+        System.setProperty("HOST", args[2]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * QUEUE
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nChangeQueueAclEntry setAcl = new nChangeQueueAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println(
+        "nchangequeueacl <queue name> <user> <host> [+/-list_acl] [+/-modify_acl] [+/-full] [+/-peek] [+/-push] [+/-purge] [+/-pop] [+/-all_perms\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<queue name> - Queue name parameter for the queue to change the ACL entry for");
+    System.out.println("<user> - User name parameter for the queue to change the ACL entry for");
+    System.out.println("<host> - Host name parameter for the queue to change the ACL entry for");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[+/-] - Prepending + or - specifies whether to add or remove a permission");
+    System.out.println("[list_acl] - Specifies that the list acl permission should be added/removed");
+    System.out.println("[modify_acl] - Specifies that the modify acl permission should be added");
+    System.out.println("[full] - Specifies that the full permission should be added/removed");
+    System.out.println("[peak] - Specifies that the peak permission should be added/removed");
+    System.out.println("[push] - Specifies that the push permission should be added/removed");
+    System.out.println("[purge] - Specifies that the purge permission should be added/removed");
+    System.out.println("[pop] - Specifies that the pop permission should be added/removed");
+    System.out.println("[all_perms] - Specifies that the pop permission should be added/removed");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

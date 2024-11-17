@@ -1,0 +1,250 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.nAdminAPI.nConfigEntry;
+import com.pcbsys.nirvana.nAdminAPI.nConfigGroup;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * Looks for differences in the configurations of 2 realm and prints any differences
+ */
+public class nDiff {
+
+  String Rname1 = null;
+  String Rname2 = null;
+  nDiff myself;
+  boolean testing = false;
+
+  /**
+   * constructor
+   */
+  public nDiff() {
+  }
+
+  /**
+   * Establishes a connection to a realm and returns the realm node
+   *
+   * @param rname The RNAME for the realm to connect to
+   * @return The nRealmNode for the realm specified by rname
+   */
+  public nRealmNode getRealm(String rname) {
+    try {
+      System.out.print("Establishing realm node...");
+      nSessionAttributes nsa = new nSessionAttributes(rname);
+      nRealmNode rNode = new nRealmNode(nsa);
+
+      if (!rNode.isAuthorised()) {
+        System.out.println("User not authorised on this node " + nsa);
+        System.exit(1);
+      }
+      System.out.println("done\n");
+      return rNode;
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    return null;
+  }
+
+  /**
+   * Loops through each config group and calls processGroup to compare each item in the config groups
+   *
+   * @param realm1 nRealmNode of the first realm to compare
+   * @param realm2 nRealmNode of the second realm to compare
+   */
+  public void configDifferences(nRealmNode realm1, nRealmNode realm2) {
+
+    Enumeration cGroups1 = realm1.getConfigGroups();
+    Enumeration cGroups2 = realm2.getConfigGroups();
+
+    while (cGroups1.hasMoreElements()) {
+      nConfigGroup group1 = (nConfigGroup) cGroups1.nextElement();
+      nConfigGroup group2 = (nConfigGroup) cGroups2.nextElement();
+
+      if (!(group1.getName().equalsIgnoreCase(group2.getName()))) {
+        System.out.println("group1 = " + group1.getName() + " group2 = " + group2.getName());
+        System.exit(1);
+      }
+
+      processGroup(group1, group2);
+
+    }
+
+  }
+
+  /**
+   * Loops through each item in the first realms config group and looks that item up in the second configs group
+   * If the item is not found then the printMissingEntry method is called.  If the item is found but the values are
+   * different then the printEntryDiffs method is called.  If both values match then nothing happens.  After iterating
+   * over the first realms group, the method then iterates over the second realms group, this time only checking to
+   * see if any items are in the second group but not the first.
+   *
+   * @param group1 The config group for the first realm
+   * @param group2 The config groups for the second realm
+   */
+  public void processGroup(nConfigGroup group1, nConfigGroup group2) {
+    boolean foundDiff = false;
+
+    Enumeration items1 = group1.getItems();
+
+    while (items1.hasMoreElements()) {
+      nConfigEntry entry1 = (nConfigEntry) items1.nextElement();
+      try {
+        nConfigEntry entry2 = group2.find(entry1.getName());
+        if (entry2 != null) {
+          if (!(entry2.getValue().equalsIgnoreCase(entry1.getValue()))) {
+            if (!foundDiff) {
+              foundDiff = true;
+              printGroupHeader(group1.getName());
+            }
+            printEntryDiffs(entry1, entry2);
+          }
+        } else {
+          if (!foundDiff) {
+            foundDiff = true;
+            printGroupHeader(group1.getName());
+          }
+          printMissingEntry(entry1, 1);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.exit(1);
+      }
+    }
+
+    Enumeration items2 = group2.getItems();
+
+    while (items2.hasMoreElements()) {
+      nConfigEntry entry2 = (nConfigEntry) items2.nextElement();
+      try {
+        nConfigEntry entry1 = group1.find(entry2.getName());
+        if (entry1 == null) {
+          if (!foundDiff) {
+            foundDiff = true;
+            printGroupHeader(group1.getName());
+          }
+          printMissingEntry(entry2, 2);
+        }
+      } catch (Exception e) {
+        e.printStackTrace();
+        System.exit(1);
+      }
+    }
+
+    if (foundDiff) {
+      System.out.println("~~~~~~~~~~~~~~~~~~~~\n");
+    }
+
+  }
+
+  /**
+   * This method is called when an entry is not found in one of the realms config groups.
+   *
+   * @param entry The entry which was found in one group but not the other
+   * @param realmNum The number of the realm that HAS the entry.
+   */
+  public void printMissingEntry(nConfigEntry entry, int realmNum) {
+    System.out.println("\t-" + entry.getName());
+    if (realmNum == 1) {
+      System.out.println("\t\t" + Rname1 + "\t=\t" + entry.getValue());
+      System.out.println("\t\t" + Rname2 + "\t=\tNo entry found");
+    } else {
+      System.out.println("\t\t" + Rname1 + "\t=\tNo entry found");
+      System.out.println("\t\t" + Rname2 + "\t=\t" + entry.getValue());
+    }
+    System.out.println();
+
+  }
+
+
+  /**
+   * prints the group name
+   *
+   * @param gName name of the group to print out
+   */
+  public void printGroupHeader(String gName) {
+    System.out.println("~~~" + gName + "~~~\n");
+  }
+
+  /**
+   * This method is called when an entry is present in both groups but the values do not match.
+   *
+   * @param entry1 nConfigEntry from the first realm
+   * @param entry2 nConfigEntry from the second realm
+   */
+  public void printEntryDiffs(nConfigEntry entry1, nConfigEntry entry2) {
+    System.out.println("\t-" + entry1.getName());
+    System.out.println("\t\t" + Rname1 + "\t=\t" + entry1.getValue());
+    System.out.println("\t\t" + Rname2 + "\t=\t" + entry2.getValue());
+    System.out.println();
+
+  }
+
+  /**
+   * Check the arguments and initialises the global values
+   *
+   * @param args program arguments
+   */
+  public void processArgs(String args[]) {
+
+    switch (args.length) {
+      case 0: {
+        usage();
+        break;
+      }
+      case 1: {
+        usage();
+        break;
+      }
+      default: {
+        Rname1 = args[0];
+        Rname2 = args[1];
+
+      }
+    }
+  }
+
+  public static void main(String args[]) {
+    nDiff myself = new nDiff();
+    myself.processArgs(args);
+    nRealmNode r1 = myself.getRealm(myself.Rname1);
+
+    nRealmNode r2 = myself.getRealm(myself.Rname2);
+    System.out.println("Realm1 = " + myself.Rname1);
+    System.out.println("Realm2 = " + myself.Rname2 + "\n\n");
+
+    myself.configDifferences(r1, r2);
+
+    try {
+      r1.close();
+      r2.close();
+    } catch (Exception e) {
+    }
+    //Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+
+  }
+
+  /**
+   * This is called when the program arguments are invalid.  I prints out usage information to help the user
+   * to input the correct arguments.
+   */
+  public static void usage() {
+    System.out.println("Usage ...\n");
+    System.out.println("nDiff <realm1> <realm2> \n");
+    System.out.println("\n[Required Arguments] \n");
+    System.out.println("<realm1> - the RNAME of a the first realm to compare \n");
+    System.out.println("<realm2> - the RNAME of a the second realm to compare \n");
+  }
+
+}

@@ -1,0 +1,158 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nThreadPool;
+import java.util.Iterator;
+import java.util.Vector;
+
+/**
+ * Displays the realm thread pool information in a table
+ */
+public class nShowRealmThreadPools {
+
+  private static nShowRealmThreadPools myself = null;
+
+  /**
+   * This function creates a session based on RNAME and establishes the nRealmNode for that realm
+   *
+   * @param RNAME The realm identifier including protocol e.g. nsp://localhost:9000
+   * @return The Vector of thread pool details for the realm specified by RNAME
+   */
+  private Vector getThreadPools(String RNAME) {
+    try {
+      System.out.print("Establishing realm node...");
+      nSessionAttributes nsa = new nSessionAttributes(RNAME);
+      nRealmNode rNode = new nRealmNode(nsa);
+
+      if (!rNode.isAuthorised()) {
+        System.out.println("User not authorised on this node " + nsa);
+        System.exit(1);
+      }
+      System.out.println("done\n");
+      return rNode.getThreadPoolDetails();
+    } catch (Exception e) {
+      e.printStackTrace();
+      System.exit(1);
+    }
+    return null;
+  }
+
+  /**
+   * This method takes a vector of thread pool and prints out information from each in a table
+   *
+   * @param threadPools A vector of thread pools
+   */
+  private void printTable(Vector threadPools) {
+
+    //The names of the thread pools vary in size, to longest name is 23 characters.  In case other names are
+    //added at a later date, this length variable can be adjusted
+    int nameLength = 25;
+
+    System.out.print("Name");
+    //this function is used to print multiple spaces at a time for alignment purposes
+    printSpaces(nameLength - 4);
+    System.out.println("Idle    Allocated Queued Tasks");
+    printSpaces(nameLength);
+    System.out.println("Threads Threads   Tasks  Executed\n");
+
+    Iterator it = threadPools.iterator();
+    while (it.hasNext()) {
+      nThreadPool thread = (nThreadPool) it.next();
+
+      int idle = thread.getIdle();
+      String name = thread.getName();
+      int queue = thread.getQueue();
+      int size = thread.getSize();
+      long total = thread.getTotal();
+
+      System.out.print(name + "  ");
+      printSpaces(nameLength - name.length());
+      System.out.println(idle + "\t    " + size + "\t     " + queue + "\t  " + total);
+
+
+    }
+  }
+
+  /**
+   * This method prints the number of spaces specified by the length argument.  It is used by certain methods to align
+   * the output.
+   *
+   * @param length The number of spaces to print
+   */
+  private void printSpaces(int length) {
+    for (int i = 0; i < length; i++) {
+      System.out.print(" ");
+    }
+  }
+
+  public static void main(String[] args) {
+
+    myself = new nShowRealmThreadPools();
+    if ((args.length != 0) && (args[0].equals("-?"))) {
+      usageEnv();
+      System.exit(1);
+    }
+
+    /**
+     * The RNAME variable is required as an environment variable, if the RNAME is not specifed then the
+     * program cannot proceed.  In this situation the usageEnv function is called and the system exits.
+     */
+    String RNAME = null;
+    if (System.getProperty("RNAME") != null) {
+      RNAME = System.getProperty("RNAME");
+    } else {
+      usageEnv();
+      System.exit(1);
+    }
+
+    Vector threadPools = myself.getThreadPools(RNAME);
+
+    myself.printTable(threadPools);
+
+  }
+
+  /**
+   * If the environment variables are not correctly specified or the user requests informations, this method
+   * will print the correct usage for the environment variables
+   */
+  private static void usageEnv() {
+    System.out.println("\n\n(Environment Variables) \n");
+
+    System.out.println("(RNAME) - One or more RNAME entries in the form protocol://host:port");
+    System.out.println("   protocol - Can be one of nsp, nhp, nsps, or nhps, where:");
+    System.out.println("   nsp - Specifies Nirvana Socket Protocol (nsp)");
+    System.out.println("   nhp - Specifies Nirvana HTTP Protocol (nhp)");
+    System.out.println("   nsps - Specifies Nirvana Socket Protocol Secure (nsps), i.e. using SSL/TLS");
+    System.out.println("   nhps - Specifies Nirvana HTTP Protocol Secure (nhps), i.e. using SSL/TLS");
+    System.out.println("   port - The port number of the server");
+    System.out.println(
+        "\nHint: - For multiple RNAME entries, use comma separated values which will be attempted in connection weight order\n");
+
+    System.out.println(
+        "(LOGLEVEL) - This determines how much information the nirvana api will output 0 = verbose 7 = quiet\n");
+
+    System.out.println("(CKEYSTORE) - If using SSL, the location of the keystore containing the client cert\n");
+    System.out.println("(CKEYSTOREPASSWD) - If using SSL, the password for the keystore containing the client cert\n");
+    System.out.println("(CAKEYSTORE) - If using SSL, the location of the ca truststore\n");
+    System.out.println("(CAKEYSTOREPASSWD) - If using SSL, the password for the ca truststore\n");
+
+    System.out.println("(HPROXY) - HTTP Proxy details in the form proxyhost:proxyport, where:");
+    System.out.println("   proxyhost - The HTTP proxy host");
+    System.out.println("   proxyport - The HTTP proxy port\n");
+    System.out.println("(HAUTH) - HTTP Proxy authentication details in the form user:pass, where:");
+    System.out.println("   user - The HTTP proxy authentication username");
+    System.out.println("   pass - The HTTP proxy authentication password\n");
+    System.exit(1);
+  }
+
+
+}

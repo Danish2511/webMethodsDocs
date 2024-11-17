@@ -1,0 +1,60 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+using System.Threading;
+
+namespace MyChannels.Nirvana
+{
+    internal abstract class AbstractObserver<T> : IObserver<T>, IDisposable
+    {
+        private int isStopped;
+
+        protected AbstractObserver()
+        {
+            this.isStopped = 0;
+        }
+
+        protected abstract void Completed();
+        public virtual void Dispose()
+        {
+            this.isStopped = 1;
+        }
+
+        protected abstract void Error(Exception error);
+        protected abstract void Next(T value);
+        public void OnCompleted()
+        {
+            if (Interlocked.Exchange(ref this.isStopped, 1) == 0)
+            {
+                this.Completed();
+            }
+        }
+
+        public void OnError(Exception error)
+        {
+            if (error == null)
+            {
+                throw new ArgumentNullException("error");
+            }
+            if (Interlocked.Exchange(ref this.isStopped, 1) == 0)
+            {
+                this.Error(error);
+            }
+        }
+
+        public void OnNext(T value)
+        {
+            if (this.isStopped == 0)
+            {
+                this.Next(value);
+            }
+        }
+    }
+}

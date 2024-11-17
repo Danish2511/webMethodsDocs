@@ -1,0 +1,248 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nChannelAttributes.h"
+#include "nChannel.h"
+#include "nSession.h"
+#include "nSessionFactory.h"
+#include "nChannelNotFoundException.h"
+#include "nSessionNotConnectedException.h"
+#include "nRequestTimedOutException.h"
+#include "nUnexpectedResponseException.h"
+#include "nUnknownRemoteRealmException.h"
+#include "nChannelAlreadyExistsException.h"
+#include "nSecurityException.h"
+
+using namespace com::pcbsys::nirvana::apps;
+using namespace com::pcbsys::nirvana::client;
+
+class makequeue : nSampleApp {
+
+    /**
+    * Creates a nirvana queue
+    */
+  private:
+    static makequeue *m_pSelf;
+
+    /**
+    * This method demonstrates the Nirvana API calls necessary to create
+    * a queue.
+    * It is called after all command line arguments have been received and
+    * validated
+    *
+    * @param realmDetails a String[] containing the possible RNAME values
+    * @param nRealmDetail length of the rname array
+    * @param aqueueName the queue name to create
+    * @param age the time to live for each event published to each queue
+    * @param cap the maximum number for events to hold within the event in a First in First out policy
+    * @param type the type of queue to create (see Usage())
+    * @param cluster whether the queue is cluster wide
+    * @eid the starting eid to begin the queue from
+    */
+    void doit(std::string *pRealmDetails, int nRealmDetail, std::string& aqueueName, int age, int cap, std::string& type, bool cluster, long eid) {
+        m_pSelf->constructSession(pRealmDetails, nRealmDetail);
+
+        //Creates the specified queue
+        try {
+            //Create a Channel attributes object
+            nChannelAttributes *pNca = createChannelAttributes(aqueueName, age, cap, type, cluster);
+
+            //Create the queue
+            nQueue *pQueue = m_pSession->createQueue(pNca, eid);
+
+            if (pQueue)
+                delete pQueue;
+
+            if (pNca)
+                delete pNca;
+        }
+
+        //Handle errors
+        catch (nChannelNotFoundException cnfe) {
+            printf("The channel specified could not be found.\n");
+            printf("Please ensure that the channel exists in the REALM you connect to.\n");
+            exit(1);
+        }
+
+        catch (nSecurityException se) {
+            printf("Unsufficient permissions for the requested operation.\n");
+            printf("Please check the ACL settings on the server.\n");
+            exit(1);
+        }
+
+        catch (nSessionNotConnectedException snce) {
+            printf("The session object used is not physically connected to the Nirvana realm.\n");
+            printf("Please ensure the realm is up and check your RNAME value.\n");
+            exit(1);
+        }
+
+        catch (nUnexpectedResponseException ure) {
+            printf("The Nirvana REALM has returned an unexpected response.\n");
+            printf("Please ensure the Nirvana REALM and client API used are compatible.\n");
+            exit(1);
+        }
+
+        catch (nUnknownRemoteRealmException urre) {
+            printf("The channel specified resided in a remote realm which could not be found.\n");
+            printf("Please ensure the channel name specified is correct.\n");
+            exit(1);
+        }
+
+        catch (nRequestTimedOutException rtoe) {
+            printf("The requested operation has timed out waiting for a response from the REALM.\n");
+            printf("If this is a very busy REALM ask your administrator to increase the client timeout values.\n");
+            exit(1);
+        }
+
+        catch (nChannelAlreadyExistsException caee) {
+            printf("The channel specified already exists on the REALM.\n");
+            exit(1);
+        }
+
+        catch (nBaseClientException nbce) {
+            printf("An error occured while creating the Channel Attributes object.\n");
+            exit(1);
+        }
+
+        //Close the session we opened
+        try {
+            nSessionFactory::close(m_pSession);
+        }
+
+        catch (Exception ex) {
+        }
+
+        //Close any other sessions within this program so that we can exit
+        nSessionFactory::shutdown();
+
+    }
+
+  private:
+    nChannelAttributes* createChannelAttributes(std::string& aqueueName, int age, int cap, std::string& type, bool cluster) {
+        //Create a queue attributes object
+        nChannelAttributes *pNca = new nChannelAttributes();
+
+        //Set the queue name
+        pNca->setName(aqueueName);
+
+        //Set the queue type parameter (reliable or guaranteed)
+        if (!type.empty()) {
+            if (!type.compare("R")) {
+                pNca->setType(nChannelAttributes::RELIABLE_TYPE);
+            }
+
+            else if (!type.compare("P")) {
+                pNca->setType(nChannelAttributes::PERSISTENT_TYPE);
+            }
+
+            else if (!type.compare("M")) {
+                pNca->setType(nChannelAttributes::MIXED_TYPE);
+            }
+        }
+
+        else {
+            pNca->setType(nChannelAttributes::RELIABLE_TYPE);
+        }
+
+        //Set the queue capacity parameter
+        pNca->setMaxEvents(cap);
+
+        //Set the queue Time to Live parameter
+        pNca->setTTL(age);
+
+        return pNca;
+    }
+
+    /**
+    * Prints the usage message for this class
+    */
+  private:
+    static void Usage() {
+        printf("Usage ...\n\n");
+        printf("makequeue <rname> <queue name> [time to live] [capacity] [type] [cluster wide] [start eid] \n\n");
+        printf("<Required Arguments> \n\n");
+        printf("<rname> - the rname of the server to connect to\n");
+        printf("<queue name> - queue name parameter for the queue to be created\n");
+        printf("\n[Optional Arguments] \n\n");
+        printf("[time to live] - The Time To Live parameter for the new queue (default: 0)\n");
+        printf("[capacity] - The Capacity parameter for the new queue (default: 0)\n");
+        printf("[type] - The type parameter for the new queue (default: S)\n");
+        printf("   R - For a reliable (stored in memory) queue with persistent eids\n");
+        printf("   P - For a persistent (stored on disk) queue\n");
+        printf("   M - For a mixed (allows both memory and persistent events) queue\n\n");
+        printf("[cluster wide] - Whether the queue is cluster wide. Will only work if the realm is part of a cluster\n");
+        printf("[start eid] - The initial start event id for the new queue (default: 0)\n");
+    }
+
+  protected:
+    virtual void processArgs(int argc, char** argv) {
+        //
+        // Need a min of 2, rname, queue name, capacity, ttl, type
+        if (argc < 3) {
+            Usage();
+            exit(2);
+        }
+
+        std::string RNAME = argv[1];
+
+        std::string queueName = argv[2];
+
+        int age = 0;
+        int cap = 0;
+        std::string type = "S";
+        bool cluster = false;
+        long eid = 0;
+
+        //Check the queue name specified
+        if (argc > 3) {
+            age = atoi(argv[3]);
+        }
+
+        if (argc > 4) {
+            cap = atoi(argv[4]);
+        }
+
+        if (argc > 5) {
+            type = argv[5];
+        }
+
+        if (argc > 6) {
+            cluster = !strcmp(argv[6], "true");
+        }
+
+        if (argc > 7) {
+            eid = atoi(argv[7]);
+        }
+
+        //
+        // Run the sample app
+        //
+
+        int nRproperty = 0;
+        std::string *pRproperties = parseRealmProperties(RNAME, nRproperty);
+
+        m_pSelf->doit(pRproperties, nRproperty, queueName, age, cap, type, cluster, eid);
+    }
+
+  public:
+    static int Main(int argc, char** argv) {
+        //Create an instance for this class
+        m_pSelf = new makequeue();
+
+        m_pSelf->processArgs(argc, argv);
+
+        return 0;
+    }
+};
+
+makequeue* makequeue::m_pSelf = NULL;
+
+int main (int argc, char** argv) {
+    return makequeue::Main (argc, argv);
+}

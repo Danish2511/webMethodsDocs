@@ -1,0 +1,156 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nClusterConnectionListener;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nConnectionDetails;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.io.BufferedInputStream;
+
+/**
+ * This class demonstrates how to watch for connections to a cluster and be notified of
+ * new connections, or connections closing on any of the cluster realms
+ */
+
+public class nClusterConnectionWatch extends nSampleApp {
+
+  private String realmUrl = null;
+
+  /**
+   * Constructor takes a realm URL
+   */
+  public nClusterConnectionWatch(String[] args) {
+    try {
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes for a realm in the cluster
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+      // construct the real node
+      nRealmNode node = new nRealmNode(attr);
+      node.waitForEntireNameSpace();
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realmUrl);
+        return;
+      }
+
+      // register the cluster node for new connections and removed connections
+      register(node.getCluster());
+      System.out.println("Press any key to quit !");
+      BufferedInputStream bis = new BufferedInputStream(System.in);
+      try {
+        bis.read();
+      } catch (Exception read) {
+      } //Ignore this
+      node.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nClusterConnectionWatch dump = new nClusterConnectionWatch(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  private synchronized void newConnection(String target, nConnectionDetails cd) {
+    if (cd.getSubject().length == 1) {
+      System.out.println(
+          new java.util.Date(System.currentTimeMillis()) + target + " ADD User Connection : " + cd.getId() + " Subject:"
+              + cd.getSubject()[0]);
+    } else {
+      System.out
+          .println(new java.util.Date(System.currentTimeMillis()) + target + " ADD User Connection :" + cd.getId());
+      for (int x = 0; x < cd.getSubject().length; x++) {
+        System.out
+            .println(new java.util.Date(System.currentTimeMillis()) + " \tSubject[" + x + "] " + cd.getSubject()[x]);
+      }
+    }
+  }
+
+  private void delConnection(String target, nConnectionDetails cd) {
+
+    //handle disconnection due to explicit client close
+    if (cd.wasClosedByClient()) {
+      System.out.println(
+          new java.util.Date(System.currentTimeMillis()) + target + " DEL User Connection : " + cd.getId() + " Subject:"
+              + cd.getSubject()[0] + " Explicitly closed by client : true");
+    }
+    //handle unrequested disconnects
+    else {
+      System.out.println(
+          new java.util.Date(System.currentTimeMillis()) + target + " DEL User Connection : " + cd.getId() + " Subject:"
+              + cd.getSubject()[0] + " Explicitly closed by client : false");
+    }
+  }
+
+  private void register(nClusterNode cluster) throws nBaseAdminException {
+    cluster.addConnectionListener(new nClusterWatch());
+  }
+
+  /**
+   * Class that implements the cluster connection lister interface.
+   * This internal class will receive notifications when a subject connection
+   * is added or removed from any of the cluster realms
+   */
+  public class nClusterWatch implements nClusterConnectionListener {
+
+    /**
+     * Notification of a new session connection to a realm
+     */
+    public void add(nRealmNode realm, nConnectionDetails cd) {
+      nClusterConnectionWatch.this.newConnection("Realm " + realm.getName() + " : New Connection : ", cd);
+    }
+
+    /**
+     * Notification of a session connection being removed from a realm
+     */
+    public void del(nRealmNode realm, nConnectionDetails cd) {
+      nClusterConnectionWatch.this.delConnection("Realm " + realm.getName() + " : Del Connection : ", cd);
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nclusterconnectionwatch\n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

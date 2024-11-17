@@ -1,0 +1,253 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nAuditEvent;
+import com.pcbsys.nirvana.nAdminAPI.nAuditListener;
+import com.pcbsys.nirvana.nAdminAPI.nLogListener;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.io.FileOutputStream;
+import java.io.PrintStream;
+
+/**
+ * This application demonstrates how to receive log messages from a realm, as well
+ * as how to receive audit events from a realm.
+ * The output is directed to stdOut as a default, but can be redirected to two files
+ * if file names are specified.
+ */
+
+public class nRealmLogAndAuditListener extends nSampleApp implements nLogListener, nAuditListener {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realmUrl = null;
+
+  private nSessionAttributes attr = null;
+  private nRealmNode realm = null;
+
+  private String logFileName = null;
+  private String auditFileName = null;
+
+  private FileOutputStream logOut = null;
+  private FileOutputStream auditOut = null;
+
+  private PrintStream log = null;
+  private PrintStream audit = null;
+
+  private boolean logfile = false;
+  private boolean auditfile = false;
+  private boolean replayAudit = false;
+
+  /**
+   * Construct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nRealmLogAndAuditListener(String args[]) {
+    try {
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realmUrl);
+      // get the realm node
+      realm = new nRealmNode(attr);
+      if (!realm.isAuthorised()) {
+        System.out.println("User not authorised on this node " + attr);
+        return;
+      }
+
+      // add this object as a loglistener
+      log.println("Adding log listener");
+      audit.println("Adding audit listener");
+      realm.addLogListener(this);
+      // add this object as an auditListener
+      realm.addAuditListener(this, replayAudit);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * This is the callback method for the realm log listener.
+   * The method checks to see if a file has been set, otherwise prints out a log message to stdOut
+   */
+  public void report(String msg) {
+    log.println("LOG " + msg);
+  }
+
+  /**
+   * This is the callback method for the realm audit listener.
+   * The method checks to see if a file has been set, otherwise prints out the audit
+   * details to stdOut
+   */
+  public void audit(nAuditEvent auditevent) {
+
+    String originator = auditevent.getSubject();
+    String operation = auditevent.getOperationString();
+    String objecttype = auditevent.getObjectString();
+    String objectname = auditevent.getObjectName();
+    String timestamp = auditevent.getTimestamp();
+    int op = auditevent.getOperation();
+    int obj = auditevent.getObjectType();
+    nACLEntry oldval = null;
+    nACLEntry newval = null;
+    boolean acloperation = false;
+    boolean change = false;
+
+    switch (obj) {
+      case nAuditEvent.sChanACL:
+        oldval = auditevent.getOldValue();
+        acloperation = true;
+        break;
+      case nAuditEvent.sQueueACL:
+        oldval = auditevent.getOldValue();
+        acloperation = true;
+        break;
+      case nAuditEvent.sRealmACL:
+        oldval = auditevent.getOldValue();
+        acloperation = true;
+        break;
+      default:
+        break;
+    }
+    switch (op) {
+      case nAuditEvent.sChange:
+        change = true;
+        newval = auditevent.getNewValue();
+        break;
+      default:
+        break;
+    }
+    if (acloperation) {
+      if (change) {
+        audit.println(
+            "AUDIT " + timestamp + " " + originator + " " + objecttype + " " + operation + " " + objectname + " "
+                + oldval + " " + newval);
+      } else {
+        audit.println(
+            "AUDIT " + timestamp + " " + originator + " " + objecttype + " " + operation + " " + objectname + " "
+                + oldval);
+      }
+    } else {
+      audit.println("AUDIT " + timestamp + " " + originator + " " + objecttype + " " + operation + " " + objectname);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (args == null) {
+      log = System.out;
+      audit = System.out;
+      return;
+    }
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-l")) {
+        try {
+          i++;
+          logFileName = args[i];
+          logOut = new FileOutputStream(logFileName);
+          log = new PrintStream(logOut);
+          logfile = true;
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for realm log file");
+        }
+      } else if (args[i].equalsIgnoreCase("-a")) {
+        try {
+          i++;
+          auditFileName = args[i];
+          auditOut = new FileOutputStream(auditFileName);
+          audit = new PrintStream(auditOut);
+          auditfile = true;
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for realm audit file");
+        }
+      } else if (args[i].equalsIgnoreCase("-replay")) {
+        try {
+          replayAudit = true;
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for realm audit file");
+        }
+      } else {
+        System.out.println("Unrecognized parameter passed");
+      }
+    }
+    if (!auditfile) {
+      audit = System.out;
+    }
+    if (!logfile) {
+      log = System.out;
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length != 0) {
+      switch (args.length) {
+        case 1:
+          if (args[0].equals("-?")) {
+            Usage();
+            UsageEnv();
+          }
+          System.setProperty("LOGFILE", args[0]);
+          getOptions(null);
+          break;
+        default:
+          System.setProperty("LOGFILE", args[0]);
+          System.setProperty("AUDITFILE", args[1]);
+          getOptions(args);
+      }
+    } else {
+      getOptions(null);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * LOGFILE
+   * AUDITFILE
+   * as system properties
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nRealmLogAndAuditListener listener = new nRealmLogAndAuditListener(args);
+    try {
+      while (true) {
+        Thread.sleep(1000);
+      }
+    } catch (Exception ex) {
+
+    }
+
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nauditandloglistener <-l logfile> <-a auditfile> <-replay>\n");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out
+        .println("<-l logfile> - A file name to store the log messages to (without this it will go to system.out");
+    System.out
+        .println("<-a auditfile> - A file name to store the audit messages to (without this it will go to system.out");
+    System.out.println("<-replay> - Specifies if the entire audit file will be replayed");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

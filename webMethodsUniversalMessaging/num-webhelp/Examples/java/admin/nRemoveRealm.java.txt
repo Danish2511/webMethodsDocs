@@ -1,0 +1,177 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nRemovable;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to remove a realm from a namespace.
+ */
+
+public class nRemoveRealm extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realmName = null;
+  private String fromRealm = null;
+  private nRealmNode node = null;
+  private nSessionAttributes attr = null;
+
+  private boolean recursive = false;
+  private boolean removeChildren = false;
+
+  /**
+   * Consruct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nRemoveRealm(String args[]) {
+    try {
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("Connecting to " + fromRealm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(fromRealm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + attr);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      if (recursive) {
+        System.out.print("waiting for namepsace construction..... ");
+        node.waitForEntireNameSpace();
+        System.out.println("finished");
+      }
+      // call the method to search from the root realm node
+      searchNode(node);
+      // close the realm node which will close all connections to child nodes
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * remove the realm calling the remove method
+   */
+  public void removeRealm(nRealmNode p_realm) {
+    try {
+      nRemovable toRemove = (nRemovable) p_realm;
+      toRemove.remove(removeChildren);
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * search the enumeration of child nodes for other realms and channels
+   */
+  private void searchNodes(nRealmNode p_node, Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nRealmNode) {
+        // we have found another realm node, so search check this node for the correct name
+        nRealmNode found = (nRealmNode) obj;
+        System.out.println("Found realm " + found.getName());
+        if (found.getName().equalsIgnoreCase(realmName)) {
+          removeRealm(found);
+        }
+        if (recursive) {
+          searchNode((nRealmNode) obj);
+        }
+      }
+    }
+  }
+
+  /**
+   * Search the children of the realm passed as a paremeter
+   */
+  private void searchNode(nRealmNode p_node) {
+    try {
+      System.out.println("Found node " + p_node.getName());
+      searchNodes(p_node, p_node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    fromRealm = System.getProperty("RNAME", null);
+    // set the realm name to lower case as the nirvana namespace is all lowercase
+    realmName = System.getProperty("REALM", null);
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-r")) {
+        recursive = true;
+      } else if (args[i].equalsIgnoreCase("-c")) {
+        removeChildren = true;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+          getOptions(null);
+          break;
+        } else {
+          System.setProperty("REALM", args[0]);
+          getOptions(args);
+          break;
+        }
+      default:
+        System.setProperty("REALM", args[0]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * REALM
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nRemoveRealm setAcl = new nRemoveRealm(args);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nadmindelrealm <realm> [-r] [-c]\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<realm> - Realm RNAME parameter for the realm to delete from the namespace");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("<-r> - Will remove all occurrances of realm in the namespace");
+    System.out.println("<-c> - Will delete all child nodes under the realm");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

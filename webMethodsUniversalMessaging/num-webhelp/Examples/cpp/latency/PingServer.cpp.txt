@@ -1,0 +1,113 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "PingServer.h"
+#include <utility>
+#include "UMTException.h"
+
+#include <iostream>
+
+using namespace com::softwareag::umtransport;
+
+Poco::Mutex com::softwareag::umtransport::samples::ping::PingServer::threadMutex;
+std::vector<Poco::Thread*> com::softwareag::umtransport::samples::ping::PingServer::threadList;
+volatile bool com::softwareag::umtransport::samples::ping::PingServer::canRun = true;
+
+int com::softwareag::umtransport::samples::ping::PingServer::main(int argc, char** argv){
+	ServerAcceptThread* acceptThreadRunner;
+	for (int i = 1; i<argc; i++){
+		try{
+			auto transportContext = ServerTransportContextFactory::build(argv[i]);
+			acceptThreadRunner = new ServerAcceptThread(TransportFactory::bind(std::move(transportContext)));
+			std::cout << "Started synchronous transport ping server on " << argv[i] << std::endl;
+			Poco::Thread* acceptThread = new Poco::Thread();
+			acceptThread->start(*acceptThreadRunner);
+			Poco::Mutex::ScopedLock lock(threadMutex);
+			threadList.insert(threadList.begin(), acceptThread);
+		}
+		catch (IllegalArgumentException& ex){
+			std::cout << ex.displayText() << std::endl;
+		}
+	}
+	std::cout << "Press <CR> key to finish";
+	std::cin.ignore();
+	canRun = false;
+	acceptThreadRunner->close();
+	Poco::Mutex::ScopedLock lock(threadMutex);
+	for (std::vector<Poco::Thread*>::iterator it = threadList.begin(); it != threadList.end(); ++it){
+		(*it)->join();
+	}
+	threadList.clear();
+	delete acceptThreadRunner;
+	return 0;
+}
+
+com::softwareag::umtransport::samples::ping::PingServer::ReadThread::ReadThread(std::unique_ptr<SynchronousTransport> transport){
+	m_client = std::move(transport);
+}
+
+com::softwareag::umtransport::samples::ping::PingServer::ReadThread::~ReadThread(){
+
+}
+
+void com::softwareag::umtransport::samples::ping::PingServer::ReadThread::run(){
+	int b = 0;
+	try {
+		unsigned char* tmp = new unsigned char[1024];
+		while (PingServer::canRun){  // Provide an Echo back to the client....
+			b = m_client->getInputStream().read(tmp, 0, 1024);
+			if (b>0){
+				m_client->getOutputStream().write(tmp, 0, b);
+				m_client->getOutputStream().flush();
+			}
+			else{
+				m_client->close();
+				return;
+			}
+		}
+		delete[] tmp;
+	}
+	catch (Poco::Exception& e) {
+		std::cout << e.displayText() << std::endl;
+	}
+
+	m_client->close();
+}
+
+com::softwareag::umtransport::samples::ping::PingServer::ServerAcceptThread::ServerAcceptThread(std::unique_ptr<SynchronousServerTransport> transport){
+	m_serverTransport = std::move(transport);
+}
+
+com::softwareag::umtransport::samples::ping::PingServer::ServerAcceptThread::~ServerAcceptThread(){
+	for (std::vector<ReadThread*>::iterator it = readThreadObjects.begin(); it< readThreadObjects.end(); ++it){
+		delete *it;
+	}
+	readThreadObjects.clear();
+}
+
+void com::softwareag::umtransport::samples::ping::PingServer::ServerAcceptThread::close(){
+	m_serverTransport->close();
+}
+void com::softwareag::umtransport::samples::ping::PingServer::ServerAcceptThread::run(){
+	try{
+		while (PingServer::canRun) {
+			std::unique_ptr<SynchronousTransport> t = m_serverTransport->accept();
+			std::cout << "\nAccepted a new Socket" << std::endl;
+			ReadThread* read = new ReadThread(std::move(t));
+			readThreadObjects.insert(readThreadObjects.begin(), read);
+			Poco::Thread* t1 = new Poco::Thread();
+			t1->start(*read);
+			Poco::Mutex::ScopedLock lock(threadMutex);
+			threadList.insert(threadList.begin(), t1);
+		}
+	}
+	catch (Poco::Exception& e) {
+		std::cout << e.displayText() << std::endl;
+	}
+}
+

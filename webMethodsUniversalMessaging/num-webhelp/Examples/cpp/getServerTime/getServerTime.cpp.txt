@@ -1,0 +1,146 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nSession.h"
+#include "nSessionNotConnectedException.h"
+#include "nRequestTimedOutException.h"
+#include "nUnexpectedResponseException.h"
+#include "nSecurityException.h"
+#include "nSessionPausedException.h"
+#include "nSessionFactory.h"
+
+#include <time.h>
+
+using namespace com::pcbsys::nirvana::apps;
+using namespace com::pcbsys::nirvana::client;
+
+/**
+ * Gets the server time of the specified realm
+ */
+class getServerTime : nSampleApp {
+  private:
+    static getServerTime *m_pSelf;
+
+    /**
+     * This method demonstrates the Nirvana API calls necessary to get the
+     * server time from a realm.
+     * It is called after all command line arguments have been received and
+     * validated
+     *
+     * @param pRealmDetails a String[] containing the possible RNAME values
+     * @param nRealmDetail length of the rname array
+     */
+    void doit(std::string *pRealmDetails, int nRealmDetail) {
+        m_pSelf->constructSession(pRealmDetails, nRealmDetail);
+
+        try {
+            longlong serverTime = m_pSession->getServerTime();
+            time_t secs = serverTime / 1000;
+            unsigned long millisecs = serverTime - secs * 1000;
+            struct tm *pTm = localtime (&secs);
+            char timeBuf[80];
+            strftime (timeBuf, 80, "%H:%M:%S", pTm);
+            printf ("Server Time : %s\n", timeBuf);
+        }
+
+        catch (nSessionPausedException ps) {
+            printf("Session has been paused, please resume the session\n");
+            exit(1);
+        }
+
+        catch (nSecurityException se) {
+            printf("Unsufficient permissions for the requested operation.\n");
+            printf("Please check the ACL settings on the server.\n");
+            exit(1);
+        }
+
+        catch (nSessionNotConnectedException snce) {
+            printf("The session object used is not physically connected to the Nirvana realm.\n");
+            printf("Please ensure the realm is up and check your RNAME value.\n");
+            exit(1);
+        }
+
+        catch (nUnexpectedResponseException ure) {
+            printf("The Nirvana REALM has returned an unexpected response.\n");
+            printf("Please ensure the Nirvana REALM and client API used are compatible.\n");
+            exit(1);
+        }
+
+        catch (nRequestTimedOutException rtoe) {
+            printf("The requested operation has timed out waiting for a response from the REALM.\n");
+            printf("If this is a very busy REALM ask your administrator to increase the client timeout values.\n");
+            exit(1);
+        }
+
+        //Close the session we opened
+        try {
+            nSessionFactory::close(m_pSession);
+        }
+
+        catch (Exception ex) {
+        }
+
+        //Close any other sessions within this program so that we can exit
+        nSessionFactory::shutdown();
+    }
+
+  protected:
+    virtual void processArgs(int argc, char** argv) {
+        //
+        // Need a min of 1, rname
+        switch (argc) {
+        case 0:
+        case 1: {
+            Usage();
+            exit(2);
+        }
+        break;
+        }
+
+        std::string RNAME = argv[1];
+
+        //
+        // Run the sample app
+        //
+        int nRproperty = 0;
+        std::string *pRproperties = parseRealmProperties(RNAME, nRproperty);
+
+        m_pSelf->doit(pRproperties, nRproperty);
+    }
+
+  public:
+    static int Main(int argc, char** argv) {
+        //Create an instance for this class
+        m_pSelf = new getServerTime();
+
+        //Process command line arguments
+        m_pSelf->processArgs(argc, argv);
+
+        return 0;
+    }
+
+    /**
+     * Prints the usage message for this class
+     */
+  private:
+    static void Usage() {
+        printf("Usage...\n\n");
+        printf("getServerTime <rname>\n\n");
+        printf("<Required Arguments> \n\n");
+        printf("<rname> - the rname of the server to connect to\n");
+    }
+};
+
+getServerTime* getServerTime::m_pSelf = NULL;
+
+int main (int argc, char** argv) {
+    return getServerTime::Main (argc, argv);
+}
+// End of getServerTime Class
+

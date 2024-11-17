@@ -1,0 +1,200 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using com.pcbsys.nirvana.client;
+
+namespace com.pcbsys.nirvana.apps
+{
+    /**
+     * Purges messages within a specifed range on a a set of nirvana channels
+     */
+    public class purgeevents : nSampleApp
+    {
+        private string channel;
+        private static string RNAME;
+        private long starteid;
+        private long endeid = -1;
+        private string filter;
+        private static purgeevents mySelf;
+
+        /**
+         * This method demonstrates the Nirvana API calls necessary to purge a channel.
+         * It is called after all command line arguments have been received and
+         * validated
+         *
+         * @param realmDetails a String[] containing the possible RNAME values
+         */
+        private void doit(String[] realmDetails)
+        {
+
+            mySelf.constructSession(realmDetails);
+
+            //Purges the specified range from each channel
+            try
+            {
+
+                nChannelAttributes[] attributes = mySession.getChannels(channel);
+                for (int x = 0; x < attributes.Length; x++)
+                {
+                    //Obtain a channel reference
+                    nChannel myChannel = mySession.findChannel(attributes[x]);
+
+                    //Purge the specified range
+                    if ((!String.IsNullOrEmpty(filter)) && (filter.Length > 0))
+                    {
+                        myChannel.purgeEvents(starteid, endeid, filter);
+                    }
+                    else
+                    {
+                        myChannel.purgeEvents(starteid, endeid);
+                    }
+                    Console.WriteLine("Purged all events between " + starteid + " and " + endeid + " on " + attributes[x].getFullName());
+                }
+            }
+            catch (nSessionPausedException) { }
+            //Handle errors
+            catch (nIllegalArgumentException illArg)
+            {
+                Console.WriteLine("Failed due to the following Illegal Argument exception ");
+                Console.WriteLine(illArg.StackTrace);
+            }
+            catch (nIllegalChannelMode cm)
+            {
+                Console.WriteLine("The requested channel is a queue and cannot be accessed like a channel");
+                Console.WriteLine("Use the queue API's instead");
+                Console.WriteLine(cm.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nChannelNotFoundException cnfe)
+            {
+                Console.WriteLine("The channel specified could not be found.");
+                Console.WriteLine("Please ensure that the channel exists in the REALM you connect to.");
+                Console.WriteLine(cnfe.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nSecurityException se)
+            {
+                Console.WriteLine("Unsufficient permissions for the requested operation.");
+                Console.WriteLine("Please check the ACL settings on the server.");
+                Console.WriteLine(se.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nSessionNotConnectedException snce)
+            {
+                Console.WriteLine("The session object used is not physically connected to the Nirvana realm.");
+                Console.WriteLine("Please ensure the realm is up and check your RNAME value.");
+                Console.WriteLine(snce.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nUnexpectedResponseException ure)
+            {
+                Console.WriteLine("The Nirvana REALM has returned an unexpected response.");
+                Console.WriteLine("Please ensure the Nirvana REALM and client API used are compatible.");
+                Console.WriteLine(ure.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nUnknownRemoteRealmException urre)
+            {
+                Console.WriteLine("The channel specified resided in a remote realm which could not be found.");
+                Console.WriteLine("Please ensure the channel name specified is correct.");
+                Console.WriteLine(urre.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nRequestTimedOutException rtoe)
+            {
+                Console.WriteLine("The requested operation has timed out waiting for a response from the REALM.");
+                Console.WriteLine("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+                Console.WriteLine(rtoe.StackTrace);
+                Environment.Exit(1);
+            }
+            catch (nBaseClientException baseex)
+            {
+                Console.WriteLine("The requested operation has generated an exception.");
+                Console.WriteLine(baseex.StackTrace);
+                Environment.Exit(1);
+            }
+
+            //Close the session we opened
+            try
+            {
+                nSessionFactory.close(mySession);
+            }
+            catch (Exception) { }
+            //Close any other sessions so that we can exit
+            nSessionFactory.shutdown();
+
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            if (args.Length < 4)
+            {
+                Usage();
+                Environment.Exit(1);
+            }
+            switch (args.Length)
+            {
+                case 4:
+                    RNAME = args[0];
+                    channel = args[1];
+                    starteid = Convert.ToInt32(args[2]);
+                    endeid = Convert.ToInt32(args[3]);
+                    break;
+                case 5:
+                    RNAME = args[0];
+                    channel = args[1];
+                    starteid = Convert.ToInt32(args[2]);
+                    endeid = Convert.ToInt32(args[3]);
+                    filter = args[4];
+                    break;
+            }
+        }
+
+        public static void Main(String[] args)
+        {
+
+            //Create an instance for this class
+            mySelf = new purgeevents();
+
+            //Process command line arguments
+            mySelf.processArgs(args);
+
+            //Process the local REALM RNAME details
+            String[] rproperties = parseRealmProperties(RNAME);
+
+            //Purge the specified events from the channel
+            mySelf.doit(rproperties);
+        }
+
+        /**
+         * Prints the usage message for this class
+         */
+        private static void Usage()
+        {
+
+            Console.WriteLine("Usage ...\n");
+            Console.WriteLine("purgeevents <rname> <channel name> <start eid> <end eid> [filter]\n");
+            Console.WriteLine(
+              "<Required Arguments> \n");
+            Console.WriteLine(
+              "<rname> - The realm to retrieve channels from");
+            Console.WriteLine(
+              "<channel name> - Channel name parameter for the channel to be purged");
+            Console.WriteLine(
+              "<start eid> - The start eid of the range of events to be purged");
+            Console.WriteLine(
+              "<end eid> - The end eid of the range of events to be purged");
+            Console.WriteLine(
+              "[Optional Arguments] \n");
+            Console.WriteLine(
+              "[filter] - The filter string to use for the purge");
+        }
+
+    } // End of purgeevents Class
+}

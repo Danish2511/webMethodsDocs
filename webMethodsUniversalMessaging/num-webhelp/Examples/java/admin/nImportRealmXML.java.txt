@@ -1,0 +1,214 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.nAdminAPI.ImportExportParametersBuilder;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.xml.NirvanaRealm;
+import com.pcbsys.nirvana.nAdminAPI.xml.NirvanaRealmParser;
+import java.io.File;
+import java.util.Date;
+
+
+/**
+ * This application can be used to import the objects into a realm.
+ * <p/>
+ * The program will import realm acl entries and permissions, and configurations for all channels, queues, interfaces
+ * and schedulers.
+ */
+public class nImportRealmXML extends nSampleApp {
+
+  private String realmUrl = null;
+  private String fileName = null;
+  private ImportExportParametersBuilder importParameters = null;
+
+  /**
+   * Constructor for the class, takes the string realm url
+   */
+  private nImportRealmXML(String[] args) {
+
+    nRealmNode node = null;
+
+    try {
+      processArgs(args);
+      report("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+
+      // construct the realm node
+      node = new nRealmNode(attr);
+      node.waitForEntireNameSpace(5000);
+
+      // construct the importer
+      NirvanaRealm realm = NirvanaRealmParser.getNirvanaRealm(fileName);
+      node.importConfiguration(realm, importParameters);
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    } finally {
+      if (node != null) {
+        node.close();
+        nSessionFactory.shutdown();
+      }
+    }
+  }
+
+  /**
+   * Main program thread, takes a realm URL as the parameter to start the search
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    new nImportRealmXML(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 0:
+        Usage();
+        UsageEnv();
+        System.exit(1);
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("FILE", args[0]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("FILE", args[0]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  void getOptions(String[] args) {
+
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      showUsageAndExit();
+    }
+
+    fileName = System.getProperty("FILE");
+    if (fileName == null) {
+      showUsageAndExit();
+    }
+
+    if (!new File(fileName).exists()) {
+      System.out.println("The specified file does not exist");
+      showUsageAndExit();
+    }
+
+    if (args == null) {
+      showUsageAndExit();
+    }
+
+    importParameters = ImportExportParametersBuilder.createParametersBuilder();
+
+    // set what will be imported based on command line arguments
+    boolean disableCluster = false;
+
+    for (String arg : args) {
+      if (arg.equals("-all")) {
+        importParameters.enableAll();
+      } else if (arg.equalsIgnoreCase("-nocluster")) {
+        disableCluster = true;
+      } else if (arg.equals("-realms")) {
+        importParameters.setRealmsProcessing(true);
+      } else if (arg.equals("-cluster")) {
+        importParameters.setClusterProcessing(true);
+      } else if (arg.equals("-realmacl")) {
+        importParameters.setRealmAclProcessing(true);
+      } else if (arg.equals("-realmcfg")) {
+        importParameters.setRealmCfgProcessing(true);
+      } else if (arg.equals("-channels")) {
+        importParameters.setChannelsProcessing(true);
+      } else if (arg.startsWith("-channelfilter")) {
+        importParameters.setChannelfilter(getFilter(arg));
+      } else if (arg.equals("-channelacls")) {
+        importParameters.setChannelAclsProcessing(true);
+      } else if (arg.equals("-channelprotobufs")) {
+        importParameters.setChannelProtobufsProcessing(true);
+      } else if (arg.equals("-joins")) {
+        importParameters.setJoinsProcessing(true);
+      } else if (arg.equals("-queues")) {
+        importParameters.setQueuesProcessing(true);
+      } else if (arg.startsWith("-queuefilter")) {
+        importParameters.setQueuefilter(getFilter(arg));
+      } else if (arg.equals("-queueacls")) {
+        importParameters.setQueueAclsProcessing(true);
+      } else if(arg.equals("-queueprotobufs")){
+        importParameters.setQueueProtobufsProcessing(true);
+      } else if (arg.equals("-interfaces")) {
+        importParameters.setInterfacesProcessing(true);
+      } else if (arg.equals("-plugins")) {
+        importParameters.setPluginsProcessing(true);
+      } else if (arg.equals("-via")) {
+        importParameters.setViaProcessing(true);
+      } else if (arg.equals("-durables")) {
+        importParameters.setDurablesProcessing(true);
+      } else if (arg.equals("-jndi")) {
+        importParameters.setJndiProcessing(true);
+      }
+    }
+
+    if (disableCluster) {
+      report("Cluster configuration not being loaded due to -noCluster flag");
+      importParameters.setClusterProcessing(true);
+    }
+  }
+
+  private String getFilter(String arg) {
+    String[] parts = arg.split("=");
+
+    if (parts.length != 2) {
+      throw new IllegalArgumentException("Wrong filter: " + arg + " Use '='!");
+    }
+
+    return parts[1];
+  }
+
+  private void showUsageAndExit() {
+    Usage();
+    System.exit(1);
+  }
+
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+    System.out.println("Usage ...\n");
+    System.out.println("nimportrealmxml file_name\n");
+    System.out.println(
+        "<Optional Arguments> -all -realmacl -realmcfg -channels -durables -jndi -channelfilter=<filter> -channelacls -channelprotobufs -queues -queuefilter=<filter> -queueacls -queueprotobufs -interfaces \n");
+    System.out.println(
+        "\n<filter> values are a comma separated list of java regular expressions that can filter channel, queue names respectively.");
+    System.out.println(
+        "\nExample 1: nimportrealmxml test.xml -channels -channelfilter=/perf.+ \n will import only channels whose absolute path starts with /perf");
+    System.out.println(
+        "\nExample 2: nimportrealmxml test.xml -channels -channelfilter=.+test \n will import only channels whose absolute path ends in test");
+    System.out.println(
+        "\nExample 3: nimportrealmxml test.xml -channels -channelfilter=.*test.* \n will import only channels whose absolute path contains test");
+    System.out.println(
+        "\nExample 4: nimportrealmxml test.xml -all -channelfilter=.*test.*,/perf.* \n will import everything with channels being restricted to those with absolute path containing test or starting with /perf");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+  private static void report(String line) {
+    Date dt = new Date();
+    System.out.println(dt.toString() + " > " + line);
+  }
+
+}

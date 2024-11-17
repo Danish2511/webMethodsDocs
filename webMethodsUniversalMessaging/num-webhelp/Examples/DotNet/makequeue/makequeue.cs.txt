@@ -1,0 +1,230 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using com.pcbsys.nirvana.client;
+
+namespace com.pcbsys.nirvana.apps
+{
+    class makequeue : nSampleApp
+    {
+        /**
+         * Creates a nirvana queue
+         */
+        private static makequeue mySelf = null;
+
+        /**
+         * This method demonstrates the Nirvana API calls necessary to create
+         * a queue.
+         * It is called after all command line arguments have been received and
+         * validated
+         *
+         * @param realmDetails a String[] containing the possible RNAME values
+         * @param aqueueName the queue name to create
+         */
+        private void doit(String[] realmDetails, String aqueueName, int age, int cap, String type, long eid)
+        {
+
+            mySelf.constructSession(realmDetails);
+
+            //Creates the specified queue
+            try
+            {
+                //Create a queue attributes object
+                nChannelAttributes nca = createChannelAttributes(aqueueName, age, cap, type);
+
+                //Create the queue
+                nQueue myQueue = mySession.createQueue(nca, eid);
+
+            }
+            //Handle errors
+            catch (nChannelNotFoundException )
+            {
+                Console.WriteLine("The channel specified could not be found.");
+                Console.WriteLine("Please ensure that the channel exists in the REALM you connect to.");
+                Environment.Exit(1);
+            }
+            catch (nSecurityException )
+            {
+                Console.WriteLine("Unsufficient permissions for the requested operation.");
+                Console.WriteLine("Please check the ACL settings on the server.");
+                Environment.Exit(1);
+            }
+            catch (nSessionNotConnectedException )
+            {
+                Console.WriteLine("The session object used is not physically connected to the Nirvana realm.");
+                Console.WriteLine("Please ensure the realm is up and check your RNAME value.");
+                Environment.Exit(1);
+            }
+            catch (nUnexpectedResponseException )
+            {
+                Console.WriteLine("The Nirvana REALM has returned an unexpected response.");
+                Console.WriteLine("Please ensure the Nirvana REALM and client API used are compatible.");
+                Environment.Exit(1);
+            }
+            catch (nUnknownRemoteRealmException )
+            {
+                Console.WriteLine("The channel specified resided in a remote realm which could not be found.");
+                Console.WriteLine("Please ensure the channel name specified is correct.");
+                Environment.Exit(1);
+            }
+            catch (nRequestTimedOutException )
+            {
+                Console.WriteLine("The requested operation has timed out waiting for a response from the REALM.");
+                Console.WriteLine("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+                Environment.Exit(1);
+            }
+            catch (nChannelAlreadyExistsException )
+            {
+                Console.WriteLine("The channel specified already exists on the REALM.");
+                Environment.Exit(1);
+            }
+            catch (nBaseClientException )
+            {
+                Console.WriteLine("An error occured while creating the Channel Attributes object.");
+                Environment.Exit(1);
+            }
+            //Close the session we opened
+            try
+            {
+                nSessionFactory.close(mySession);
+            }
+            catch (Exception ) { }
+            //Close any other sessions so that we can exit
+            nSessionFactory.shutdown();
+        }
+
+        private nChannelAttributes createChannelAttributes(String aqueueName, int age, int cap, String type)
+        {
+            //Create a queue attributes object
+            nChannelAttributes nca = new nChannelAttributes();
+
+            //Set the queue name
+            nca.setName(aqueueName);
+
+            //Set the queue type parameter (reliable or guaranteed)
+            if (type != null)
+            {
+                if (type.Equals("R"))
+                {
+                    nca.setType(nChannelAttributes.RELIABLE_TYPE);
+                }
+                else if (type.Equals("P"))
+                {
+                    nca.setType(nChannelAttributes.PERSISTENT_TYPE);
+                }
+                else if (type.Equals("M"))
+                {
+                    nca.setType(nChannelAttributes.MIXED_TYPE);
+                }
+            }
+            else
+            {
+                nca.setType(nChannelAttributes.RELIABLE_TYPE);
+            }
+
+            //Set the queue capacity parameter
+            nca.setMaxEvents(cap);
+
+            //Set the queue Time to Live parameter
+            nca.setTTL(age);
+
+
+            return nca;
+        }
+
+        /**
+         * Prints the usage message for this class
+         */
+        private static void Usage()
+        {
+
+            Console.WriteLine("Usage ...\n");
+            Console.WriteLine("makequeue <rname> <queue name> [time to live] [capacity] [type] [cluster wide] [start eid] \n");
+
+            Console.WriteLine(
+              "<Required Arguments> \n");
+            Console.WriteLine(
+              "<rname> - the rname of the server to connect to");
+            Console.WriteLine(
+              "<queue name> - queue name parameter for the queue to be created");
+            Console.WriteLine(
+              "\n[Optional Arguments] \n");
+            Console.WriteLine(
+              "[time to live] - The Time To Live parameter for the new queue (default: 0)");
+            Console.WriteLine(
+              "[capacity] - The Capacity parameter for the new queue (default: 0)");
+            Console.WriteLine(
+              "[type] - The type parameter for the new queue (default: S)");
+            Console.WriteLine(
+              "   R - For a reliable (stored in memory) queue with persistent eids");
+            Console.WriteLine(
+              "   P - For a persistent (stored on disk) queue");
+            Console.WriteLine(
+              "   M - For a mixed (allows both memory and persistent events) queue\n");
+            Console.WriteLine(
+              "[cluster wide] - Deprecated: Whether the queue is cluster wide. Will only work if the realm is part of a cluster (default: false)");
+            Console.WriteLine(
+              "[start eid] - The initial start event id for the new queue (default: 0)");
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            //
+            // Need a min of 2, rname, queue name, capacity, ttl, type
+            if (args.Length < 2)
+            {
+                Usage();
+                Environment.Exit(2);
+            }
+            String RNAME = args[0]; ;
+
+            var queueName = args[1];
+
+            int age = 0;
+            int cap = 0;
+            String type = "S";
+            long eid = 0;
+
+            //Check the queue name specified
+            if (args.Length > 2)
+            {
+                age = Convert.ToInt32(args[2]);
+            }
+            if (args.Length > 3)
+            {
+                cap = Convert.ToInt32(args[3]);
+            }
+            if (args.Length > 4)
+            {
+                type = args[4];
+            }
+            if (args.Length > 5)
+            {
+                // Deprecated
+            }
+            if (args.Length > 6)
+            {
+                eid = Convert.ToInt32(args[6]);
+            }
+
+            //
+            // Run the sample app
+            //
+            mySelf.doit(parseRealmProperties(RNAME), queueName, age, cap, type, eid);
+        }
+
+        static void Main(string[] args)
+        {
+            //Create an instance for this class
+            mySelf = new makequeue();
+
+            mySelf.processArgs(args);
+        }
+    }
+}

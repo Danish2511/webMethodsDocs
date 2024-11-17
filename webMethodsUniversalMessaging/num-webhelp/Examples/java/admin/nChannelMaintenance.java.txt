@@ -1,0 +1,197 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.Hashtable;
+
+/**
+ * This application demonstrates how to manage persistant / mixed channels, i.e. performing maintenance
+ * on them.
+ */
+
+public class nChannelMaintenance extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realmUrl = null;
+
+  private nSessionAttributes attr = null;
+  private nRealmNode realm = null;
+
+  private nChannelMaintenanceScheduler channelMgr = null;
+  private Hashtable myChannels = new Hashtable();
+
+  /**
+   * Construct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nChannelMaintenance(String args[]) {
+    try {
+      // set the parameters required for this operation
+      processArgs(args);
+      System.out.println("[" + new Date(System.currentTimeMillis()).toString() + "],Connecting to " + realmUrl);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realmUrl);
+      // get the realm node
+      realm = new nRealmNode(attr);
+      if (!realm.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realmUrl);
+        return;
+      }
+
+      // wait for the namespace to be complete
+      realm.waitForEntireNameSpace();
+      // register this realm node and all child realms and look for channels
+      this.register(realm);
+      channelMgr = new nChannelMaintenanceScheduler();
+      realm.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * Search the enumeration of child nodes, and add observers to all child realms
+   * and check all channels and queues if they are mixed or persistant add to the vector.
+   */
+  private void register(Enumeration enum1) throws nBaseAdminException {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nLeafNode) {
+        nLeafNode node = ((nLeafNode) obj);
+        if ((node.getAttributes().getType() == nChannelAttributes.MIXED_TYPE) || (node.getAttributes().getType()
+            == nChannelAttributes.PERSISTENT_TYPE)) {
+          nLeafNode leaf = (nLeafNode) myChannels.get(node.getAbsolutePath());
+          if (leaf == null) {
+            if (node.isChannel()) {
+              System.out.println(
+                  "[" + new Date(System.currentTimeMillis()).toString() + "],Adding channel " + node.getAbsolutePath()
+                      + " to scheduler");
+            } else {
+              System.out.println(
+                  "[" + new Date(System.currentTimeMillis()).toString() + "],Adding queue " + node.getAbsolutePath()
+                      + " to scheduler");
+            }
+            myChannels.put(node.getAbsolutePath(), node);
+          } else {
+            myChannels.remove(node.getAbsolutePath());
+            if (node.isChannel()) {
+              System.out.println(
+                  "[" + new Date(System.currentTimeMillis()).toString() + "],Removing channel " + node.getAbsolutePath()
+                      + " from scheduler");
+            } else {
+              System.out.println(
+                  "[" + new Date(System.currentTimeMillis()).toString() + "],Removing queue " + node.getAbsolutePath()
+                      + " from scheduler");
+            }
+          }
+        }
+      } else if (obj instanceof nRealmNode) {
+        register((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        register(((nContainer) obj).getNodes());
+      }
+    }
+  }
+
+  /**
+   * Add this as an observer to the realm ao that any new channels can be added
+   */
+  private void register(nRealmNode node) throws nBaseAdminException {
+    register(node.getNodes());
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Class used to perform channel maintenance periodically
+   */
+  private class nChannelMaintenanceScheduler {
+
+    public nChannelMaintenanceScheduler() {
+      try {
+        synchronized (myChannels) {
+          Enumeration enum1 = myChannels.elements();
+          while (enum1.hasMoreElements()) {
+            nLeafNode leaf = (nLeafNode) enum1.nextElement();
+            leaf.freeUnusedSpace();
+            if (leaf.isChannel()) {
+              System.out.println(
+                  "[" + new Date(System.currentTimeMillis()).toString() + "],Performing maintenance on channel " + leaf
+                      .getAbsolutePath());
+            } else {
+              System.out.println(
+                  "[" + new Date(System.currentTimeMillis()).toString() + "],Performing maintenance on queue " + leaf
+                      .getAbsolutePath());
+            }
+          }
+        }
+      } catch (Exception ex) {
+        ex.printStackTrace();
+      }
+    }
+
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          Usage();
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * as a system property
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nChannelMaintenance mgr = new nChannelMaintenance(args);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nchannelmaintenance \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

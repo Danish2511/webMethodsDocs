@@ -1,0 +1,235 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using com.pcbsys.nirvana.client;
+
+namespace com.pcbsys.nirvana.apps
+{
+    class makechan : nSampleApp
+    {
+        /**
+         * Creates a nirvana channel
+         */
+        private static makechan mySelf;
+
+        /**
+         * This method demonstrates the Nirvana API calls necessary to create
+         * a channel.
+         * It is called after all command line arguments have been received and
+         * validated
+         *
+         * @param realmDetails a String[] containing the possible RNAME values
+         * @param achannelName the channel name to create
+         */
+        private void doit(String[] realmDetails, String achannelName, int age, int cap, String type, long eid)
+        {
+
+            mySelf.constructSession(realmDetails);
+
+            //Creates the specified channel
+            try
+            {
+                //Create a channel attributes object
+                nChannelAttributes nca = createChannelAttributes(achannelName, age, cap, type);
+
+                //Create the channel
+                nChannel chan = mySession.createChannel(nca, eid);
+
+                nca = chan.getChannelAttributes();
+
+                bool val = chan.getChannelAttributes().getProperties().getPerformAutomaticMaintenance();
+            
+                Console.WriteLine("Maint : "+val);
+            }
+            //Handle errors
+            catch (nChannelNotFoundException)
+            {
+                Console.WriteLine("The channel specified could not be found.");
+                Console.WriteLine("Please ensure that the channel exists in the REALM you connect to.");
+                Environment.Exit(1);
+            }
+            catch (nSecurityException)
+            {
+                Console.WriteLine("Unsufficient permissions for the requested operation.");
+                Console.WriteLine("Please check the ACL settings on the server.");
+                Environment.Exit(1);
+            }
+            catch (nSessionNotConnectedException)
+            {
+                Console.WriteLine("The session object used is not physically connected to the Nirvana realm.");
+                Console.WriteLine("Please ensure the realm is up and check your RNAME value.");
+                Environment.Exit(1);
+            }
+            catch (nUnexpectedResponseException)
+            {
+                Console.WriteLine("The Nirvana REALM has returned an unexpected response.");
+                Console.WriteLine("Please ensure the Nirvana REALM and client API used are compatible.");
+                Environment.Exit(1);
+            }
+            catch (nUnknownRemoteRealmException)
+            {
+                Console.WriteLine("The channel specified resided in a remote realm which could not be found.");
+                Console.WriteLine("Please ensure the channel name specified is correct.");
+                Environment.Exit(1);
+            }
+            catch (nRequestTimedOutException)
+            {
+                Console.WriteLine("The requested operation has timed out waiting for a response from the REALM.");
+                Console.WriteLine("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+                Environment.Exit(1);
+            }
+            catch (nChannelAlreadyExistsException)
+            {
+                Console.WriteLine("The channel specified already exists on the REALM.");
+                Environment.Exit(1);
+            }
+            catch (nBaseClientException)
+            {
+                Console.WriteLine("An error occured while creating the Channel Attributes object.");
+                Environment.Exit(1);
+            }
+            //Close the session we opened
+            try
+            {
+                nSessionFactory.close(mySession);
+            }
+            catch (Exception) { }
+            //Close any other sessions so that we can exit
+            nSessionFactory.shutdown();
+        }
+
+        private nChannelAttributes createChannelAttributes(String achannelName, int age, int cap, String type)
+        {
+            //Create a channel attributes object
+            nChannelAttributes nca = new nChannelAttributes();
+
+            //Set the channel name
+            nca.setName(achannelName);
+
+            //Set the channel type parameter (reliable or guaranteed)
+            if (type != null)
+            {
+                if (type.Equals("R"))
+                {
+                    nca.setType(nChannelAttributes.RELIABLE_TYPE);
+                }
+                else if (type.Equals("P"))
+                {
+                    nca.setType(nChannelAttributes.PERSISTENT_TYPE);
+                }
+                else if (type.Equals("M"))
+                {
+                    nca.setType(nChannelAttributes.MIXED_TYPE);
+                }
+            }
+            else
+            {
+                nca.setType(nChannelAttributes.RELIABLE_TYPE);
+            }
+
+            //Set the channel capacity parameter
+            nca.setMaxEvents(cap);
+
+            //Set the channel Time to Live parameter
+            nca.setTTL(age);
+
+            nca.getProperties().setPerformAutomaticMaintenance(true);
+            return nca;
+        }
+
+        /**
+         * Prints the usage message for this class
+         */
+        private static void Usage()
+        {
+
+            Console.WriteLine("Usage ...\n");
+            Console.WriteLine("makechan <rname> <channel name> [time to live] [capacity] [type] [cluster wide] [start eid] \n");
+
+            Console.WriteLine(
+              "<Required Arguments> \n");
+            Console.WriteLine(
+              "<rname> - the rname of the server to connect to");
+            Console.WriteLine(
+              "<channel name> - Channel name parameter for the channel to be created");
+            Console.WriteLine(
+              "\n[Optional Arguments] \n");
+            Console.WriteLine(
+              "[time to live] - The Time To Live parameter for the new channel (default: 0)");
+            Console.WriteLine(
+              "[capacity] - The Capacity parameter for the new channel (default: 0)");
+            Console.WriteLine(
+              "[type] - The type parameter for the new channel (default: S)");
+            Console.WriteLine(
+              "   R - For a reliable (stored in memory) channel with persistent eids");
+            Console.WriteLine(
+              "   P - For a persistent (stored on disk) channel");
+            Console.WriteLine(
+              "   M - For a Mixed (allows both memory and persistent events) channel\n");
+            Console.WriteLine(
+              "[cluster wide] - Deprecated: Whether the channel is cluster wide. Will only work if the realm is part of a cluster (default: false)");
+            Console.WriteLine(
+              "[start eid] - The initial start event id for the new channel (default: 0)");
+        }
+
+        protected override void processArgs(String[] args)
+        {
+            //
+            // Need a min of rname, channel name
+            if (args.Length < 2)
+            {
+                Usage();
+                Environment.Exit(2);
+            }
+            String RNAME = args[0]; ;
+
+            var channelName = args[1];
+
+            int age = 0;
+            int cap = 0;
+            String type = "S";
+            long eid = 0;
+
+            //Check the channel name specified
+            if (args.Length > 2)
+            {
+                age = Convert.ToInt32(args[2]);
+            }
+            if (args.Length > 3)
+            {
+                cap = Convert.ToInt32(args[3]);
+            }
+            if (args.Length > 4)
+            {
+                type = args[4];
+            }
+            if (args.Length > 5)
+            {
+                // Deprecated
+            }
+            if (args.Length > 6)
+            {
+                eid = Convert.ToInt32(args[6]);
+            }
+
+            //
+            // Run the sample app
+            //
+            mySelf.doit(parseRealmProperties(RNAME), channelName, age, cap, type, eid);
+        }
+
+        static void Main(string[] args)
+        {
+            //Create an instance for this class
+            mySelf = new makechan();
+
+            mySelf.processArgs(args);
+        }
+    }
+}

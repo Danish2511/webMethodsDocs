@@ -1,0 +1,316 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nAdminIllegalArgumentException;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nRealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to add a new subject to a realm, and assign permissions
+ * for operations performed on the realm.
+ * You can also specify to add an acl entry to all known realms within a namespace, by
+ * recursively searching through looking for other realm nodes and setting the new acl entry
+ * This is achieved by specifying -r as a command line parameter.
+ */
+
+public class nAddRealmAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private boolean recursive = false;
+  private boolean canListAcl = false;
+  private boolean canModifyAcl = false;
+  private boolean fullPrivileges = false;
+  private boolean canAccessRealm = false;
+  private boolean isRealmAdmin = false;
+  private boolean canChangeConfig = false;
+  private boolean canManageChannels = false;
+  private boolean canManageJoins = false;
+  private boolean canManageRealm = false;
+  private boolean canOverrideConnections = false;
+  private nSessionAttributes attr = null;
+  private nRealmNode node = null;
+
+  /**
+   * Consruct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nAddRealmAclEntry(String args[]) {
+    try {
+      // set the permissions flags from the command line
+      processArgs(args);
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed if
+      // the operation is recursive
+      if (recursive) {
+        System.out.print("waiting for namepsace construction..... ");
+        node.waitForEntireNameSpace();
+        System.out.println("finished");
+      }
+      System.out.println("Creating new entry for " + name + "@" + host);
+      // create a new acl entry with the name and host
+      nRealmACLEntry newEntry = createNewACLEntry(name, host);
+      node.addACLEntry(newEntry);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Added ACL for " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      dump();
+      // if you specify -r as a command line parameter, you can choose to traverse the entire
+      // realm namespace, including any realms that have been added to the root node
+      if (recursive) {
+        traverse(node);
+      }
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * recursively search through the nodes from a realm node looking for other realm nodes
+   */
+  public nRealmNode traverse(nRealmNode p_node) {
+    // get the enumeration of child nodes from p_node
+    Enumeration enum1 = p_node.getNodes();
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      // only deal with realm nodes
+      if (obj instanceof nRealmNode) {
+        nRealmNode node = (nRealmNode) obj;
+        try {
+          // create new acl entry and set the permissions
+          nRealmACLEntry aclEntry = createNewACLEntry(name, host);
+          node.addACLEntry(aclEntry);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        System.out.println("Added ACL for " + node.getName());
+        System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+        dump();
+        // now traverse the child nodes
+        return traverse(node);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNode(cont.getNodes());
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Search the enumeration of nodes passed as a parameter
+   */
+  private void searchNode(Enumeration p_nodes) {
+    try {
+      while (p_nodes.hasMoreElements()) {
+        Object obj = p_nodes.nextElement();
+        if (obj instanceof nRealmNode) {
+          nRealmNode node = (nRealmNode) obj;
+          try {
+            // create new acl entry and set the permissions
+            nRealmACLEntry aclEntry = createNewACLEntry(name, host);
+            node.addACLEntry(aclEntry);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          System.out.println("Added ACL for " + node.getName());
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          dump();
+        } else if (obj instanceof nContainer) {
+          searchNode(((nContainer) obj).getNodes());
+        }
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Create a new acl entry and set the permissions based on the permissions flags
+   */
+  public nRealmACLEntry createNewACLEntry(String p_name, String p_host) {
+    nRealmACLEntry aclEntry = null;
+    try {
+      aclEntry = new nRealmACLEntry(p_name, p_host);
+      this.setPermissions(aclEntry);
+    } catch (nAdminIllegalArgumentException e) {
+      System.out.println(e.getMessage());
+    }
+    return aclEntry;
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * Set the permissions on the realm acl entry
+   */
+  public void setPermissions(nRealmACLEntry aclEntry) {
+    aclEntry.setList(canListAcl);
+    aclEntry.setModify(canModifyAcl);
+    aclEntry.setFullPrivileges(fullPrivileges);
+    aclEntry.setAccessTheRealm(canAccessRealm);
+    aclEntry.setUseAdminAPI(isRealmAdmin);
+    aclEntry.setConfigureRealm(canChangeConfig);
+    aclEntry.setManageChannels(canManageChannels);
+    aclEntry.setManageJoins(canManageJoins);
+    aclEntry.setManageJoins(canManageRealm);
+    aclEntry.setOverrideConnectionCount(canOverrideConnections);
+  }
+
+  /**
+   * Output to system.out the permissions that have been set
+   */
+  public void dump() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL               : " + canListAcl);
+    System.out.println("Set ACL                : " + canModifyAcl);
+    System.out.println("Full Privileges        : " + fullPrivileges);
+    System.out.println("Access realm           : " + canAccessRealm);
+    System.out.println("Use admin api          : " + isRealmAdmin);
+    System.out.println("Confgure realm         : " + canChangeConfig);
+    System.out.println("Manage channel         : " + canManageChannels);
+    System.out.println("Manage joins           : " + canManageJoins);
+    System.out.println("Manage realm           : " + canManageRealm);
+    System.out.println("Override connections   : " + canOverrideConnections);
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Set the program variables and permissions flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    }
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("list_acl")) {
+        canListAcl = true;
+      } else if (args[i].equalsIgnoreCase("modify_acl")) {
+        canModifyAcl = true;
+      } else if (args[i].equalsIgnoreCase("full")) {
+        fullPrivileges = true;
+      } else if (args[i].equalsIgnoreCase("access_realm")) {
+        canAccessRealm = true;
+      } else if (args[i].equalsIgnoreCase("realm_admin")) {
+        isRealmAdmin = true;
+      } else if (args[i].equalsIgnoreCase("realm_config")) {
+        canChangeConfig = true;
+      } else if (args[i].equalsIgnoreCase("manage_channels")) {
+        canManageChannels = true;
+      } else if (args[i].equalsIgnoreCase("manage_joins")) {
+        canManageJoins = true;
+      } else if (args[i].equalsIgnoreCase("manage_realm")) {
+        canManageRealm = true;
+      } else if (args[i].equalsIgnoreCase("override_connections")) {
+        canOverrideConnections = true;
+      } else if (args[i].equalsIgnoreCase("-r")) {
+        recursive = true;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("NAME", args[0]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("NAME", args[0]);
+        System.setProperty("HOST", args[1]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nAddRealmAclEntry setAcl = new nAddRealmAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println(
+        "naddrealmacl <user> <host> [-r] [list_acl] [modify_acl] [full] [access_realm] [realm_admin] [realm_config] [manage_channels] [manage_joins] [override_connections]\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<user> - User name parameter for the new ACL entry");
+    System.out.println("<host> - Host name parameter for the new ACL entry");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[-r] - Specifies whether recursive traversal of the namespace should be done");
+    System.out.println("[list_acl] - Specifies that the list acl permission should be added");
+    System.out.println("[modify_acl] - Specifies that the modify acl permission should be added");
+    System.out.println("[full] - Specifies that the full permission should be added");
+    System.out.println("[access_realm] - Specifies that the realm access permission should be added");
+    System.out.println("[realm_admin] - Specifies that the realm admin permission should be added");
+    System.out.println("[realm_config] - Specifies that the realm configuration permission should be added");
+    System.out.println("[manage_channels] - Specifies that the manage channels permission should be added");
+    System.out.println("[manage_joins] - Specifies that the manage joins permission should be added");
+    System.out.println("[override_connections] - Specifies that the override connections permission should be added");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

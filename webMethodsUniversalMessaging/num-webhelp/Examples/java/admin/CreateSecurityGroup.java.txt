@@ -1,0 +1,99 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nBaseClientException;
+import com.pcbsys.nirvana.client.nIllegalArgumentException;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+
+public class CreateSecurityGroup extends nSampleApp {
+
+  public static void main(String[] args) {
+    CreateSecurityGroup createSecurityGroup = new CreateSecurityGroup();
+    createSecurityGroup.processArgs(args);
+    nSampleApp.processEnvironmentVariables();
+
+    // Check the local realm details
+    String rname = System.getProperty("RNAME");
+    if (rname == null) {
+      System.out.println(
+          "Please specify rname as a system property. E.g. -Dlax.nl.env.RNAME=nsp://127.0.0.1:9000 or -DRNAME=nsp://127.0.0.1:9000");
+      Usage();
+      System.exit(1);
+    }
+
+    createSecurityGroup.doit(rname, args[0]);
+  }
+
+  private static void Usage() {
+    System.out.println("Usage:\n");
+    System.out.println("nmakesecgroup <security group name> \n");
+
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<security group name> - The name of the security group");
+  }
+
+  void doit(String rname, String groupName) {
+    nRealmNode realmNode = null;
+    try {
+      //Create realm node as security group creation is part of the Admin API
+      realmNode = new nRealmNode(new nSessionAttributes(rname));
+      //Register the new group
+      realmNode.getSecurityGroupManager().registerSecurityGroup(groupName);
+      System.out.printf("%s was created for %s", groupName, rname);
+      // Handle errors
+    } catch (nBaseAdminException e) {
+      showErrorAndExit(e);
+    } catch (nBaseClientException e) {
+      showErrorAndExit(e);
+    } finally {
+      closeSession(realmNode);
+    }
+  }
+
+  private void closeSession(nRealmNode realmNode) {
+    // Close the session with the remote Realm
+    if (realmNode != null) {
+      realmNode.close();
+    }
+
+    // Close the session we opened
+    try {
+      nSessionFactory.close(mySession);
+    } catch (nIllegalArgumentException ex) {
+      //This exception indicates that the session is invalid (either null or missing from the list of known sessions)
+      //In this case there is not much we can do
+    }
+    // Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+  }
+
+  @Override
+  protected void processArgs(String[] args) {
+    if (args.length < 1) {
+      showUsageAndExit("Missing security group name. Please check the usage");
+    }
+  }
+
+  private void showErrorAndExit(Exception e) {
+    System.out.println(e.getLocalizedMessage());
+    e.printStackTrace();
+    System.exit(1);
+  }
+
+  private void showUsageAndExit(String message) {
+    System.out.println(message);
+    Usage();
+    System.exit(1);
+  }
+}

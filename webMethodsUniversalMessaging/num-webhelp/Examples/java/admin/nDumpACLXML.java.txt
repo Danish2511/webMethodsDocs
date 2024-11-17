@@ -1,0 +1,408 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nBaseClientException;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.xml.ChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.ChannelAttributesEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.ChannelEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.ChannelGroupACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.ChannelPermissionSet;
+import com.pcbsys.nirvana.nAdminAPI.xml.ChannelSet;
+import com.pcbsys.nirvana.nAdminAPI.xml.NirvanaRealm;
+import com.pcbsys.nirvana.nAdminAPI.xml.ObjectFactory;
+import com.pcbsys.nirvana.nAdminAPI.xml.QueueACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.QueueEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.QueueGroupACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.QueuePermissionSet;
+import com.pcbsys.nirvana.nAdminAPI.xml.QueueSet;
+import com.pcbsys.nirvana.nAdminAPI.xml.RealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.RealmGroupACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.xml.RealmPermissionSet;
+import java.util.Enumeration;
+import java.util.GregorianCalendar;
+import java.util.List;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.datatype.DatatypeFactory;
+import javax.xml.datatype.XMLGregorianCalendar;
+
+/**
+ * This application can be used to output the acls for objects within a realm.
+ * The program will search through the realm and output the acl entries and permissions
+ * for all channels, queues and other realms within the namespace
+ */
+
+public class nDumpACLXML extends nSampleApp {
+
+  private String realmUrl = null;
+
+  /**
+   * Main program thread, takes a realm URL as the parameter to start the search
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nDumpACLXML dump = new nDumpACLXML(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Constructor for the class, takes the string realm url
+   */
+  public nDumpACLXML(String[] args) {
+    try {
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+      // construct the realm node
+      nRealmNode node = new nRealmNode(attr);
+      node.waitForEntireNameSpace();
+
+      // create a JAXBContext
+      JAXBContext jc = JAXBContext.newInstance("com.pcbsys.nirvana.nAdminAPI.xml");
+
+      // create an ObjectFactory instance.
+      // if the JAXBContext had been created with mutiple pacakge names,
+      // we would have to explicitly use the correct package name when
+      // creating the ObjectFactory.
+      ObjectFactory objFactory = new ObjectFactory();
+
+      NirvanaRealm realm = objFactory.createNirvanaRealm();
+
+      realm.setComment("Realm configuration from " + realmUrl);
+
+      realm.setName(node.getRealm().getName());
+
+      GregorianCalendar cal = new GregorianCalendar();
+
+      XMLGregorianCalendar xmlCal = DatatypeFactory.newInstance().newXMLGregorianCalendar(cal);
+      realm.setExportDate(xmlCal);
+
+      createACL(objFactory, realm, node);
+
+      // create a Marshaller and marshal to System.out
+      Marshaller m = jc.createMarshaller();
+      m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, Boolean.TRUE);
+      m.marshal(realm, System.out);
+
+      // close the node, which closes all sessions made to the namespace
+      node.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Method to output contents of a realm node
+   */
+  private void createACL(ObjectFactory objFact, NirvanaRealm realm, nRealmNode node) throws JAXBException {
+
+    RealmPermissionSet rpermset = null;
+
+    try {
+      // call the method to output the acl entries for the realm
+      rpermset = objFact.createRealmPermissionSet();
+      createRealmACL(objFact, rpermset, node.getACLs());
+
+      // call the method to search the child nodes within the realm node
+      Enumeration enum1 = node.getNodes();
+      while (enum1.hasMoreElements()) {
+        nNode o = (nNode) enum1.nextElement();
+        if (o instanceof nLeafNode) {
+          createLeafACL(objFact, realm, (nLeafNode) o);
+        } else if (o instanceof nContainer) {
+          createContainerACL(objFact, realm, (nContainer) o);
+        }
+
+      }
+
+      realm.setRealmPermissionSet(rpermset);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private void createContainerACL(ObjectFactory objFact, NirvanaRealm realm, nContainer node) {
+    try {
+      // call the method to search the child nodes within the realm node
+      Enumeration enum1 = node.getNodes();
+      while (enum1.hasMoreElements()) {
+        nNode o = (nNode) enum1.nextElement();
+        if (o instanceof nLeafNode) {
+          createLeafACL(objFact, realm, (nLeafNode) o);
+        } else if (o instanceof nContainer) {
+          createContainerACL(objFact, realm, (nContainer) o);
+        }
+
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+
+  /**
+   * Method to output the contents of a leaf node, i.e. a channel or a queue
+   */
+  private void createLeafACL(ObjectFactory objFact, NirvanaRealm realm, nLeafNode node)
+      throws JAXBException, nBaseAdminException, nBaseClientException {
+    // detect if the node is a channel or a queue
+    if (node.isChannel()) {
+      createChannelACL(objFact, realm, node);
+    } else {
+      createQueueACL(objFact, realm, node);
+    }
+  }
+
+  private ChannelAttributesEntry createChannelAttributes(ObjectFactory objFact, nLeafNode node)
+      throws JAXBException, nBaseClientException {
+    ChannelAttributesEntry entry = objFact.createChannelAttributesEntry();
+    nChannelAttributes nca = node.getAttributes();
+    entry.setName(nca.getName());
+    entry.setTTL(nca.getTTL());
+    entry.setCapacity(nca.getMaxEvents());
+    entry.setEID(node.getLastEID());
+    switch (nca.getType()) {
+      case nChannelAttributes.RELIABLE_TYPE:
+        entry.setType("RELIABLE_TYPE");
+        break;
+      case nChannelAttributes.PERSISTENT_TYPE:
+        entry.setType("PERSISTENT_TYPE");
+        break;
+      case nChannelAttributes.MIXED_TYPE:
+        entry.setType("MIXED_TYPE");
+        break;
+    }
+    return entry;
+  }
+
+  private void createQueueACL(ObjectFactory objFact, NirvanaRealm realm, nLeafNode node)
+      throws JAXBException, nBaseAdminException, nBaseClientException {
+    QueueSet queueset = null;
+    if (realm.getQueueSet() == null) {
+      queueset = objFact.createQueueSet();
+      realm.setQueueSet(queueset);
+    } else {
+      queueset = (QueueSet) realm.getQueueSet();
+    }
+    List chanlist = queueset.getQueueEntry();
+    QueueEntry qentry = objFact.createQueueEntry();
+    qentry.setChannelAttributesEntry(createChannelAttributes(objFact, node));
+    QueuePermissionSet qpermset = objFact.createQueuePermissionSet();
+    List qpermlist = qpermset.getQueueACLEntry();
+    List qpermgrouplist = qpermset.getQueueGroupACLEntry();
+    Enumeration aclenum = node.getACLs().getEntries();
+    while (aclenum.hasMoreElements()) {
+      Object next = aclenum.nextElement();
+      nChannelACLEntry o = (nChannelACLEntry) next;
+      if (o.isGroup()) {
+        QueueGroupACLEntry qaclentry = objFact.createQueueGroupACLEntry();
+        qaclentry.setGroupname(o.getName());
+        qaclentry.setListACLEntries(o.canList());
+        qaclentry.setModifyACLEntries(o.canModify());
+        qaclentry.setFullControl(o.hasFullPrivileges());
+        qaclentry.setPeek(o.canRead());
+        qaclentry.setPop(o.canPop());
+        qaclentry.setPush(o.canWrite());
+        qaclentry.setPurge(o.canPurge());
+        qpermgrouplist.add(qaclentry);
+      } else {
+        QueueACLEntry qaclentry = objFact.createQueueACLEntry();
+        qaclentry.setHost(o.getHost());
+        qaclentry.setName(o.getName());
+        qaclentry.setListACLEntries(o.canList());
+        qaclentry.setModifyACLEntries(o.canModify());
+        qaclentry.setFullControl(o.hasFullPrivileges());
+        qaclentry.setPeek(o.canRead());
+        qaclentry.setPop(o.canPop());
+        qaclentry.setPush(o.canWrite());
+        qaclentry.setPurge(o.canPurge());
+        qpermlist.add(qaclentry);
+      }
+    }
+    qentry.setQueuePermissionSet(qpermset);
+
+    chanlist.add(qentry);
+  }
+
+
+  private void createChannelACL(ObjectFactory objFact, NirvanaRealm realm, nLeafNode node)
+      throws JAXBException, nBaseAdminException, nBaseClientException {
+    ChannelSet chanset = null;
+    if (realm.getChannelSet() == null) {
+      chanset = objFact.createChannelSet();
+      realm.setChannelSet(chanset);
+    } else {
+      chanset = (ChannelSet) realm.getChannelSet();
+    }
+    List chanlist = chanset.getChannelEntry();
+    ChannelEntry chanentry = objFact.createChannelEntry();
+    chanentry.setChannelAttributesEntry(createChannelAttributes(objFact, node));
+    ChannelPermissionSet chanpermset = objFact.createChannelPermissionSet();
+    List chanpermlist = chanpermset.getChannelACLEntry();
+    List chanpermgrouplist = chanpermset.getChannelGroupACLEntry();
+    Enumeration aclenum = node.getACLs().getEntries();
+    while (aclenum.hasMoreElements()) {
+      Object next = aclenum.nextElement();
+      nChannelACLEntry o = (nChannelACLEntry) next;
+      if (o.isGroup()) {
+        ChannelGroupACLEntry chanaclentry = objFact.createChannelGroupACLEntry();
+        chanaclentry.setGroupname(o.getName());
+        chanaclentry.setListACLEntries(o.canList());
+        chanaclentry.setModifyACLEntries(o.canModify());
+        chanaclentry.setFullControl(o.hasFullPrivileges());
+        chanaclentry.setGetLastEID(o.canGetLastEID());
+        chanaclentry.setPublish(o.canWrite());
+        chanaclentry.setSubscribe(o.canRead());
+        chanaclentry.setPurgeEvents(o.canPurge());
+        chanaclentry.setUseNamedSubcription(o.canUseNamedSubscription());
+        chanpermgrouplist.add(chanaclentry);
+      } else {
+        ChannelACLEntry chanaclentry = objFact.createChannelACLEntry();
+        chanaclentry.setHost(o.getHost());
+        chanaclentry.setName(o.getName());
+        chanaclentry.setListACLEntries(o.canList());
+        chanaclentry.setModifyACLEntries(o.canModify());
+        chanaclentry.setFullControl(o.hasFullPrivileges());
+        chanaclentry.setGetLastEID(o.canGetLastEID());
+        chanaclentry.setPublish(o.canWrite());
+        chanaclentry.setSubscribe(o.canRead());
+        chanaclentry.setPurgeEvents(o.canPurge());
+        chanaclentry.setUseNamedSubcription(o.canUseNamedSubscription());
+        chanpermlist.add(chanaclentry);
+      }
+    }
+    chanentry.setChannelPermissionSet(chanpermset);
+
+    chanlist.add(chanentry);
+  }
+
+  /**
+   * Method to search an enumeration of nodes, these could be realm acl
+   * entries, channel acl entries, leaf nodes or realm nodes
+   */
+  private void createRealmACLList(ObjectFactory objFact, RealmPermissionSet rpermset, Enumeration enum1)
+      throws JAXBException {
+    List rpermlist = rpermset.getRealmACLEntry();
+    List rpermgrouplist = rpermset.getRealmGroupACLEntry();
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+
+      // if the node is a realm, call the method to output the acls for a realm node
+      if (((nRealmACLEntry) obj).isGroup()) {
+        RealmGroupACLEntry xmlentry = createRealmGroupACLEntry(objFact, (nRealmACLEntry) obj);
+        rpermgrouplist.add(xmlentry);
+      } else {
+        RealmACLEntry xmlentry = createRealmACLEntry(objFact, (nRealmACLEntry) obj);
+        rpermlist.add(xmlentry);
+      }
+
+    }
+  }
+
+  /**
+   * Method that outputs the entries of an acl object, by passing the enumeration of acl entries
+   */
+  private void createRealmACL(ObjectFactory objFact, RealmPermissionSet rpermset, nACL acl) throws JAXBException {
+    createRealmACLList(objFact, rpermset, acl.getEntries());
+  }
+
+
+  /**
+   * Method to output the permissions for a realm acl entry
+   */
+  private RealmACLEntry createRealmACLEntry(ObjectFactory objFact, nRealmACLEntry entry) throws JAXBException {
+    RealmACLEntry xmlentry = objFact.createRealmACLEntry();
+    xmlentry.setName(entry.getName());
+    xmlentry.setHost(entry.getHost());
+    xmlentry.setConnectToRealm(entry.canAccessTheRealm());
+    xmlentry.setChangeRealmConfig(entry.canConfigureRealm());
+    xmlentry.setAddremoveChannels(entry.canManageChannels());
+    xmlentry.setAddremoveJoins(entry.canManageJoins());
+    xmlentry.setOverrideConnectionCount(entry.canOverrideConnectionCount());
+    xmlentry.setAddremoveRealms(entry.canManageRealm());
+    xmlentry.setFullControl(entry.hasFullPrivileges());
+    xmlentry.setListACLEntries(entry.canList());
+    xmlentry.setModifyACLEntries(entry.canModify());
+    xmlentry.setUseAdminAPI(entry.canUseAdminAPI());
+
+    return xmlentry;
+  }
+
+  /**
+   * Method to output the permissions for a realm acl entry
+   */
+  private RealmGroupACLEntry createRealmGroupACLEntry(ObjectFactory objFact, nRealmACLEntry entry)
+      throws JAXBException {
+    RealmGroupACLEntry xmlentry = objFact.createRealmGroupACLEntry();
+    xmlentry.setGroupname(entry.getName());
+    xmlentry.setConnectToRealm(entry.canAccessTheRealm());
+    xmlentry.setChangeRealmConfig(entry.canConfigureRealm());
+    xmlentry.setAddremoveChannels(entry.canManageChannels());
+    xmlentry.setAddremoveJoins(entry.canManageJoins());
+    xmlentry.setOverrideConnectionCount(entry.canOverrideConnectionCount());
+    xmlentry.setAddremoveRealms(entry.canManageRealm());
+    xmlentry.setFullControl(entry.hasFullPrivileges());
+    xmlentry.setListACLEntries(entry.canList());
+    xmlentry.setModifyACLEntries(entry.canModify());
+    xmlentry.setUseAdminAPI(entry.canUseAdminAPI());
+
+    return xmlentry;
+  }
+
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("ndumpacl \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}
+

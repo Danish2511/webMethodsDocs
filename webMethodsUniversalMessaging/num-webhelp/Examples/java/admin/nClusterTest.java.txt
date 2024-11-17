@@ -1,0 +1,81 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+
+public class nClusterTest {
+
+
+  public static void main(String[] args) {
+    if (args.length < 2) {
+      System.out.println("Usage :-");
+      System.out
+          .println("java com.pcbsys.nirvana.nAdminAPI.apps.nClusterTest <ClusterName> <realm1> [<realm2> .....] ");
+      System.out.println("need at least two rnames, if one realms specified it deletes the named cluster");
+      System.exit(1);
+    }
+
+    try {
+      if (args.length < 2) {
+        System.out.println("Usage :-");
+        System.out
+            .println("java com.pcbsys.nirvana.nAdminAPI.apps.nClusterTest <ClusterName> <realm1> [<realm2> .....] ");
+        System.out.println("need at least two rnames, if one realms specified it deletes the named cluster");
+        System.exit(1);
+      }
+
+      nRealmNode node1 = new nRealmNode(new nSessionAttributes(args[0]));
+
+      nRealmNode node2 = new nRealmNode(new nSessionAttributes(args[1]));
+
+      node1.waitForEntireNameSpace();
+      node2.waitForEntireNameSpace();
+
+      System.err.println("We now have a link to both clusters");
+
+      nClusterNode cl1 = node1.getCluster();
+      nClusterNode cl2 = node2.getCluster();
+      //System.err.println("Registering remote cluster "+cl2.getName()+" with local cluster "+cl1.getName());
+
+      // cl1.deregisterRemoteCluster(cl2);
+      // Thread.sleep(10000);
+      //  cl1.registerRemoteCluster(cl2);
+      // Thread.sleep(10000);
+
+      nChannelAttributes[] attr = node1.getSession().getChannels();
+      for (int x = 0; x < attr.length; x++) {
+        if (node1.isClustered()) {
+          nNode source = node1.findNode(attr[x].getName());
+          if (source != null && source instanceof nLeafNode) {
+            nNode dest = node2.findNode("/us/" + attr[x].getName());
+            if (dest != null && dest instanceof nLeafNode) {
+              System.err.println("Joining channel " + source.getAbsolutePath() + " with " + dest.getAbsolutePath());
+              cl1.joinRemoteClusterStore((nLeafNode) source, (nLeafNode) dest, true, 10, null, true);
+            }
+          }
+        }
+      }
+
+      //   Thread.sleep(40000);
+
+      //
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.exit(1);
+    }
+    System.exit(1);
+  }
+}

@@ -1,0 +1,36 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+using System;
+
+namespace MyChannels.Nirvana
+{
+    internal static class Disposable
+    {
+        public static IDisposable Create(Action action)
+        {
+            return new Anonymous(action);
+        }
+
+        private class Anonymous : IDisposable
+        {
+            private readonly Action _action;
+
+            public Anonymous(Action action)
+            {
+                _action = action;
+            }
+
+            public void Dispose()
+            {
+                _action();
+            }
+        }
+    }
+}

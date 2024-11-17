@@ -1,0 +1,327 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nChannelAttributes.h"
+#include "nChannel.h"
+#include "nSession.h"
+#include "nEventProperties.h"
+#include "nConsumeEvent.h"
+#include "nTransactionAttributes.h"
+#include "nTransaction.h"
+#include "nTransactionFactory.h"
+#include "nSessionFactory.h"
+#include "nSessionNotConnectedException.h"
+#include "nChannelNotFoundException.h"
+#include "nSecurityException.h"
+#include "nUnexpectedResponseException.h"
+#include "nUnknownRemoteRealmException.h"
+#include "nRequestTimedOutException.h"
+#include "nTransactionAlreadyCommittedException.h"
+#include "nTransactionNotStartedException.h"
+#include "Poco/Thread.h"
+#include <sys/timeb.h>
+#include <sstream>
+
+using namespace com::pcbsys::nirvana::apps;
+using namespace com::pcbsys::nirvana::client;
+using namespace com::pcbsys::nirvana::nbase;
+
+
+class txpublish : public nSampleApp {
+    /**
+    * Publishes transactionally to a channel
+    */
+  private:
+    static txpublish *m_pSelf;
+
+    /**
+     * This method demonstrates the Nirvana API calls necessary to publish to
+     * a channel transactionally.
+     * It is called after all command line arguments have been received and
+     * validated
+     *
+     * @param pRealmDetails a String[] containing the possible RNAME values
+     * @param nRealmDetail length of the rname array
+     * @param channelName the channel name to publish to
+     * @param count the number of messages to publish
+     * @param size the size (bytes) of each message to be published
+     * @param txSize the number of messages to be published in each transaction
+     */
+    void doit(std::string *pRealmDetails, int nRealmDetail, std::string& channelName, int count,
+              int size, int txSize) {
+        m_pSelf->constructSession(pRealmDetails, nRealmDetail);
+
+        try {
+            nChannelAttributes *pNca = new nChannelAttributes();
+            pNca->setName(channelName);
+
+            nChannel *pChannel = m_pSession->findChannel(pNca);
+
+            //Create a byte array filled with characters equal to
+            //the message size specified.
+            unsigned char *buffer = new unsigned char[size];
+
+            for (int x = 0; x < size; x++) {
+                buffer[x] = (unsigned char)((x % 90) + 32);
+            }
+
+            //Create a list that contains the messages to be published on each
+            //transactional publish call
+            std::list<nConsumeEvent*> vevents;
+
+            for (int x = 0; x < txSize; x++) {
+                nEventProperties *pProps = new nEventProperties();
+                pProps->put("floatval", (float)1.2345);
+
+                std::stringstream ss;
+                ss<< "TXID-" << x;
+                unsigned int length = 0;
+                unsigned char *txid = fBase::encode(ss.str(), length);
+
+                nConsumeEvent *pEvt = new nConsumeEvent(pProps, txid, length); // Note the Tag does NOT need the TX
+                vevents.push_back(pEvt);
+
+                delete[] txid;
+
+                if (pProps->delRef())
+                    delete pProps;
+            }
+
+            //Inform the user that publishing is about to start
+            printf("Starting publish of %d events of size %d\n", count, size);
+
+            //Obtain the channel's last event ID prior to us publishing anything
+            longlong startEid = pChannel->getLastEID();
+
+            //Get a timestamp to be used to calculate the message publishing rates
+            struct timeb tm;
+            ftime (&tm);
+            unsigned long start = (unsigned long) tm.time * 1000 + tm.millitm;
+
+            //Create a transaction attributes object based on the channel we wish to publish to
+            nTransactionAttributes *pTXAttrib = new nTransactionAttributes(pChannel, 1000);
+
+            //Define a transaction object
+            nTransaction *pTx = NULL;
+
+            //Loop as many times as the number of messages we want to publish
+            //divided by the number of events per transaction
+            for (int x = 0; x < ((int)(count / txSize)); x++) {
+                try {
+                    //Create a new transaction object
+                    pTx = nTransactionFactory::create(pTXAttrib);
+
+                    //Publish the list of messages create previously
+                    pTx->publish(vevents);
+
+                    //Commit the transaction
+                    pTx->commit();
+
+                    delete pTx;
+                }
+
+                catch (nSessionNotConnectedException ex) {
+                    while (!m_pSession->isConnected()) {
+                        printf("Disconnected from Nirvana, Sleeping for 1 second...\n");
+
+                        try {
+                            Poco::Thread::sleep(1000);
+                        }
+
+                        catch (Exception e) {
+                        }
+                    }
+
+                    if (pTx != NULL) {
+                        try {
+                            pTx->commit();
+                            printf("Commited tx after failover...\n");
+                            delete pTx;
+                        }
+
+                        catch (Exception e) {
+                            printf("Got error trying to commit transaction as it had started on another Nirvana realm, republishing event..\n");
+                            x--;
+                        }
+                    }
+
+                    else {
+                        printf("Got error trying to commit transaction as it had started on another Nirvana realm, republishing event..\n");
+                        x--;
+                    }
+                }
+            }
+
+            //Calculate the actual number of events published by obtaining
+            //the channel's last eid after our publishing and subtracting
+            //the channel's last eid before our publishing.
+            //This also ensures that all client queues have been flushed.
+            longlong events = pChannel->getLastEID() - startEid;
+
+            //Get a timestamp to calculate the publishing rates
+            ftime (&tm);
+            unsigned long end = (unsigned long) tm.time * 1000 + tm.millitm;
+
+            unsigned long dif = end - start;
+
+            //Calculate the events / sec rate
+            long eventPerSec = ((events * 1000) / dif);
+
+            //Calculate the bytes / sec rate
+            long bytesPerSec = eventPerSec * size;
+
+            //Inform the user of the resulting rates
+            printf("Events = %lld Events/sec = %ld Bytes/Sec = %ld\n", events, eventPerSec, bytesPerSec);
+
+            delete pTXAttrib;
+
+            for (std::list<nConsumeEvent*>::iterator iterator = vevents.begin();
+                    iterator != vevents.end(); iterator++) {
+                if ((*iterator)->delRef())
+                    delete (*iterator);
+            }
+
+            delete[] buffer;
+            delete pChannel;
+            delete pNca;
+        }
+
+        //Handle errors
+        catch (nChannelNotFoundException cnfe) {
+            printf("The channel specified could not be found.\n");
+            printf("Please ensure that the channel exists in the REALM you connect to.\n");
+            exit(1);
+        }
+
+        catch (nSecurityException se) {
+            printf("Unsufficient permissions for the requested operation.\n");
+            printf("Please check the ACL settings on the server.\n");
+            exit(1);
+        }
+
+        catch (nSessionNotConnectedException snce) {
+            printf("The session object used is not physically connected to the Nirvana realm.\n");
+            printf("Please ensure the realm is up and check your RNAME value.\n");
+            exit(1);
+        }
+
+        catch (nUnexpectedResponseException ure) {
+            printf("The Nirvana REALM has returned an unexpected response.\n");
+            printf("Please ensure the Nirvana REALM and client API used are compatible.\n");
+            exit(1);
+        }
+
+        catch (nUnknownRemoteRealmException urre) {
+            printf("The channel specified resided in a remote realm which could not be found.\n");
+            printf("Please ensure the channel name specified is correct.\n");
+            exit(1);
+        }
+
+        catch (nRequestTimedOutException rtoe) {
+            printf("The requested operation has timed out waiting for a response from the REALM.\n");
+            printf("If this is a very busy REALM ask your administrator to increase the client timeout values.\n");
+            exit(1);
+        }
+
+        catch (nTransactionAlreadyCommittedException tace) {
+            printf("The transaction you attempted to commit has already been commited on this REALM.\n");
+            exit(1);
+        }
+
+        catch (nTransactionNotStartedException tnse) {
+            printf("The transaction you attempted to commit has not yet started on this REALM.\n");
+            exit(1);
+        }
+
+        catch (nBaseClientException nbce) {
+            printf("An error occured while creating the Channel Attributes object.\n");
+            exit(1);
+        }
+
+        //Close the session we opened
+        try {
+            nSessionFactory::close(m_pSession);
+        }
+
+        catch (Exception ex) {
+        }
+
+        //Close any other sessions within this program so that we can exit
+        nSessionFactory::shutdown();
+    }
+
+  protected:
+    void processArgs(int argc, char** argv) {
+        if (argc < 3) {
+            Usage();
+            exit(2);
+        }
+
+        std::string RNAME = argv[1];
+        std::string channelName = argv[2];
+
+        int count = 1000;
+
+        if (argc > 3)
+            count = atoi(argv[3]);
+
+        int size = 1024;
+
+        if (argc > 4)
+            size = atoi(argv[4]);
+
+        int txSize = 1;
+
+        if (argc > 5)
+            txSize = atoi(argv[5]);
+
+        //
+        // Run the sample app
+        //
+
+        int nRproperty = 0;
+        std::string *pRproperties = parseRealmProperties(RNAME, nRproperty);
+
+        m_pSelf->doit(pRproperties, nRproperty, channelName, count, size, txSize);
+    }
+
+  public:
+    static int Main(int argc, char** argv) {
+        //Create an instance for this class
+        m_pSelf = new txpublish();
+
+
+        //Process command line arguments
+        m_pSelf->processArgs(argc, argv);
+
+        return 0;
+    }
+
+    /**
+    * Prints the usage message for this class
+    */
+  private:
+    static void Usage() {
+        printf("Usage ...\n\n");
+        printf("txpublish <rname>  <channel name> [count] [size] [tx size] \n\n");
+        printf("<Required Arguments> \n\n");
+        printf("<rname> - the rname of the server to connect to\n");
+        printf("<channel name> - Channel name parameter for the channel to publish to\n");
+        printf("\n[Optional Arguments] \n\n");
+        printf("[count] -The number of events to publish (default: 10)\n");
+        printf("[size] - The size (bytes) of the event to publish (default: 100)\n");
+        printf("[tx size] - The number of events per transaction (default: 1)\n");
+    }
+};
+
+txpublish* txpublish::m_pSelf = NULL;
+
+int main (int argc, char** argv) {
+    return txpublish::Main (argc, argv);
+}

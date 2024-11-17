@@ -1,0 +1,57 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nSpace;
+
+import java.awt.Button;
+
+//
+// Simple example of Key Value pairs stored within name space
+//
+public class nSerializableObjectSample {
+
+  public nSerializableObjectSample() {
+  }
+
+  public static void usage() {
+    System.out.println("java com.pcbsys.nirvana.nSpace.nSerializableObjectSample RNAME Key Label");
+    System.out.println("RNAME = The Nirvana Realm RNAME");
+    System.out.println("Key - The Key name used by the name space to assign the object to");
+    System.out.println("Label - The label assigned to the button stored within the name space");
+  }
+
+  public static void main(String[] args) {
+    if (args.length < 3) {
+      usage();
+      System.exit(1);
+    }
+    nSerializableObjectSample sample = new nSerializableObjectSample();
+    try {
+      sample.doBind(args[0], args[1], args[2]);
+      sample.doLookup(args[0], args[1]);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public void doBind(String rname, String key, String label) throws Exception {
+    NirvanaContext nctx = new NirvanaContext(rname);
+    Button b = new Button(label);
+    nctx.bind(key, b);
+    nctx.close();
+  }
+
+  public void doLookup(String rname, String akey) throws Exception {
+    NirvanaContext nctx = new NirvanaContext(rname);
+    Button aval = (Button) nctx.lookup(akey);
+    System.out.println("Button label is : " + aval.getLabel());
+    nctx.close();
+  }
+
+}

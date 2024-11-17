@@ -1,0 +1,172 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nChannelAttributes.h"
+#include "nChannel.h"
+#include "nSession.h"
+#include "nSessionFactory.h"
+#include "nChannelNotFoundException.h"
+#include "nSessionNotConnectedException.h"
+#include "nRequestTimedOutException.h"
+#include "nUnexpectedResponseException.h"
+#include "nUnknownRemoteRealmException.h"
+#include "nChannelAlreadyExistsException.h"
+#include "nSecurityException.h"
+
+using namespace com::pcbsys::nirvana::apps;
+using namespace com::pcbsys::nirvana::client;
+
+class deletechan : nSampleApp {
+
+    /**
+    * Deletes a nirvana channel
+    */
+  private:
+    static deletechan *m_pSelf;
+
+    /**
+    * This method demonstrates the Nirvana API calls necessary to delete
+    * a channel.
+    * It is called after all command line arguments have been received and
+    * validated
+    *
+    * @param realmDetails a String[] containing the possible RNAME values
+    * @param nRealmDetail length of the rname array
+    * @param achannelName the channel name to create
+    */
+    void doit(std::string *pRealmDetails, int nRealmDetail, std::string& achannelName) {
+        m_pSelf->constructSession(pRealmDetails, nRealmDetail);
+
+        //Deletes the specified channel
+        try {
+            //Create a channel attributes object
+            nChannelAttributes *pNca = new nChannelAttributes();
+
+            //Set the channel name
+            pNca->setName(achannelName);
+
+            //Deletes the channel
+            m_pSession->deleteChannel(pNca);
+
+            if (pNca)
+                delete pNca;
+
+        }
+
+        //Handle errors
+        catch (nChannelNotFoundException cnfe) {
+            printf("The channel specified could not be found.\n");
+            printf("Please ensure that the channel exists in the REALM you connect to.\n");
+            exit(1);
+        }
+
+        catch (nSecurityException se) {
+            printf("Unsufficient permissions for the requested operation.\n");
+            printf("Please check the ACL settings on the server.\n");
+            exit(1);
+        }
+
+        catch (nSessionNotConnectedException snce) {
+            printf("The session object used is not physically connected to the Nirvana realm.\n");
+            printf("Please ensure the realm is up and check your RNAME value.\n");
+            exit(1);
+        }
+
+        catch (nUnexpectedResponseException ure) {
+            printf("The Nirvana REALM has returned an unexpected response.\n");
+            printf("Please ensure the Nirvana REALM and client API used are compatible.\n");
+            exit(1);
+        }
+
+        catch (nUnknownRemoteRealmException urre) {
+            printf("The channel specified resided in a remote realm which could not be found.\n");
+            printf("Please ensure the channel name specified is correct.\n");
+            exit(1);
+        }
+
+        catch (nRequestTimedOutException rtoe) {
+            printf("The requested operation has timed out waiting for a response from the REALM.\n");
+            printf("If this is a very busy REALM ask your administrator to increase the client timeout values.\n");
+            exit(1);
+        }
+
+        catch (nChannelAlreadyExistsException caee) {
+            printf("The channel specified already exists on the REALM.\n");
+            exit(1);
+        }
+
+        catch (nBaseClientException nbce) {
+            printf("An error occured while creating the Channel Attributes object.\n");
+            exit(1);
+        }
+
+        //Close the session we opened
+        try {
+            nSessionFactory::close(m_pSession);
+
+
+            //Close any other sessions within this program so that we can exit
+            nSessionFactory::shutdown();
+
+        }
+
+        catch (Exception ex) {
+        }
+    }
+
+    /**
+    * Prints the usage message for this class
+    */
+  private:
+    static void Usage() {
+        printf("Usage ...\n\n");
+        printf("deletechan <rname> <channel name>\n\n");
+        printf("<Required Arguments> \n\n");
+        printf("<rname> - the rname of the server to connect to\n");
+        printf("<channel name> - Channel name parameter for the channel to be deleted\n");
+    }
+
+  protected:
+    virtual void processArgs(int argc, char** argv) {
+        //
+        // Need a min of 2, rname, channel name, capacity, ttl, type
+        if (argc < 3) {
+            Usage();
+            exit(2);
+        }
+
+        std::string RNAME = argv[1];
+
+        std::string channelName = argv[2];
+        //
+        // Run the sample app
+        //
+
+        int nRproperty = 0;
+        std::string *pRproperties = parseRealmProperties(RNAME, nRproperty);
+
+        m_pSelf->doit(pRproperties, nRproperty, channelName);
+    }
+
+  public:
+    static int Main(int argc, char** argv) {
+        //Create an instance for this class
+        m_pSelf = new deletechan();
+
+        m_pSelf->processArgs(argc, argv);
+
+        return 0;
+    }
+};
+
+deletechan* deletechan::m_pSelf = NULL;
+
+int main (int argc, char** argv) {
+    return deletechan::Main (argc, argv);
+}

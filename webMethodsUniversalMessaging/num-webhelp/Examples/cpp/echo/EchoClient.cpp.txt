@@ -1,0 +1,96 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "EchoClient.h"
+
+#include "ClientTransportContextFactory.h"
+#include "TransportFactory.h"
+#include <utility>
+#include <iostream>
+
+
+com::softwareag::umtransport::samples::echo::EchoClient::EchoClient(std::string url)
+{
+	m_url = url;
+}
+
+com::softwareag::umtransport::samples::echo::EchoClient::~EchoClient()
+{
+}
+
+void com::softwareag::umtransport::samples::echo::EchoClient::run(){
+	try{
+		//Use the factory to generate the required builder based on the protocol in the url string
+		auto context = ClientTransportContextFactory::build(m_url);
+
+		//We do not pass any handlers to the connect method because we want a synchronous transport
+		auto transport = TransportFactory::connect(std::move(context));
+
+		//This is just a basic wrapper for the client transport so it is easier to read/write messages
+		std::shared_ptr<SynchronousTransport> transportShared(std::move(transport));
+		SynchronousClient<SimpleMessage> client(std::move(transportShared));
+
+		//Start a new thread to read from the client transport because read is a blocking call
+		ReadThread readThread(client);
+		Poco::Thread th;
+		th.start(readThread);
+
+		bool canRun = true;
+		//Now continue to write messages to the EchoServer until the user enter 'quit'
+		while (canRun){
+			std::cout << "Enter a message or type 'quit' to exit >" << std::endl;
+			std::string input;
+			std::getline(std::cin, input);
+			if (input == "quit"){
+				canRun = false;
+			}
+			else{
+				SimpleMessage sm(input);
+				client.write(sm);
+			}
+		}
+		readThread.shutdown();
+		client.close();
+		th.tryJoin(10000);
+	}
+	catch (Poco::Exception &ex){
+		std::cout << ex.displayText();
+	}
+}
+
+int com::softwareag::umtransport::samples::echo::EchoClient::main(int argc, char** argv){
+	if (argc < 2){
+		std::cout << "EchoClient <URL>\n<Required parameters>\n\tURL - protocol://host:port for the server to connect to e.g. tcp://localhost:9000" << std::endl;
+	}
+	EchoClient client(argv[1]);	
+	client.run();
+	return 0;
+}
+
+com::softwareag::umtransport::samples::echo::EchoClient::ReadThread::ReadThread(SynchronousClient<SimpleMessage> &client) : m_client(client){
+}
+
+com::softwareag::umtransport::samples::echo::EchoClient::ReadThread::~ReadThread(){
+}
+
+void com::softwareag::umtransport::samples::echo::EchoClient::ReadThread::shutdown(){
+	canRun = false;
+}
+
+void com::softwareag::umtransport::samples::echo::EchoClient::ReadThread::run(){	
+	try {		
+		while (canRun){ 
+			SimpleMessage message;
+			m_client.read(message);
+			std::cout << "Message Content: " << message << std::endl;
+		}		
+	}
+	catch (Poco::Exception& e) {
+		std::cout << "Connection Closed " << e.displayText();
+	}	
+}

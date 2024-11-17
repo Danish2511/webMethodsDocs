@@ -1,0 +1,264 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.apps;
+
+import com.pcbsys.nirvana.client.nConnectionQueueListener;
+import com.pcbsys.nirvana.client.nSession;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.util.Date;
+import java.util.Vector;
+
+public class nSessionUsageMonitor extends Thread {
+
+  private Vector mySessionList;
+  private boolean run = true;
+  private double delayTime = 1000.0;
+  private File myTestFile;
+
+  private static nSessionUsageMonitor myInstance;
+
+  public static nSessionUsageMonitor getInstance() {
+    if (myInstance == null) {
+      myInstance = new nSessionUsageMonitor();
+    }
+    return myInstance;
+  }
+
+  protected nSessionUsageMonitor() {
+    mySessionList = new Vector();
+    myTestFile = new File("session.log");
+    setDaemon(true);
+    start();
+  }
+
+  public void addSession(nSession sess) {
+    addSession(sess, null);
+  }
+
+  public void addSession(nSession sess, nConnectionQueueListener listener) {
+    Container c = new Container(sess, listener);
+    try {
+      sess.addConnectionQueueListener(c);
+    } catch (Exception ex) {
+      c = new Container(sess, null);
+      System.out.println("UNABLE TO ADD Connection Queue Listener");
+    }
+    mySessionList.add(c);
+  }
+
+  public void delSession(nSession sess) {
+    mySessionList.remove(sess);
+  }
+
+  public void startLogging() {
+    try {
+      myTestFile.createNewFile();
+    } catch (Exception ex) {
+    }
+  }
+
+  public void stopLogging() {
+    try {
+      Date dt = new Date();
+      String newName = "session-" + dt.toString() + ".log";
+      newName = newName.replaceAll(" ", "-");
+      newName = newName.replaceAll(":", "-");
+      System.out.println("Renaming to " + newName);
+      myTestFile.renameTo(new File(newName));
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public long getDelayTime() {
+    return (long) delayTime;
+  }
+
+  public void setDelayTime(long delayTime) {
+    if (delayTime < 500) {
+      delayTime = 500;
+    }
+    this.delayTime = delayTime;
+  }
+
+  public void close() {
+    run = false;
+  }
+
+  public void run() {
+    System.out.println("Starting session usage logging");
+    int count = 0;
+    while (run) {
+      FileOutputStream fos = null;
+      try {
+        Thread.sleep((long) delayTime);
+        if (myTestFile.exists()) {
+          fos = new FileOutputStream(myTestFile, true);
+          if (count == 0) {
+            String header = "Date,Session Id,Events Rx,Events Tx,Bytes Rx,Bytes Tx,Queue Size,Rx events/sec,Tx events/sec,Rx bytes/sec,Tx bytes/sec,Low Water, High Water\r\n";
+            fos.write(header.getBytes());
+          }
+          count++;
+          if (count > 40) {
+            count = 0;
+          }
+          Date dt = new Date();
+          for (int x = 0; x < mySessionList.size(); x++) {
+            Container c = (Container) mySessionList.elementAt(x);
+            double lastTx = c.getLastTx();
+            double lastRx = c.getLastRx();
+            double lastETx = c.getLastEventTx();
+            double lastERx = c.getLastEventRx();
+            c.updateCounts();
+            lastTx = c.getLastTx() - lastTx;
+            lastRx = c.getLastRx() - lastRx;
+            lastTx = lastTx / delayTime * 1000; // make it per second not milli second
+            lastRx = lastRx / delayTime * 1000; // make it per second not milli second
+
+            lastETx = c.getLastEventTx() - lastETx;
+            lastERx = c.getLastEventRx() - lastERx;
+            lastETx = (lastETx / delayTime) * 1000; // make it per second not milli second
+            lastERx = lastERx / delayTime * 1000; // make it per second not milli second
+
+            StringBuffer msg = new StringBuffer(dt.toString());
+            msg = msg.append(",").append(c.getId()).append(",").append(c.getLastEventRx()).append(",")
+                .append(c.getLastEventTx()).append(",").append(c.getLastRx()).append(",").append(c.getLastTx())
+                .append(",").append(c.getQueueSize()).append(",").append(lastERx).append(",").append(lastETx)
+                .append(",").append(lastRx).append(",").append(lastTx).append(",").append(c.getLowWaterCount())
+                .append(",").append(c.getHighWaterCount()).append("\r\n");
+            fos.write(msg.toString().getBytes());
+          }
+        }
+      } catch (Throwable ex) {
+      }finally {
+        try {
+          if (fos != null) {
+            fos.close();
+          }
+        }catch (Exception e){
+          //Ignore
+        }
+      }
+    }
+    System.out.println("Terminating session usage logging");
+  }
+
+  private class Container implements nConnectionQueueListener {
+
+    private nSession session;
+    private long lastTx;
+    private long lastRx;
+    private long lastQSize;
+    private long lastEventTx;
+    private long lastEventRx;
+    private long highWaterCount;
+    private long lowWaterCount;
+    private nConnectionQueueListener clientListener;
+
+
+    public Container(nSession sess, nConnectionQueueListener listener) {
+      session = sess;
+      clientListener = listener;
+      if (listener != null) {
+        highWaterCount = 0;
+        lowWaterCount = 0;
+      } else {
+        highWaterCount = -1;
+        lowWaterCount = -1;
+      }
+      updateCounts();
+    }
+
+    public String getId() {
+      try {
+        return session.getId();
+      } catch (Throwable th) {
+
+      }
+      return "";
+    }
+
+    public long getHighWaterCount() {
+      return highWaterCount;
+    }
+
+    public long getLowWaterCount() {
+      return lowWaterCount;
+    }
+
+    public long getLastTx() {
+      return lastTx;
+    }
+
+    public long getLastRx() {
+      return lastRx;
+    }
+
+    public long getQueueSize() {
+      return lastQSize;
+    }
+
+
+    public long getLastEventRx() {
+      return lastEventRx;
+    }
+
+    public long getLastEventTx() {
+      return lastEventTx;
+    }
+
+    public void updateCounts() {
+      lastQSize = session.getQueueSize();
+      lastTx = session.getOutputByteCount();
+      lastRx = session.getInputByteCount();
+      lastEventTx = session.getSentEventCount();
+      lastEventRx = session.getReceivedEventCount();
+
+    }
+
+    public void reachedLWM(long lwm, int queueSize) {
+      lowWaterCount++;
+      if (clientListener != null) {
+        clientListener.reachedLWM(lwm, queueSize);
+      }
+    }
+
+    public void reachedHWM(long hwm, int queueSize) {
+      highWaterCount++;
+      if (clientListener != null) {
+        clientListener.reachedHWM(hwm, queueSize);
+      }
+    }
+
+    public void reachedAccessWaitLimit(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      if (clientListener != null) {
+        clientListener.reachedAccessWaitLimit(waitTime, queueSize, eventsTx, eventsRx);
+      }
+    }
+
+    public void reachedPushWaitLimit(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      if (clientListener != null) {
+        clientListener.reachedPushWaitLimit(waitTime, queueSize, eventsTx, eventsRx);
+      }
+    }
+
+    public void reachedQueueBlockLimit(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      if (clientListener != null) {
+        clientListener.reachedQueueBlockLimit(waitTime, queueSize, eventsTx, eventsRx);
+      }
+    }
+
+    public void queueUnBlocked(long waitTime, int queueSize, long eventsTx, long eventsRx) {
+      if (clientListener != null) {
+        clientListener.queueUnBlocked(waitTime, queueSize, eventsTx, eventsRx);
+      }
+    }
+  }
+}

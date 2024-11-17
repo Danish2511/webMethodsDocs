@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Globally Accessible DLLs</title><link rel="Prev" href="co-clientssl_1.html" title="Previous" /><link rel="Next" href="co-using_um_dotnet_in_dotnet_standard.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-globaldll.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pZeaqxXoRPrp6i4giMkqviQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-globaldll.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_developer_guide.html#wwconnect_header">Developer Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_enterprise_apis.html#wwconnect_header">Enterprise APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/co-index_dg_10.html#wwconnect_header">Enterprise Developer's Guide for C#</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_prerequisites_2.html#wwconnect_header">Prerequisites</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Globally Accessible DLLs</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EODIW" class="Heading_4">Globally Accessible DLLs</div><div id="wwID0EWDIW" class="Body">By default, C# applications require any user created DLLs to be present in the same directory as the application. As DLLs are typically shared by multiple applications, it may be necessary for the DLL to be placed in a globally accessible location. To do this in C# you need to add the DLL file to the Global Assembly Cache (GAC).</div><div id="wwID0ECEIW" class="Section_Title">Strong-Named Assemblies</div><div id="wwID0EHEIW" class="Body">Before a DLL can be added to the GAC, it must be given a strong-same. This procedure aims to protect the user from corrupted DLLs. As DLLs are linked at runtime, it would be possible for someone to build a new version of the DLL but add malicious code. The user application would have no way of telling that this is not the correct DLL and would run the malicious code. GAC and strong-named assemblies protect against this, for more information see 
+    <a href="http://msdn.microsoft.com/en-us/library/wd40t7ad.aspx"
+   
+     target="external_window"
+    ><span class="heading-page">Strong-Named Assemblies</span></a> on the <span class="Keyword">Microsoft</span> website.</div><div id="wwID0EEFIW" class="Section_Title">Creating a Strong-Named Assembly</div><div id="wwID0EJFIW" class="Body">The C# DLLs in the Universal Messaging download have already been given strong-names so this section is not required to make the Universal Messaging DLLs globally accessible.</div><div id="wwID0ESFIW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Either open a .NET command prompt or open a standard command prompt and run vsvars32.bat which is located in "C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools". Which will set up the required environment.</div><div id="wwID0EDGIW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>Navigate to a directory where you want to store the keyfile and run the following command:</div><div id="wwID0EUGIW" class="Preformatted_1"><br />C:\myarea\folder\&gt; sn -k keyfile.snk<br /></div><div id="wwID0EDGIW-3" class="Numbered_1_Continued">This will create a keyfile which contains a pair of private and public keys which can be used to protect your DLLs.</div><div id="wwID0E2GIW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span>Now you need to edit the AssemblyInfo.cs file for the project used to create the DLL by adding the following code:</div><div id="wwID0EMHIW" class="Preformatted_1"><br />[assembly:AssemblyKeyFile(@"C:\myarea\folder\keyfile.snk")]<br /></div><div id="wwID0ETHIW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span>Now when you build the DLL as usual it will be given a strong-name but will not be globally accessible until added to GAC.</div><div id="wwID0ENIIW" class="Section_Title">Adding Strong-Named Assembly to GAC</div><div id="wwID0EWIIW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Either open a .NET command prompt or open a standard command prompt and run vsvars32.bat which is located in "C:\Program Files\Microsoft Visual Studio 9.0\Common7\Tools". Which will set up the required environment.</div><div id="wwID0EHJIW" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>In this prompt execute gacutil as shown below:</div><div id="wwID0EYJIW" class="Preformatted_1"><br />C:\myarea\folder\&gt; gacutil /i mylib.DLL<br /></div><div id="wwID0EAKIW" class="Body">The DLL will now be globally accessible on the system. The C#.NET sample applications in the download use the "Nirvana Dotnet.DLL" library and "nSampleApp.DLL", both have been given strong-names so can be added to GAC using gacutil as described above.</div><div id="wwID0EFKIW" class="Body">NOTE: to remove an assembly from the cache execute "gacutil /u mylib", the file extension is not required.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

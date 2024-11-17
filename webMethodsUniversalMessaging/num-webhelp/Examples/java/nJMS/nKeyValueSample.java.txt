@@ -1,0 +1,54 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nSpace;
+
+//
+// Simple example of Key Value pairs stored within name space
+//
+public class nKeyValueSample {
+
+  public nKeyValueSample() {
+  }
+
+  public static void usage() {
+    System.out.println("java com.pcbsys.nirvana.nSpace.nKeyValueSample RNAME Key Value");
+    System.out.println("RNAME = The Nirvana Realm RNAME");
+    System.out.println("Key - The Key name used by the name space to assign the value to");
+    System.out.println("Value - The value assigned to the key");
+  }
+
+  public static void main(String[] args) {
+    if (args.length < 3) {
+      usage();
+      System.exit(1);
+    }
+    nKeyValueSample sample = new nKeyValueSample();
+    try {
+      sample.doBind(args[0], args[1], args[2]);
+      sample.doLookup(args[0], args[1]);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  public void doBind(String rname, String key, String value) throws Exception {
+    NirvanaContext nctx = new NirvanaContext(rname);
+    nctx.bind(key, value);
+    nctx.close();
+  }
+
+  public void doLookup(String rname, String akey) throws Exception {
+    NirvanaContext nctx = new NirvanaContext(rname);
+    String aval = (String) nctx.lookup(akey);
+    System.out.println("Key is : " + akey + " and Value is : " + aval);
+    nctx.close();
+  }
+
+}

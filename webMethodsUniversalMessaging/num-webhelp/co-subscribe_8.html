@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Subscribing Tasks</title><link rel="Prev" href="co-index_dg_27.html" title="Previous" /><link rel="Next" href="co-session_8.html" title="Next" /><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_universal_messaging_docset_reverb_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/num-webhelp/co-subscribe_8.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pznvNtfoHvT6cxM5J2c5CxA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/num-webhelp/co-subscribe_8.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Universal Messaging</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-title_developer_guide.html#wwconnect_header">Developer Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_enterprise_apis.html#wwconnect_header">Enterprise APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/co-index_dg_25.html#wwconnect_header">Enterprise Developer's Guide for VBA</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../num-webhelp/to-header_publish_subscribe.html#wwconnect_header">Publish / Subscribe</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Subscribing Tasks</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EIPJW" class="Heading_4">Subscribing Tasks</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../num-webhelp/co-subscribe_8.html#wwID0E4RJW">Subscribing to a Channel</a></div></dd></dl></div><div id="wwID0E4RJW" class="Heading_5">Subscribing to a Channel</div><div id="wwID0EFSJW" class="Body">Once you have installed the Universal Messaging (Nirvana) RTD server, the server will be available for use in any <span class="Keyword">Microsoft</span> <span class="Keyword">Excel</span> spreadsheet on the system. To start subscribing you need to use the RTD function in Excel. The RTD function is used in the same way as any other Excel function. By entering the function with the correct parameters into a cell, you will immediately subscribe to the specified channel and receive the value associated with the specified property contained in the event.</div><div id="wwID0E3SJW" class="Section_Title">RTD Function</div><div id="wwID0EBTJW" class="Body">The RTD function is a built in Excel function but the parameters are specific to the Universal Messaging RTD server. To subscribe to a Universal Messaging channel you need to use the following structure:</div><div id="wwID0EGTJW" class="Preformatted"><br />=RTD("NirvanaRTD",,RNAME,Channel,Property,Key,Value,Key2,Value2 ...)<br /></div><div id="wwID0EMTJW" class="Body">The parameters are explained below:</div><div id="wwID0EZTJW" class="Section_Title">"NirvanaRTD"</div><div id="wwID0E5TJW" class="Body">This is the CLSID which has been registered for the Universal Messaging RTD server. By specifying this ID, Excel will look up the Universal Messaging RTD server in the Windows Registry.</div><div id="wwID0ELUJW" class="Section_Title">Second Parameter</div><div id="wwID0EQUJW" class="Body">The second parameter is left blank because the Universal Messaging RTD server is installed on the local machine. If it were installed remotely, the server would be specified here.</div><div id="wwID0E4UJW" class="Section_Title">RNAME</div><div id="wwID0ECVJW" class="Body">The RNAME of the realm which the cell should connect to. You may also specify certain configurations for the session in this field. The RNAME is of the form:</div><div id="wwID0EHVJW" class="Preformatted"><br />protocol://host:port?property=value&amp;property2=value2...<br /></div><div id="wwID0ENVJW" class="Body">The following properties are available:</div><div id="wwID0EWVJW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">user</span> - this is the username that will be used to connect to the realm</div><div id="wwID0EUWJW" class="Section_Title">Channel</div><div id="wwID0EZWJW" class="Body">The name of the Universal Messaging Channel which you wish to connect to. You may also specify channel specific configuration properties in this field. The Channel field has the form:</div><div id="wwID0E5WJW" class="Preformatted"><br />/folder/channelname?property=value&amp;property2=value2...<br /></div><div id="wwID0EEXJW" class="Body">The following properties are available:</div><div id="wwID0ENXJW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">eid</span> - the eid for which to start subscribing. This value is -1 by default which means subscription starts from the last eid of the channel (will not receive any events currently on the channel). -2 will mean the last event published on the channel is consumed as well as any further events published and hence -3 will mean the last 2 are consumed etc. A positive value will cause mean events from that eid onward are consumed so 0 means all events on the channel will be consumed.</div><div id="wwID0ECYJW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">hwmark</span> - the high water mark for the event queue of the channel. This ensures that the event queues do not grow too large without dropping any events. For more information see 
+    <a href="../num-webhelp/co-queuewatermarks_8.html#wwID0E2DLW"
+   
+     title="Universal Messaging RTD Server Internal Queues"
+    ><span class="heading-page">Queue watermarks</span></a>.</div><div id="wwID0EBZJW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="parmname">lwmark</span> - once the event queue has reached high watermark, no more events will be added to the event queue. Once the queue length reaches lwmark (low watermark) the listener is notified to continue receiving events.</div><div id="wwID0E6ZJW" class="Section_Title">Key, Value</div><div id="wwID0EE1JW" class="Body">The Universal Messaging RTD server allows you to filter events based on key-value pairs. Here the value of Property is only shown if the event properties contains each key and the value associated with that key.</div><div id="wwID0EJ1JW" class="Body">A Universal Messaging Event can contain nEventProperties which themselves can contain nested nEventProperties. These nested properties are accessed by a key in the same way as the values are accessed. In order to access the key-value pairs contained within the inner properties using the RTD server, you should use the syntax shown below:</div><div id="wwID0EO1JW" class="Preformatted"><br />...,propsA.Key,value,propsA.propsB.key,value,...<br /></div><div id="wwID0EU1JW" class="Body">Here propsA is found inside the main nEventProperties for the nConsumeEvent. Inside propsA is a set of key-value pairs but also another nEventProperties object called propsB which itself contains key-value pairs and possibly further nEventProperties.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

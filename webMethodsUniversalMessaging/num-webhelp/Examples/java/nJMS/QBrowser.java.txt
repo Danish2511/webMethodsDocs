@@ -1,0 +1,166 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nJMSApps;
+
+import com.pcbsys.foundation.utils.fEnvironment;
+import java.util.Enumeration;
+import javax.jms.BytesMessage;
+import javax.jms.JMSException;
+import javax.jms.Message;
+import javax.jms.Queue;
+import javax.jms.QueueBrowser;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.naming.Context;
+import javax.naming.NamingException;
+
+public class QBrowser extends Subscriber {
+
+  public QBrowser(String factoryName, String destinationName) {
+    super(factoryName, destinationName);
+  }
+
+  public static void main(String[] args) {
+    //Check to see if args were specified
+    if ((args.length == 1) && args[0].equals("-?")) {
+      UsageEnv();
+    }
+
+    if (args.length < 2) {
+      Usage();
+      System.exit(1);
+    }
+
+    //Process Environment Variables
+    processEnvironmentVariable("RNAME");
+    processEnvironmentVariable("PRINCIPAL");
+    processEnvironmentVariable("PASSWORD");
+    processEnvironmentVariable("CONTEXT_FACTORY");
+    processEnvironmentVariable("PROVIDER_URL");
+    processEnvironmentVariable("LOGLEVEL");
+    processEnvironmentVariable("HPROXY");
+    processEnvironmentVariable("HAUTH");
+    processEnvironmentVariable("CKEYSTORE");
+    processEnvironmentVariable("CKEYSTOREPASSWD");
+    processEnvironmentVariable("CAKEYSTORE");
+    processEnvironmentVariable("CAKEYSTOREPASSWD");
+
+    // Install any proxy server settings
+    fEnvironment.setProxyEnvironments();
+
+    // Install any ssl settings
+    fEnvironment.setSSLEnvironments();
+
+    //Create an instance for this class
+    QBrowser subscriber = new QBrowser(args[0], args[1]);
+
+    String selector = null;
+
+    if (args.length > 2) {
+      selector = args[2];
+    }
+
+    //Subscribe to the destination specified
+    subscriber.doIt(args[0], args[1], selector);
+  }
+
+  /**
+   * A callback is received by the API to this method each time a message is received from
+   * the destination.
+   *
+   * @param msg A JMS Message object
+   */
+  public void onMessage(Message msg) {
+    try {
+      if (msg instanceof BytesMessage) {
+        BytesMessage bmsg = (BytesMessage) msg;
+        String data = bmsg.readUTF();
+        System.out.println("JMS MSG ID : " + bmsg.getJMSMessageID());
+        System.out.println("JMS DELIVERY MODE : " + bmsg.getJMSDeliveryMode());
+        System.out.println("JMS TIME STAMP : " + bmsg.getJMSTimestamp());
+        System.out.println("Received : " + data);
+      } else {
+        super.onMessage(msg);
+      }
+
+    } catch (JMSException e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * This method demonstrates the Nirvana JMS API calls necessary to subscribe to
+   * a destination whether it is a topic or a queue.
+   * It is called after all command line arguments have been received and
+   * validated
+   *
+   * @param factoryName The name of the factory to find
+   * @param destName the name of the destination
+   * @param selector an optional mesage selector string
+   */
+  protected void doIt(String factoryName, String destName, String selector) {
+    try {
+      // get the initial context
+      Context ctx = getInitialContext();
+      QueueConnectionFactory qcf = (QueueConnectionFactory) ctx.lookup(factoryName);
+
+      // Create a Connection from the Connection Factory
+      QueueConnection qc = qcf.createQueueConnection();
+
+      // set the exceptionlistener
+      qc.setExceptionListener(this);
+
+      // Start the connection
+      qc.start();
+
+      // Create a Sesson from the Connection
+      s = qc.createQueueSession(transacted, 1);
+
+      // create the queue, and bind if necessary
+      Queue q = (Queue) getDestination(ctx, s, destName);
+
+      // Create a Browser from the Session
+      QueueBrowser browser = s.createBrowser(q, selector);
+
+      // Get the enuemration of message from the queue
+      Enumeration msgs = browser.getEnumeration();
+      while (msgs.hasMoreElements()) {
+        Message m = (Message) msgs.nextElement();
+        onMessage(m);
+      }
+
+      qc.close();
+      s.close();
+      ctx.close();
+    } catch (NamingException ex) {
+      System.out.println("Naming Exception : Please ensure you have created the connection factory " + factoryName);
+      System.out.println(
+          "Naming Exception : This can be done using the Enterprise Manager JNDI panel or the jmsadmin command line application");
+      System.exit(0);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.exit(0);
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  protected static void Usage() {
+    System.out.println("Usage ...\n\n");
+    System.out.println("jmsqbrowse <factoryname> <destinationName> <selector>\n");
+
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<factoryname> - JMS Factory (Must exist in target realm)");
+    System.out.println("<destinationName> - JMS Destination to subscribe to");
+    System.out.println("<selector> - An optional message selector");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

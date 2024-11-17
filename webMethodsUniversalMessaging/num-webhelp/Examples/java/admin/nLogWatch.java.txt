@@ -1,0 +1,106 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nLogListener;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Vector;
+
+public class nLogWatch extends nSampleApp {
+
+  private String realmUrl = null;
+  private static nLogWatch dump;
+
+  /**
+   * Main program thread, takes a realm URL as the parameter to start the search
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    dump = new nLogWatch(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Constructor for the class, takes the string realm url
+   */
+  public nLogWatch(String[] args) {
+    try {
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+      // construct the realm node
+      nRealmNode node = new nRealmNode(attr);
+      node.waitForEntireNameSpace();
+      node.addLogListener(new LogMonitor(node.getName()));
+      Vector realms = node.getRealmList();
+      for (int x = 0; x < realms.size(); x++) {
+        nRealmNode realm = (nRealmNode) realms.elementAt(x);
+        System.out.println("Realm = " + realm.getName());
+        realm.addLogListener(new LogMonitor(realm.getName()));
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  class LogMonitor implements nLogListener {
+
+    private String myName;
+
+    public LogMonitor(String name) {
+      myName = name;
+    }
+
+    public void report(String message) {
+      synchronized (dump) {
+        System.out.println(myName + ">>" + message);
+      }
+      //To change body of implemented methods use File | Settings | File Templates.
+    }
+
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("nLogWatch \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

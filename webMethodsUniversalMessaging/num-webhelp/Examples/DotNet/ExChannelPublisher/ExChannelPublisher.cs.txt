@@ -1,0 +1,108 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+using System;
+using System.Threading;
+
+namespace MyChannels.Nirvana.Samples
+{
+    class ExChannelPublisher
+    {
+        private int messagesSent = 0;
+        private string rName = null;
+        private string topicName = null;
+        private int count = 10;
+        private int size = 100;
+
+        public ExChannelPublisher(string[] args)
+        {
+            // check arguments <rname> <channelname> [count] [size]
+            if (args.Length < 1)
+            {
+                Console.WriteLine("rName and channel Name required");
+                Environment.Exit(2);
+            }
+            rName = args[0];
+
+            topicName = args[1];
+            if (args.Length > 2)
+                count = Convert.ToInt32(args[2]);
+            if (args.Length > 3)
+                size = Convert.ToInt32(args[3]);
+
+            start();
+        }
+
+        private void start()
+        {
+            var session = new Session(rName);
+
+            // Initialize the session
+            session.Initialize();
+            Console.WriteLine("Initialized...");
+            session.AsynchronousExceptionRaised += new EventHandler<AsyncExceptionEventArgs>(session_AsynchronousExceptionRaised);
+            session.ConnectionStatusChanged += new EventHandler<ConnectionStatusEventArgs>(session_ConnectionStatusChanged);
+            var topics = session.Topics;
+
+            //Create a byte array filled with characters equal to
+            // the message size specified. This could be a result
+            //of String.getBytes() call in a real world scenario.
+            byte[] buffer = new byte[size];
+            for (int x = 0; x < size; x++)
+            {
+                buffer[x] = (byte)((x % 90) + 32);
+            }
+
+            //Construct a sample Properties object
+            //Instantiate the message to be published with the specified Propeties and buffer
+            Properties props = new Properties();
+            Message msg = new Message(props, buffer);
+
+
+            //Inform the user that publishing is about to start
+            Console.WriteLine("Starting publish of " + count + " events with a size of " + size + " bytes each");
+
+            IProducer producer = topics.CreateProducer(topicName);
+            for (messagesSent = 0; messagesSent < count; messagesSent++)
+            {
+                //Publish the event
+                producer.Send(msg);
+            }
+            session.Dispose();
+        }
+
+        void session_ConnectionStatusChanged(object sender, ConnectionStatusEventArgs e)
+        {
+            while (!e.IsConnected)
+            {
+                Console.WriteLine("Disconnected from Nirvana, Sleeping for 1 second...");
+                try
+                {
+                    Thread.Sleep(1000);
+                }
+                catch (Exception) { }
+            }
+
+            // Decrement the sent messages loop, so that the message sending while the disconnect
+            //occurred is sent again
+            --messagesSent;
+        }
+
+        void session_AsynchronousExceptionRaised(object sender, AsyncExceptionEventArgs e)
+        {
+            Console.WriteLine("Exception raised: {0}", e.Error.GetType());
+            Console.WriteLine("Exception message: {0}", e.Error.Message);
+            Environment.Exit(2);
+        }
+
+        public static void Main(string[] args)
+        {
+            new ExChannelPublisher(args);
+        }
+    }
+}

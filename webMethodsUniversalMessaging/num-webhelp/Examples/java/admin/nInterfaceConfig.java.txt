@@ -1,0 +1,532 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.foundation.utils.fEnvironment;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nHTTPInterface;
+import com.pcbsys.nirvana.nAdminAPI.nHTTPSInterface;
+import com.pcbsys.nirvana.nAdminAPI.nInterface;
+import com.pcbsys.nirvana.nAdminAPI.nInterfaceStatus;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import com.pcbsys.nirvana.nAdminAPI.nSSLInterface;
+import com.pcbsys.nirvana.nAdminAPI.nSSLInterfaceAPI;
+import com.pcbsys.nirvana.nAdminAPI.nSocketInterface;
+import java.util.Enumeration;
+import java.util.Hashtable;
+import java.util.Observable;
+import java.util.Observer;
+import java.util.Vector;
+
+/**
+ * Nirvana Realm Server Interface Management Tool used for configuration, stopping starting interfaces within a realm
+ * Usage :
+ * add protocol://adapter:port/ <parameters> ....
+ * Adds a new interface to the Realm Server
+ * Where
+ * protocol = nsp, nsps, nhps or nhp
+ * adapter = n.n.n.n or adpater_name
+ * port = Socket port number to use
+ * mod name <parameters> ....
+ * Modifies an exisiting Interface with the new parameters supplied
+ * del name
+ * Delete the interface specified.
+ * This will disconnect all users currently connected to this interface
+ * start name
+ * Starts the interface
+ * stop name
+ * Stops the interface and disconnects all users
+ * help
+ * This screen
+ * Parameters
+ * Generic
+ * AUTOSTART = True/False           Will the interface be started at Realm Server startup
+ * ADVERTISE = True/False           Should the interface be public
+ * BACKLOG = 1<=  <=100             How large should the low level accept queue be
+ * POOLSIZE = 1<= <=5               Number of threads to use for the client accept
+ * SSL related
+ * KEYSTORE = keystoreName          File name of the keystore to use
+ * KEYSTOREPASSWORD = Password      Quoted passphrase for the keystore
+ * TRUSTSTORE = trustStore          File name of the truststore to find the CA certificates
+ * TRUSTSTOREPASSWORD = Password    Quoted passphrase for the keystore
+ * CERTIFICATENAME = name           Name of the certificate to use in the KeyStore
+ * PRIVATEKEYPASSWORD= Password     Quoted passphrase for access to the private key
+ * CLIENTCERTREQUIRED = True/False  Should the client Certificate be validated
+ */
+
+public class nInterfaceConfig {
+
+  private nRealmNode myNode;
+
+  public static void main(String[] args) {
+    //Process Environment Variables
+    processEnvironmentVariable("RNAME");
+    processEnvironmentVariable("LOGLEVEL");
+    processEnvironmentVariable("HPROXY");
+    processEnvironmentVariable("HAUTH");
+    processEnvironmentVariable("CKEYSTORE");
+    processEnvironmentVariable("CKEYSTOREPASSWD");
+    processEnvironmentVariable("CAKEYSTORE");
+    processEnvironmentVariable("CAKEYSTOREPASSWD");
+
+    // Install any proxy server settings
+    fEnvironment.setProxyEnvironments();
+
+    // Install JSSE SSL Environement settings
+    fEnvironment.setSSLEnvironments();
+
+    String url = processArgs(args);
+
+    nRealmNode realmNode = null;
+    try {
+      System.out.println("Connecting to " + url);
+      nSessionAttributes attr = new nSessionAttributes(url);
+      realmNode = new nRealmNode(attr);
+      if (!realmNode.isAuthorised()) {
+        System.out.println("User not authorised on this node " + url);
+        return;
+      }
+
+    } catch (Exception ex) {
+      ex.printStackTrace();
+      System.exit(1);
+    }
+    StringBuilder command = new StringBuilder().append("list");
+    if (args.length > 0) {
+
+      // Batch command
+      command = new StringBuilder();
+      for (int x = 0; x < args.length; x++) {
+        command.append(args[x]).append(" ");
+      }
+    }
+    new nInterfaceConfigParser(command.append("\n").toString(), new nInterfaceConfig(realmNode));
+    realmNode.close();
+  }
+
+  public static String getOptions(String args[]) {
+    String url = System.getProperty("RNAME", null);
+    if (url == null) {
+      Usage();
+      System.exit(1);
+    }
+    return url;
+  }
+
+  private static String processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if ((args[0].equals("-?")) || (args[0].equals("-help"))) {
+          UsageEnv();
+        }
+        return getOptions(null);
+      default:
+        return getOptions(args);
+    }
+  }
+
+  private static void processEnvironmentVariable(String variable) {
+    String laxVAR = System.getProperty("lax.nl.env." + variable);
+    if (laxVAR == null) {
+      laxVAR = System.getenv(variable);
+    }
+    if (laxVAR != null) {
+      if (fEnvironment.CKEYSTORE.equals(variable)) {
+        variable = nSessionAttributes.KEYSTORE_PATH;
+        System.clearProperty(fEnvironment.CKEYSTORE);
+      } else if (fEnvironment.CKEYSTOREPASSWD.equals(variable)) {
+        variable = nSessionAttributes.KEYSTORE_PASSWORD;
+        System.clearProperty(fEnvironment.CKEYSTOREPASSWD);
+      } else if (fEnvironment.CAKEYSTORE.equals(variable)) {
+        variable = nSessionAttributes.TRUSTSTORE_PATH;
+        System.clearProperty(fEnvironment.CAKEYSTORE);
+      } else if (fEnvironment.CAKEYSTOREPASSWD.equals(variable)) {
+        variable = nSessionAttributes.TRUSTSTORE_PASSWORD;
+        System.clearProperty(fEnvironment.CAKEYSTOREPASSWD);
+      }
+      System.setProperty(variable, laxVAR);
+    }
+  }
+
+  public nInterfaceConfig(nRealmNode node) {
+    myNode = node;
+  }
+
+  public void delInterface(nInterface inter) throws Exception {
+    myNode.getInterfaceManager().delInterface(inter);
+  }
+
+  public void stopInterface(nInterface inter) throws Exception {
+    myNode.getInterfaceManager().stopInterface(inter);
+  }
+
+  public void startInterface(nInterface inter) throws Exception {
+    myNode.getInterfaceManager().startInterface(inter);
+  }
+
+  public nInterfaceStatus findInterface(String name) throws Exception {
+    return (myNode.getInterfaceManager().findInterface(name));
+  }
+
+  public void modInterface(nInterface inter, Hashtable fields) throws Exception {
+    updateBaseFields(inter, fields);
+    if (inter instanceof nSSLInterfaceAPI) {
+      updateFields((nSSLInterfaceAPI) inter, fields);
+    }
+    if (inter instanceof nHTTPInterface) {
+      updateFields((nHTTPInterface) inter, fields);
+    }
+    this.myNode.getInterfaceManager().modInterface(inter);
+  }
+
+  public void addInterface(nInterface inter, Hashtable fields) throws Exception {
+    updateBaseFields(inter, fields);
+    if (inter instanceof nSSLInterfaceAPI) {
+      updateFields((nSSLInterfaceAPI) inter, fields);
+    }
+    if (inter instanceof nHTTPInterface) {
+      updateFields((nHTTPInterface) inter, fields);
+    }
+    this.myNode.getInterfaceManager().addInterface(inter);
+  }
+
+  public void display(boolean dumpAll) {
+    System.out.println("\n\nRealm Server interface configuration for " + myNode.getName());
+    System.out.println("");
+    try {
+      Vector status = myNode.getInterfaceManager().getInterfaces();
+      for (int x = 0; x < status.size(); x++) {
+        dumpInterface((nInterfaceStatus) status.elementAt(x), dumpAll);
+      }
+    } catch (Exception ex) {
+    }
+  }
+
+  public void displayAll(boolean dumpAll) {
+    System.out.println("\n\nRealm Server interface configuration for " + myNode.getName());
+    System.out.println("");
+    try {
+      Vector status = myNode.getInterfaceManager().getInterfaces();
+      for (int x = 0; x < status.size(); x++) {
+        dumpInterface((nInterfaceStatus) status.elementAt(x), dumpAll);
+      }
+    } catch (Exception ex) {
+    }
+  }
+
+  public void displayInterface(nInterfaceStatus status, boolean dumpAll) {
+    System.out.println("\n\nRealm Server interface configuration for " + myNode.getName());
+    dumpInterface(status, dumpAll);
+  }
+
+  public void monitorInterface(nInterfaceStatus inter) {
+    System.out.println("\n\nRealm Server interface configuration for " + myNode.getName() + "\n");
+    Monitor mon = new Monitor(inter);
+    try {
+      System.in.read();
+    } catch (Exception ex) {
+    }
+  }
+
+  public void monitorAll() {
+    System.out.println("\n\nRealm Server interface configuration for " + myNode.getName() + "\n");
+    try {
+      Vector status = myNode.getInterfaceManager().getInterfaces();
+      for (int x = 0; x < status.size(); x++) {
+        Monitor mon = new Monitor((nInterfaceStatus) status.elementAt(x));
+      }
+    } catch (Exception ex) {
+    }
+    try {
+      System.in.read();
+    } catch (Exception ex) {
+    }
+  }
+
+  protected void updateBaseFields(nInterface inter, Hashtable fields) throws Exception {
+    Enumeration keys = fields.keys();
+    while (keys.hasMoreElements()) {
+      String key = keys.nextElement().toString();
+      String value = fields.get(key).toString();
+      if (key.equalsIgnoreCase("AUTOSTART")) {
+        boolean val = ((value.equalsIgnoreCase("true")) || (value.equalsIgnoreCase("yes")));
+        inter.setAutostart(val);
+      } else if (key.equalsIgnoreCase("ADVERTISE")) {
+        boolean val = ((value.equalsIgnoreCase("true")) || (value.equalsIgnoreCase("yes")));
+        inter.setAutostart(val);
+      } else if (key.equalsIgnoreCase("BACKLOG")) {
+        inter.setBacklog(Integer.parseInt(value));
+      } else if (key.equalsIgnoreCase("POOLSIZE")) {
+        inter.setThreadCount(Integer.parseInt(value));
+      } else if (key.equalsIgnoreCase("AUTHTIMEOUT")) {
+        inter.setAuthTimeOut(Integer.parseInt(value));
+      }
+    }
+  }
+
+  protected void updateFields(nSSLInterfaceAPI inter, Hashtable fields) throws Exception {
+    Enumeration keys = fields.keys();
+    while (keys.hasMoreElements()) {
+      String key = keys.nextElement().toString();
+      String value = fields.get(key).toString();
+      if (key.equalsIgnoreCase("KEYSTORE")) {
+        inter.setKeyStore(value);
+      } else if (key.equalsIgnoreCase("KEYSTOREPASSWORD")) {
+        value = trim(value);
+        inter.setKeyStorePassword(value);
+      } else if (key.equalsIgnoreCase("TRUSTSTORE")) {
+        inter.setTrustStore(value);
+      } else if (key.equalsIgnoreCase("TRUSTSTOREPASSWORD")) {
+        value = trim(value);
+        inter.setTrustStorePassword(value);
+      } else if (key.equalsIgnoreCase("CERTIFICATENAME")) {
+        inter.setAlias(value);
+      } else if (key.equalsIgnoreCase("PRIVATEKEYPASSWORD")) {
+        value = trim(value);
+        inter.setPrivateKeyPassword(value);
+      } else if (key.equalsIgnoreCase("CLIENTCERTREQUIRED")) {
+        boolean val = ((value.equalsIgnoreCase("true")) || (value.equalsIgnoreCase("yes")));
+        inter.setCertRequired(val);
+      }
+    }
+  }
+
+  protected void updateFields(nHTTPInterface inter, Hashtable fields) {
+    Enumeration keys = fields.keys();
+    while (keys.hasMoreElements()) {
+      String key = keys.nextElement().toString();
+      String value = fields.get(key).toString();
+    }
+  }
+
+  protected void dumpInterface(nInterfaceStatus status, boolean dumpAll) {
+    String state = getStatus(status);
+    if (status.getInterface() instanceof nSSLInterface) {
+      displayConfig((nSSLInterface) status.getInterface(), state, dumpAll);
+    } else if (status.getInterface() instanceof nSocketInterface) {
+      displayConfig((nSocketInterface) status.getInterface(), state, dumpAll);
+    } else if (status.getInterface() instanceof nHTTPSInterface) {
+      displayConfig((nHTTPSInterface) status.getInterface(), state, dumpAll);
+    } else if (status.getInterface() instanceof nHTTPInterface) {
+      displayConfig((nHTTPInterface) status.getInterface(), state, dumpAll);
+    }
+    System.out.println("");
+  }
+
+  protected void displayConfig(nSSLInterface inter, String state, boolean dumpAll) {
+    System.out.println("SSL Interface " + inter.getName() + " : " + state + "\n");
+    displayCommon(inter);
+    if (dumpAll) {
+      displaySSL(inter);
+    }
+  }
+
+  protected void displayConfig(nSocketInterface inter, String state, boolean dumpAll) {
+    System.out.println("Socket Interface " + inter.getName() + " : " + state + "\n");
+    displayCommon(inter);
+  }
+
+  protected void displayConfig(nHTTPInterface inter, String state, boolean dumpAll) {
+    System.out.println("HTTP Interface " + inter.getName() + " : " + state + "\n");
+    displayCommon(inter);
+    if (dumpAll) {
+      displayHTTP(inter);
+    }
+  }
+
+  protected void displayConfig(nHTTPSInterface inter, String state, boolean dumpAll) {
+    System.out.println("HTTP SSL (HTTPS) Interface " + inter.getName() + " : " + state + "\n");
+    displayCommon(inter);
+    if (dumpAll) {
+      displayHTTP(inter);
+      displaySSL(inter);
+    }
+  }
+
+  protected String trim(String val) {
+    String value = val;
+    if (value.startsWith("\"")) {
+      value = value.substring(1);
+    }
+    if (value.endsWith("\"")) {
+      value = value.substring(0, value.length() - 1);
+    }
+    if (value.startsWith("\'")) {
+      value = value.substring(1);
+    }
+    if (value.endsWith("\'")) {
+      value = value.substring(0, value.length() - 1);
+    }
+    return value;
+  }
+
+  private void displayHTTP(nHTTPInterface inter) {
+  }
+
+  private String getStatus(nInterfaceStatus inter) {
+    switch (inter.getStatus()) {
+      case nInterfaceStatus.s_error: {
+        return ("Error: " + inter.getErrorMessage());
+      }
+      case nInterfaceStatus.s_started: {
+        return ("Started");
+      }
+      case nInterfaceStatus.s_stopped: {
+        return ("Stopped");
+      }
+    }
+    return ("");
+  }
+
+  private void displayCommon(nInterface inter) {
+    System.out.println("       Bound to adapter. . . . . : " + inter.getAdapter());
+    System.out.println("       Port. . . . . . . . . . . : " + inter.getPort());
+    System.out.println("       Backlog size. . . . . . . : " + inter.getBacklog());
+    System.out.println("       Authentication time . . . : " + inter.getAuthTimeOut() + "ms");
+    System.out.println("       Thread Pool size. . . . . : " + inter.getThreadCount());
+    System.out.println("       Advertise Interface . . . : " + inter.canAdvertise());
+    System.out.println("       Automatically Start . . . : " + inter.willAutostart());
+  }
+
+  private void displaySSL(nSSLInterfaceAPI inter) {
+    System.out.println("       SSL Specific :");
+    System.out.println("       Certificate name. . . . . : " + inter.getAlias());
+    System.out.println("       KeyStore file name. . . . : " + inter.getKeyStore());
+    System.out.println("       TrustStore file name. . . : " + inter.getTrustStore());
+    System.out.println("       Client validation . . . . : " + inter.getCertRequired());
+    System.out.println("       Cipher List :");
+    String[] ciphers = inter.getEnabledCiphers();
+    if (ciphers != null) {
+      for (int x = 0; x < ciphers.length; x++) {
+        System.out.println("            " + ciphers[x]);
+      }
+    }
+    System.out.println("       Supported Cipher List :");
+    ciphers = inter.getSupportedCiphers();
+    if (ciphers != null) {
+      for (int x = 0; x < ciphers.length; x++) {
+        System.out.println("            " + ciphers[x]);
+      }
+    }
+  }
+
+  public class Monitor implements Observer {
+
+    public Monitor(nInterfaceStatus is) {
+      is.addObserver(this);
+    }
+
+    public void update(Observable obs, Object obj) {
+      if (obs instanceof nInterfaceStatus) {
+        displayStatus((nInterfaceStatus) obs);
+      }
+    }
+
+    protected void displayStatus(nInterfaceStatus is) {
+      System.out.println("        Interface Name . . . . . . . . . . . : " + is.getInterface().getName());
+      System.out.println("        Total Connections Vended . . . . . . : " + is.getTotalConnections());
+      System.out.println("        Idle Thread Count. . . . . . . . . . : " + is.getCurrentIdleCount());
+      System.out.println("        Thread Exhaustion Count. . . . . . . : " + is.getPoolExhausted());
+      System.out.println("        Total Time Exhausted . . . . . . . . : " + is.getWaitTime());
+      System.out.println("        Total Time Authenticating. . . . . . : " + is.getTotalAuthenticationTime());
+      System.out.println("        Total Failed Connections . . . . . . : " + is.getTotalFailedConnections() + "\n\n");
+    }
+  }
+
+  private static void UsageEnv() {
+    System.out.println("\n\n(Environment Variables) \n");
+
+    System.out.println("(RNAME) - One or more RNAME entries in the form protocol://host:port");
+    System.out.println("   protocol - Can be one of nsp, nhp, nsps, or nhps, where:");
+    System.out.println("   nsp - Specifies Nirvana Socket Protocol (nsp)");
+    System.out.println("   nhp - Specifies Nirvana HTTP Protocol (nhp)");
+    System.out.println("   nsps - Specifies Nirvana Socket Protocol Secure (nsps), i.e. using SSL/TLS");
+    System.out.println("   nhps - Specifies Nirvana HTTP Protocol Secure (nhps), i.e. using SSL/TLS");
+    System.out.println("   port - The port number of the server");
+    System.out.println(
+        "\nHint: - For multiple RNAME entries, use comma separated values which will be attempted in connection weight order\n");
+
+    System.out.println(
+        "(LOGLEVEL) - This determines how much information the nirvana api will output 0 = verbose 7 = quiet\n");
+
+    System.out.println("(CKEYSTORE) - If using SSL, the location of the keystore containing the client cert\n");
+    System.out.println("(CKEYSTOREPASSWD) - If using SSL, the password for the keystore containing the client cert\n");
+    System.out.println("(CAKEYSTORE) - If using SSL, the location of the ca truststore\n");
+    System.out.println("(CAKEYSTOREPASSWD) - If using SSL, the password for the ca truststore\n");
+
+    System.out.println("(HPROXY) - HTTP Proxy details in the form proxyhost:proxyport, where:");
+    System.out.println("   proxyhost - The HTTP proxy host");
+    System.out.println("   proxyport - The HTTP proxy port\n");
+    System.out.println("(HAUTH) - HTTP Proxy authentication details in the form user:pass, where:");
+    System.out.println("   user - The HTTP proxy authentication username");
+    System.out.println("   pass - The HTTP proxy authentication password\n");
+    System.exit(1);
+  }
+
+  public static void Usage() {
+    System.out.println("Usage ...\n");
+    System.out.println("inconfig \n");
+    System.out.println("Nirvana Realm Server Interface Management help");
+    System.out.println("      ");
+    System.out.println("    Commands :");
+    System.out.println("      ");
+    System.out.println("      add protocol://adapter:port/ <parameters> ....");
+    System.out.println("          Adds a new interface to the Realm Server");
+    System.out.println("            Where ");
+    System.out.println("              protocol = nsp, nsps, nhps or nhp");
+    System.out.println("              adapter = n.n.n.n or adpater_name");
+    System.out.println("              port = Socket port number to use");
+    System.out.println("          ");
+    System.out.println("          ");
+    System.out.println("      mod name <parameters> ....");
+    System.out.println("          Modifies an exisiting Interface with the new parameters supplied");
+    System.out.println("          ");
+    System.out.println("          ");
+    System.out.println("      del name");
+    System.out.println("          Delete the interface specified.");
+    System.out.println("          This will disconnect all users currently connected to this interface");
+    System.out.println("          ");
+    System.out.println("          ");
+    System.out.println("      start name");
+    System.out.println("          Starts the interface ");
+    System.out.println("          ");
+    System.out.println("          ");
+    System.out.println("      stop name");
+    System.out.println("          Stops the interface and disconnects all users");
+    System.out.println("          ");
+    System.out.println("          ");
+    System.out.println("      help");
+    System.out.println("          This screen");
+    System.out.println("      ");
+    System.out.println("      ");
+    System.out.println("Parameters - Generic");
+    System.out.println("      ");
+    System.out.println(" AUTOSTART = True/False           Will the interface be started at Realm Server startup\n");
+    System.out.println(" ADVERTISE = True/False           Should the interface be public\n");
+    System.out.println(" BACKLOG = 1<=  <=100             How large should the low level accept queue be\n");
+    System.out.println(" POOLSIZE = 1<= <=5               Number of threads to use for the client accept\n");
+    System.out.println("      ");
+    System.out.println("Parameters - SSL related");
+    System.out.println("      ");
+    System.out.println(" KEYSTORE = keystoreName          File name of the keystore to use\n");
+    System.out.println(" KEYSTOREPASSWORD = Password      Quoted passphrase for the keystore\n");
+    System.out.println(" TRUSTSTORE = trustStore          File name of the truststore to find the CA certificates\n");
+    System.out.println(" TRUSTSTOREPASSWORD = Password    Quoted passphrase for the keystore\n");
+    System.out.println(" CERTIFICATENAME = name           Name of the certificate to use in the KeyStore\n");
+    System.out.println(" PRIVATEKEYPASSWORD= Password     Quoted passphrase for access to the private key\n");
+    System.out.println(" CLIENTCERTREQUIRED = True/False  Should the client Certificate be validated\n");
+    System.out.println("      ");
+    System.out.println("      ");
+    System.out.println("      ");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+
+
+} // End of inconfig Class
+

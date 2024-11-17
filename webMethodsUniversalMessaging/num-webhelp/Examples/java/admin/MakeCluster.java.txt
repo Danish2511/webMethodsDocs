@@ -1,0 +1,169 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nBaseClientException;
+import com.pcbsys.nirvana.client.nIllegalArgumentException;
+import com.pcbsys.nirvana.client.nSessionFactory;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nClusterMemberConfiguration;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import java.net.URI;
+import java.net.URISyntaxException;
+
+public class MakeCluster extends nSampleApp {
+
+  private static final String SHM_PROTOCOL = "shm";
+
+  public static void main(String[] args) {
+    //Validation of the environment variable
+    nSampleApp.processEnvironmentVariables();
+
+    MakeCluster makeCluster = new MakeCluster();
+    //Validation of the required parameters
+    makeCluster.processArgs(args);
+
+    //Extracting required parameters
+    //The first argument is the cluster name
+    String clusterName = args[0];
+    //The second argument is a flag whether to convert local stores to cluster wide stores
+    boolean convertLocalStores = Boolean.parseBoolean(args[1]);
+    int rnamesCount = args.length - 2;
+    String[] rnames = new String[rnamesCount];
+    //Copying the rnames (the reamining elements after the first two) in separate array.
+    System.arraycopy(args, 2, rnames, 0, rnamesCount);
+
+    //The cluster creation is done here
+    makeCluster.doit(clusterName, rnames, convertLocalStores);
+  }
+
+  private static void Usage() {
+    System.out.println("Usage:\n");
+    System.out.println("nmakecluster <cluster name> <convert local stores> <rnames> \n");
+
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<cluster name> - The name for the new cluster. The cluster name must be alphanumeric");
+    System.out.println(
+        "<convert local stores> - Flag to indicate whether the local stores of the master should be converted to cluster wide stores");
+    System.out.println(
+        "<rnames> - Server URLs to be included in the cluster. Can be more than one separated by space. The proper format is [nsp/nhp/nsps/nhps]://[hostname]:[port] or shm://[path/to/file]");
+  }
+
+  @Override
+  protected void processArgs(String[] args) {
+    if (args != null && args.length > 0) {
+      validateClusterName(args);
+      validateConvertLocalStores(args);
+      validateRealmNames(args);
+    } else {
+      showUsageAndExit();
+    }
+  }
+
+  private void validateClusterName(String[] args) {
+    String clusterName = args[0];
+    if (clusterName == null || !clusterName.matches("^[a-zA-Z0-9]*$")) {
+      System.out.println("The cluster name must be alphanumeric");
+      showUsageAndExit();
+    }
+  }
+
+  private void validateRealmNames(String[] args) {
+    for (int i = 2; i < args.length; i++) {
+      validateRealmName(args[i]);
+    }
+  }
+
+  private void validateRealmName(String name) {
+    if (name != null) {
+      try {
+        new URI(name);
+      } catch (URISyntaxException e) {
+        showErrorAndExit(String.format("The rname %s is not proper URI", name));
+      }
+    }
+  }
+
+  private void validateConvertLocalStores(String[] args) {
+    if (!(args[1].equals("true") || args[1].equals("false"))) {
+      System.out.println("The flag whether to convert local stores to cluster wide ones is missing");
+      showUsageAndExit();
+    }
+  }
+
+  void doit(String clusterName, String[] rnames, boolean convertLocal) {
+    if (rnames != null && rnames.length > 0) {
+
+      //Create the members of the cluster
+      nClusterMemberConfiguration[] clusterMemberConfigurations = new nClusterMemberConfiguration[rnames.length];
+      for (int i = 0; i < rnames.length; i++) {
+        try {
+          clusterMemberConfigurations[i] = new nClusterMemberConfiguration(rnames[i]);
+          // Handle errors
+        } catch (nIllegalArgumentException e) {
+          showErrorAndExit(e);
+        } catch (nBaseAdminException e) {
+          showErrorAndExit(e);
+        }
+      }
+
+      //Create the cluster
+      try {
+        nClusterNode clusterNode = nClusterNode.create(clusterName, clusterMemberConfigurations, convertLocal);
+        System.out.printf("Cluster %s was created.", clusterNode.getName());
+        // Handle errors
+      } catch (nIllegalArgumentException e) {
+        showErrorAndExit("In order to proceed delete the local stores", e);
+      } catch (nBaseClientException e) {
+        showErrorAndExit(e);
+      }
+
+      closeSession();
+    } else {
+      System.out.println("There are no rnames specified");
+      System.exit(1);
+    }
+  }
+
+  private void closeSession() {
+    // Close the session we opened
+    try {
+      nSessionFactory.close(mySession);
+    } catch (nIllegalArgumentException ex) {
+      //This exception indicates that the session is invalid (either null or missing from the list of known sessions)
+      //In this case there is not much we can do
+    }
+    // Close any other sessions within this JVM so that we can exit
+    nSessionFactory.shutdown();
+  }
+
+  private void showErrorAndExit(String errorMessage) {
+    System.out.println(errorMessage);
+    System.exit(1);
+  }
+
+  private void showErrorAndExit(String hint, Exception e) {
+    System.out.println(e.getLocalizedMessage());
+    if (hint != null) {
+      System.out.println(hint);
+    }
+    e.printStackTrace();
+    System.exit(1);
+  }
+
+  private void showErrorAndExit(Exception e) {
+    showErrorAndExit(null, e);
+  }
+
+  private static void showUsageAndExit() {
+    Usage();
+    System.exit(1);
+  }
+}

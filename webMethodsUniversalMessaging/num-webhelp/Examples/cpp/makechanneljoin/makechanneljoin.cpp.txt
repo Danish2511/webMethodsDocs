@@ -1,0 +1,189 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nChannel.h"
+#include "nSession.h"
+#include "nChannelAttributes.h"
+#include "nSessionFactory.h"
+#include "nSessionPausedException.h"
+#include "nSecurityException.h"
+#include "nSessionNotConnectedException.h"
+#include "nUnexpectedResponseException.h"
+#include "nRequestTimedOutException.h"
+#include "nChannelNotFoundException.h"
+#include "nUnknownRemoteRealmException.h"
+
+using namespace com::pcbsys::nirvana::client;
+using namespace com::pcbsys::nirvana::apps;
+/**
+* Creates a join between 2 nirvana channels
+*/
+class makechanneljoin : public nSampleApp {
+  private:
+    bool ALLOWPURGE;
+    int jhc;
+    std::string SELECTOR;
+    static std::string RNAME;
+    std::string chanName;
+    std::string rchanName;
+    static makechanneljoin* mySelf;
+
+    /**
+    * This method demonstrates the Nirvana API calls necessary to create
+    * a channel join.
+    * It is called after all command line arguments have been received and
+    * validated
+    *
+    * @param realmDetails a string* containing the possible RNAME values
+    * @param nRproperty the length of the realmDetails array
+    */
+    void doit(std::string* realmDetails, int nRproperty) {
+
+
+        mySelf->constructSession(realmDetails, nRproperty);
+
+        //Creates the specified channel join
+        try {
+
+            //Create the channel attributes object to locate the source channel first
+            nChannelAttributes* nca = new nChannelAttributes();
+            nca->setName( chanName );
+
+            //Create the channel attributes for the destination channel
+            nChannelAttributes* dest = new nChannelAttributes();
+            dest->setName( rchanName );
+
+            //Obtain a reference to the source channel
+            nChannel* mySrcChannel = m_pSession->findChannel( nca );
+
+            //Obtain a reference to the destination channel
+            nChannel* myDstChannel = m_pSession->findChannel( dest );
+
+            //has a value for JHOPS been specified?
+            //if no
+            if ( jhc == -2 ) {
+                mySrcChannel->joinChannel( myDstChannel, SELECTOR );
+            }
+            //if yes
+            else if ( jhc > 1 ) {
+                mySrcChannel->joinChannel( myDstChannel, true, jhc, SELECTOR, ALLOWPURGE );
+            }
+
+        }
+        //Handle errors
+        catch(nChannelNotFoundException cnfe) {
+            printf("The channel specified could not be found.");
+            printf("Please ensure that the channel exists in the REALM you connect to.");
+            exit(1);
+        } catch (nSecurityException se) {
+            printf("Unsufficient permissions for the requested operation.");
+            printf("Please check the ACL settings on the server.");
+            exit(1);
+        } catch (nSessionNotConnectedException snce) {
+            printf("The session object used is not physically connected to the Nirvana realm.");
+            printf("Please ensure the realm is up and check your RNAME value.");
+            exit(1);
+        } catch (nUnexpectedResponseException ure) {
+            printf("The Nirvana REALM has returned an unexpected response.");
+            printf("Please ensure the Nirvana REALM and client API used are compatible.");
+            exit(1);
+        } catch (nUnknownRemoteRealmException urre) {
+            printf("The channel specified resided in a remote realm which could not be found.");
+            printf("Please ensure the channel name specified is correct.");
+            exit(1);
+        } catch (nRequestTimedOutException rtoe) {
+            printf("The requested operation has timed out waiting for a response from the REALM.");
+            printf("If this is a very busy REALM ask your administrator to increase the client timeout values.");
+            exit(1);
+        } catch (nBaseClientException nbce) {
+            printf("An error occured while creating the Channel Attributes object.");
+            exit(1);
+        }
+        //Close the session we opened
+        try {
+            nSessionFactory::close ( m_pSession );
+        } catch(Exception) {}
+        //Close any other sessions so that we can exit
+        nSessionFactory::shutdown ( );
+
+    }
+
+    void processArgs(int argc, char** argv) {
+        ALLOWPURGE = true;
+        jhc = -2;
+        if(argc < 4) {
+            Usage();
+            exit(1);
+        }
+        if(argc >  3) {
+            RNAME = argv[1];
+            chanName = argv[2];
+            rchanName = argv[3];
+        }
+        if(argc >  4) {
+            jhc = atoi(argv[4]);
+        }
+        if(argc >  5) {
+            SELECTOR = argv[5];
+        }
+        if(argc >  6) {
+            ALLOWPURGE = !strcmp(argv[6], "true");
+        }
+    }
+
+    /**
+    * Prints the usage message for this class
+    */
+    static void Usage() {
+
+        printf( "Usage ...\n\n" );
+        printf("makechanneljoin <rname> <source channel name> <destination channel name> [max hops] [selector] [allow purge] \n\n");
+        printf(
+            "<Required Arguments> \n\n");
+        printf(
+            "<rname> - the rname of the server to connect to\n");
+        printf(
+            "<source channel name> - Channel name parameter of the local channel name to join\n" );
+        printf(
+            "<destination channel name> - Channel name parameter of the remote channel name to join\n" );
+        printf(
+            "\n[Optional Arguments]\n\n");
+        printf(
+            "[max hops] - The maximum number of join hops a message can travel through\n" );
+        printf(
+            "[selector] - The event filter std::string to use on messages travelling through this join\n" );
+        printf(
+            "[allow purge] - boolean to specify whether purging is allowed (default : true)\n");
+    }
+
+  public:
+    static int Main(int argc, char** argv) {
+
+        //Create an instance for this class
+        mySelf = new makechanneljoin();
+
+        //Process command line arguments
+        mySelf->processArgs(argc,argv);
+
+        //Process the local REALM RNAME details
+
+        int nRproperty;
+        std::string* rproperties = parseRealmProperties(RNAME,nRproperty); //sets nRproperty to the number of realms in RNAME
+
+        //create the channel join specified
+        mySelf->doit(rproperties,nRproperty);
+        return 0;
+    }
+}; // End of makechanneljoin Class
+
+makechanneljoin* makechanneljoin::mySelf = NULL;
+std::string makechanneljoin::RNAME = "";
+int main (int argc, char** argv) {
+    return makechanneljoin::Main (argc, argv);
+}

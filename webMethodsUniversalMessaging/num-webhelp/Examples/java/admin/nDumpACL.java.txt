@@ -1,0 +1,294 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nChannelACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to output the acls for objects within a realm.
+ * The program will search through the realm and output the acl entries and permissions
+ * for all channels, queues and other realms within the namespace
+ */
+
+public class nDumpACL extends nSampleApp {
+
+  private String realmUrl = null;
+
+  /**
+   * Main program thread, takes a realm URL as the parameter to start the search
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nDumpACL dump = new nDumpACL(args);
+  }
+
+  protected void processArgs(String[] args) {
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        getOptions(null);
+        break;
+      default:
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realmUrl = System.getProperty("RNAME", null);
+    if (realmUrl == null) {
+      Usage();
+      System.exit(1);
+    }
+  }
+
+  /**
+   * Constructor for the class, takes the string realm url
+   */
+  public nDumpACL(String[] args) {
+    try {
+      processArgs(args);
+      System.out.println("Connecting to " + realmUrl);
+      // construct the session attributes for the realm
+      nSessionAttributes attr = new nSessionAttributes(realmUrl);
+      // construct the realm node
+      nRealmNode node = new nRealmNode(attr);
+      node.waitForNameSpace();
+      dumpACL(node);
+      // close the node, which closes all sessions made to the namespace
+      node.close();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Method to output contents of a realm node
+   */
+  private void dumpACL(nRealmNode node) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("Realm Found : " + node.getName());
+    if (!node.isAuthorised()) {
+      System.out.println("User not authorised on this node");
+      return;
+    }
+    try {
+      while (!node.isNamespaceComplete()) {
+        System.out.println("Not yet complete for realm " + node.getName());
+        node.waitForNameSpace(2000);
+      }
+      // call the method to output the acl entries for the realm
+      dumpACL(node.getACLs());
+      // call the method to search the child nodes within the realm node
+      dumpACL(node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  private void dumpACL(nContainer node) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    try {
+      // call the method to search the child nodes within the realm node
+      dumpACL(node.getNodes());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+
+  /**
+   * Method to output the contents of a leaf node, i.e. a channel or a queue
+   */
+  private void dumpACL(nLeafNode node) {
+    // detect if the node is a channel or a queue
+    if (node.isChannel()) {
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Channel Found : " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    } else {
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Queue Found : " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    }
+    try {
+      // call the method to output the acls for the leafnode
+      dumpACL(node.getACLs());
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Method to search an enumeration of nodes, these could be realm acl
+   * entries, channel acl entries, leaf nodes or realm nodes
+   */
+  private void dumpACL(Enumeration enum1) {
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      if (obj instanceof nRealmACLEntry) {
+        // if the node is a realm, call the method to output the acls for a realm node
+        dumpACL((nRealmACLEntry) obj);
+      } else if (obj instanceof nChannelACLEntry) {
+        // if the node is a channel acl entry, call the method to output the channel acl
+        dumpACL((nChannelACLEntry) obj);
+      } else if (obj instanceof nLeafNode) {
+        // if the node is a channel or queue call the method to output the contents of the node
+        dumpACL((nLeafNode) obj);
+      } else if (obj instanceof nRealmNode) {
+        // if the node is a realm call the method to output the contents of the realm node
+        dumpACL((nRealmNode) obj);
+      } else if (obj instanceof nContainer) {
+        // if the node is a channel or queue call the method to output the contents of the node
+        dumpACL((nContainer) obj);
+      }
+    }
+  }
+
+  /**
+   * Method that outputs the entries of an acl object, by passing the enumeration of acl entries
+   */
+  private void dumpACL(nACL acl) {
+    dumpACL(acl.getEntries());
+  }
+
+  /**
+   * Method that outputs the permissions for an acl entry
+   */
+  private void dumpACL(nChannelACLEntry entry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("Subject Found : " + entry.getSubject());
+    // call the method to output the base acl entry permissions
+    dumpBase(entry);
+    if (entry.canGetLastEID()) {
+      System.out.println("  Can Get last EID");
+    } else {
+      System.out.println("  Can NOT Get last EID");
+    }
+    if (entry.canPop()) {
+      System.out.println("  Can POP from a Queue");
+    } else {
+      System.out.println("  Can NOT POP from a Queue");
+    }
+    if (entry.canGetLastEID()) {
+      System.out.println("  Can Get last EID");
+    } else {
+      System.out.println("  Can NOT Get last EID");
+    }
+    if (entry.canWrite()) {
+      System.out.println("  Can Write to this channel");
+    } else {
+      System.out.println("  Can NOT Write to this channel");
+    }
+    if (entry.canPurge()) {
+      System.out.println("  Can Purge this channel");
+    } else {
+      System.out.println("  Can NOT Purge this channel");
+    }
+    if (entry.canRead()) {
+      System.out.println("  Can Read from this channel");
+    } else {
+      System.out.println("  Can NOT read from this channel");
+    }
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Method to output the permissions for a realm acl entry
+   */
+  private void dumpACL(nRealmACLEntry entry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("Subject:" + entry.getSubject());
+    // call the method to output the base acl entry permissions
+    dumpBase(entry);
+    if (entry.canAccessTheRealm()) {
+      System.out.println("  Can Access the realm");
+    } else {
+      System.out.println("  Can NOT access the realm");
+    }
+    if (entry.canConfigureRealm()) {
+      System.out.println("  Can Configure the realm");
+    } else {
+      System.out.println("  Can NOT Configure the realm");
+    }
+    if (entry.canManageChannels()) {
+      System.out.println("  Can Make/Delete Channels");
+    } else {
+      System.out.println("  Can NOT Make/Delete channels");
+    }
+    if (entry.canManageJoins()) {
+      System.out.println("  Can Join channels");
+    } else {
+      System.out.println("  Can NOT Join Channels");
+    }
+    if (entry.canManageRealm()) {
+      System.out.println("  Can Manage the the realm");
+    } else {
+      System.out.println("  Can NOT Manage the realm");
+    }
+    if (entry.canOverrideConnectionCount()) {
+      System.out.println("  Can Bypass the realm connection count");
+    } else {
+      System.out.println("  Can NOT Bypass the realm connection count");
+    }
+    if (entry.canUseAdminAPI()) {
+      System.out.println("  Can Use the ADMIN API");
+    } else {
+      System.out.println("  Can NOT use the ADMIN API");
+    }
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Method to output the base acl permissions
+   */
+  private void dumpBase(nACLEntry entry) {
+    if (entry.canModify()) {
+      System.out.println("  Can Modify the ACL");
+    } else {
+      System.out.println("  Can NOT Modify the ACL");
+    }
+    if (entry.canList()) {
+      System.out.println("  Can List ACL");
+    } else {
+      System.out.println("  Can NOT list ACL");
+    }
+    if (entry.hasFullPrivileges()) {
+      System.out.println("  Has FULL privileges");
+    } else {
+      System.out.println("  Does NOT have full privileges");
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println("ndumpacl \n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}
+

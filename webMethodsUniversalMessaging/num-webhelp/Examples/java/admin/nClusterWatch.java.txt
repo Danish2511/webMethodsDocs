@@ -1,0 +1,116 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nClusterEventListener;
+import com.pcbsys.nirvana.nAdminAPI.nClusterNode;
+import com.pcbsys.nirvana.nAdminAPI.nClusterStatus;
+import com.pcbsys.nirvana.nAdminAPI.nClusterStatusEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Observable;
+import java.util.Observer;
+
+/**
+ * This application demonstrates how to monitor a realm for creation of clusters,
+ * or if it is part of a cluster, to monitor cluster events.
+ */
+public class nClusterWatch implements nClusterEventListener, Observer {
+
+  // The realm node to connect to
+  private nRealmNode myRealm;
+
+  /**
+   * Construct the cluster watch object using the RNAME of the realm to connect to
+   *
+   * @param args arg[0] should be the RNAME
+   */
+  public nClusterWatch(String[] args) throws Exception {
+    myRealm = new nRealmNode(new nSessionAttributes(args[0]));
+    // add observer to the realm to get new cluster notifications
+    myRealm.addObserver(this);
+    // if part of a cluster already, add a listener for cluster events
+    if (myRealm.getCluster() != null) {
+      myRealm.getCluster().addListener(this);
+    }
+  }
+
+  public static void main(String[] args) {
+    try {
+      new nClusterWatch(args);
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * New member added to the cluster
+   */
+  public void memberAdded(nRealmNode node) {
+    System.out.println("Member added to cluster " + node.getName());
+  }
+
+  /**
+   * Member deleted from the cluster
+   */
+  public void memberDeleted(nRealmNode node) {
+    System.out.println("Member deleted from cluster " + node.getName());
+  }
+
+  /**
+   * quorum reached, i.e. master realm has been elected
+   */
+  public void quorumReached(nRealmNode masterNode) {
+    System.out.println("quorum reach, master - " + masterNode.getName());
+  }
+
+  /**
+   * quorum lost, i.e. master realm has been lost, no current master
+   */
+  public void quorumLost() {
+    System.out.println("quorum lost");
+  }
+
+  /**
+   * Cluster status updatet
+   */
+  public void statusUpdate(nClusterStatus update) {
+    System.out.println("Cluster status changed ");
+    System.out.println(update.getName() + " elected Master = " + update.getElectedMaster());
+    for (int x = 0; x < update.size(); x++) {
+      nClusterStatusEntry entry = update.getStatus(x);
+      System.out.println("*******" + entry.getName() + " Online = " + entry.isOnline());
+    }
+    System.out.println("");
+  }
+
+  /**
+   * Cluster state change
+   */
+  public void stateChange(nRealmNode node, String newState) {
+    System.out.println("Node " + node.getName() + " changed state to " + newState);
+  }
+
+  /**
+   * Cluster log event
+   */
+  public void report(String source, String message) {
+    System.out.println("CLUSTER>> " + source + "> " + message);
+  }
+
+  /**
+   * Update from the realm node that a cluster has been created
+   */
+  public void update(Observable o, Object arg) {
+    if (arg instanceof nClusterNode) {
+      System.out.println("New cluster formed, name = " + ((nClusterNode) arg).getName());
+      ((nClusterNode) arg).addListener(this);
+    }
+  }
+}

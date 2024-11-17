@@ -1,0 +1,300 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nBaseClientException;
+import com.pcbsys.nirvana.client.nChannelAttributes;
+import com.pcbsys.nirvana.client.nIllegalArgumentException;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nAdminIllegalArgumentException;
+import com.pcbsys.nirvana.nAdminAPI.nBaseAdminException;
+import com.pcbsys.nirvana.nAdminAPI.nLeafNode;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Vector;
+
+/**
+ * This application can be used to copy channels from one realm to another.
+ *
+ */
+
+public class nCopyChannel extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String fromRealm = null;
+  private String toRealm = null;
+
+  private String fromChannelName = null;
+  private String toChannelName = null;
+  private nRealmNode from = null;
+  private nRealmNode to = null;
+  private String copyArgs[] = null;
+  private boolean isLocalCopy = true;
+  private int ttl = -10;
+  private int capacity = -10;
+  private int type = -10;
+
+  private void init(String[] args) throws nIllegalArgumentException, nBaseAdminException {
+    copyArgs = args;
+    processArgs(copyArgs);
+    System.out.println( "Connecting to " + fromRealm );
+    nSessionAttributes attr = new nSessionAttributes( fromRealm );
+    from = new nRealmNode(attr);
+    if(!from.isAuthorised()){
+      System.out.println("User not authorised on this node "+fromRealm);
+      return;
+    }
+    System.out.print( "waiting for namespace construction..... " );
+    from.waitForEntireNameSpace();
+    System.out.println("finished.");
+  }
+
+  private void doCopy() throws nAdminIllegalArgumentException {
+    nLeafNode channelToCopy = (nLeafNode) from.findNode(fromChannelName, false);
+    if (channelToCopy == null) {
+      System.out.println("Channel not found");
+      return;
+    }
+    if (isLocalCopy) {
+      copyChannel(channelToCopy);
+    } else {
+      to = findRealm(toRealm);
+      if (to != null) {
+        copyChannel(channelToCopy);
+      } else {
+        System.out.println("Target realm not found");
+      }
+    }
+  }
+
+  private void copyChannel(nLeafNode source) {
+    try {
+      nChannelAttributes newAttr = new nChannelAttributes();
+      if (isLocalCopy) {
+        source.copy(true, checkAttributes(source.getAttributes(), newAttr), source.getACLs(), null);
+      } else {
+        source.copy(to, true, checkAttributes(source.getAttributes(), newAttr),null);
+      }
+    } catch (nBaseAdminException e) {
+      e.printStackTrace();
+    }
+  }
+
+  private nRealmNode findRealm(String name) {
+    nRealmNode match = null;
+    Vector<nRealmNode> realmList = from.getRealmList();
+    for (nRealmNode realm : realmList) {
+      if (name.equalsIgnoreCase(realm.getName())) {
+        match = realm;
+        break;
+      }
+    }
+    return match;
+  }
+
+  private void close() {
+    if (from != null) {
+      from.close();
+    }
+  }
+
+  /**
+   * Set new channel attributes for the channel copy
+   */
+  private nChannelAttributes checkAttributes(nChannelAttributes p_src, nChannelAttributes p_dest) {
+    try {
+      if (ttl != -10) {
+        p_dest.setTTL(ttl);
+      } else {
+        p_dest.setTTL(p_src.getTTL());
+      }
+      if (capacity != -10) {
+        p_dest.setMaxEvents(capacity);
+      } else {
+        p_dest.setMaxEvents(p_src.getMaxEvents());
+      }
+      if (type != -10) {
+        p_dest.setType(type);
+      } else {
+        p_dest.setType(p_src.getType());
+      }
+      p_dest.setName(toChannelName);
+
+
+      if (p_src.isJMSEngine()) {
+        p_dest.useJMSEngine(p_src.isJMSEngine());
+        p_dest.useMergeEngine(false);
+      } else if (p_src.isMergeEngine()) {
+        p_dest.useJMSEngine(false);
+        p_dest.useMergeEngine(p_src.isMergeEngine());
+      }
+
+      //Publish keys we need to copy only in case of channel
+      if (p_src.getPublishKeys() != null) {
+        p_dest.setPublishKeys(p_src.getPublishKeys());
+      }
+
+      //Copy Store properties
+      p_dest.getProperties().copy(p_src.getProperties());
+    } catch (nBaseClientException e) {
+      e.printStackTrace();
+    }
+    return p_dest;
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    fromRealm = System.getProperty("RNAME", null);
+    if (fromRealm==null) {
+      Usage();
+      throw new RuntimeException("Source realm not found");
+    }
+    fromChannelName = System.getProperty("FROMCHANNEL", null);
+    if (fromChannelName==null) {
+      Usage();
+      throw new RuntimeException("Source channel not found");
+    }
+    // set the channel name to lower case as the nirvana namespace is all lowercase
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-r")) {
+        try {
+          i++;
+          toRealm = args[i];
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for toRealm");
+        }
+      } else if (args[i].equalsIgnoreCase("-n")) {
+        try {
+          i++;
+          toChannelName = args[i];
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for channel name for copied channel");
+        }
+      } else if (args[i].equalsIgnoreCase("-a")) {
+        try {
+          i++;
+          ttl = Integer.parseInt(args[i]);
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for channel age");
+        }
+      } else if (args[i].equalsIgnoreCase("-c")) {
+        try {
+          i++;
+          capacity = Integer.parseInt(args[i]);
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for channel capacity");
+        }
+      } else if (args[i].equalsIgnoreCase("-t")) {
+        try {
+          i++;
+          String sType = args[i];
+          if (sType.equals("P")) {
+            type = nChannelAttributes.PERSISTENT_TYPE;
+          } else if (sType.equals("R")) {
+            type = nChannelAttributes.RELIABLE_TYPE;
+          } else if (sType.equals("M")) {
+            type = nChannelAttributes.MIXED_TYPE;
+          }
+        } catch (Exception e) {
+          System.out.println("Invalid parameter passed for channel type");
+        }
+      }
+    }
+    if (toRealm != null) {
+      isLocalCopy = false;
+    }
+    if (toChannelName == null) {
+      if (fromChannelName.startsWith("/")) {
+        toChannelName = "copyof"+fromChannelName.substring(1);
+      } else {
+        toChannelName = "copyof"+fromChannelName;
+      }
+    }
+  }
+
+  protected void processArgs(String[] args){
+    if (args.length == 0) {
+      Usage();
+      throw new RuntimeException("No arguments");
+    }
+    switch (args.length){
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+          getOptions(null);
+          break;
+        } else {
+          System.setProperty("FROMCHANNEL",args[0]);
+          getOptions(args);
+          break;
+        }
+      default:
+        System.setProperty("FROMCHANNEL",args[0]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   *
+   * Or construct one of these classes from another class ensuring you have added :
+   *
+   *    RNAME
+   *    FROMCHANNEL
+   *
+   * as system properties, and pass in a list of permissions in the constructor
+   *
+   */
+  public static void main( String[] args ) {
+    processEnvironmentVariables();
+
+    nCopyChannel copy = new nCopyChannel();
+    try {
+      copy.init(args);
+      copy.doCopy();
+    } catch (Exception e) {
+      System.out.println("An error has occured during copying the channel");
+      copy.close();
+      System.exit(1);
+    }
+    copy.close();
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println( "Usage ...\n" );
+    System.out.println("nadmincopychan <channel> [-r toRealm] [-n toChannelName] [-a channel ttl] [-c channel capacity] [-t channel type]\n");
+    System.out.println(
+        "<Required Arguments> \n");
+    System.out.println(
+        "<channel> - Channel name parameter for the channel to copy" );
+    System.out.println(
+        "\n[Optional Arguments] \n");
+    System.out.println(
+        "<-r toRealm> - The name of the remote realm to copy the channel to" );
+    System.out.println(
+        "<-n toChannelName> - The name you wish to give the copied channel" );
+    System.out.println(
+        "<-a channel ttl> - The ttl you wish to give the copied channel" );
+    System.out.println(
+        "<-c channel capacity> - The capacity you wish to give the copied channel" );
+    System.out.println(
+        "<-t channel type> - The channel you wish the copied channel to be any of (P | R | M)" );
+    System.out.println(
+        "\n\nNote: -? provides help on environment variables \n");
+  }
+}

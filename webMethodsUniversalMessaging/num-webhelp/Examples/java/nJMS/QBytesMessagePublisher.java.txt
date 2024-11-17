@@ -1,0 +1,181 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+
+package com.pcbsys.nirvana.nJMSApps;
+
+import com.pcbsys.foundation.utils.fEnvironment;
+import javax.jms.BytesMessage;
+import javax.jms.DeliveryMode;
+import javax.jms.Queue;
+import javax.jms.QueueConnection;
+import javax.jms.QueueConnectionFactory;
+import javax.naming.Context;
+import javax.naming.NamingException;
+
+/**
+ * This class demonstrates how to construct a Publisher that can send bytes messages on a topic
+ */
+public class QBytesMessagePublisher extends Publisher {
+
+  public QBytesMessagePublisher(String factoryName, String destinationName) {
+    super(factoryName, destinationName);
+  }
+
+  public static void main(String[] args) {
+    //Check to see if args were specified
+    if ((args.length == 1) && args[0].equals("-?")) {
+      UsageEnv();
+    }
+    final int min_args = 2;
+
+    if (args.length < min_args) {
+      Usage();
+      System.exit(1);
+    }
+
+    //Process Environment Variables
+    processEnvironmentVariable("RNAME");
+    processEnvironmentVariable("PRINCIPAL");
+    processEnvironmentVariable("PASSWORD");
+    processEnvironmentVariable("CONTEXT_FACTORY");
+    processEnvironmentVariable("PROVIDER_URL");
+    processEnvironmentVariable("LOGLEVEL");
+    processEnvironmentVariable("HPROXY");
+    processEnvironmentVariable("HAUTH");
+    processEnvironmentVariable("CKEYSTORE");
+    processEnvironmentVariable("CKEYSTOREPASSWD");
+    processEnvironmentVariable("CAKEYSTORE");
+    processEnvironmentVariable("CAKEYSTOREPASSWD");
+
+    // Install any proxy server settings
+    fEnvironment.setProxyEnvironments();
+
+    // Install any ssl settings
+    fEnvironment.setSSLEnvironments();
+
+    int count = 10 * 1000;
+    boolean transacted = false;
+    int argpos = 0;
+
+    String factname = args[argpos++];
+    String destname = args[argpos++];
+    //Create an instance for this class
+    QBytesMessagePublisher publisher = new QBytesMessagePublisher(factname, destname);
+
+    if (args.length > argpos) {
+      count = Integer.parseInt(args[argpos++]);
+    }
+    if (args.length > 3) {
+      transacted = Boolean.parseBoolean(args[argpos++]);
+    }
+
+    if (args.length > argpos) {
+      System.out.println("Excess arguments");
+      Usage();
+      System.exit(1);
+    }
+    System.out.println("Transacted=" + transacted + ", Count=" + count);
+
+    //Publish to the queue specified
+    publisher.doIt(factname, destname, count, transacted);
+  }
+
+  /**
+   * This method demonstrates the Nirvana JMS API calls necessary to publish to
+   * a queue.
+   * It is called after all command line arguments have been received and
+   * validated
+   *
+   * @param factoryName The name of the factory to find
+   * @param queueName the name of the queue
+   * @param count number of message to publish
+   * @param transacted whether the session is transactional
+   */
+  private void doIt(String factoryName, String queueName, int count, boolean transacted) {
+    try {
+      System.out.println("******* This program is throttled to produce 100 events a second *******");
+      System.out.println("******* remove the sleep in Publisher.doTXPublish or doPublish   *******");
+      // get the initial context
+      Context ctx = getInitialContext();
+      QueueConnectionFactory qcf = (QueueConnectionFactory) ctx.lookup(factoryName);
+
+      // Create a Queue Connection from the Queue Connection Factory
+      QueueConnection qc = qcf.createQueueConnection();
+
+      // set the exceptionlistener
+      qc.setExceptionListener(this);
+
+      // Start the connection
+      qc.start();
+
+      // Create a Queue Sesson from the Queue Connection
+      s = qc.createQueueSession(transacted, 1);
+
+      // create the queue, and bind if necessary
+      Queue q = (Queue) getDestination(ctx, s, queueName);
+
+      //Create a Queue Sender from the Queue Session
+      p = s.createProducer(q);
+
+      //Loop for count
+      for (int x = 0; x < count; x++) {
+        // create a bytes message
+        BytesMessage bmsg = s.createBytesMessage();
+        bmsg.setJMSDeliveryMode(DeliveryMode.PERSISTENT);
+        String str = "Message Number(" + x + ")";
+        bmsg.writeBytes(str.getBytes());
+        bmsg.setIntProperty("MessageNumber", x);
+        if (transacted) {
+          doTXPublish(bmsg);
+        } else {
+          doPublish(bmsg);
+        }
+      }
+
+      //Print a message to the console saying we are about to exit
+      System.out
+          .println("Closing queue session and queue connection. Published a total of " + publishCount + " messages");
+
+      Thread.sleep(1000);
+
+      //Close the Queue Connection
+      qc.close();
+
+      //Close the Queue Session
+      s.close();
+
+      //close the context
+      ctx.close();
+    } catch (NamingException ex) {
+      System.out.println("\nNaming Exception : Please ensure you have created the connection factory " + factoryName);
+      System.out.println(
+          "Naming Exception : This can be done using the Enterprise Manager JNDI panel or the jmsadmin command line application");
+      ex.printStackTrace();
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+    System.out.println("Usage ...\n\n");
+    System.out.println("jmsbytesqpub <factoryname> <queueName> <count> <transacted>\n");
+
+    System.out.println("<Required Arguments> \n");
+    JMSClient.printFactoryNameUsage();
+    System.out.println(
+        "<queueName> - JMS Queue to publish on. When using AMPQ this should be in the format queue.<queueName>");
+    System.out.println("<count> - Number of events to publish");
+    System.out.println("<transacted> - Whether the session is transacted");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}
+// End of QBytesMessagePublisher Class

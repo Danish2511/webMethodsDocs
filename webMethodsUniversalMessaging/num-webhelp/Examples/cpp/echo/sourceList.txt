@@ -1,0 +1,7 @@
+SET (SRC 
+../nSampleApp/nSampleApp.cpp
+EchoClient.cpp
+EchoServer.cpp
+SimpleMessage.cpp
+main.cpp
+)

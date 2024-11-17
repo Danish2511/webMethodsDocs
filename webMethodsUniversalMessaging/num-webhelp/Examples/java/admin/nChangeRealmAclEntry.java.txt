@@ -1,0 +1,461 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+package com.pcbsys.nirvana.nAdminAPI.apps;
+
+import com.pcbsys.nirvana.apps.nSampleApp;
+import com.pcbsys.nirvana.client.nSessionAttributes;
+import com.pcbsys.nirvana.nAdminAPI.nACL;
+import com.pcbsys.nirvana.nAdminAPI.nContainer;
+import com.pcbsys.nirvana.nAdminAPI.nRealmACLEntry;
+import com.pcbsys.nirvana.nAdminAPI.nRealmNode;
+import java.util.Enumeration;
+
+/**
+ * This application can be used to change an acl entry for a subject in a realm
+ * You can also specify to change an acl entry from all known realms within a namespace, by
+ * recursively searching through looking for other realm nodes and changing the acl entry
+ * This is achieved by specifying -r as a command line parameter.
+ */
+
+public class nChangeRealmAclEntry extends nSampleApp {
+
+  /**
+   * Private variables used in this application
+   */
+  private String realm = null;
+  private String name = null;
+  private String host = null;
+  private boolean recursive = false;
+  private boolean canListAcl = false;
+  private boolean canModifyAcl = false;
+  private boolean fullPrivileges = false;
+  private boolean canAccessRealm = false;
+  private boolean isRealmAdmin = false;
+  private boolean canChangeConfig = false;
+  private boolean canManageChannels = false;
+  private boolean canManageJoins = false;
+  private boolean canManageRealm = false;
+  private boolean canOverrideConnections = false;
+  private boolean isClusterMember = false;
+  private nSessionAttributes attr = null;
+  private nRealmNode node = null;
+  private nACL acl = null;
+  private String changeArgs[] = null;
+
+  /**
+   * Consruct an instance of this class using the command line arguments passed
+   * when it is executed.
+   */
+  public nChangeRealmAclEntry(String args[]) {
+    try {
+      changeArgs = args;
+      // set the parameters required for this operation
+      processArgs(changeArgs);
+      System.out.println("Connecting to " + realm);
+      // construct the session attributes from the realm
+      attr = new nSessionAttributes(realm);
+      // get the root realm node from the realm admin
+      node = new nRealmNode(attr);
+      if (!node.isAuthorised()) {
+        System.out.println("User not authorised on this node " + realm);
+        return;
+      }
+
+      // wait for the entire node namespace to be constructed
+      node.waitForEntireNameSpace();
+      // get the acl for the root node
+      acl = node.getACLs();
+      System.out.println("Changing entry for " + name + "@" + host);
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("Current ACL Settings for " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      // change an acl entry with the specified name and host
+      nRealmACLEntry lookup = (nRealmACLEntry) acl.find(name + "@" + host);
+      // set the current permissions from the acl entry
+      setCurrent(lookup);
+      // output those permissions
+      dump(lookup);
+      // now set those which have changed
+      setChanges();
+      // change the entry in the acl
+      node.modACLEntry(changeACLEntry(lookup));
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      System.out.println("New ACL entry for " + node.getName());
+      System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+      // verify changes
+      lookup = (nRealmACLEntry) acl.find(name + "@" + host);
+      dump(lookup);
+      // if you specify -r as a command line parameter, you can choose t traverse the entire
+      // realm namespace, including any realms that have been added to the root node
+      if (recursive) {
+        traverse(node);
+      }
+      node.close();
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+
+  /**
+   * recursively search through the nodes from a realm node looking for other realm nodes
+   */
+  public nRealmNode traverse(nRealmNode p_node) {
+    // get the enumeration of child nodes from p_node
+    Enumeration enum1 = p_node.getNodes();
+    while (enum1.hasMoreElements()) {
+      Object obj = enum1.nextElement();
+      // only deal with realm nodes
+      if (obj instanceof nRealmNode) {
+        nRealmNode node = (nRealmNode) obj;
+        try {
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          System.out.println("Current ACL Settings for " + node.getName());
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          // get the acl for this realm node
+          nACL acl = node.getACLs();
+          // change an acl entry with the specified name and host
+          nRealmACLEntry lookup = (nRealmACLEntry) acl.find(name + "@" + host);
+          // set the current permissions from the acl entry
+          setCurrent(lookup);
+          // output those permissions
+          dump(lookup);
+          // now set those which have changed
+          setChanges();
+          // change the entry in the acl
+          node.modACLEntry(changeACLEntry(lookup));
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          System.out.println("New ACL Settings for " + node.getName());
+          System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+          // verify changes
+          lookup = (nRealmACLEntry) acl.find(name + "@" + host);
+          dump(lookup);
+        } catch (Exception e) {
+          e.printStackTrace();
+        }
+        // now traverse the child nodes
+        return traverse(node);
+      } else if (obj instanceof nContainer) {
+        nContainer cont = (nContainer) obj;
+        searchNode(cont.getNodes());
+      }
+    }
+    return null;
+  }
+
+  /**
+   * Search the enumeration of nodes passed as a parameter
+   */
+  private void searchNode(Enumeration p_nodes) {
+    try {
+      while (p_nodes.hasMoreElements()) {
+        Object obj = p_nodes.nextElement();
+        if (obj instanceof nRealmNode) {
+          nRealmNode node = (nRealmNode) obj;
+          try {
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println("Current ACL Settings for " + node.getName());
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            // get the acl for this realm node
+            nACL acl = node.getACLs();
+            // change an acl entry with the specified name and host
+            nRealmACLEntry lookup = (nRealmACLEntry) acl.find(name + "@" + host);
+            // set the current permissions from the acl entry
+            setCurrent(lookup);
+            // output those permissions
+            dump(lookup);
+            // now set those which have changed
+            setChanges();
+            // change the entry in the acl
+            acl.replace(changeACLEntry(lookup));
+            // set the node acl to the acl list with the changed entry
+            node.setACLs(acl);
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            System.out.println("New ACL Settings for " + node.getName());
+            System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+            // verify changes
+            lookup = (nRealmACLEntry) acl.find(name + "@" + host);
+            dump(lookup);
+          } catch (Exception e) {
+            e.printStackTrace();
+          }
+        } else if (obj instanceof nContainer) {
+          searchNode(((nContainer) obj).getNodes());
+        }
+      }
+    } catch (Exception ex) {
+      ex.printStackTrace();
+    }
+  }
+
+  /**
+   * If you construct an instance of this class from another class, you can set the name
+   * and host for the subject to change.
+   */
+  public void setSubject(String p_name, String p_host) {
+    name = p_name;
+    host = p_host;
+  }
+
+  /**
+   * Change an acl entry and set the permissions based on the permissions flags
+   */
+  public nRealmACLEntry changeACLEntry(nRealmACLEntry aclEntry) {
+    return this.setPermissions(aclEntry);
+  }
+
+  /**
+   * Output to system.out the permissions that have been set
+   */
+  public void dump() {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL                        : " + canListAcl);
+    System.out.println("Set ACL                         : " + canModifyAcl);
+    System.out.println("Full Privileges                 : " + fullPrivileges);
+    System.out.println("Access realm                    : " + canAccessRealm);
+    System.out.println("Use admin api                   : " + isRealmAdmin);
+    System.out.println("Confgure realm                  : " + canChangeConfig);
+    System.out.println("Manage channel                  : " + canManageChannels);
+    System.out.println("Manage joins                    : " + canManageJoins);
+    System.out.println("Manage realm                    : " + canManageRealm);
+    System.out.println("Override connections            : " + canOverrideConnections);
+    System.out.println("Is Cluster Member               : " + isClusterMember);
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * Output to system.out the current permissions for the acl entry
+   */
+  public void dump(nRealmACLEntry entry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    System.out.println("List ACL                        : " + entry.canList());
+    System.out.println("Set ACL                         : " + entry.canModify());
+    System.out.println("Full Privileges                 : " + entry.hasFullPrivileges());
+    System.out.println("Access realm                    : " + entry.canAccessTheRealm());
+    System.out.println("Use admin api                   : " + entry.canUseAdminAPI());
+    System.out.println("Confgure realm                  : " + entry.canConfigureRealm());
+    System.out.println("Manage channel                  : " + entry.canManageChannels());
+    System.out.println("Manage joins                    : " + entry.canManageJoins());
+    System.out.println("Manage realm                    : " + entry.canManageRealm());
+    System.out.println("Override connections            : " + entry.canOverrideConnectionCount());
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+  }
+
+  /**
+   * This will set the permissions flags to what the current acl settings are
+   * This is so that only those permissions that you wish to change are changed
+   */
+  public void setCurrent(nRealmACLEntry entry) {
+    canListAcl = entry.canList();
+    canModifyAcl = entry.canModify();
+    fullPrivileges = entry.hasFullPrivileges();
+    canAccessRealm = entry.canAccessTheRealm();
+    isRealmAdmin = entry.canUseAdminAPI();
+    canChangeConfig = entry.canConfigureRealm();
+    canManageChannels = entry.canManageChannels();
+    canManageJoins = entry.canManageJoins();
+    canManageRealm = entry.canManageRealm();
+    canOverrideConnections = entry.canOverrideConnectionCount();
+  }
+
+  /**
+   * Set the program variables and flags based on command line args
+   */
+  public void getOptions(String args[]) {
+    realm = System.getProperty("RNAME", null);
+    if (realm == null) {
+      Usage();
+      System.exit(1);
+    }
+    name = System.getProperty("NAME", null);
+    if (name == null) {
+      Usage();
+      System.exit(1);
+    }
+    host = System.getProperty("HOST", null);
+    if (host == null) {
+      Usage();
+      System.exit(1);
+    }
+    for (int i = 0; i < args.length; i++) {
+      if (args[i].equalsIgnoreCase("-r")) {
+        recursive = true;
+      }
+    }
+  }
+
+  /**
+   * This method will set the permissions flags, if the command line arguments have been
+   * passed for specific permissions.
+   * The command line arguments are + or - for either add or remove permission, followed
+   * by the actual permission flag
+   */
+  public void setChanges() {
+    for (int i = 0; i < changeArgs.length; i++) {
+      boolean hasPermission = false;
+      String argument = changeArgs[i];
+      if (changeArgs[i].equalsIgnoreCase("-r")) {
+        recursive = true;
+      } else {
+        if (changeArgs[i].startsWith("+")) {
+          hasPermission = true;
+        } else if (changeArgs[i].startsWith("-")) {
+          hasPermission = false;
+        } else {
+          continue;
+        }
+        String permission = changeArgs[i].substring(1);
+        System.out.println("operation " + hasPermission + " for permission " + permission);
+        if (permission.equalsIgnoreCase("list_acl")) {
+          canListAcl = hasPermission;
+        } else if (permission.equalsIgnoreCase("modify_acl")) {
+          canModifyAcl = hasPermission;
+        } else if (permission.equalsIgnoreCase("full")) {
+          fullPrivileges = hasPermission;
+        } else if (permission.equalsIgnoreCase("access_realm")) {
+          canAccessRealm = hasPermission;
+        } else if (permission.equalsIgnoreCase("realm_admin")) {
+          isRealmAdmin = hasPermission;
+        } else if (permission.equalsIgnoreCase("realm_config")) {
+          canChangeConfig = hasPermission;
+        } else if (permission.equalsIgnoreCase("manage_channels")) {
+          canManageChannels = hasPermission;
+        } else if (permission.equalsIgnoreCase("manage_joins")) {
+          canManageJoins = hasPermission;
+        } else if (permission.equalsIgnoreCase("manage_realm")) {
+          canManageRealm = hasPermission;
+        } else if (permission.equalsIgnoreCase("override_connections")) {
+          canOverrideConnections = hasPermission;
+        } else if (permission.equalsIgnoreCase("cluster_member")) {
+          isClusterMember = hasPermission;
+        } else if (permission.equalsIgnoreCase("all_perms")) {
+          canListAcl = hasPermission;
+          canModifyAcl = hasPermission;
+          canAccessRealm = hasPermission;
+          isRealmAdmin = hasPermission;
+          canChangeConfig = hasPermission;
+          canManageChannels = hasPermission;
+          canManageJoins = hasPermission;
+          canManageRealm = hasPermission;
+          canOverrideConnections = hasPermission;
+        }
+      }
+    }
+  }
+
+  /**
+   * Set the permissions on the realm acl entry
+   */
+  public nRealmACLEntry setPermissions(nRealmACLEntry aclEntry) {
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    if (canListAcl != aclEntry.canList()) {
+      System.out.println("Set List ACL to                 : " + canListAcl);
+      aclEntry.setList(canListAcl);
+    }
+    if (canModifyAcl != aclEntry.canModify()) {
+      System.out.println("Set Modify ACL to               : " + canModifyAcl);
+      aclEntry.setModify(canModifyAcl);
+    }
+    if (fullPrivileges != aclEntry.hasFullPrivileges()) {
+      System.out.println("Set is Full Privileges to       : " + fullPrivileges);
+      aclEntry.setFullPrivileges(fullPrivileges);
+    }
+    if (canAccessRealm != aclEntry.canAccessTheRealm()) {
+      System.out.println("Set Access realm to             : " + canAccessRealm);
+      aclEntry.setAccessTheRealm(canAccessRealm);
+    }
+    if (isRealmAdmin != aclEntry.canUseAdminAPI()) {
+      System.out.println("Set Use admin api to            : " + isRealmAdmin);
+      aclEntry.setUseAdminAPI(isRealmAdmin);
+    }
+    if (canChangeConfig != aclEntry.canConfigureRealm()) {
+      System.out.println("Set Confgure realm to           : " + canChangeConfig);
+      aclEntry.setConfigureRealm(canChangeConfig);
+    }
+    if (canManageChannels != aclEntry.canManageChannels()) {
+      System.out.println("Set Manage channel to           : " + canManageChannels);
+      aclEntry.setManageChannels(canManageChannels);
+    }
+    if (canManageJoins != aclEntry.canManageJoins()) {
+      System.out.println("Set Manage realm join           : " + canManageJoins);
+      aclEntry.setManageJoins(canManageJoins);
+    }
+    if (canManageRealm != aclEntry.canManageRealm()) {
+      System.out.println("Set Manage realm                : " + canManageRealm);
+      aclEntry.setManageRealm(canManageRealm);
+    }
+    if (canOverrideConnections != aclEntry.canOverrideConnectionCount()) {
+      System.out.println("Set Override connections to     : " + canOverrideConnections);
+      aclEntry.setOverrideConnectionCount(canOverrideConnections);
+    }
+    System.out.println("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+    return aclEntry;
+  }
+
+  protected void processArgs(String[] args) {
+    if (args.length == 0) {
+      Usage();
+      System.exit(1);
+    }
+    switch (args.length) {
+      case 1:
+        if (args[0].equals("-?")) {
+          UsageEnv();
+        }
+        System.setProperty("NAME", args[0]);
+        getOptions(null);
+        break;
+      default:
+        System.setProperty("NAME", args[0]);
+        System.setProperty("HOST", args[1]);
+        getOptions(args);
+    }
+  }
+
+  /**
+   * Run this as a command line program passing the command line args.
+   * Or construct one of these classes from another class ensuring you have added :
+   * RNAME
+   * NAME
+   * HOST
+   * as system properties, and pass in a list of permissions in the constructor
+   */
+  public static void main(String[] args) {
+    processEnvironmentVariables();
+
+    nChangeRealmAclEntry setAcl = new nChangeRealmAclEntry(args);
+    System.exit(0);
+  }
+
+  /**
+   * Prints the usage message for this class
+   */
+  private static void Usage() {
+
+    System.out.println("Usage ...\n");
+    System.out.println(
+        "nchangerealmacl <user> <host> [-r] [+/-list_acl] [+/-modify_acl] [+/-full] [+/-access_realm] [+/-realm_admin] [+/-realm_config] [+/-manage_channels] [+/-manage_joins] [+/-override_connections] [+/-all_perms]\n");
+    System.out.println("<Required Arguments> \n");
+    System.out.println("<user> - User name parameter to change the ACL entry for");
+    System.out.println("<host> - Host name parameter to channel the ACL entry for");
+    System.out.println("\n[Optional Arguments] \n");
+    System.out.println("[-r] - Specifies whether recursive traversal of the namespace should be done");
+    System.out.println("[+/-] - Prepending + or - specifies whether to add or remove a permission");
+    System.out.println("[list_acl] - Specifies that the list acl permission should be added/removed");
+    System.out.println("[modify_acl] - Specifies that the modify acl permission should be added/removed");
+    System.out.println("[full] - Specifies that the full permission should be added/removed");
+    System.out.println("[access_realm] - Specifies that the realm access permission should be added/removed");
+    System.out.println("[realm_admin] - Specifies that the realm admin permission should be added/removed");
+    System.out.println("[realm_config] - Specifies that the realm configuration permission should be added/removed");
+    System.out.println("[manage_channels] - Specifies that the manage channels permission should be added/removed");
+    System.out.println("[manage_joins] - Specifies that the manage joins permission should be added/removed");
+    System.out
+        .println("[override_connections] - Specifies that the override connections permission should be added/removed");
+    System.out.println("\n\nNote: -? provides help on environment variables \n");
+  }
+}

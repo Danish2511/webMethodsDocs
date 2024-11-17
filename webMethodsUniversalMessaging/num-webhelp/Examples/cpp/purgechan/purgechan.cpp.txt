@@ -1,0 +1,201 @@
+/*
+ *
+ *   Copyright (c) 1999 - 2011 my-Channels Ltd
+ *   Copyright (c) 2012 - 2022 Software AG, Darmstadt, Germany and/or Software AG USA Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors.
+ *
+ *   Use, reproduction, transfer, publication or disclosure is prohibited except as specifically provided for in your License Agreement with Software AG.
+ *
+ */
+#include "nSampleApp.h"
+#include "nChannel.h"
+#include "nSession.h"
+#include "nChannelAttributes.h"
+#include "nSessionFactory.h"
+#include "nSessionPausedException.h"
+#include "nSecurityException.h"
+#include "nChannelNotFoundException.h"
+#include "nSessionNotConnectedException.h"
+#include "nUnexpectedResponseException.h"
+#include "nRequestTimedOutException.h"
+
+#include <string>
+#include <sys/timeb.h>
+
+using namespace com::pcbsys::nirvana::client;
+using namespace com::pcbsys::nirvana::nbase;
+using namespace com::pcbsys::nirvana::apps;
+
+class purgechan : public nSampleApp {
+    /**
+     * Purges events from a nirvana channel.
+     */
+  private:
+    static purgechan *m_pSelf;
+    static longlong m_startEid;
+    static longlong m_endEid;
+    static std::string m_selector;
+    bool m_wait;
+
+    nChannel *m_pChannel;
+
+    /**
+     * This method demonstrates the Nirvana API calls necessary to purge events from a channel using event ids and / or a filter
+     *
+     * It is called after all command line arguments have been received and
+     * validated
+     *
+     * @param pRealmDetails a String[] containing the possible RNAME values
+     * @param nRealmDetail the length of the rname array
+     * @param channelName the channel name to purge from
+     * @param selector the purge filter
+     * @param startEid the eid to start purging from
+     * @param endEid the eid to purge to
+     * @param wait whether to wait for a response (synchronous) or not (asynchronous)
+     */
+    void doit(std::string *pRealmDetails, int nRealmDetail, std::string& channelName, std::string& selector,
+              longlong startEid, longlong endEid, bool wait) {
+        m_pSelf->constructSession(pRealmDetails, nRealmDetail);
+
+        try {
+            nChannelAttributes *pNca = new nChannelAttributes();
+            pNca->setName(channelName);
+
+            // locate the channel
+            m_pChannel = m_pSession->findChannel(pNca);
+
+            // purge from the channel using the given criteria
+            if (wait) {
+                m_pChannel->purgeEvents(startEid, endEid, selector);
+            } else {
+                m_pChannel->purgeEventsAsync(startEid, endEid, selector);
+            }
+
+            try {
+                // close the session
+                nSessionFactory::close(m_pSession);
+            }
+
+            catch (Exception ex) {
+            }
+
+            // close any other sessions in this programs so it can exit
+            nSessionFactory::shutdown();
+
+            if (m_pChannel) {
+                delete m_pChannel;
+                m_pChannel = NULL;
+            }
+        }
+
+        catch (nChannelNotFoundException cnf) {
+            printf(cnf.message().c_str());
+            exit(1);
+        }
+
+        catch (nSessionPausedException ps) {
+            printf("Session has been paused, please resume the session\n");
+            exit(1);
+        }
+
+        catch (nSecurityException se) {
+            printf("Unsufficient permissions for the requested operation.\n");
+            printf("Please check the ACL settings on the server.\n");
+            exit(1);
+        }
+
+        catch (nSessionNotConnectedException snce) {
+            printf("The session object used is not physically connected to the Nirvana realm.\n");
+            printf("Please ensure the realm is up and check your RNAME value.\n");
+            exit(1);
+        }
+
+        catch (nUnexpectedResponseException ure) {
+            printf("The Nirvana REALM has returned an unexpected response.\n");
+            printf("Please ensure the Nirvana REALM and client API used are compatible.\n");
+            exit(1);
+        }
+
+        catch (nRequestTimedOutException rtoe) {
+            printf("The requested operation has timed out waiting for a response from the REALM.\n");
+            printf("If this is a very busy REALM ask your administrator to increase the client timeout values.\n");
+            exit(1);
+        }
+    }
+
+    int getType () {
+        return 0;
+    }
+
+  protected:
+    /**
+     * Process the command line args
+     */
+    void processArgs(int argc, char** argv) {
+        if (argc < 3) {
+            Usage();
+            exit(2);
+        }
+
+        std::string channelName = argv[2];
+        m_startEid = 0;
+        m_endEid = 100000000000000;
+
+        if (argc > 3)
+            m_startEid = atoi (argv[3]);
+
+        if (argc > 4)
+            m_endEid = atoi (argv[4]);
+
+        if (argc > 5) {
+            m_selector = argv[5];
+        }
+
+        if (argc > 6) {
+            m_wait = !strcmp(argv[6], "true");
+        }
+        std::string RNAME = argv[1];
+        int nRproperty = 0;
+        std::string *pRproperties = parseRealmProperties(RNAME, nRproperty);
+
+        m_pSelf->doit(pRproperties, nRproperty, channelName, m_selector, m_startEid, m_endEid, m_wait);
+    }
+
+  public:
+    purgechan () : m_pChannel(NULL) {
+    }
+
+    /**
+     * Prints the usage message for this class
+     */
+    void Usage() {
+        printf("Usage ...\n");
+        printf("purgechan <rname> <channel name> [start eid] [end eid] [selector] [wait]\n");
+
+        printf("<Required Arguments> \n\n");
+        printf("<rname> - URL of realm to connect to\n");
+        printf("<channel name> - Channel name parameter for the channel to purge to\n");
+        printf("\n[Optional Arguments] \n\n");
+        printf("[start eid] - The Event ID to start purging from\n");
+        printf("[end eid] - The Event ID to purge to\n");
+        printf("[selector] - The purge event filter string to use\n");
+        printf("[wait] - whether to wait for a response (synchronous) or not (asynchronous)\n");
+    }
+
+    static int Main(int argc, char** argv) {
+        m_pSelf = new purgechan();
+
+        m_pSelf->processArgs(argc, argv);
+
+        return 0;
+    }
+
+};
+
+purgechan* purgechan::m_pSelf = NULL;
+longlong purgechan::m_startEid = 0;
+longlong purgechan::m_endEid = 1000000000000;
+std::string purgechan::m_selector;
+
+int main (int argc, char** argv) {
+    return purgechan::Main (argc, argv);
+}
