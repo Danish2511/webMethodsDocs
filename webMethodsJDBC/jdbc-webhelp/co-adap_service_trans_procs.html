@@ -1,0 +1,88 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Adapter Service Transaction Processing</title><link rel="Prev" href="co-changing_user_credentials_runtime.html" title="Previous" /><link rel="Next" href="co-adap_notifications.html" title="Next" /><link rel="StyleSheet" href="css/_jdbc_iug_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_jdbc_iug_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/jdbc-webhelp/co-adap_service_trans_procs.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN3ODMI4XmYW9lkyUQ5z9PUQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/jdbc-webhelp/co-adap_service_trans_procs.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Adapter for JDBC</span>&nbsp;10.3 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../jdbc-webhelp/to-landing_page.html#wwconnect_header">webMethods Adapter for JDBC Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../jdbc-webhelp/_jdbc_iug_webhelp.1.006.html#wwconnect_header">webMethods Adapter for JDBC Installation and User’s Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../jdbc-webhelp/_jdbc_iug_webhelp.1.007.html#wwconnect_header">Overview of the Adapter</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../jdbc-webhelp/co-adap_services.html#wwconnect_header">Adapter Services</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Adapter Service Transaction Processing</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ELRCI" class="Heading_4">Adapter Service Transaction Processing</div><div id="wwID0ETRCI" class="Body">The following diagram illustrates how <span class="ph">Adapter for JDBC</span> processes adapter services at run time.</div><div class="ww_skin_page_overflow"><div id="wwID0E4RCI" class="Figure"><img class="Default" src="../jdbc-webhelp/images/service_trans_proc.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 272px; max-width: 370px; top: 0pt" alt="" /></div></div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 9.7%"><div id="wwID0EPTCI" class="Table_Cell_Head">Step</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 90.2%"><div id="wwID0EVTCI" class="Table_Cell_Head">Description</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEUCI" class="Table_Cell">1</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKUCI" class="Table_Cell">An <span class="ph">Integration Server</span> client, typically using a flow or Java service, invokes a <span class="ph">Adapter for JDBC</span> service on <span class="ph">Integration Server</span> to perform an operation on a database.</div><div id="wwID0E3UCI" class="Table_Cell">You configured the adapter service earlier using <span class="ph">Designer</span>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMVCI" class="Table_Cell">2</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESVCI" class="Table_Cell">The adapter service gets a connection from the service's connection pool.</div><div id="wwID0EYVCI" class="Table_Cell">Adapter connections contain connection information for the database, including JDBC driver parameters.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDWCI" class="Table_Cell">3</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJWCI" class="Table_Cell">The adapter service uses the JDBC driver to connect to the database.</div><div id="wwID0EPWCI" class="Table_Cell">You created and enabled the adapter connection earlier using <span class="ph">Integration Server Administrator</span>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6WCI" class="Table_Cell">4</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFXCI" class="Table_Cell">All adapter services except ExecuteService perform a SQL operation against the database.</div><div id="wwID0EPXCI" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For SelectSQL, InsertSQL, UpdateSQL, DeleteSQL, CustomSQL, and DynamicSQL services, the adapter service executes a SQL statement against the database.</div><div id="wwID0EAYCI" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For BatchInsertSQL and BatchUpdateSQL services, the adapter service executes batch SQL statements against the database. The adapter service will continue to loop through the document list that is used as input, set the fields to the parameters of the SQL statement and then add that command set to the batch. Upon completion, the adapter sends the entire batch to the database resource for execution.</div><div id="wwID0ERYCI" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For StoredProcedure and StoredProcedureWithSignature services, the adapter service executes a stored procedure against the database.</div><div id="wwID0ECZCI" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The ExecuteService adapter service executes a Java or flow service that needs a connection object from the connection pool. For more information see 
+    <a href="../jdbc-webhelp/co-using_conn_from_connpool.html#wwID0EUDCI"
+   
+     title="Using a Connection from the Connection Pool Within a Java or Flow Service"
+    ><span class="heading-page">Using a Connection from the Connection Pool
+						Within a Java or Flow Service</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EF1CI" class="Table_Cell">5</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EL1CI" class="Table_Cell">Depending on the adapter service type, such as a SelectSQL service, the adapter service may return data to <span class="ph">Integration Server</span>.</div><div id="wwID0EZ1CI" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the operation is successful, the service returns the output from the service's database operation, if applicable.</div><div id="wwID0EK2CI" class="List_1_Continued">With BatchInsertSQL and BatchUpdateSQL services, if all commands are successfully executed, the adapter commits all commands in the batch and returns a list of String values. These values will vary by driver. Refer to your driver documentation for details.</div><div id="wwID0EQ2CI" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the operation is unsuccessful, the service returns an error such as an AdapterException. If the database throws an exception while performing the adapter service's operation, the adapter passes the exception to the <span class="ph">Integration Server</span> logs.</div><div id="wwID0EF3CI" class="List_1_Continued">For more information about how the adapter handles exceptions, see 
+    <a href="../jdbc-webhelp/co-logg_exception_overview.html#wwID0EMJKQ"
+   
+     title="Overview of Logging and Exception Handling"
+    ><span class="heading-page">Overview of Logging and Exception Handling</span></a>.</div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2006-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
