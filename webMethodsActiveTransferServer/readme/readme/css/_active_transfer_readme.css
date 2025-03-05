@@ -1,0 +1,262 @@
+div.Title, caption.Title
+{
+  color: #666666;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.75em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 6px;
+  margin-top: 25px;
+}
+
+div.Body, caption.Body
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-top: 0pt;
+}
+
+div.Child_Topics_Link_Pool_Open, caption.Child_Topics_Link_Pool_Open
+{
+  border-top-color: black;
+  border-top-style: solid;
+  border-top-width: 2pt;
+  color: #FF8000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0;
+  font-weight: bold;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+
+div.Child_Topics_Link_Pool_Close, caption.Child_Topics_Link_Pool_Close
+{
+  border-bottom-color: black;
+  border-bottom-style: solid;
+  border-bottom-width: 2pt;
+  color: #FF8000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 0;
+  font-weight: bold;
+  margin-bottom: 1pt;
+  margin-top: 1pt;
+}
+
+div.Child_Topic, caption.Child_Topic
+{
+  color: #FF8000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12pt;
+  margin-left: 18pt;
+}
+
+div.Heading_1, caption.Heading_1
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.75em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 6px;
+  margin-top: 25px;
+}
+
+div.Table_Cell_Head, caption.Table_Cell_Head
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 6px;
+  margin-top: 9px;
+}
+
+div.Table_Cell, caption.Table_Cell
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-top: 9px;
+}
+
+div.Lines, caption.Lines
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-top: 0pt;
+  white-space: pre;
+}
+
+div.Parent_Topics_Link_Pool_Open, caption.Parent_Topics_Link_Pool_Open
+{
+  color: #FF8000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12pt;
+  font-weight: bold;
+}
+
+div.Parent_Topic, caption.Parent_Topic
+{
+  color: #FF8000;
+  font-family: 'Roboto', sans-serif;
+  font-size: 12pt;
+  margin-left: 18pt;
+}
+
+div.Section, caption.Section
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-top: 0pt;
+}
+
+div.Section_Title, caption.Section_Title
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.1em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 6px;
+  margin-top: 25px;
+}
+
+div.List_1, caption.List_1
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-left: 0pt;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-left: 18pt;
+  padding-top: 0pt;
+  text-indent: -18pt;
+}
+
+div.List_1_Continued, caption.List_1_Continued
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-left: 18pt;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-top: 0pt;
+}
+
+div.Heading_2, caption.Heading_2
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 1.45em;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: bold;
+  margin-bottom: 6px;
+  margin-top: 25px;
+}
+
+div.List_2, caption.List_2
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-left: 0pt;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-left: 36pt;
+  padding-top: 0pt;
+  text-indent: -18pt;
+}
+
+div.List_2_Continued, caption.List_2_Continued
+{
+  color: Black;
+  font-family: 'Roboto', sans-serif;
+  font-size: 14px;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  margin-bottom: 6px;
+  margin-left: 36pt;
+  margin-top: 9px;
+  padding-bottom: 0pt;
+  padding-top: 0pt;
+}
+
+span.uicontrol, abbreviation.uicontrol, acronym.uicontrol, citation.uicontrol
+{
+  font-family: 'Roboto', sans-serif;
+  font-weight: bold;
+}
+
+span.varname, abbreviation.varname, acronym.varname, citation.varname
+{
+  font-style: italic;
+}
+
+span.userinput, abbreviation.userinput, acronym.userinput, citation.userinput
+{
+  font-family: 'Source Code Pro', monospace;
+}
+
+span.Bold, abbreviation.Bold, acronym.Bold, citation.Bold
+{
+  font-weight: bold;
+}
+
+span.Italic, abbreviation.Italic, acronym.Italic, citation.Italic
+{
+  font-style: italic;
+}
+
+table.rules1
+{
+  margin-bottom: 9pt;
+  margin-top: 5pt;
+  padding-right: 20pt;
+}
+

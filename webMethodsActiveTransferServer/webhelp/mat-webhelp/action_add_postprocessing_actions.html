@@ -1,0 +1,162 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Adding a Post-Processing Action</title><link rel="Prev" href="server_actions.html" title="Previous" /><link rel="Next" href="action_add_scheduled_actions.html" title="Next" /><link rel="StyleSheet" href="css/_at_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_at_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/mat-webhelp/action_add_postprocessing_actions.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pj47zSkWEss_002bNY5FS_002fTvk3w" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/mat-webhelp/action_add_postprocessing_actions.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>ActiveTransfer Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/to-at_webhelp_landing_page.html#wwconnect_header">webMethods ActiveTransfer Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/_at_integrated_webhelp.1.027.html#wwconnect_header">Administering ActiveTransfer Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/_at_integrated_webhelp.1.066.html#wwconnect_header">Managing Actions</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Adding a Post-Processing Action</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EWELM" class="Heading_3">Adding a Post-Processing Action</div><div id="wwID0EPFLM" class="Body">You can define a post-processing action for execution when a user uploads, downloads, or deletes a file.</div><div id="wwID0EUFLM" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To add a post-processing action</div><div id="wwID0E5FLM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">On the navigation pane, select </span><span class="Command_002c_uicontrol">Actions&gt; Post-Processing</span><span class="Command">. </span></div><div id="wwID0E2GLM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">On the </span><span class="Command_002c_wintitle">Post-Processing actions</span><span class="Command"> page, you can do one of the following: </span></div><div class="ww_skin_page_overflow"><div id="wwID0EBILM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you want to create a new action, click <img class="Default" src="../mat-webhelp/images/at_olh_add_button.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 50px; top: 0pt" alt="" />.</div></div><div class="ww_skin_page_overflow"><div id="wwID0EZILM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you want to create a copy of an action that already exists, select an existing action, and click <img class="Default" src="../mat-webhelp/images/_at_integrated_webhelp.1.068.02.jpg" width="100%" style="display: inline; float: none; left: 0pt; max-height: 18px; max-width: 44px; top: 0pt" alt="" />.</div></div><div id="wwID0E1JLM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">To define the conditions that trigger the action, specify the following details: </span></div><div class="ww_skin_page_overflow"><table class="rules2" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 16.6%"><div id="wwID0ENLLM" class="Table_Cell_Head">Field</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 83.3%"><div id="wwID0ETLLM" class="Table_Cell_Head">Description</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EAMLM" class="Table_Cell"><span class="uicontrol">Action name</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKMLM" class="Table_Cell">Type a unique name for the post-processing action.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUMLM" class="Table_Cell"><span class="uicontrol">Description</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5MLM" class="Table_Cell">Type a brief description for the post-processing action.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EINLM" class="Table_Cell"><span class="uicontrol">Active</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div class="ww_skin_page_overflow"><div id="wwID0ESNLM" class="Table_Cell">Click the toggle button to activate (<img class="Default" src="../mat-webhelp/images/at_olh_activate.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 33px; top: 0pt" alt="" />) or deactivate (<img class="Default" src="../mat-webhelp/images/at_olh_deactivate.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 39px; top: 0pt" alt="" />) the action.</div></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top" colspan="2"><div class="ww_skin_page_overflow"><div id="wwID0ENOLM" class="Table_Cell"><span class="uicontrol">Criteria</span> : Click <img class="Default" src="../mat-webhelp/images/at_olh_settings.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 19px; top: 0pt" alt="" />. In the <span class="wintitle">Criteria</span> dialog box, configure the following criteria based on which <span class="ph">ActiveTransfer Server</span> will execute tasks, and click <span class="uicontrol">Ok</span>.</div></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERPLM" class="Table_Cell"><span class="uicontrol">Execute the tasks below when a user [] files</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2PLM" class="Table_Cell">Select the file operation from the list.</div><div id="wwID0EBQLM" class="Note"><span class="Bold">Note:<br /></span>If you specify an action based on the deletion of a file, make sure that any subsequent tasks you define for the action do not rely on the presence of the deleted file.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4QLM" class="Table_Cell"><span class="uicontrol">Virtual folder</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHRLM" class="Table_Cell">To specify any folder or a particular folder, select <span class="uicontrol">Any folder</span> or <span class="uicontrol">Specific folder</span> respectively.</div><div id="wwID0EVRLM" class="Table_Cell">For <span class="uicontrol">Specific folder</span>, type a specific folder name in the box. You can use wildcard characters in the folder name box (for example, <span class="codeph">*baseName</span>). By default, <span class="ph">ActiveTransfer Server</span> considers file activity in any folder structure when evaluating action criteria.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMSLM" class="Table_Cell"><span class="uicontrol">File transfer status</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EWSLM" class="Table_Cell">To specify a file transfer status, select <span class="uicontrol">Success or Failure</span>, <span class="uicontrol">Success</span>, or <span class="uicontrol">Failure</span>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ENTLM" class="Table_Cell"><span class="uicontrol">Task execution by</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div class="ww_skin_page_overflow"><div id="wwID0EXTLM" class="Table_Cell">To enable <span class="ph">ActiveTransfer Server</span> to execute the action for file operations performed by particular users, groups, or roles, select <span class="uicontrol">Any user, role, group</span> or <span class="uicontrol">Specific users, roles, groups</span> and click <img class="Default" src="../mat-webhelp/images/at_olh_quick_add.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 27px; max-width: 30px; top: 0pt" alt="" />, select the users, groups, or roles, and click <span class="uicontrol">OK</span>.</div></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZULM" class="Table_Cell"><span class="uicontrol">Execute tasks</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDVLM" class="Table_Cell">To specify whether to execute the tasks immediately, after the user exits all sessions, or after the user is idle for few seconds, select <span class="uicontrol">Immediately</span>, <span class="uicontrol">After the user exists all sessions</span>, or <span class="uicontrol">After the user is idle for</span> and type the number of seconds to wait before executing the action in the box.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1VLM" class="Table_Cell"><span class="uicontrol">Tasks</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEWLM" class="Table_Cell">Select one or more of the following tasks, and define configurations for each of the tasks in the <span class="uicontrol">Properties</span> section accordingly:</div><div id="wwID0ESWLM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>File operations</div><div id="wwID0EGXLM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_find.html#wwID0E5VAO"
+   
+     title="Find Task Configuration"
+    ><span class="heading-page">Find Task Configuration</span></a></div><div id="wwID0EBYLM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_copy.html#wwID0EL3BO"
+   
+     title="Copy Task Configuration"
+    ><span class="heading-page"> Copy Task Configuration</span></a></div><div id="wwID0E3YLM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_move.html#wwID0EWEDO"
+   
+     title="Move Task Configuration"
+    ><span class="heading-page">Move Task Configuration</span></a></div><div id="wwID0EXZLM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_delete.html#wwID0ECWEO"
+   
+     title="Delete Task Configuration"
+    ><span class="heading-page">Delete Task Configuration</span></a></div><div id="wwID0ES1LM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_rename.html#wwID0EFDFO"
+   
+     title="Rename Task Configuration"
+    ><span class="heading-page">Rename Task Configuration</span></a></div><div id="wwID0EN2LM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_encrypt.html#wwID0ERRFO"
+   
+     title="Encrypt Task Configuration"
+    ><span class="heading-page">Encrypt Task Configuration</span></a></div><div id="wwID0EI3LM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_decrypt.html#wwID0EYAGO"
+   
+     title="Decrypt Task Configuration"
+    ><span class="heading-page">Decrypt Task Configuration</span></a></div><div id="wwID0ED4LM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_zip.html#wwID0E4UGO"
+   
+     title="Zip Task Configuration"
+    ><span class="heading-page">Zip Task Configuration</span></a></div><div id="wwID0E54LM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_unzip.html#wwID0EWQHO"
+   
+     title="Unzip Task Configuration"
+    ><span class="heading-page">Unzip Task Configuration</span></a></div><div id="wwID0EZ5LM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_writecontent.html#wwID0ELLIO"
+   
+     title="Write Content Task Configuration"
+    ><span class="heading-page">Write Content Task Configuration</span></a></div><div id="wwID0EW6LM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_execute_is_service.html#wwID0EODJO"
+   
+     title="Execute Integration Server Service Task Configuration"
+    ><span class="heading-page">Execute 
+						Integration Server Service Task Configuration</span></a></div><div id="wwID0ERAMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_execute_script.html#wwID0E6WJO"
+   
+     title="Execute Script Task Configuration"
+    ><span class="heading-page">Execute Script Task Configuration</span></a></div><div id="wwID0EMBMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_execute_tn_service.html#wwID0EYOKO"
+   
+     title="Execute Trading Networks Service Task Configuration"
+    ><span class="heading-page">Execute 
+						Trading Networks Service Task Configuration</span></a></div><div id="wwID0EHCMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_execute_script_2.html#wwID0EBKLO"
+   
+     title="Send Universal Messaging/Broker Notification Task Configuration"
+    ><span class="heading-page">Send 
+						Universal Messaging/Broker Notification Task Configuration</span></a></div><div id="wwID0ECDMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_send_email.html#wwID0EH4LO"
+   
+     title="Send Email Task Configuration"
+    ><span class="heading-page">Send Email Task Configuration</span></a></div><div id="wwID0E4DMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_write_file_to_db.html#wwID0EPQMO"
+   
+     title="Write File to Database Task Configuration"
+    ><span class="heading-page">Write File to Database Task Configuration</span></a></div><div id="wwID0EYEMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_jump.html#wwID0ERBNO"
+   
+     title="Jump Task Configuration"
+    ><span class="heading-page">Jump Task Configuration</span></a></div><div id="wwID0ETFMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_exclude.html#wwID0EWSNO"
+   
+     title="Exclude Task Configuration"
+    ><span class="heading-page">Exclude Task Configuration</span></a></div><div id="wwID0EOGMM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../mat-webhelp/action_task_error.html#wwID0EZAOO"
+   
+     title="Error Task Configuration"
+    ><span class="heading-page">Error Task Configuration</span></a></div><div id="wwID0EKHMM" class="Table_Cell">For descriptions of fields for task configurations, see 
+    <a href="../mat-webhelp/action_task_configuration_definitions.html#wwID0ETEAO"
+   
+     title="Task Configuration Definitions"
+    ><span class="heading-page">Task Configuration Definitions</span></a>.</div><div class="ww_skin_page_overflow"><div id="wwID0E2HMM" class="Tip"><span class="Bold">Tip:<br /></span>Click <img class="Default" src="../mat-webhelp/images/at_olh_disable.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 25px; top: 0pt" alt="" /> to disable a task. Click <img class="Default" src="../mat-webhelp/images/at_olh_enable.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 20px; top: 0pt" alt="" /> to enable a task. Click <img class="Default" src="../mat-webhelp/images/at_olh_delete_icon.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 20px; max-width: 19px; top: 0pt" alt="" /> to delete the task. Click <img class="Default" src="../mat-webhelp/images/_at_integrated_webhelp.1.068.10.jpg" width="100%" style="display: inline; float: none; left: 0pt; max-height: 18px; max-width: 21px; top: 0pt" alt="" /> to copy the task. By default, a task is enabled when created.</div></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top" colspan="2"><div id="wwID0E3JMM" class="Table_Cell"><span class="uicontrol">Parallel processing</span></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMKMM" class="Table_Cell"><span class="uicontrol">Enable parallel processing</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EWKMM" class="Table_Cell">Select this option if you want to enable parallel processing of files in multiple threads.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EALMM" class="Table_Cell"><span class="uicontrol">Start parallel processing for files after</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKLMM" class="Table_Cell">Select the task after which <span class="ph">ActiveTransfer</span> must start parallel processing of files in multiple threads from the list. <span class="ph">ActiveTransfer</span> first executes the task you select here, and any other tasks before it, sequentially.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4LMM" class="Table_Cell"><span class="uicontrol">Maximum numer of parallel processes</span></div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHMMM" class="Table_Cell">Type the maximum number (between one and 999) of parallel threads that <span class="ph">ActiveTransfer</span> can create to simultaneously process files.</div></td></tr></table></div><div id="wwID0EYMMM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Add</span><span class="Command">. </span></div><div id="wwID0EVNMM" class="Step_Result_1">The new post-processing action appears in the post-processing actions list.</div><div id="wwID0ENPMM" class="Related_Concept">&nbsp;</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2012-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

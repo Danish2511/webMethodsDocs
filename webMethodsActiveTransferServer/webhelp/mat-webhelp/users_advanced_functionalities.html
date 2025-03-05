@@ -1,0 +1,87 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Features in Users Templates</title><link rel="Prev" href="users.html" title="Previous" /><link rel="Next" href="users_add_new_user.html" title="Next" /><link rel="StyleSheet" href="css/_at_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_at_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/mat-webhelp/users_advanced_functionalities.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pnpV_002bgLekzDDc_002fRSv8lzgNQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/mat-webhelp/users_advanced_functionalities.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>ActiveTransfer Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/to-at_webhelp_landing_page.html#wwconnect_header">webMethods ActiveTransfer Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/_at_integrated_webhelp.1.027.html#wwconnect_header">Administering ActiveTransfer Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/_at_integrated_webhelp.1.096.html#wwconnect_header">Managing Users and Templates</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../mat-webhelp/users.html#wwconnect_header">Overview</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Features in Users Templates</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EB1QO" class="Heading_4">Features in Users Templates</div><div id="wwID0EU1QO" class="Body">This topic provides information about specific features you can use to configure advanced settings for user and templates in <span class="ph">ActiveTransfer</span>:</div><div id="wwID0EF2QO" class="Section_Title">Restrictions for a User</div><div id="wwID0EK2QO" class="Body">You can define the following restrictions for a user:</div><div id="wwID0ET2QO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Restrict server availability to specified times and days of the week.</div><div id="wwID0EE3QO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Restrict particular actions for files that match a specified pattern and restrict access to subfolders in a folder structure that match a specified pattern.</div><div id="wwID0EV3QO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Restrict login volume and duration and specify authentication settings.</div><div id="wwID0EG4QO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Restrict connections by protocol or IP address and specify default character encoding.</div><div id="wwID0EY4QO" class="Body">These settings will override any restrictions set in the template associated with the user, role, or group.</div><div id="wwID0E44QO" class="Section_Division"><span class="inlinetitle">Restrictions for Authentication and Login</span></div><div id="wwID0EG5QO" class="Body">You can set authentication and login restrictions that specify the maximum number of users who can log in simultaneously, the maximum login and idle times per session, public key and password requirements, and the paths to trusted public SSH key files.</div><div id="wwID0EK5QO" class="Section_Division"><span class="inlinetitle">Restrictions for Files</span></div><div id="wwID0ET5QO" class="Body">You can restrict particular actions for files that match a specified pattern. For example, you can restrict users from uploading files that end with <span class="codeph">.exe</span>. You can also restrict access to subfolders in the file system that match a specified pattern.</div><div id="wwID0E35QO" class="Section_Division"><span class="inlinetitle">Restrictions for Connections</span></div><div id="wwID0EF6QO" class="Body">You can restrict connections to <span class="ph">ActiveTransfer Server</span> or an <span class="ph">ActiveTransfer Gateway</span> instance by choosing the protocols or client IP addresses for access. You can also specify the default character encoding for the connection between the user and <span class="ph">ActiveTransfer Server</span>.</div><div id="wwID0E66QO" class="Section_Title">Active Time Window</div><div id="wwID0EEARO" class="Body">You can specify the days of the week and the time during which users can connect to <span class="ph">ActiveTransfer Server</span>.</div><div id="wwID0EOARO" class="Note"><span class="Bold">Note:<br /></span>The days and times are represented in the time zone of the <span class="ph">ActiveTransfer Server</span>.</div><div id="wwID0ERBRO" class="Section_Title">Encryption and Decryption</div><div id="wwID0EWBRO" class="Body">You can define specific file-based encryption and decryption PGP keys for users. These settings will override any encryption assignments set in the template associated with the user, role, or group.</div><div id="wwID0E2BRO" class="Body">When encrypted, files are stored on the user’s drive. Encrypted files are decrypted only if they are transferred back through <span class="ph">ActiveTransfer</span> using the same key that was used to encrypt them. When encryption and decryption keys are configured at multiple levels (user, server, and folder), <span class="ph">ActiveTransfer</span> enforces the following order of preference:</div><div id="wwID0ENCRO" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Users</div><div id="wwID0E5CRO" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>Folders</div><div id="wwID0EPDRO" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span>Servers</div><div id="wwID0EBERO" class="Body">For example, if user <span class="emphasis">A</span> accesses port <span class="emphasis">10</span> and uploads a file in a VFS <span class="emphasis">MN</span>, then <span class="ph">ActiveTransfer</span> checks if the encryption or decryption key is available for user <span class="emphasis">A</span>. If no key is available at the user level, then <span class="ph">ActiveTransfer</span> checks for the folder settings for a key. If no key is present at the VFS level, then <span class="ph">ActiveTransfer</span> checks the server level settings for the key.</div><div id="wwID0EPFRO" class="Section_Title">File-based Encryption for Templates</div><div id="wwID0EUFRO" class="Body">You can define specific file-based encryption and decryption PGP keys for users assigned to a template. When files are encrypted, they are stored on a user’s drive in a format that cannot be read outside of <span class="ph">ActiveTransfer</span>. Encrypted files are decrypted only if they are transferred back through <span class="ph">ActiveTransfer</span> using the same key that was used to encrypt them.</div><div id="wwID0ECGRO" class="Note"><span class="Bold">Note:<br /></span>You must obtain the appropriate keystores and ensure that these keystore files reside on the machines that host the <span class="ph">ActiveTransfer Server</span> or <span class="ph">ActiveTransfer Gateway</span> on which you perform these configuration tasks.</div><div id="wwID0EGHRO" class="Body">You can override the template-level encryption and decryption options for a specific user.</div><div id="wwID0E6IRO" class="Related_Task">
+    <a href="../mat-webhelp/users_advanced_settings.html#wwID0EU5SO"
+   
+     title="Configuring Advanced Settings for Users"
+    ><span class="Link_Text">.</span></a></div><div id="wwID0EPJRO" class="Related_Task">
+    <a href="../mat-webhelp/template_configure_advanced_settings.html#wwID0ET4WO"
+   
+     title="Configuring Additional Settings for a Template"
+    ><span class="Link_Text">.</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2012-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
