@@ -1,0 +1,91 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Modifying a Saved Search</title><link rel="Prev" href="ta-using_a_saved_search.html" title="Previous" /><link rel="Next" href="ta-deleting_a_saved_search_2.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/ta-modifying_a_saved_search_2.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pGJ724JfUWg72sH8_002fKMZPug" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/ta-modifying_a_saved_search_2.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.139.html#wwconnect_header">Administering My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-part_mwm_admin.html#wwconnect_header">My webMethods Administrator Functions</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-searches_for_users_groups_and_roles.html#wwconnect_header">Searches for Users, Groups, and Roles</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/co-working_with_saved_searches.html#wwconnect_header">Working with Saved Searches</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Modifying a Saved Search</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ELNBR" class="Heading_5">Modifying a Saved Search</div><div id="wwID0EYNBR" class="Body">You can modify an existing saved search.</div><div id="wwID0E4NBR" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To modify a saved search</div><div id="wwID0EHOBR" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">To navigate to the correct page, do one of the following: </span></div><div id="wwID0EAPBR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>In <span class="ph">My webMethods</span>: <span class="uicontrol">Navigate &gt; Applications &gt; Administration &gt; User Management &gt; </span><span class="uicontrol_002c_varname">User_type</span><span class="uicontrol"> &gt; Saved</span>.</div><div id="wwID0EAQBR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>As system administrator: <span class="uicontrol">Administration Dashboard &gt; User Management &gt; Manage </span><span class="uicontrol_002c_varname">User_type</span><span class="uicontrol"> &gt; Saved</span>.</div><div id="wwID0E3QBR" class="Choice_2_Continued">where <span class="uicontrol_002c_varname">User_type</span> is <span class="uicontrol">Users</span>, <span class="uicontrol">Groups</span>, or <span class="uicontrol">Roles</span>.</div><div id="wwID0E1RBR" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">Saved Search</span><span class="Command"> list, choose the name of the saved search to be modified and click </span><span class="Command_002c_uicontrol">Details</span><span class="Command">. </span></div><div id="wwID0E4SBR" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Do any of the following: </span></div><div id="wwID0EXTBR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>In the search field of the <span class="uicontrol">Saved</span> panel, change the search criteria.</div><div id="wwID0EMUBR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For users and groups, in the <span class="uicontrol">Directory Service</span> list change the directory service in which to perform the search.</div><div id="wwID0EBVBR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For users, in the <span class="uicontrol">Core Attributes</span> panel add, modify, or remove any of the following fields:</div><div id="wwID0EAWBR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">First Name</span></div><div id="wwID0EUWBR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Last Name</span></div><div id="wwID0EIXBR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">User ID</span></div><div id="wwID0E3XBR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">E-mail Address</span></div><div id="wwID0EXVBR-2" class="Step_Info_1">The core user attributes match the user attribute fields on the <span class="uicontrol">User Information</span> panel, described in 
+    <a href="../my-webmethods-server-webhelp/re-user_information.html#wwID0EMDER"
+   
+     title="User Information"
+    ><span class="heading-page">User Information</span></a>.</div><div id="wwID0EFZBR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For groups, in the <span class="uicontrol">Core Attributes</span> panel add, modify, or remove any of the following fields:</div><div id="wwID0EE1BR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Group Name</span></div><div id="wwID0EY1BR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Group ID</span></div><div id="wwID0EM2BR" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">E-mail Address</span></div><div id="wwID0E2ZBR-2" class="Step_Info_1">The core user attributes match the group attribute fields on the <span class="uicontrol">Group Information</span> panel described in 
+    <a href="../my-webmethods-server-webhelp/re-group_information.html#wwID0E6EJR"
+   
+     title="Group Information"
+    ><span class="heading-page">Group Information</span></a>.</div><div id="wwID0EV3BR" class="Choice_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>In the <span class="uicontrol">Extended Attributes</span> panel, choose an extended attribute by doing the following:</div><div id="wwID0EN4BR" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>From the <span class="uicontrol">Attribute Provider</span> list, choose an attribute provider.</div><div id="wwID0EC5BR" class="Numbered_3_Continued">For more information on attribute providers, see 
+    <a href="../my-webmethods-server-webhelp/to-attribute_providers.html#wwID0EXZGS"
+   
+     title="Attribute Providers"
+    ><span class="heading-page">Attribute Providers</span></a>.</div><div id="wwID0EU5BR" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>In the <span class="uicontrol">Attribute Value</span> field, type or modify the value to be used in the saved search.</div><div id="wwID0EN6BR" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">To update the saved search, click </span><span class="Command_002c_uicontrol">Save</span><span class="Command">. </span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

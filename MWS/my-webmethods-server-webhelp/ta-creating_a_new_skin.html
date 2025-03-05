@@ -1,0 +1,92 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Creating and Modifying a New Skin</title><link rel="Prev" href="co-how_know_modify.html" title="Previous" /><link rel="Next" href="ta-exporting_a_skin.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/ta-creating_a_new_skin.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pQ5Ri5BPJgyBFYlARbXAS0A" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/ta-creating_a_new_skin.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.139.html#wwconnect_header">Administering My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-part_develop.html#wwconnect_header">Server Page Development</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-customizing_skins.html#wwconnect_header">Customizing Skins</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Creating and Modifying a New Skin</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EJTTU" class="Heading_4">Creating and Modifying a New Skin</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../my-webmethods-server-webhelp/ta-exporting_a_skin.html#wwconnect_header">Exporting a Skin to Your Computer</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../my-webmethods-server-webhelp/ta-designer_modify_skin.html#wwconnect_header">Using Designer to Modify Skin Packages</a></div></dd></dl></div><div id="wwID0EVTTU" class="Body">As a system administrator, you can create a skin with the Skin Administration page. After you have created the new skin, you can customize it using the Skin Administration page or by manually editing the skin package.</div><div id="wwID0E1TTU" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To create a new skin</div><div id="wwID0ECUTU" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">As system administrator: </span><span class="Command_002c_uicontrol">Administration Dashboard &gt; User Interface &gt; Skin Administration &gt; Create New Skin</span><span class="Command">.</span></div><div id="wwID0E3UTU" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">System Name</span><span class="Command"> field, type a short name that contains only letters, numbers, and the underscore character.</span></div><div id="wwID0EXVTU" class="Step_Info_1">This name is used internally by the server.</div><div id="wwID0E2VTU" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">Display Name</span><span class="Command"> field, type the skin title that you want users to see.</span></div><div id="wwID0EWWTU" class="Step_Info_1">This name has no character restrictions.</div><div id="wwID0E1WTU" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">From the </span><span class="Command_002c_uicontrol">Parent Skin</span><span class="Command"> list, choose the skin from which the new skin will inherit any unspecified properties.</span></div><div id="wwID0EVXTU" class="Step_Info_1">The system default skin is selected by default.</div><div id="wwID0EZXTU" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Create</span><span class="Command">.</span></div><div id="wwID0EUYTU" class="Step_Info_1">A new skin initially inherits all of its properties (colors, fonts, and images) from its parent. You can modify the new skin, changing just a single property, such as adding a new header logo, or you can modify the skin to create a radical new look and feel with completely different colors, fonts, and images.</div><div id="wwID0EYYTU" class="Result">Having created a new skin, you can begin to customize it by doing one or more of the following:</div><div id="wwID0EAZTU" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Modify the use of images, colors, and fonts, described in 
+    <a href="../my-webmethods-server-webhelp/co-using_the_skin_editor.html#wwID0EH1UU"
+   
+     title="Using the Skin Administration Page"
+    ><span class="heading-page">Using the Skin Administration Page</span></a>.</div><div id="wwID0E3ZTU" class="Note_1"><span class="Bold">Note:<br /></span>You should make any planned changes in the Skin Administration page <span class="emphasis">before</span> using either of the manual editing techniques.</div><div id="wwID0EX1TU" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Export the skin for manual editing, described in 
+    <a href="../my-webmethods-server-webhelp/ta-exporting_a_skin.html#wwID0ENEUU"
+   
+     title="Exporting a Skin to Your Computer"
+    ><span class="heading-page">Exporting a Skin to Your Computer</span></a>.</div><div id="wwID0ES2TU" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Import the skin into <span class="ph">Designer</span> for manual editing, described in 
+    <a href="../my-webmethods-server-webhelp/ta-designer_modify_skin.html#wwID0EMNUU"
+   
+     title="Using Designer to Modify Skin Packages"
+    ><span class="heading-page">Using 
+						Designer to Modify Skin Packages</span></a>.</div><div id="wwID0EX3TU" class="Example_Title">Example:</div><div id="wwID0EL4TU" class="Body">Assume you want to create a new skin from the parent skin Pearls.</div><div id="wwID0ET4TU" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>As system administrator: <span class="uicontrol">Administration Dashboard &gt; User Interface &gt; Skin Administration &gt; Create New Skin</span>.</div><div id="wwID0EH5TU" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>In the <span class="uicontrol">System Name</span> field, type a name such as <span class="userinput">wm_skin_carbon</span>.</div><div id="wwID0E65TU" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span>In the <span class="uicontrol">Display Name</span> field, type the skin title, <span class="userinput">Carbon Sailing Skin</span>.</div><div id="wwID0EX6TU" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span>From the <span class="uicontrol">Parent Skin</span> list, choose the Pearls skin.</div><div id="wwID0EMAUU" class="Numbered_1_Continued">This is the skin from which the new skin will inherit any unspecified properties.</div><div id="wwID0ERAUU" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span>Click <span class="uicontrol">Create</span>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Viewing Log Messages with the Log Viewer Tool</title><link rel="Prev" href="to-mws_diagnostic_portlets_22.html" title="Previous" /><link rel="Next" href="to-mws_diagnostic_portlets_24.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/to-mws_diagnostic_portlets_23.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pmqHJK7jcG2Ni0B7m24LGZA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/to-mws_diagnostic_portlets_23.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.733.html#wwconnect_header">Diagnosing My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets.html#wwconnect_header">Using My webMethods Server Diagnostic Portlets</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_20.html#wwconnect_header">Using the Log Analysis Tools</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Viewing Log Messages with the Log Viewer Tool</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EPVYV" class="Heading_4">Viewing Log Messages with the Log Viewer Tool</div><div id="wwID0E4VYV" class="Body">The Log Viewer tool enables you to view the latest messages in the plain text log files of <span class="ph">My webMethods Server</span>. You can set the log messages collection criteria using the Log Configuration tool. For more information, see the <span class="Citation">Analysis, Reporting and Troubleshooting</span> chapter of <span class="ph"> </span><span class="ph_002c_Citation">Administering My webMethods Server</span>.</div><div id="wwID0EWWYV" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To view log messages</div><div id="wwID0EAXYV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Log on as an administrator on </span><span class="Command_002c_Command">My webMethods Server</span><span class="Command">. </span></div><div id="wwID0E4XYV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">In </span><span class="Command_002c_Command">My webMethods Server</span><span class="Command">: </span><span class="Command_002c_uicontrol">Tools &gt; MWS Monitoring and Diagnostics &gt; Log Tracing and Analysis</span><span class="Command">. </span></div><div id="wwID0EAZYV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Locate the </span><span class="Command_002c_uicontrol">Log Viewer</span><span class="Command"> tool and drag it onto the workspace. </span></div><div id="wwID0E4ZYV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">Log File</span><span class="Command"> field, select the file that you want to analyze. </span></div><div id="wwID0E11YV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">Lines</span><span class="Command"> field, select the number of lines that you want to display. </span></div><div id="wwID0E32YV" class="Body_1">The default configuration of the Log Viewer tool is set to show the last page of the last 500 lines of <span class="ph">My webMethods Server</span> full log file.</div><div id="wwID0EG3YV" class="Body_1">The list of files is updated whenever the logs are rotated. This happens either overnight or based on the log file size depending on the log4j configuration. You can use the updated list of files when you re-open the tool. For more information, see Logging Configuration</div><div id="wwID0EN3YV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">To display the most recent information, click </span><span class="Command_002c_uicontrol">Refresh</span><span class="Command">. </span></div><div id="wwID0EP4YV" class="Body_1">You can sort the table by any column. If a log entry has a stack trace associated with it, you can display it by clicking on the icon in the <span class="uicontrol">ST</span> column.</div><div id="wwID0E24YV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>7. </span></span><span class="Command">To export the provided plain text log files, click </span><span class="Command_002c_uicontrol">Export Logs</span><span class="Command"> and proceed as follows: </span></div><div id="wwID0E25YV" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>a. </span></span><span class="Command">From the </span><span class="Command_002c_uicontrol">Available</span><span class="Command"> area, on the window that opens, choose a file which you want to export. </span></div><div id="wwID0E46YV" class="Body_2">If you select a single log file for export, the application enables you to choose whether you want to compress it into a zip file. If you do not select the <span class="uicontrol">Compress selected log files before export</span> option, the downloaded data is an uncompressed plain text file.</div><div id="wwID0EHAZV" class="Body_2">When you select and export more than one log file, the application automatically compresses the data into a zip file.</div><div id="wwID0EOAZV" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>b. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Export</span><span class="Command">. </span></div><div id="wwID0ELBZV" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>c. </span></span><span class="Command">Specify a directory on the file system in which you want to download and save the file and then click </span><span class="Command_002c_uicontrol">OK</span><span class="Command">. Alternatively, you can open the file without saving it on the file system. </span></div><div id="wwID0EKCZV" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>8. </span></span><span class="Command">To search for a particular entry in the result table, in the </span><span class="Command_002c_uicontrol">Text</span><span class="Command"> and </span><span class="Command_002c_uicontrol">Date</span><span class="Command"> fields provide your search criteria and proceed as follows: </span></div><div id="wwID0EQDZV" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>a. </span></span><span class="Command">To display the first entry that matches the search criteria, click </span><span class="Command_002c_uicontrol">Search</span><span class="Command">. </span></div><div id="wwID0ENEZV" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>b. </span></span><span class="Command">To display a consecutive entry that matches the search criteria, click </span><span class="Command_002c_uicontrol">Search Next</span><span class="Command">. </span></div><div id="wwID0EKFZV" class="Step_Result_2">The tool highlights the found entry.</div><div id="wwID0EQFZV" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>c. </span></span><span class="Command">To reset the search criteria, click </span><span class="Command_002c_uicontrol">Clear</span><span class="Command">. </span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

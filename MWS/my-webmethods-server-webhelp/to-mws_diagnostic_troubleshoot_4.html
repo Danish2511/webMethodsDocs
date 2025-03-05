@@ -1,0 +1,162 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Troubleshooting Performance Issues</title><link rel="Prev" href="to-mws_diagnostic_troubleshoot_3.html" title="Previous" /><link rel="Next" href="to-mws_diagnostic_troubleshoot_5.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/to-mws_diagnostic_troubleshoot_4.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pNTtDfy8u5YziDxUqv9rtHQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/to-mws_diagnostic_troubleshoot_4.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.733.html#wwconnect_header">Diagnosing My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-mws_diagnostic_troubleshoot.html#wwconnect_header">Troubleshooting My webMethods Server Using Diagnostic Tools</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Troubleshooting Performance Issues</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EW26V" class="Heading_3">Troubleshooting Performance Issues</div><div id="wwID0EG36V" class="Body"><span class="ph">My webMethods Server</span> has a set of tools that enable you to easily identify and troubleshoot possible issues that you may encounter while working with it. This section presents some common configuration problems that are addressed by the diagnostic tools. The tools facilitate collecting the needed troubleshooting data and additionally provide output files that can be used by a support organization, such as<span class="ph">Software&nbsp;AG Global Support</span> or your internal support group.</div><div id="wwID0EU36V" class="Body">The following table outlines potential problems, a description of the problem, and a reference to the tool that assists in the resolution:</div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 33.3%"><div id="wwID0E446V" class="Table_Cell_Head">Problem</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 33.3%"><div id="wwID0ED56V" class="Table_Cell_Head">Description</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 33.3%"><div id="wwID0EJ56V" class="Table_Cell_Head">Reference</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E456V" class="Table_Cell"><span class="ph">My webMethods Server</span> exhibits slow performance, stops responding, or encounters a deadlock condition.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EO66V" class="Table_Cell">Use the threaddump tool and portlet to establish a remote connection to the server and then to obtain thread dump information.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E166V" class="Table_Cell">For more information, see:</div><div id="wwID0EEAAW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../my-webmethods-server-webhelp/re-mws-threaddump-cmd.html#wwID0EW4QV"
+   
+     title="threaddump"
+    ><span class="heading-page">threaddump</span></a>.</div><div id="wwID0EABAW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_2.html#wwID0E3YUV"
+   
+     title="Using the Thread Dump Portlet"
+    ><span class="heading-page">Using the Thread Dump Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJCAW" class="Table_Cell"><span class="ph">My webMethods Server</span> exhibits slow performance or stops responding until other processes are finished.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1CAW" class="Table_Cell">Additional manual thread dump analysis is necessary. To do so, the tool displays all available threads. If the tool does not display deadlock threads, configure the settings to display the complete thread dump information and use the results for further analysis.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EGDAW" class="Table_Cell">For more information, see:</div><div id="wwID0EPDAW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../my-webmethods-server-webhelp/re-mws-threaddump-cmd.html#wwID0EW4QV"
+   
+     title="threaddump"
+    ><span class="heading-page">threaddump</span></a>.</div><div id="wwID0ELEAW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_2.html#wwID0E3YUV"
+   
+     title="Using the Thread Dump Portlet"
+    ><span class="heading-page">Using the Thread Dump Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUFAW" class="Table_Cell"><span class="ph">My webMethods Server</span> stops responding and you cannot diagnose it using the portlet diagnostic tool.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFGAW" class="Table_Cell">Use the command line tool, which relies on a JVM algorithm to diagnose threads.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERGAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/re-mws-threaddump-cmd.html#wwID0EW4QV"
+   
+     title="threaddump"
+    ><span class="heading-page">threaddump</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EOHAW" class="Table_Cell">You experience problems regarding the memory allocation of <span class="ph">My webMethods Server</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6HAW" class="Table_Cell">Use the memorydump command line tool or the Memory Monitor portlet to troubleshoot the memory allocation of <span class="ph">My webMethods Server</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQIAW" class="Table_Cell">For more information, see:</div><div id="wwID0EZIAW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../my-webmethods-server-webhelp/re-memorydump-command.html#wwID0ESGQV"
+   
+     title="memorydump"
+    ><span class="heading-page">memorydump</span></a>.</div><div id="wwID0EVJAW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_26.html#wwID0EHN1V"
+   
+     title="Using the Memory Monitor Portlet"
+    ><span class="heading-page">Using the Memory Monitor Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5KAW" class="Table_Cell">You want to monitor and analyze the performance of your CAF application.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKLAW" class="Table_Cell">The Performance Analysis portlet enables portlet developers or administrators to measure and analyze the performance of <span class="ph">My webMethods Server</span> services and custom portlets or applications using an embedded performance-monitoring service.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2LAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYMAW" class="Table_Cell">You want to analyze application performance on other systems.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EENAW" class="Table_Cell">You can export the performance data and then import it and analyze it on another system, or save it as reference information.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQNAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ENOAW" class="Table_Cell">The performance information is too comprehensive or too superficial.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZOAW" class="Table_Cell">Depending on the service that you configure and use, the tool displays lightweight or thorough performance information.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFPAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ECQAW" class="Table_Cell">You want to analyze a snapshot within a particular period.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EOQAW" class="Table_Cell">The Performance Analysis tool enables you to capture a particular snapshot and then analyze the performance within the particular interval.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1QAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EXRAW" class="Table_Cell">You need performance support from an external organization.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDSAW" class="Table_Cell">The Performance Analysis tool enables you to export the snapshot into an XML file and provide the exported data for further analysis. The tool also enables you to export the analyzed data into a comma separated values (CSV) file. Note that you cannot import and analyze CSV files.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPSAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMTAW" class="Table_Cell">You want to analyze the overall performance.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYTAW" class="Table_Cell">As an administrator, you can use the Performance Analysis diagnostic tool to analyze overall performance.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEUAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBVAW" class="Table_Cell">The performance service settings are not persisted after a server restart.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ENVAW" class="Table_Cell">The Performance Analysis tool configuration enables you to persist the performance service type and state configuration settings after server restart. If you do not configure this option, the changes are reset to the default configuration upon restart.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZVAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EWWAW" class="Table_Cell">You cannot import previously exported server snapshot information.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ECXAW" class="Table_Cell">The Performance Analysis tool cannot import a snapshot in CSV format .</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EOXAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_6.html#wwID0EDLVV"
+   
+     title="Using the Performance Analysis Portlet"
+    ><span class="heading-page">Using the Performance Analysis
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELYAW" class="Table_Cell">You want to define and troubleshoot the slowest database calls.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EXYAW" class="Table_Cell">You can use a diagnostic tool to display information about ten of the slowest database calls.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDZAW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_13.html#wwID0ED2WV"
+   
+     title="Using the Performance Statistics Portlet"
+    ><span class="heading-page">Using the Performance Statistics
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EA1AW" class="Table_Cell">You want to define and troubleshoot the slowest performing portlets.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EM1AW" class="Table_Cell">Use the Performance Statistics portlet to display performance information about the ten slowest portlets.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EY1AW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_13.html#wwID0ED2WV"
+   
+     title="Using the Performance Statistics Portlet"
+    ><span class="heading-page">Using the Performance Statistics
+		  Portlet</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EV2AW" class="Table_Cell">You want to define and troubleshoot the slowest performing Web services.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EB3AW" class="Table_Cell">Use the Performance Statistics portlet to display performance information about the ten slowest Web services.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EN3AW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_13.html#wwID0ED2WV"
+   
+     title="Using the Performance Statistics Portlet"
+    ><span class="heading-page">Using the Performance Statistics
+		  Portlet</span></a> </div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

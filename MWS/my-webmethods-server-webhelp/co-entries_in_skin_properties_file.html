@@ -1,0 +1,95 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Making Entries in a Skin Properties File</title><link rel="Prev" href="co-value_of_skin_properties_file.html" title="Previous" /><link rel="Next" href="co-skin_deploy_file.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/co-entries_in_skin_properties_file.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pr_002fsClAzvnE1x6GRqtEbZ_002bA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/co-entries_in_skin_properties_file.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.139.html#wwconnect_header">Administering My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-part_develop.html#wwconnect_header">Server Page Development</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-customizing_skins.html#wwconnect_header">Customizing Skins</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/co-make-up_of_a_skin_package.html#wwconnect_header">Make-up of a Skin Package</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/co-skin_properties_file.html#wwconnect_header">The Skin Properties File</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Making Entries in a Skin Properties File</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EF41U" class="Heading_6">Making Entries in a Skin Properties File</div><div id="wwID0EM41U" class="Body">If you edit the skins.properties.xml file manually, you do not need to include components inherited from one of the skin’s ancestors. Rather, you need only include modifications to inherited components. <span class="ph">A good way to see the properties that describe a skin is to export the parent skin package using the method described in </span>
+    <a href="../my-webmethods-server-webhelp/ta-exporting_a_skin.html#wwID0ENEUU"
+   
+     title="Exporting a Skin to Your Computer"
+    ><span class="ph_002c_heading-page">Exporting a Skin to Your Computer</span></a><span class="ph">, unzip the skin package, and examine the skin.properties.xml file.</span></div><div id="wwID0EC51U" class="Note"><span class="Bold">Note:<br /></span>Modifying the skin properties in the skins.properties.xml file requires CSS expertise.</div><div id="wwID0EX51U" class="Body">The skin.properties.xml file is made up of property elements, each describing a component of the skin. The property elements have this format:</div><div id="wwID0E251U" class="Preformatted">&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;<span class="varname">property_name</span>&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;<span class="varname">property_value</span>&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;<span class="varname">optional_description</span>&lt;/description&gt; <br />&lt;/property&gt;</div><div id="wwID0EQ61U" class="Body">The following guidelines apply to the property element:</div><div id="wwID0EX61U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the value is the same as the name, you can omit the value.</div><div id="wwID0EHA2U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The description is optional.</div><div id="wwID0EXA2U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can add comments using standard XML comment syntax:</div><div id="wwID0EIB2U" class="Preformatted_1">&lt;!-- This is a comment --&gt;</div><div id="wwID0EOB2U" class="Body">A skin component can have multiple properties associated with it. For example, the banner that appears at the top of a <span class="ph">My webMethods Server</span> page has over twenty properties that determine its appearance, such as:</div><div id="wwID0E2B2U" class="Simple_List_1">Color, position, and padding of the background</div><div id="wwID0E6B2U" class="Simple_List_1">Color, font, and weight of link text, selected links, including hover characteristics</div><div id="wwID0EDC2U" class="Simple_List_1">Images and their positioning</div><div id="wwID0EHC2U" class="Body">To see the properties that describe a skin, export the pearls skin package using the method described in 
+    <a href="../my-webmethods-server-webhelp/ta-exporting_a_skin.html#wwID0ENEUU"
+   
+     title="Exporting a Skin to Your Computer"
+    ><span class="heading-page">Exporting a Skin to Your Computer</span></a>, unzip the skin package, and examine the skin.properties.xml file. The following examples describe a few ways to modify properties.</div><div id="wwID0E3C2U" class="Section_Title">How do I specify a parent skin?</div><div id="wwID0EBD2U" class="Body">To make the development of a custom skin easier, you need to specify a parent skin from which the custom skin inherits its properties. A skin can have only one parent skin. In the following example, the skin.properties.xml file specifies the pearls skin package as the parent of the custom skin:</div><div id="wwID0EGD2U" class="Preformatted">&lt;!-- parent skin; all unspecified properties are inherited --&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;parent&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;skin.wm_skin_pearls&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;parent skin&lt;/description&gt; <br />&lt;/property&gt;</div><div id="wwID0ETD2U" class="Section_Title">How do I replace one image with another?</div><div id="wwID0EYD2U" class="Body">To replace one image with another, you first need to move a copy of the new image into the images directory for the skin package. Then you need to locate the property for the image in the skins.properties.xml file.</div><div id="wwID0E4D2U" class="Body">For example, perhaps you want to rebrand the page by changing the logo image that appears in the left side of the banner. The new image has the name my_logo.png.</div><div id="wwID0ECE2U" class="Preformatted"> &lt;!-- images --&gt; <br /> <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;images/logo.gif&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;images/my_logo.png&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;header logo&lt;/description&gt; <br />&lt;/property&gt;</div><div id="wwID0EPE2U" class="Section_Title">How do I modify colors?</div><div id="wwID0EUE2U" class="Body">The topic 
+    <a href="../my-webmethods-server-webhelp/ta-replacing_colors_using_a_color_picker.html#wwID0EX4VU"
+   
+     title="Replacing Colors Using a Color Picker"
+    ><span class="heading-page">Replacing Colors Using a Color Picker</span></a> shows several colors modified in the Skin Administration page. The same changes look like this in the skin.properties.xml file.</div><div id="wwID0EFF2U" class="Preformatted">&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#FFFFFF&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button text&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-bg&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#9EB6C7&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button background&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-border&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#668899&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button border&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-border-light&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#BBDDEE&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button border&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-hover&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#FFFFFF&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button text&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-hover-bg&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#4C7499&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button background&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-hover-border&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#395874&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button border&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-hover-border-light&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#ABC9D8&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;button border&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-disabled&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#C5C7C7&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;disabled button text&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-disabled-bg&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#FFFFFF&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;disabled button background&lt;/description&gt; <br />&lt;/property&gt; <br />&lt;property&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;name&gt;colors/button-disabled-border&lt;/name&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;value&gt;#C5C7C7&lt;/value&gt; <br />&nbsp;&nbsp;&nbsp;&nbsp;&lt;description&gt;disabled button border&lt;/description&gt; <br />&lt;/property&gt;</div><div id="wwID0EQF2U" class="Section_Title">How do I add Cascading Style Sheets?</div><div id="wwID0EVF2U" class="Body">You can add multiple style sheets to a skin.properties.xml file. For more information, see 
+    <a href="../my-webmethods-server-webhelp/co-adding_stylesheets.html#wwID0EMF3U"
+   
+     title="Adding Stylesheets to a Skin Package"
+    ><span class="heading-page">Adding Stylesheets to a Skin Package</span></a>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

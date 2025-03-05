@@ -1,0 +1,91 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Cascading Style Sheets</title><link rel="Prev" href="co-skin_deploy_file.html" title="Previous" /><link rel="Next" href="co-how_csi_files_work.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/co-css_and_csi_files.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pDdnRkG9ixPCV4YpyQ7HpYA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/co-css_and_csi_files.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.139.html#wwconnect_header">Administering My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-part_develop.html#wwconnect_header">Server Page Development</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-customizing_skins.html#wwconnect_header">Customizing Skins</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/co-make-up_of_a_skin_package.html#wwconnect_header">Make-up of a Skin Package</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Cascading Style Sheets</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EBT2U" class="Heading_5">Cascading Style Sheets</div><div id="wwID0EIT2U" class="Note"><span class="Bold">Note:<br /></span>Modifying the files described in this topic requires CSS expertise.</div><div id="wwID0E4T2U" class="Body">When <span class="ph">My webMethods Server</span> displays a page, the skin for that page uses a Cascading Style Sheet (CSS) that describes all of the properties making up the skin. <span class="ph">My webMethods Server</span> generates this base CSS at the time you deploy the skin package to the server and every time the server starts. The generated CSS file is based on properties that can be provided from a number of sources:</div><div id="wwID0ENU2U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Properties inherited from a hierarchy of parent skins</div><div id="wwID0E4U2U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>A skins.properties.xml file that is part of the skin package</div><div id="wwID0ENV2U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>One or more CSS or dynamic CSS files in the skin package</div><div id="wwID0E4V2U" class="Body"><span class="ph">My webMethods Server</span> uses dynamic CSS files to reference property values in the skin.properties.xml file and place them in the generated base.css file for a skin package. See 
+    <a href="../my-webmethods-server-webhelp/co-how_csi_files_work.html#wwID0E5A3U"
+   
+     title="How Dynamic CSS Files Work"
+    ><span class="heading-page">How Dynamic CSS Files Work</span></a>.</div><div id="wwID0EYW2U" class="Section_Title">Cascading Style Sheet Definitions</div><div id="wwID0EDX2U" class="Definition_Term">base.css</div><div id="wwID0EHX2U" class="Definition_Description">The primary CSS for a skin package. A base.css file most often exists only as a generated CSS file, having been defined by other sources in the skin package or its parent. The base.css can be modified by one or more extended CSS or dynamic CSS files. It is not recommended that you create a base.css file for a custom skin package, but if you do so, define it in the skin.properties.xml file. You cannot define both a base.css file and a base.csi file in the same custom skin package.</div><div id="wwID0EOX2U" class="Definition_Term">extended.css</div><div id="wwID0ESX2U" class="Definition_Description">A secondary CSS for a skin package. Entries in the extended CSS file override the base.css file. You can have multiple extended CSS files, such as to provide browser-specific CSS values. Extended CSS files, each with a different name, are defined in the skin.properties.xml file.</div><div id="wwID0EZX2U" class="Definition_Term">base.csi</div><div id="wwID0E4X2U" class="Definition_Description">A dynamic CSS file that references properties in the skin.properties.xml file (
+    <a href="../my-webmethods-server-webhelp/co-how_csi_files_work.html#wwID0E5A3U"
+   
+     title="How Dynamic CSS Files Work"
+    ><span class="heading-page">How Dynamic CSS Files Work</span></a>). As a result of the base.csi file, the generated base.css file contains properties from the skin.properties.xml file. The skin.properties.xml file for a top-level skin package (one that has no parent) describes all properties that make up a skin. If there is no base.csi file in a skin package, it is inherited from a parent skin. The base.csi file is defined in the skin.properties.xml file. You cannot define both a base.css file and a base.csi file in the same custom skin package.</div><div id="wwID0EQY2U" class="Definition_Term">extended.csi</div><div id="wwID0EUY2U" class="Definition_Description">A secondary dynamic CSS file for a skin package (
+    <a href="../my-webmethods-server-webhelp/co-how_csi_files_work.html#wwID0E5A3U"
+   
+     title="How Dynamic CSS Files Work"
+    ><span class="heading-page">How Dynamic CSS Files Work</span></a>). Entries in the extended.csi file override the base.csi file. You can have multiple extended.csi files, such as to provide browser-specific CSS values. the extended.csi files, each with a different name, are defined in the skin.properties.xml file.</div><div id="wwID0EKZ2U" class="Section_Title">How Do I Choose Which Type of Stylesheet to Modify?</div><div id="wwID0EPZ2U" class="Body">Use these guidelines in determining which stylesheet to use:</div><div id="wwID0EXZ2U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Use an extended.css file to make selected modifications to a custom skin that is not significantly different from the parent skin on which it is based. An extended.css file overrides:</div><div id="wwID0EL12U" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The base.css or base.csi file in the parent skin package</div><div id="wwID0E312U" class="List_1_Continued">If you define an extended.csi file for a custom skin, the classes in it override only the corresponding classes in the base.css or base.csi file of the parent skin.</div><div id="wwID0EB22U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Use an extended.csi file to change selected references to a skin.properties.xml file, either in the custom skin package or in its parent. An extended.csi file overrides:</div><div id="wwID0EV22U" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The base.csi file in the parent skin package</div><div id="wwID0EF32U" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The base.csi file in the custom skin package, if you have created one.</div><div id="wwID0EW32U" class="List_1_Continued">Using an extended.csi file to create new classes is the simplest way to add new styles to a custom skin.</div><div id="wwID0E232U" class="List_1_Continued">As an alternative to defining extended.css files in the skin.properties.xml file, you can use import statements to include them in an extended.csi file. For example, the following statements cause two CSS files to be included during generation of the base.css for a skin:</div><div id="wwID0EA42U" class="Preformatted_1">@import url(@skin css/general.css;);�" <br />@import url(@skin css/dialog_styles.css;);�</div><div id="wwID0EG42U" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Use a base.csi file if you have made extensive modifications to the skin.properties file in the custom skin package that require a revised set of references. A base.csi file is required in any skin package that does not have a parent skin package.</div><div id="wwID0EX42U" class="List_1_Continued">If you define a base.csi file for a custom skin, it completely overrides any base.css or base.csi file in the parent skin. If the custom base.csi file contains a subset of the classes defined for the parent skin, the generated base.css file will contain only that same subset of classes.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

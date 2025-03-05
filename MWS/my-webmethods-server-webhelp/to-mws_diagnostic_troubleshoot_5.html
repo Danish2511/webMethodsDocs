@@ -1,0 +1,141 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Troubleshooting Log Issues</title><link rel="Prev" href="to-mws_diagnostic_troubleshoot_4.html" title="Previous" /><link rel="Next" href="re-jmx_mbeans.html" title="Next" /><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_my_webmethods_server_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/my-webmethods-server-webhelp/to-mws_diagnostic_troubleshoot_5.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pTFXuZ637dsowJcxF7t93WA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/my-webmethods-server-webhelp/to-mws_diagnostic_troubleshoot_5.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>My webMethods Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-about_mws_webhelp.html#wwconnect_header">My webMethods Server Webhelp</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/_my_webmethods_server_webhelp.1.733.html#wwconnect_header">Diagnosing My webMethods Server</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../my-webmethods-server-webhelp/to-mws_diagnostic_troubleshoot.html#wwconnect_header">Troubleshooting My webMethods Server Using Diagnostic Tools</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Troubleshooting Log Issues</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EO4AW" class="Heading_3">Troubleshooting Log Issues</div><div id="wwID0E54AW" class="Body"><span class="ph">My webMethods Server</span> provides a set of pre-configured log analysis tools that read and analyze log files created within <span class="ph">My webMethods Server</span> in accordance with the log4j mechanism. As an administrator, you configure a common data source file and analysis time period which is then used by all log analysis tools.</div><div id="wwID0EM5AW" class="Body">These tools are available in the <span class="ph">My webMethods</span> interface at <span class="uicontrol">Tools&nbsp;&gt; MWS Monitoring and Diagnostics&nbsp;&gt; Log Tracing and Analysis</span></div><div id="wwID0E15AW" class="Body">The following table outlines potential problems, a description of the problem, and a reference to the tool that assists for the resolution:</div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 30.8%"><div id="wwID0EDABW" class="Table_Cell_Head">Problem</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 34.5%"><div id="wwID0EJABW" class="Table_Cell_Head">Description</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 34.5%"><div id="wwID0EPABW" class="Table_Cell_Head">Reference</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDBBW" class="Table_Cell">You want to analyze the errors.log file.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPBBW" class="Table_Cell">The loganalyzer diagnostic tool analyzes the errors.log file, which is an XML file created in accordance with the log4j mechanism. The tool cannot examine plain text log files.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2BBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/re-loganalyzer-cmd.html#wwID0EHYOV"
+   
+     title="loganalyzer"
+    ><span class="heading-page">loganalyzer</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYCBW" class="Table_Cell">You want to organize the reported log issues on <span class="ph">My webMethods Server</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJDBW" class="Table_Cell">The loganalyzer tool examines the errors.log file you provide for analysis, and organizes the results in several reports that are displayed in the console window.</div><div id="wwID0EODBW" class="Table_Cell">Depending on the options you use when you start the tool, you can create several XML files that contain different reports.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1DBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/re-loganalyzer-cmd.html#wwID0EHYOV"
+   
+     title="loganalyzer"
+    ><span class="heading-page">loganalyzer</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EXEBW" class="Table_Cell">You want to analyze the average amount of log issues.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDFBW" class="Table_Cell">Use the loganalyzer diagnostic tool to quickly identify and analyze the amount of reported issues in the logs of <span class="ph">My webMethods Server</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUFBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/re-loganalyzer-cmd.html#wwID0EHYOV"
+   
+     title="loganalyzer"
+    ><span class="heading-page">loganalyzer</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERGBW" class="Table_Cell">The loganalyzer tool cannot map the issues to the relevant Java classes or packages.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4GBW" class="Table_Cell">The javaArtifactMapping.xml file might be out -of-date and may not contain information about new custom components.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJHBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/co-mws-java-artifact-mapping.html#wwID0EJDTV"
+   
+     title="Java Artifact Mapping in My webMethods Server"
+    ><span class="heading-page">Java Artifact Mapping in 
+						My webMethods Server </span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EGIBW" class="Table_Cell">The Log Analysis tool you are working with is not processing the correct log file.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESIBW" class="Table_Cell">The targeted log files (data source) is not configured correctly.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5IBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_21.html#wwID0EJCYV"
+   
+     title="Configuring Log Analysis Data Sources"
+    ><span class="heading-page">Configuring Log Analysis Data
+			 Sources</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2JBW" class="Table_Cell">The Log Analysis tool you are working with does not display correct entries on a date basis.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHKBW" class="Table_Cell">Be sure your date ranges are correctly set. If you select a period that goes beyond the captured date range, the log data is displayed only for what is captured in the logs.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ETKBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_22.html#wwID0EGOYV"
+   
+     title="Configuring the Log Analysis Time Period"
+    ><span class="heading-page">Configuring the Log Analysis Time
+			 Period</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQLBW" class="Table_Cell">You want to display statistics for all log issues.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E3LBW" class="Table_Cell">The Log Analysis tools display statistics about the logs in the configured data source file that occur in the configured period. Information about the total numb of appearances of the issues is displayed, as well as the time interval in which the issues appeared.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EIMBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a>.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFNBW" class="Table_Cell">You want to display and investigate only FATAL issues.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERNBW" class="Table_Cell">The Log FATAL Issues tool analyzes and displays only log messages of FATAL severity.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4NBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a> </div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E3OBW" class="Table_Cell">You want to display and investigate log issues by a specific component or product.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EIPBW" class="Table_Cell">To display thorough information about a particular component type or product, choose the respective graphic that is displayed on the tools. Depending on your selection, the tool opens the Issues For Component or Issues For Product tools and displays information about the logs of the respective component or product.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2PBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a> </div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1QBW" class="Table_Cell">You want to find out which portlets are used the most.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EGRBW" class="Table_Cell">The Most Used Portlets tool displays statistics about the ten most-used portlets in <span class="ph">My webMethods Server</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EXRBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a> </div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQSBW" class="Table_Cell">You want to find out which services are used the most</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E3SBW" class="Table_Cell">The Most Used Web Services tool displays statistics about the ten most-used Web services in <span class="ph">My webMethods Server</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ENTBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a> </div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMUBW" class="Table_Cell">You want to obtain more information about certain issues that are displayed by the other diagnostic tools.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYUBW" class="Table_Cell">The Log Issues tool analyzes and displays only log messages with the following severity:</div><div id="wwID0ESVBW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>WARNING</div><div id="wwID0EWWBW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>ERROR</div><div id="wwID0E1XBW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>FATAL</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVYBW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a> </div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUZBW" class="Table_Cell">You want to display more information about issues that are displayed by the Log Issues portlet.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EA1BW" class="Table_Cell">The Issue Details window displays thorough information about a particular log issue. You open the window by clicking a log issue in the following tools:</div><div id="wwID0E11BW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Log FATAL Issues</div><div id="wwID0E52BW" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Log Issues</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZ3BW" class="Table_Cell">For more information, see 
+    <a href="../my-webmethods-server-webhelp/to-mws_diagnostic_portlets_24.html#wwID0E1GZV"
+   
+     title="Using the Predefined Logging Tools"
+    ><span class="heading-page">Using the Predefined Logging
+			 Tools</span></a> </div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2004-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
