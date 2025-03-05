@@ -1,0 +1,106 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Advanced Configuration of API Portal</title><link rel="Prev" href="ta-restoring_default_settings_tenantwide.html" title="Previous" /><link rel="Next" href="co-securing_elasticsearch_access.html" title="Next" /><link rel="StyleSheet" href="css/_apiportal_integrated_webhelp_restructured_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_apiportal_integrated_webhelp_restructured_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/api-portal-integrated-webhelp/co-config_advanced_configuration_api_portal.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pyrFrxB_002fdi_002f6jzCq51qa3sQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/api-portal-integrated-webhelp/co-config_advanced_configuration_api_portal.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Portal</span>&nbsp;10.7 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/_apiportal_integrated_webhelp_restructured_diba2.1.006.html#wwconnect_header">webMethods API Portal for Administrators</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/_apiportal_integrated_webhelp_restructured_diba2.1.028.html#wwconnect_header">Configuring API Portal</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Advanced Configuration of API Portal</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EC4FM" class="Heading_2">Advanced Configuration of <span class="ph">API Portal</span></div><div id="wwID0EP4FM" class="Body">The user registration parameters are configurable from the <span class="ph">API Portal</span> user interface.</div><div id="wwID0EZ4FM" class="Body">You can perform advanced configurations from the <span class="ph">API Portal</span> user interface from Administration &gt; Configuration &gt; Configuration Settings. You can configure the validity period of e-mail activation link received through e-mail for registration, various e-mail notifications for success and failure for user registrations, and enabling audit log for access token events.</div><div id="wwID0ED5FM" class="Body">The table lists the advanced configurations in <span class="ph">API Portal</span>.</div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 33.3%"><div id="wwID0EO6FM" class="Table_Cell_Head">Step</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 66.6%"><div id="wwID0EU6FM" class="Table_Cell_Head">Where to find the procedures</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDAGM" class="Table_Cell">Import the <span class="ph">API Portal</span> license file.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUAGM" class="Table_Cell">
+    <a href="../api-portal-integrated-webhelp/co-config_license_file.html#wwID0E6XEK"
+   
+     title="API Portal License File"
+    ><span class="heading-page"> 
+				API Portal License File</span></a></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKBGM" class="Table_Cell">Create a technical user in <span class="ph">API Portal</span> and assign the user to the API Provider role.</div><div id="wwID0EUBGM" class="Table_Cell">Specify this user when registering an <span class="ph">API Portal</span> instance in <span class="ph">CentraSite</span> and <span class="ph">API Gateway</span>. It is considered a best practice not to tie critical actions (such as publishing data or APIs) to a real user whose credentials can expire.</div><div id="wwID0EGCGM" class="Note"><span class="Bold">Note:</span><span class="ph">Software&nbsp;AG</span> recommends specifying the same user credentials as the technical user created in <span class="ph">CentraSite</span>, <span class="ph">Mediator</span> and <span class="ph">API Gateway</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESDGM" class="Table_Cell">
+    <a href="../api-portal-integrated-webhelp/co-um_overview_managing_users.html#wwID0EKJCO"
+   
+     title="Overview of Managing Users"
+    ><span class="heading-page">Overview of Managing Users</span></a></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EIEGM" class="Table_Cell">Customize the <span class="ph">API Portal</span> user registration and the e-mail-templates for user registration.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZEGM" class="Table_Cell">
+    <a href="../api-portal-integrated-webhelp/co-config_registering_users.html#wwID0E4VFK"
+   
+     title="Configuring User Registration"
+    ><span class="heading-page">Configuring User Registration</span></a></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPFGM" class="Table_Cell">Define the advanced configurations of <span class="ph">API Portal</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EAGGM" class="Table_Cell">
+    <a href="../api-portal-integrated-webhelp/APIP_Config_Settings.html#wwID0EXDEM"
+   
+     title="Configuration Settings"
+    ><span class="heading-page">Configuration Settings</span></a></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EWGGM" class="Table_Cell">Customize the user registration with social media for <span class="ph">API Portal</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHHGM" class="Table_Cell">
+    <a href="../api-portal-integrated-webhelp/co-config_user_reg_social_network.html#wwID0EB6BM"
+   
+     title="User Registration in API Portal with Social Login"
+    ><span class="heading-page">User Registration in 
+				API Portal with Social Login</span></a></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4HGM" class="Table_Cell">Customize the <span class="ph">API Portal</span> branding and set up <span class="ph">API Portal</span> templates.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESIGM" class="Table_Cell">
+    <a href="../api-portal-integrated-webhelp/APIP_Views.html#wwID0EMTRO"
+   
+     title="API Portal Views"
+    ><span class="heading-page">API Portal
+				Views</span></a></div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2014-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Handling Events</title><link rel="Prev" href="co-assetmgt_publishing_apis_to_api_portal.html" title="Previous" /><link rel="Next" href="co-assetmgt_api_portal_extension_points.html" title="Next" /><link rel="StyleSheet" href="css/_apiportal_integrated_webhelp_restructured_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_apiportal_integrated_webhelp_restructured_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/api-portal-integrated-webhelp/co-assetmgt_handling_requests_for_api_access_tokens.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pHfdaA2JYRgKlVYza0eM38A" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/api-portal-integrated-webhelp/co-assetmgt_handling_requests_for_api_access_tokens.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Portal</span>&nbsp;10.7 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/_apiportal_integrated_webhelp_restructured_diba2.1.006.html#wwconnect_header">webMethods API Portal for Administrators</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/_apiportal_integrated_webhelp_restructured_diba2.1.130.html#wwconnect_header">Managing API Assets</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Handling Events</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EFPHO" class="Heading_2">Handling Events</div><div id="wwID0ENPHO" class="Body">Starting from 9.12 version, <span class="ph">API Portal</span> logs the events related to access token like key request, key renew, and key revoke in an events table. The events table also handles events related to user update and user delete.</div><div id="wwID0EXPHO" class="Body">The events mechanism has two approaches namely, Push and Pull. In the Push mechanism, the event, once saved in events table, is published to the callback URL of the key provider, whereas, in the Pull mechanism the key provider queries the events from the events table.</div><div id="wwID0E3PHO" class="Body"><span class="inlinetitle">APIs published from CentraSite</span></div><div id="wwID0EGQHO" class="Body">When an API developer signs up and requests an API access token, <span class="ph">API Portal</span> logs the request in the local database events table with the status as NEW and sends the API developer’s sign-up or key request to <span class="ph">CentraSite</span> (when <span class="ph">CentraSite</span> is in the online mode). If <span class="ph">CentraSite</span> is in the offline mode, a scheduler in <span class="ph">CentraSite</span> polls the events database and gets the list of requests or events that are in NEW state, once it is online. Once the queried event reaches <span class="ph">CentraSite</span>, the status changes to INPROGRESS in the events table of <span class="ph">API Portal</span>.</div><div id="wwID0EIRHO" class="Body"><span class="ph">CentraSite</span> then generates a key, sends the key through an email to the requesting API developer and deploys the key to <span class="ph">Mediator</span>. Once the successful request reaches <span class="ph">API Portal</span>, the status of the event in the events table changes from INPROGRESS to COMPLETED. If the request is rejected in <span class="ph">CentraSite</span>, then the status of the event in the events table changes from INPROGRESS to REJECTED.</div><div id="wwID0E4RHO" class="Body">On receiving the email, the API developer includes the key in the application so that, at run time, when the application communicates with the virtual service at the <span class="ph">Mediator</span> target endpoint, <span class="ph">Mediator</span> calls the native service. <span class="ph">Mediator</span> acts as a key enforcer validating the key contained in the application’s header. In addition to key validation, <span class="ph">Mediator</span> also collects metrics about the application and sends that data to <span class="ph">CentraSite</span> for analysis and displaying the information on dashboards.</div><div id="wwID0E3SHO" class="Note"><span class="Bold">Note:<br /></span>For <span class="ph">API Portal</span> 9.12 configured with <span class="ph">CentraSite</span> 9.10, the key request handling for API access tokens for the APIs published from <span class="ph">CentraSite</span> 9.10 to <span class="ph">API Portal</span> 9.12, works the same way as it did when the API was published to <span class="ph">API Portal</span> 9.10, except for the introduction of events table.</div><div id="wwID0EHUHO" class="Body"><span class="inlinetitle">Querying the requests that have the status as NEW</span></div><div id="wwID0ERUHO" class="Body">Method: GET</div><div id="wwID0EWUHO" class="Body">EndPointURL: http://<span class="varname">&lt;host&gt;</span>:<span class="varname">&lt;port&gt;</span>/ abs/apirepository/v1/events?eventStatus=NEW</div><div id="wwID0EGVHO" class="Body"><span class="inlinetitle">Updating the status of an event after processing</span></div><div id="wwID0EQVHO" class="Body">Method: POST</div><div id="wwID0EVVHO" class="Body">EndPointURL: http://<span class="varname">&lt;host&gt;</span>:<span class="varname">&lt;port&gt;</span>/ abs/apirepository/v1/events</div><div id="wwID0EFWHO" class="Body">Request payload</div><div id="wwID0EKWHO" class="Preformatted">[  <br />	{  <br />      		"eventId":"&lt;eventId&gt;",<br />      		"eventStatus":"ACCEPTED/REJECTED"<br />	}<br />] <br /></div><div id="wwID0EQWHO" class="Body">If the response event status is ACCEPTED then the status for the request in events table is updated to INPROGRESS, else it is moved to the status REJECTED. Events in INPROGRESS state can be queried by providers and the request processed. Once the event id is processed it moves to the COMPLETED state. The events in REJECTED and COMPLETED states are cleared based on the value provided for <span class="uicontrol">Events expiry days</span> variable in the <span class="uicontrol">Administration &gt; Configuration Settings</span> page.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2014-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

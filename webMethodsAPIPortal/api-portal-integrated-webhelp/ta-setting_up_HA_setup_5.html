@@ -1,0 +1,84 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Reconfiguring Other Runnables</title><link rel="Prev" href="ta-setting_up_HA_setup_4.html" title="Previous" /><link rel="Next" href="ta-setting_up_HA_setup_6.html" title="Next" /><link rel="StyleSheet" href="css/_apiportal_integrated_webhelp_restructured_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_apiportal_integrated_webhelp_restructured_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/api-portal-integrated-webhelp/ta-setting_up_HA_setup_5.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pgu9X3XO2PHJ390d8hLN2_002bw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/api-portal-integrated-webhelp/ta-setting_up_HA_setup_5.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Portal</span>&nbsp;10.7 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/_apiportal_integrated_webhelp_restructured_diba2.1.006.html#wwconnect_header">webMethods API Portal for Administrators</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/_apiportal_integrated_webhelp_restructured_diba2.1.028.html#wwconnect_header">Configuring API Portal</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/co-ha_setup.html#wwconnect_header">High Availability setup in API Portal</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../api-portal-integrated-webhelp/ta-setting_up_HA_setup.html#wwconnect_header">Setting up API Portal HA setup</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Reconfiguring Other Runnables</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EWONM" class="Heading_4">Reconfiguring Other Runnables</div><div id="wwID0EGPNM" class="Body">After the Elasticsearch, you must reconfigure other runnables and specify the order in which they must be started.</div><div id="wwID0ESPNM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Reconfigure Kibana runnable on all three nodes as follows: </span></div><div id="wwID0EPQNM" class="Preformatted_1">on n1 reconfigure kibana_s kibanacfg.elasticsearch.username="esUserName" <br />kibanacfg.elasticsearch.password="esPassword" <br />kibanacfg.elasticsearch.hosts="[\"machine1:esHTTPport\",\"http://machine2:esHTTPport\",<br />\"http://machine3:esHTTPport\"]" -zookeeper.connect.string</div><div id="wwID0EVQNM" class="Preformatted_1">on n2 reconfigure kibana_s kibanacfg.elasticsearch.username="esUserName" <br />kibanacfg.elasticsearch.password="esPassword"  <br />kibanacfg.elasticsearch.hosts="[\"machine1:esHTTPport\",\"http://machine2:esHTTPport\",<br />\"http://machine3:esHTTPport\"]" -zookeeper.connect.string</div><div id="wwID0E2QNM" class="Preformatted_1">on n3 reconfigure kibana_s kibanacfg.elasticsearch.username="esUserName" <br />kibanacfg.elasticsearch.password="esPassword" <br />kibanacfg.elasticsearch.hosts="[\"machine1:esHTTPport\",\"http://machine2:esHTTPport\",<br />\"http://machine3:esHTTPport\"]" -zookeeper.connect.string</div><div id="wwID0EBRNM" class="Note_1"><span class="Bold">Note:<br /></span>In the above three commands, replace machine1, machine2, and machine3 with the names or IP addresses of your machines and esHTTPport with Elasticsearch HTTP Port. You can retrieve the HTTP port of an Elasticsearch runnable by running the <span class="userinput">show runnable elastic_s</span> command in ACC. esUserName and esPassword are the username and password of the Elasticsearch instance you have configured for the high availability setup in Step 3 of the previous section.</div><div id="wwID0E4RNM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Reconfigure the PostgreSQL database on n1, so that it knows about all zookeeper cluster members and accepts connections from all locations, by running the following command: </span></div><div id="wwID0E1SNM" class="Preformatted_1">on n1 reconfigure postgres_s -zookeeper.connect.string  <br />+postgresql.listen_addresses = "'*'"</div><div id="wwID0EBTNM" class="Step_Info_1">The only kind of scaling that is possible with PostgreSQL at the moment is that of scaling across tenants. Currently, the data of a single tenant always resides in a single database instance, so the load created by a single tenant on the database instance needs to be handled by that instance. At the same time, a tenant's database instance is a single point of failure for that tenant; if the tenant's DB goes offline, the tenant becomes unusable until the DB is available again. In particular for production use on mission critical systems, when high availability is of interest, this approach is not an ideal solution. Since <span class="ph">API Portal</span> does not support a highly available configuration using our PostgreSQL runnable, you have to use an external DBMS like Oracle or MS SQL, which offer mechanisms for clustering and high availability. For details on configuring external databases, see 
+    <a href="../api-portal-integrated-webhelp/co-config_configuration_api_portal_external_db.html#wwID0EG6GM"
+   
+     title="Configuring API Portal with External Databases"
+    ><span class="heading-page">Configuring 
+				API Portal with External Databases</span></a>.</div><div id="wwID0EXTNM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command"> Define two cloudsearch instances, on the nodes n2 and n3, where each one belongs to a different data center: </span></div><div id="wwID0EUUNM" class="Preformatted_1">on n2 reconfigure cloudsearch_s -zookeeper.connect.string <br />+zookeeper.application.instance.datacenter = n2<br />on n3 reconfigure cloudsearch_s -zookeeper.connect.string <br />+zookeeper.application.instance.datacenter = n3</div><div id="wwID0E3UNM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command"> Reconfigure the apiportalbundle runnable on the nodes n2 and n3 as follows: </span></div><div id="wwID0EZVNM" class="Preformatted_1">on n2 reconfigure apiportalbundle_s -zookeeper.connect.string<br />on n3 reconfigure apiportalbundle_s -zookeeper.connect.string</div><div id="wwID0EBWNM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command"> Reconfigure the loadbalancer on n1 to point to all three zookeeper cluster members as follows: </span></div><div id="wwID0E5WNM" class="Preformatted_1">on n1 reconfigure loadbalancer_s -zookeeper.connect.string<br />on n2 reconfigure loadbalancer_s -zookeeper.connect.string<br />on n3 reconfigure loadbalancer_s -zookeeper.connect.string</div><div id="wwID0EEXNM" class="Body_1"><span class="ph">API Portal</span> can be accessed through multiple hostnames. If one of the loadbalancer fails, the application can be accessed using the other available loadbalancers. You can ignore this step if external load balancer is not required. If you have an external load balancer <span class="ph">Software&nbsp;AG</span> recommends you to place a highly available loadbalancer (HA LB) in front of the loadbalancer runnables. To do this the following has to be added to the loadbalancer runnable configuration:</div><div id="wwID0EWXNM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">HTTPD.servername</span> to specify the hostname or IP address of the HA loadbalancer</div><div id="wwID0EMYNM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">HTTPD.zookeeper.application.instance.port</span>, the port on which the HA loadbalancer receives the http/https requests</div><div id="wwID0ECZNM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">zookeeper.application.instance.scheme</span> which specifies the scheme http/https</div><div id="wwID0E1ZNM" class="Body_1">For example:</div><div id="wwID0E6ZNM" class="Preformatted_1">on n1 reconfigure loadbalancer_s HTTPD.servername=<span class="varname">HTTPD.servername</span> <br />HTTPD.zookeeper.application.instance.port=<span class="varname">PORT</span> <br />zookeeper.application.instance.scheme=<span class="varname">SCHEME</span></div><div id="wwID0EX1NM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command"> Change the startup order of the runnables by running the following commands: </span></div><div id="wwID0EU2NM" class="Preformatted_1">ACC+ n1&gt;on n1 set runnable.order = "zoo0 &lt; (elastic_s, kibana_s, postgres_s) <br />&lt; loadbalancer_s"<br />ACC+ n1&gt;on n2 set runnable.order = "zoo0 &lt; (elastic_s, kibana_s) <br />&lt; cloudsearch_s &lt; apiportalbundle_s &lt; loadbalancer_s"<br />ACC+ n1&gt;on n3 set runnable.order = "zoo0 &lt; (elastic_s, kibana_s) <br />&lt; cloudsearch_s &lt; apiportalbundle_s &lt; loadbalancer_s"</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2014-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
