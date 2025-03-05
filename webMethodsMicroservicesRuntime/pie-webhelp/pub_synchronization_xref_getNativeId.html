@@ -1,0 +1,95 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>pub.synchronization.xref:getNativeId</title><link rel="Prev" href="pub_synchronization_xref_getCanonicalKey.html" title="Previous" /><link rel="Next" href="pub_synchronization_xref_insertXReference.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/pub_synchronization_xref_getNativeId.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pftsD_002bYlEK5nun2A8L1ELLA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/pub_synchronization_xref_getNativeId.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/Synchronization%20Folder.html#wwconnect_header">Synchronization Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/Synchronization%20folder2.html#wwconnect_header">Summary of Elements in this Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">pub.synchronization.xref:getNativeId</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E1YRJB" class="Heading_3">pub.synchronization.xref:getNativeId</div><div id="wwID0EZZRJB" class="Body">WmPublic. Retrieves the native ID of a resource record associated with a canonical key.</div><div id="wwID0EG1RJB" class="Section_Title">Input Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 17%"><div id="wwID0EO2RJB" class="Table_Cell"><span class="varname">appId</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 82.9%"><div id="wwID0E12RJB" class="Table_Cell"><span class="bisdatatype">String</span> A unique identifier for the resource from which you want to retrieve the native ID associated with the provided canonical key.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EL3RJB" class="Table_Cell"><span class="varname">canonicalKey</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EX3RJB" class="Table_Cell"><span class="bisdatatype">String</span> The canonical key for which you want to obtain the corresponding native ID.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EI4RJB" class="Table_Cell"><span class="varname">objectId</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EU4RJB" class="Table_Cell"><span class="bisdatatype">String</span> A unique identifier for the object or process being synchronized. Typically, the <span class="varname">objectId</span> field is set to the name of the business process for which you are performing synchronization, such as "order" or "customer."</div></td></tr></table></div><div id="wwID0EP5RJB" class="Section_Title">Output Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 17.1%"><div id="wwID0EX6RJB" class="Table_Cell"><span class="varname">nativeId</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 82.8%"><div id="wwID0EDASJB" class="Table_Cell"><span class="bisdatatype">String</span> A unique identifier for the resource record associated with the provided canonical key. If the requested <span class="varname">nativeId</span> cannot be found in the cross-reference table, an empty string is returned.</div></td></tr></table></div><div id="wwID0EABSJB" class="Section_Title">Usage Notes</div><div id="wwID0EFBSJB" class="Body">You can use the <span class="apiname">getNativeId</span> service on the target side of a synchronization to determine if the record in the target resource needs to be inserted or just updated.</div><div id="wwID0EUBSJB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the native ID does not exist (the <span class="varname">nativeId</span> field contains an empty string) and you specified the correct input values, then the record does not exist in the resource. You will need to insert the record in the resource to generate the native ID. Then use the 
+    <a href="../pie-webhelp/pub_synchronization_xref_insertXReference.html#wwID0EMGSJB"
+   
+     title="pub.synchronization.xref:insertXReference"
+    ><span class="apiname-only">pub.synchronization.xref:insertXReference</span></a> service to insert a cross-reference between the native ID and the canonical key.</div><div id="wwID0ETCSJB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the native ID exists (the <span class="varname">nativeId</span> field contains a value), then a cross-reference between the canonical key and the record already exists. The record already exists in the resource and only needs to be updated.</div><div id="wwID0EKDSJB" class="Body">After you insert or update the record in the resource, make sure to use 
+    <a href="../pie-webhelp/pub_synchronization_latch_closeLatch.html#wwID0ENWPJB"
+   
+     title="pub.synchronization.latch:closeLatch"
+    ><span class="apiname-only">pub.synchronization.latch:closeLatch</span></a> to close the latch for the record to prevent circular updates (echoes).</div><div id="wwID0EZDSJB" class="Body">For more information about using the <span class="apiname">getNativeId</span> service in synchronizations, see the <span class="ph"> </span><span class="ph_002c_Citation">Publish-Subscribe Developer’s Guide</span>.</div><div id="wwID0EWESJB" class="Section_Title">See Also</div><div id="wwID0EAFSJB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_synchronization_latch_closeLatch.html#wwID0ENWPJB"
+   
+     title="pub.synchronization.latch:closeLatch"
+    ><span class="apiname-only">pub.synchronization.latch:closeLatch</span></a></div><div id="wwID0EPFSJB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_synchronization_xref_insertXReference.html#wwID0EMGSJB"
+   
+     title="pub.synchronization.xref:insertXReference"
+    ><span class="apiname-only">pub.synchronization.xref:insertXReference</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

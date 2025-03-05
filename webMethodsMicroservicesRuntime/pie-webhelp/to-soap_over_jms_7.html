@@ -1,0 +1,97 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Using SOAP/JMS with Consumer Web Service Descriptors</title><link rel="Prev" href="to-soap_over_jms_6.html" title="Previous" /><link rel="Next" href="to-soap_over_jms_8.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/to-soap_over_jms_7.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="puoWR6MhusTKaEogkXvA6fw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/to-soap_over_jms_7.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_webservices_guide.html#wwconnect_header">Web Services Developer’s Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-soap_over_jms.html#wwconnect_header">Using SOAP over JMS with Web Services</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Using SOAP/JMS with Consumer Web Service Descriptors</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EWOMQB" class="Heading_2">Using SOAP/JMS with Consumer Web Service Descriptors</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/to-soap_over_jms_8.html#wwconnect_header">Run-Time Behavior for a Web Service Connector that Uses a SOAP/JMS Binding</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/to-soap_over_jms_9.html#wwconnect_header">Additional Guidelines for Using SOAP/JMS with Consumer Web Service Descriptors</a></div></dd></dl></div><div id="wwID0E6OMQB" class="Body">To use <span class="ph">Integration Server</span> as a web service client that sends SOAP over JMS messages, you need a service that creates a SOAP message, places it in a JMS message, and then sends the JMS message to the JMS provider. <span class="ph">Integration Server</span> creates a web service connector that does all of these tasks when you create a consumer web service descriptor from a WSDL document with SOAP/JMS bindings. In addition to creating the consumer web service descriptor, you can specify how <span class="ph">Integration Server</span> will connect to the JMS provider and supplement or overwrite JMS URI information provided in the WSDL document.</div><div id="wwID0ERPMQB" class="Body">The following table identifies the basic steps that you need to complete to use <span class="ph">Integration Server</span> as a web service client that sends SOAP/JMS messages.</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 9%"><div id="wwID0EARMQB" class="Table_Cell_Head">Step</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 90.9%"><div id="wwID0EGRMQB" class="Table_Cell_Head">Description</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVRMQB" class="internalhead">1</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2RMQB" class="Table_Cell"><span class="inlinetitle">Create a consumer web service descriptor.</span></div><div id="wwID0EGSMQB" class="Table_Cell">When you create a consumer web service descriptor from a WSDL document that contains a SOAP/JMS binding, <span class="ph">Integration Server</span> creates a JMS binder for the web service descriptor. The JMS binder encapsulates the information needed to send a message to the JMS provider, including the destination and JMS message header values.</div><div id="wwID0EQSMQB" class="Table_Cell">For more information about creating a consumer web service descriptor, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Service Development Help</span>.</div><div id="wwID0EATMQB" class="Note"><span class="Bold">Note:<br /></span>Binders cannot be added to consumer web service descriptors.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E3TMQB" class="internalhead">2</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ECUMQB" class="Table_Cell"><span class="inlinetitle">Optionally, create a consumer web service endpoint alias for JMS.</span></div><div id="wwID0ENUMQB" class="Table_Cell">If you want to supplement or replace the binding information contained in the WSDL document, create a consumer web service endpoint alias.</div><div id="wwID0ESUMQB" class="Note"><span class="Bold">Note:<br /></span>The SOAP over Java Message Service standard requires only that the WSDL document contain the lookup variant and the destination. Consequently, it is possible that some of the details needed to connect to the JMS provider are absent from the JMS binder.</div><div id="wwID0EIVMQB" class="Table_Cell">For more information about creating a consumer web service endpoint alias for use with JMS, see 
+    <a href="../pie-webhelp/to-ws_endpoint_alias_8.html#wwID0E4HIT"
+   
+     title="Creating an Endpoint Alias for a Consumer Web Service Descriptor for Use with JMS"
+    ><span class="ph_002c_heading-page">Creating an Endpoint Alias for a Consumer Web
+						Service Descriptor for Use with JMS</span></a><span class="ph">.</span></div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFWMQB" class="internalhead">3</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELWMQB" class="Table_Cell"><span class="inlinetitle">Optionally, assign the consumer web service endpoint alias to the JMS binder.</span></div><div id="wwID0EYWMQB" class="Table_Cell">If you created a web service endpoint alias that you want to use to supplement or replace the JMS URI information from the WSDL document, assign the alias to the JMS binder.</div><div id="wwID0E4WMQB" class="Table_Cell">For more information about assigning web service endpoint aliases to binders, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Service Development Help</span>.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ETXMQB" class="internalhead">4</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZXMQB" class="Table_Cell"><span class="inlinetitle">Configure use of the client side queue.</span></div><div id="wwID0EEYMQB" class="Table_Cell">The client side queue is a message store that contains JMS messages sent when the JMS provider was not available. Messages remain in the client side queue until the JMS provider becomes available. For each JMS binder, you can decide whether or not to use the client side queue.</div><div id="wwID0EJYMQB" class="Table_Cell">For more information about configuring the client side queue for a JMS binder, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Service Development Help</span></div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6YMQB" class="internalhead">5</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFZMQB" class="Table_Cell"><span class="inlinetitle">Build a service that invokes the web service connector.</span></div><div id="wwID0EQZMQB" class="Table_Cell">When you create a service that invokes a web service connector, you supply values to use as input to the web service connector. These values determine the content of the SOAP message request.</div><div id="wwID0EVZMQB" class="Table_Cell">When using a SOAP/JMS binding, you can pass in name/value pairs to the <span class="varname">transportHeaders</span> parameter. <span class="ph">Integration Server</span> creates JMS message headers and properties from the name/value pairs. You can also use name/value pairs to overwrite binding details specified in the source WSDL document or in the consumer web service endpoint alias assigned to the JMS binder.</div><div id="wwID0EE1MQB" class="Table_Cell">For more information about the web service connector signature, see 
+    <a href="../pie-webhelp/to-working_with_ws_connectors_3.html#wwID0ERZOQB"
+   
+     title="Signature for a Web Service Connector"
+    ><span class="heading-page">Signature for a Web Service Connector</span></a>.</div><div id="wwID0ET1MQB" class="Table_Cell">For more information about supplying transport headers and name/value pairs, see 
+    <a href="../pie-webhelp/to-working_with_ws_connectors_8.html#wwID0EKQ1QB"
+   
+     title="Setting Transport Headers for JMS"
+    ><span class="heading-page">Setting Transport Headers for JMS</span></a>.</div><div id="wwID0EC2MQB" class="Table_Cell">For information about supplying security information into a web service connector, see 
+    <a href="../pie-webhelp/to-working_with_ws_connectors_9.html#wwID0EVX2QB"
+   
+     title="Passing Message-Level Security Information to a Web Service Connector"
+    ><span class="heading-page">Passing Message-Level Security Information to
+						a Web Service Connector</span></a>.</div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

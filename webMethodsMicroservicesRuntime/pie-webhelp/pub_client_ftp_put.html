@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>pub.client.ftp:put</title><link rel="Prev" href="pub_client_ftp_mput.html" title="Previous" /><link rel="Next" href="pub_client_ftp_putCompletedNotification.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/pub_client_ftp_put.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pO07PhCevH4qfJgfD1JoNeQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/pub_client_ftp_put.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/Client%20folder.html#wwconnect_header">Client Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/Client%20folder2.html#wwconnect_header">Summary of Elements in this Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">pub.client.ftp:put</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EUJB6" class="Heading_3">pub.client.ftp:put</div><div id="wwID0ETKB6" class="Body">WmPublic. Transfers a file to a remote FTP server. (This service corresponds to the standard FTP command <span class="codeph">put</span>.)</div><div id="wwID0EHLB6" class="Section_Title">Input Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 20.2%"><div id="wwID0ESMB6" class="Table_Cell"><span class="varname">sessionkey</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 79.7%"><div id="wwID0E5MB6" class="Table_Cell"><span class="bisdatatype">String</span> Unique key for the current FTP session. The <span class="varname">sessionkey</span> is returned by the 
+    <a href="../pie-webhelp/pub_client_ftp_login.html#wwID0E2Z45"
+   
+     title="pub.client.ftp:login"
+    ><span class="apiname-only">pub.client.ftp:login</span></a> service.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4NB6" class="Table_Cell"><span class="varname">transfermode</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJOB6" class="Table_Cell"><span class="bisdatatype">String</span> FTP file transfer mode (<span class="codeph">ascii</span> or <span class="codeph">binary</span>). The default is <span class="codeph">ascii</span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EGPB6" class="Table_Cell"><span class="varname">content</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESPB6" class="Table_Cell"><span class="bisdatatype">java.io.InputStream, byte[ ], or String</span> Data to be transferred to the remote file.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDQB6" class="Table_Cell"><span class="varname">localfile</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPQB6" class="Table_Cell"><span class="bisdatatype">String</span> Optional. Name of the local file to be appended to the remote file. Used only if <span class="varname">content</span> is not specified.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFRB6" class="Table_Cell"><span class="varname">remotefile</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERRB6" class="Table_Cell"><span class="bisdatatype">String</span> The name of the remote file.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ECSB6" class="Table_Cell"><span class="varname">putunique</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EOSB6" class="Table_Cell"><span class="bisdatatype">String</span> Optional. Indicates whether to send a STOR or a STOU (Store as Unique File) command to the remote FTP server. Set to:</div><div id="wwID0E6SB6" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">true</span> to send a STOU (Store as Unique File) command.</div><div id="wwID0EWTB6" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">false</span> to send a STOR command. This is the default.</div></td></tr></table></div><div id="wwID0E2UB6" class="Section_Title">Output Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 20.6%"><div id="wwID0EGWB6" class="Table_Cell"><span class="varname">returncode</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 79.3%"><div id="wwID0ESWB6" class="Table_Cell"><span class="bisdatatype">String</span> Standard FTP protocol return code.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EDXB6" class="Table_Cell"><span class="varname">returnmsg</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPXB6" class="Table_Cell"><span class="bisdatatype">String</span> Standard FTP protocol return message.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EAYB6" class="Table_Cell"><span class="varname">logmsg</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMYB6" class="Table_Cell"><span class="bisdatatype">String</span> FTP log messages for the entire user session.</div></td></tr></table></div><div id="wwID0EEZB6" class="Section_Title">Usage Notes</div><div id="wwID0EC1B6" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Some FTP servers, such as the <span class="ph">Integration Server</span> FTP Listener, do not support "putting" a unique file. When using the <span class="apiname">pub.client.ftp:put</span> or <span class="apiname">pub.client.ftp:mput</span> service to put a unique file to an FTP server that does not support putting a unique file, you will encounter an error like this one:</div><div id="wwID0EC2B6" class="Preformatted_1">com.wm.app.b2b.server.ServiceException: 500 'STOU': command not understood.</div><div id="wwID0E32B6" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When a client invokes this service to transport a file, the FTP listener determines the content handler to use based on the file's extension. The content handler converts the file content to the input values for the service to invoke. The <span class="ph"> </span><span class="ph_002c_emphasis">Integration&nbsp;Server_directory</span><span class="ph"> </span>\instances\<span class="varname">instance_name</span>\lib\mime.types file contains the mappings of file extension to content type.</div><div id="wwID0E53B6" class="List_1_Continued">By default, if this service encounters a file that has no file extension, the default content handler is used. To override this, you can configure any content handler to handle files that have no file extension. To do this, add a line in the <span class="ph"> </span><span class="ph_002c_emphasis">Integration&nbsp;Server_directory</span><span class="ph"> </span>\instances\<span class="varname">instance_name</span>\lib\mime.types file that specifies the content type of the files with no extension, and the ftp_no_extension key. For example, to allow a content handler to accept text/xml files that have no extension, add this line to your mime.types file:</div><div id="wwID0EU4B6" class="Preformatted_1">text/xml          ftp_no_extension</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

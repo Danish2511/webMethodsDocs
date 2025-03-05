@@ -1,0 +1,100 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Overview of the Server Log</title><link rel="Prev" href="to-server_log.html" title="Previous" /><link rel="Next" href="to-server_log_3.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/to-server_log_2.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN_002b6jCnAOhAgWIQB9VOd20fQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/to-server_log_2.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_admin_guide.html#wwconnect_header">Integration Server Administrator's Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-server_log.html#wwconnect_header">Setting Up the Server Log</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Overview of the Server Log</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EREMR" class="Heading_2">Overview of the Server Log</div><div id="wwID0E1EMR" class="Body">The <span class="ph">Integration Server</span> server log contains information about operations and errors that occur on <span class="ph">Integration Server</span>, such as the starting of <span class="ph">Integration Server</span> subsystems and the loading of packages belonging to <span class="ph">Integration Server</span> or other <span class="ph">webMethods</span> products. Entries are written to the server log by <span class="ph">Integration Server</span>'s major subsystems, called <span class="term">facilities</span>. For example, the <span class="ph">Integration Server</span> package facility writes server log entries when it loads and unloads packages, the <span class="ph">Integration Server</span> flow manager facility writes server log entries when it processes a flow service, and <span class="ph">Integration Server</span>'s HTTP ports write server log entries when they receive requests. Entries are also written to the server log by facilities for individual products that are installed on <span class="ph">Integration Server</span>, such as <span class="ph">Trading Networks Server</span> or adapters. Below is an excerpt from a sample server log.</div><div id="wwID0EQGMR" class="Preformatted">2021-01-28 15:34:40 EST [ISS.0025.0006I] (tid=82) License Manager started <br />2021-01-28 15:34:41 EST [ISS.0025.0049I] (tid=82) The JCE Unlimited Strength Jurisdiction Policy File was found } <br />2021-01-28 15:34:41 EST [ISS.0025.0041I] (tid=82) FIPS mode not initialized <br />2021-01-28 15:34:43 EST [ISS.0096.0002W] (tid=82) JDBCConnectionManager: creating Embedded Pool Alias for Xref. <br />2021-01-28 15:34:43 EST [ISS.0096.0002W] (tid=82) JDBCConnectionManager: creating Embedded Pool Alias for ISInternal. <br />2021-01-28 15:34:43 EST [ISS.0096.0003I] (tid=82) JDBCConnectionManager: creating database object for embedded database: IS_USER_TASKS.LAST_UPDATED 2 <br />021-01-28 15:34:43 EST [ISS.0025.0024I] (tid=82) JDBC Connection Manager started <br />2021-01-28 15:34:43 EST [ISS.0095.0026W] (tid=82) The AuditConfig.xml file was not found and is being created. The audit logging system is using default settings. <br />2021-01-28 15:34:43 EST [ISS.0095.0025W] (tid=82) The auditing.cnf file was not found and is being created. 2021-01-28 15:34:43 EST [ISS.0095.0025W] (tid=82) The transient.sql.errors.xml file was not found and is being created. <br />2021-01-28 15:34:44 EST [ISS.0095.0013I] (tid=82) Audit Logging initialized. <br />2021-01-28 15:34:44 EST [ISS.0017.0080I] (tid=279) Migrated the SoftwareAG-IS-WMN.xml cache manager configuration to the Ehcache 2.8.x format. <br />2021-01-28 15:34:45 EST [ISS.0045.0096I] (tid=82) Startup action for the IS Statistics Data Collector is underway.</div><div id="wwID0EWGMR" class="Body">By default, all facilities write to the server log, and the facilities write log entries about critical, error, warning, informational, and debug-related situations. You can have only selected facilities write to the log, and you can increase or decrease the amount of data the facilities provide. This flexibility is useful for troubleshooting. For example, you might temporarily increase the level of detail written to the server log to help uncover the cause of an <span class="ph">Integration Server</span> error or performance problem, and return to a lower level once the problem is resolved. You can also override the amount of information to include in the server log for a particular <span class="ph">Integration Server</span> session.</div><div id="wwID0EEHMR" class="Body">By default, <span class="ph">Integration Server</span> queues log entries written by its facilities in memory, then uses a background thread to write them to the server log. You can change that property so that facilities write directly to the server log. Using a background thread improves <span class="ph">Integration Server</span> performance, but writing directly causes the entries to appear in the server log more quickly.</div><div id="wwID0ESHMR" class="Body"><span class="ph">Integration Server</span> always writes server log entries to flat files; you cannot store the server log in a database. By default, <span class="ph">Integration Server</span> writes server log entries for the current day (defined as midnight to midnight) to the server.log file. However, you can configure <span class="ph">Integration Server</span> to rotate the server.log file by size instead of by day. For more information, see 
+    <a href="../pie-webhelp/to-server_log_7.html#wwID0ECNNR"
+   
+     title="Configuring the Server Log to Rotate Based on Size"
+    ><span class="heading-page">Configuring the Server Log to Rotate Based on
+						Size</span></a>.</div><div id="wwID0ENIMR" class="Body">When rotating the server log file, either by day or by size, <span class="ph">Integration Server</span> renames the current server.log file to have the archive file name and starts a new server.log file. The archive file names include the date (<span class="varname">yyyymmdd</span>) on which the log entries were originally written.</div><div id="wwID0E3IMR" class="Body">By default, all log and archive files are stored in the <span class="ph"> </span><span class="ph_002c_emphasis">Integration&nbsp;Server_directory</span><span class="ph"> </span>\instances<span class="varname">\instance_name\</span>logs directory. For information about changing the location of the server.log file, see 
+    <a href="../pie-webhelp/to-server_log_6.html#wwID0E1HNR"
+   
+     title="Changing the Default Server Log Location"
+    ><span class="heading-page">Changing the Default Server Log
+						Location</span></a>.</div><div id="wwID0E2JMR" class="Body"><span class="ph">Integration Server</span> keeps each server log file that it creates. However, to preserve resources, you might want to limit the number of server log files kept by <span class="ph">Integration Server</span>. For more information about limiting the number of server.log files kept by <span class="ph">Integration Server</span> automatically, see 
+    <a href="../pie-webhelp/to-server_log_8.html#wwID0E2RNR"
+   
+     title="Limiting the Number of Server Log Files Kept by Integration Server"
+    ><span class="heading-page">Limiting the Number of Server Log Files Kept
+						by 
+						Integration Server </span></a>.</div><div id="wwID0EWKMR" class="Body">You can override the location of the server log files for a particular session.. For more information about overriding the location of the server log file or the logging levels for a session, see 
+    <a href="../pie-webhelp/to-server_log_18.html#wwID0EWUQR"
+   
+     title="Overriding Logging Level and Server Log Location for a Session"
+    ><span class="heading-page">Overriding Logging Level and Server Log
+						Location for a Session</span></a>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

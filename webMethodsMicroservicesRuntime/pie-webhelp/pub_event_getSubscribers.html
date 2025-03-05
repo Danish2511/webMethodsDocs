@@ -1,0 +1,99 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>pub.event:getSubscribers</title><link rel="Prev" href="pub_event_getEventTypes.html" title="Previous" /><link rel="Next" href="pub_event_jmsReceiveErrorEvent.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/pub_event_getSubscribers.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="poGhBU_002b6GdIaYE5yd0eCoPQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/pub_event_getSubscribers.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/Event%20folder.html#wwconnect_header">Event Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/Event%20folder2.html#wwconnect_header">Summary of Elements in this Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">pub.event:getSubscribers</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ESNOBB" class="Heading_3">pub.event:getSubscribers</div><div id="wwID0ETOOBB" class="Body">WmPublic. Returns the list of subscribers for a specified event type.</div><div id="wwID0EAPOBB" class="Section_Title">Input Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 18%"><div id="wwID0EJQOBB" class="Table_Cell"><span class="varname">EventType</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 82%"><div id="wwID0EVQOBB" class="Table_Cell"><span class="bisdatatype">String</span> Type of event for which you want the list of subscribers. Must be one of the following values:</div><div id="wwID0EFROBB" class="Simple_List_1"><span class="codeph">Alarm Event</span></div><div id="wwID0EPROBB" class="Simple_List_1"><span class="codeph">Audit Event</span></div><div id="wwID0EZROBB" class="Simple_List_1"><span class="codeph">Audit Error Event</span></div><div id="wwID0EDSOBB" class="Simple_List_1"><span class="codeph">Exception Event</span></div><div id="wwID0ENSOBB" class="Simple_List_1"><span class="codeph">GD End Event</span></div><div id="wwID0EXSOBB" class="Simple_List_1"><span class="codeph">GD Start Event</span></div><div id="wwID0EBTOBB" class="Simple_List_1"><span class="codeph">JMS Delivery Failure Event</span></div><div id="wwID0ELTOBB" class="Simple_List_1"><span class="codeph">JMS Retrieval Failure Event</span></div><div id="wwID0EVTOBB" class="Simple_List_1"><span class="codeph">Port Status Event</span></div><div id="wwID0E6TOBB" class="Simple_List_1"><span class="codeph">Replication Event</span></div><div id="wwID0EJUOBB" class="Simple_List_1"><span class="codeph">Security Event</span></div><div id="wwID0ETUOBB" class="Simple_List_1"><span class="codeph">Session End Event</span></div><div id="wwID0E4UOBB" class="Simple_List_1"><span class="codeph">Session Expire Event</span></div><div id="wwID0EHVOBB" class="Simple_List_1"><span class="codeph">Session Start Event</span></div><div id="wwID0ERVOBB" class="Simple_List_1"><span class="codeph">Stat Event</span></div><div id="wwID0E2VOBB" class="Simple_List_1"><span class="codeph">Tx End Event</span></div><div id="wwID0EFWOBB" class="Simple_List_1"><span class="codeph">Tx Start Event</span></div><div id="wwID0EQWOBB" class="Tip"><span class="Bold">Tip:<br /></span>To view the current list of event types, you can execute the 
+    <a href="../pie-webhelp/pub_event_getEventTypes.html#wwID0ERCOBB"
+   
+     title="pub.event:getEventTypes"
+    ><span class="apiname-only">pub.event:getEventTypes</span></a> service.</div></td></tr></table></div><div id="wwID0E2XOBB" class="Section_Title">Output Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 17%"><div id="wwID0ELZOBB" class="Table_Cell"><span class="varname">Subscribers</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 83%" colspan="2"><div id="wwID0EXZOBB" class="Table_Cell"><span class="bisdatatype">Document</span> The list of subscribers. For each subscriber, <span class="varname">Subscribers</span> will contain a key that is the subscriber ID. The value of that key is a document containing the following information about the subscriber:</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 17%"></td><td class="internalheadrule" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 20%"><div id="wwID0EV1OBB" class="internalheadrule">Key</div></td><td class="internalheadrule" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 63%"><div id="wwID0E21OBB" class="internalheadrule">Description</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EM2OBB" class="Table_Cell"><span class="varname">Service</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EY2OBB" class="Table_Cell"><span class="bisdatatype">String</span> Fully qualified name of the event-handler service (that is, the service that subscribes to the event in <span class="varname">EventType</span>).</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EU3OBB" class="Table_Cell"><span class="varname">Filter</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EA4OBB" class="Table_Cell"><span class="bisdatatype">String</span> Filter associated with the subscription. This is a pattern string that selects (filters) an event based on a particular attribute. <span class="varname">Filter</span> is composed of literal characters, which match a character exactly, and/or the "<span class="codeph">*</span>" character, which matches any sequence of characters. For example:</div><div id="wwID0EY4OBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">*</span> would math any string.</div><div id="wwID0EN5OBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">M*</span> would math any string that starts with an uppercase "M."</div><div id="wwID0EC6OBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">M*X</span> would math any string that starts with an uppercase "M" and ends with an uppercase "X."</div><div id="wwID0EY6OBB" class="Table_Cell">For a list of attributes to which the filter is applied, see 
+    <a href="../pie-webhelp/pub_event_addSubscriber.html#wwID0EBEFBB"
+   
+     title="pub.event:addSubscriber"
+    ><span class="apiname-only">pub.event:addSubscriber</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ETAPBB" class="Table_Cell"><span class="varname">Comment</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6APBB" class="Table_Cell"><span class="bisdatatype">String</span> Descriptive comment associated with the description. If a comment has not been assigned to the subscription, <span class="varname">Comment</span> will be empty.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2BPBB" class="Table_Cell"><span class="varname">gID</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHCPBB" class="Table_Cell"><span class="bisdatatype">String</span> Subscriber ID.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5CPBB" class="Table_Cell"><span class="varname">Enabled</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKDPBB" class="Table_Cell"><span class="bisdatatype">String</span> Flag indicating the status of the subscription. Will be one of the following values. A value of:</div><div id="wwID0EZDPBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">true</span> indicates that the subscription is active.</div><div id="wwID0EOEPBB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">false</span> indicates that the subscription is inactive.</div></td></tr></table></div><div id="wwID0ERFPBB" class="Section_Title">See Also</div><div id="wwID0E2FPBB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_event_addSubscriber.html#wwID0EBEFBB"
+   
+     title="pub.event:addSubscriber"
+    ><span class="apiname-only">pub.event:addSubscriber</span></a></div><div id="wwID0EKGPBB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_event_modifySubscriber.html#wwID0E5ERBB"
+   
+     title="pub.event:modifySubscriber"
+    ><span class="apiname-only">pub.event:modifySubscriber</span></a></div><div id="wwID0EZGPBB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_event_deleteSubscriber.html#wwID0EQSJBB"
+   
+     title="pub.event:deleteSubscriber"
+    ><span class="apiname-only">pub.event:deleteSubscriber</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

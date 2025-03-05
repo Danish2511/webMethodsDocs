@@ -1,0 +1,92 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Setting Fields in the Document Envelope</title><link rel="Prev" href="to-publishing_documents_2.html" title="Previous" /><link rel="Next" href="to-publishing_documents_4.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/to-publishing_documents_3.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pm2iHlLYWdUMKsWxs_002f7UADg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/to-publishing_documents_3.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_pubsub_guide.html#wwconnect_header">Publish-Subscribe Developer’s Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-publishing_documents.html#wwconnect_header">Publishing Documents</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Setting Fields in the Document Envelope</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EXC4NB" class="Heading_2">Setting Fields in the Document Envelope</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/to-publishing_documents_4.html#wwconnect_header">About the Activation ID</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/esb.docTypes.pdt.des.html#wwconnect_header">About UUID, EventIds, and Digital Event Services</a></div></dd></dl></div><div id="wwID0EAD4NB" class="Body">The document envelope contains information about the published document, such as the publisher’s client ID, the client to which error notifications should be sent, a universally unique identification number, and the route the document has taken through the system. The document envelope contains read/write fields as well as read-only fields.</div><div id="wwID0EFD4NB" class="Body">The following table identifies the read/write envelope fields that you might want to set when building a service that publishes documents.</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 20.8%"><div id="wwID0EQE4NB" class="Table_Cell_Head">Field name</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 79.1%"><div id="wwID0EWE4NB" class="Table_Cell_Head">Description</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFF4NB" class="Table_Cell"><span class="varname">activation</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERF4NB" class="Table_Cell">A String that specifies the activation ID for the published document. If a document does not have an activation ID, <span class="ph">Integration Server</span> automatically assigns an activation ID when it publishes the document.</div><div id="wwID0E2F4NB" class="Table_Cell">Specify an activation ID when you want a trigger to join together documents published by different services. In this case, assign the same activation ID to the documents in the services that publish the documents. For more information about how <span class="ph">Integration Server</span> uses activation IDs to satisfy join conditions, see 
+    <a href="../pie-webhelp/to-understanding_join_conditions.html#wwID0ELHBPB"
+   
+     title="Understanding Join Conditions"
+    ><span class="heading-page">Understanding Join Conditions</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUG4NB" class="Table_Cell"><span class="varname">errorsTo</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EAH4NB" class="Table_Cell">A String that specifies the client ID to which <span class="ph">Integration Server</span> sends an error notification document (an instance of <span class="apiname">pub.publish.notify:error</span>) if errors occur during document processing by subscribers.</div><div id="wwID0EPH4NB" class="Table_Cell">If you do not specify a value for <span class="varname">errorsTo</span>, error notifications are sent to the document publisher.</div><div id="wwID0E1H4NB" class="Note"><span class="Bold">Note:<br /></span>The <span class="varname">errorsTo</span> field is not supported by <span class="ph">Universal Messaging</span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6I4NB" class="Table_Cell"><span class="varname">priority</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELJ4NB" class="Table_Cell">Specifies the priority level of the message. The priority level indicates how quickly the document should be published and processed. A value of 0 is the lowest processing priority; a value of 9 indicates expedited processing. Set a message priority level in the document envelope when publishing the document. The default priority is 4.</div><div id="wwID0ERJ4NB" class="Note"><span class="Bold">Note:<br /></span>Priority messaging does not apply to locally published documents.</div><div id="wwID0EHK4NB" class="Table_Cell">For more information about priority messaging, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Service Development Help</span>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4K4NB" class="Table_Cell"><span class="varname">replyTo</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJL4NB" class="Table_Cell">A String that specifies which client ID replies to the published document should be sent to. If you do not specify a <span class="varname">replyTo</span> destination, responses are sent to the document publisher.</div><div id="wwID0EUL4NB" class="Important"><span class="Bold">Important:<br /></span>When you create a service that publishes a document and waits for a reply, do not set the value of the <span class="varname">replyTo</span> field in the document envelope. By default, <span class="ph">Integration Server</span> uses the publisher ID as the <span class="varname">replyTo</span> value. If you change the <span class="varname">replyTo</span> value, responses will not be delivered to the waiting service.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEN4NB" class="Table_Cell"><span class="varname">uuuid</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQN4NB" class="Table_Cell">Universally unique identifier for the document. <span class="ph">Integration Server</span> assigns a UUID when publishing the document. However, if a service publishes a document to <span class="ph">Universal Messaging</span> using <span class="apiname">pub.publish:publish</span>, you can specify a value for <span class="varname">uuid</span>. The <span class="varname">uuid</span> value that you assign must meet the following criteria:</div><div id="wwID0ETO4NB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Must be a minimum of 1 character in length.</div><div id="wwID0EGP4NB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Must be a maximum of 96 characters in length.</div><div id="wwID0EZP4NB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Must not begin with the sequence “wm:” in any case combination. The “wm:” prefix is reserved for UUIDs generated by <span class="ph">Integration Server</span>.</div><div id="wwID0ERQ4NB" class="Table_Cell">If you do not specify a valid <span class="varname">uuid</span> value, <span class="ph">Integration Server</span> assigns one.</div><div id="wwID0EAR4NB" class="Table_Cell"><span class="ph">Integration Server</span> accepts a user-defined UUID only for invocations of <span class="apiname">pub.publish:publish</span> that publish a document to <span class="ph">Universal Messaging</span>. That is, the document being published must be an instance of a publishable document type to which a <span class="ph">Universal Messaging</span> connection alias is assigned. For any other publishing service in <span class="apiname">pub.publish</span> or invocations of <span class="apiname">pub.publish:publish</span> that publish a document locally or to <span class="ph">Broker</span>, <span class="ph">Integration Server</span> ignores any assigned <span class="varname">uuid</span> value.</div><div id="wwID0EOS4NB" class="Table_Cell">For information about how UUIDs are generated for documents published to <span class="ph">Digital Event Services</span>, see 
+    <a href="../pie-webhelp/esb.docTypes.pdt.des.html#wwID0EKY4NB"
+   
+     title="About UUID, EventIds, and Digital Event Services"
+    ><span class="heading-page">About UUID, EventIds, and 
+								Digital Event Services </span></a>.</div></td></tr></table></div><div id="wwID0EGT4NB" class="Body">For more information about the fields in the document envelope, see the description of the <span class="apiname">pub.publish:envelope</span> document type in the <span class="ph"> </span>
+    <a href="../pie-webhelp/pub_publish_envelope.html#wwID0EQ6HFB"
+   
+     title="pub.publish:envelope"
+    ><span class="ph_002c_heading-page">pub.publish:envelope</span></a><span class="ph">.</span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

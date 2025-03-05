@@ -1,0 +1,94 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Using a 6.5 SOAP-MSG Style Service as an Operation</title><link rel="Prev" href="esb.ws.operations.adding.fromProviderWSD.html" title="Previous" /><link rel="Next" href="esb.ws.operations.65SOAPMSG.modifySignature.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/esb.ws.operations.65SOAPMSG.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pTmwGrQRXzzJVeENVZPxMMg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/esb.ws.operations.65SOAPMSG.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_webservices_guide.html#wwconnect_header">Web Services Developer’s Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/esb.ws.html#wwconnect_header">Working with Web Services</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/esb.ws.operations.html#wwconnect_header">Working with Operations</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/esb.ws.operations.adding.html#wwconnect_header">Adding Operations</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Using a 6.5 SOAP-MSG Style Service as an Operation</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EZABQB" class="Heading_4">Using a 6.5 SOAP-MSG Style Service as an Operation</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/esb.ws.operations.65SOAPMSG.modifySignature.html#wwconnect_header">Modifying the Signature of a 6.5 SOAP-MSG Style Operation</a></div></dd></dl></div><div id="wwID0ERBBQB" class="Body">In <span class="ph">webMethods Integration Server</span> version 6.5, you could expose an IS service as a SOAP-MSG web service. The 6.5 SOAP-MSG style services used the default SOAP processor, specified SOAP version 1.1, and specified a style/use of Document/Literal. You can migrate 6.5 SOAP-MSG style services to the web service descriptor framework introduced in <span class="ph">Integration Server</span> 7.1 by adding the service as an operation to a provider WSD. By migrating the service, you can leverage the inherent functionality of a provider WSD, such as headers, handlers, faults, and WS-Security.</div><div id="wwID0E6BBQB" class="Body">By default, <span class="ph">Integration Server</span> derives the input and output signatures for operations from the services used to create the operation. <span class="ph">Integration Server</span> 6.5 required that an IS service in the SOAP-MSG style use a signature that took a <span class="varname">soapRequestData</span> object and a <span class="varname">soapResponseData</span> object as input and produced a <span class="varname">soapResponseData</span> object as output. This signature requirement does not result in meaningful signature information for the operation in WSDL documents generated for the provider WSD. To produce a meaningful, descriptive signature for an operation that corresponds to a 6.5 SOAP-MSG style service, you must select an IS document type or an XML schema element declaration to represent the service input and output signature.</div><div id="wwID0E3CBQB" class="Body">Keep the following points in mind when adding a 6.5 SOAP-MSG style service as an operation to a provider WSD:</div><div id="wwID0EHDBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>You can add the 6.5 IS service to an existing provider WSD or create a new provider WSD for the IS service. For information about adding an IS service as an operation to a provider WSD, see 
+    <a href="../pie-webhelp/esb.ws.operations.adding.ISservice.html#wwID0ERLAQB"
+   
+     title="Adding an IS Service as an Operation"
+    ><span class="heading-page">Adding an IS Service as an
+								Operation</span></a>. For information about creating a service first provider WSD, see 
+    <a href="../pie-webhelp/esb.ws.serviceFirst.html#wwID0E5XOPB"
+   
+     title="Creating a Service First Provider Web Service Descriptor"
+    ><span class="heading-page">Creating a Service First Provider Web Service
+						Descriptor</span></a>.</div><div id="wwID0EMEBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The provider WSD must have a single binder with the following properties:</div><div id="wwID0EEFBQB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>SOAP version = SOAP 1.1 protocol</div><div id="wwID0EXFBQB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>SOAP binding style = document</div><div id="wwID0EKGBQB" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>SOAP binding use = literal</div><div id="wwID0E6GBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>To produce a meaningful signature for the operation in a WSDL document, you must select an IS document type or an XML schema element declaration to represent the input and output signatures. For information about changing the input or output signature for an operation, a provider WSD, see 
+    <a href="../pie-webhelp/esb.ws.operations.65SOAPMSG.modifySignature.html#wwID0EALBQB"
+   
+     title="Modifying the Signature of a 6.5 SOAP-MSG Style Operation"
+    ><span class="heading-page">Modifying the Signature of a 6.5 SOAP-MSG
+										Style Operation</span></a>.</div><div id="wwID0E2HBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you use an IS document type for the input and/or output signature, the IS document type must satisfy the service signature requirements for the SOAP-MSG style as specified in the <span class="ph"> </span><span class="ph_002c_Citation">Web&nbsp;Services Developer’s Guide</span> version 6.5.</div><div id="wwID0EYIBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you add any headers to the operation, any existing clients for the 6.5 service must be modified to include the header in the SOAP request.</div><div id="wwID0ELJBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Any header handler processing that changes the SOAP message and occurs before service invocation affects the SOAP message passed to the service. Note that 6.5 SOAP-MSG style services expect the SOAP message to be in a certain format. Specifically, any changes to the SOAP body might affect the ability of the 6.5 SOAP-MSG style service to process the request.</div><div id="wwID0E5JBQB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When a 6.5 SOAP-MSG style service is added as an operation, you can add fault processing to the operation response. For fault processing to work, you need to modify the 6.5 SOAP-MSG style service to detect a Fault condition, add Fault output data to the pipeline, and drop the SOAP response message (<span class="varname">soapResponseData</span> object) from the pipeline.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

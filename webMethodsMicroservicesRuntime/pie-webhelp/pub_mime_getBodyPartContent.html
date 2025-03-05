@@ -1,0 +1,99 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>pub.mime:getBodyPartContent</title><link rel="Prev" href="pub_mime_createMimeData.html" title="Previous" /><link rel="Next" href="pub_mime_getBodyPartHeader.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/pub_mime_getBodyPartContent.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN_002fCBPsBZ_002b2xVmA9byfmizyQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/pub_mime_getBodyPartContent.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_bis_guide.html#wwconnect_header">Built-In Services Reference Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/MIME%20folder.html#wwconnect_header">MIME Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/MIME%20folder2.html#wwconnect_header">Summary of Elements in this Folder</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">pub.mime:getBodyPartContent</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EAHQEB" class="Heading_3">pub.mime:getBodyPartContent</div><div id="wwID0E6HQEB" class="Body">WmPublic. Retrieves the content (payload) from the specified MIME object.</div><div id="wwID0EGIQEB" class="Body">You use this service for both single-part and multi-part messages.</div><div id="wwID0ELIQEB" class="Body">To retrieve content from a multi-part message, you set the <span class="varname">index</span> (to select the part by index number) or <span class="varname">contentID</span> (to select the part by <span class="varname">contentID</span> value) parameter to specify the body part whose content you want to retrieve. To get the content from a single-part message, you omit the <span class="varname">index</span> and <span class="varname">contentID</span> parameters or set <span class="varname">index</span> to <span class="codeph">0</span>.</div><div id="wwID0E2JQEB" class="Section_Title">Input Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 25%"><div id="wwID0EGLQEB" class="Table_Cell"><span class="varname">mimeData</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 75%"><div id="wwID0ESLQEB" class="Table_Cell"><span class="bisdatatype">Document</span> MIME object whose content you want to retrieve. (This IData object is produced by 
+    <a href="../pie-webhelp/pub_mime_createMimeData.html#wwID0E15OEB"
+   
+     title="pub.mime:createMimeData"
+    ><span class="apiname-only">pub.mime:createMimeData</span></a>.)</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMMQEB" class="Table_Cell"><span class="varname">index</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYMQEB" class="Table_Cell"><span class="bisdatatype">String</span>. Optional. Index number of the body part whose content you want to retrieve (if you want to retrieve the content from a specific body part). The first body part is index number zero.</div><div id="wwID0EDNQEB" class="Note"><span class="Bold">Note:<br /></span>If <span class="varname">contentID</span> is specified, <span class="varname">index</span> is ignored.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJOQEB" class="Table_Cell"><span class="varname">contentID</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVOQEB" class="Table_Cell"><span class="bisdatatype">String</span>. Optional. Value of the <span class="codeph">Content-ID</span> header field of the body part whose content you want to retrieve (if you want to retrieve the payload from a specific body part).</div></td></tr></table></div><div id="wwID0ERPQEB" class="Section_Title">Output Parameters</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 25%"><div id="wwID0E3QQEB" class="Table_Cell"><span class="varname">content</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 75%"><div id="wwID0EIRQEB" class="Table_Cell"><span class="bisdatatype">IData</span> The payload of the specified body part.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZRQEB" class="Table_Cell"><span class="varname">encrypted</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EFSQEB" class="Table_Cell"><span class="bisdatatype">String</span> Flag whose value indicates whether <span class="varname">content</span> is an encrypted MIME message. A value of:</div><div id="wwID0E2SQEB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">true</span> indicates that <span class="varname">content</span> is an encrypted message.</div><div id="wwID0EXTQEB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">false</span> indicates that <span class="varname">content</span> is not an encrypted message.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1UQEB" class="Table_Cell"><span class="varname">signed</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EGVQEB" class="Table_Cell"><span class="bisdatatype">String</span> Flag indicating whether <span class="varname">content</span> is a signed MIME message. A value of:</div><div id="wwID0E3VQEB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">true</span> indicates that <span class="varname">content</span> is a signed MIME message.</div><div id="wwID0EYWQEB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">false</span> indicates that <span class="varname">content</span> is not a signed MIME message.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2XQEB" class="Table_Cell"><span class="varname">certsOnly</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHYQEB" class="Table_Cell"><span class="bisdatatype">String</span> Flag whose value indicates whether <span class="varname">content</span> is a certs-only MIME message. A value of:</div><div id="wwID0E4YQEB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">true</span> indicates that <span class="varname">content</span> is a certs-only message.</div><div id="wwID0EZZQEB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="codeph">false</span> indicates that <span class="varname">content</span> is not a certs-only message.</div></td></tr></table></div><div id="wwID0ED2QEB" class="Section_Title">Usage Notes</div><div id="wwID0EI2QEB" class="Body">This service operates on the MIME object (<span class="varname">mimeData</span>) produced by 
+    <a href="../pie-webhelp/pub_mime_createMimeData.html#wwID0E15OEB"
+   
+     title="pub.mime:createMimeData"
+    ><span class="apiname-only">pub.mime:createMimeData</span></a>.</div><div id="wwID0E32QEB" class="Body">If you omit <span class="varname">index</span> or <span class="varname">contentID</span> when retrieving content from a multi-part message, <span class="apiname">getBodyPartContent</span> returns the payload from the first body part. If you use <span class="varname">index</span> or <span class="varname">contentID</span> to select a body part that does not exist in <span class="varname">mimeData</span>, <span class="varname">content</span> will be null.</div><div id="wwID0EF4QEB" class="Body">For general information about MIME messages and using the MIME services, see the <span class="ph"> </span><span class="ph_002c_Citation">MIME-S/MIME Developer’s Guide</span>.</div><div id="wwID0E44QEB" class="Section_Title">See Also</div><div id="wwID0EH5QEB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_mime_createMimeData.html#wwID0E15OEB"
+   
+     title="pub.mime:createMimeData"
+    ><span class="apiname-only">pub.mime:createMimeData</span></a></div><div id="wwID0EW5QEB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_mime_addBodyPart.html#wwID0ELYMEB"
+   
+     title="pub.mime:addBodyPart"
+    ><span class="apiname-only">pub.mime:addBodyPart</span></a></div><div id="wwID0EF6QEB" class="Simple_List_1">
+    <a href="../pie-webhelp/pub_mime_getBodyPartHeader.html#wwID0ECAREB"
+   
+     title="pub.mime:getBodyPartHeader"
+    ><span class="apiname-only">pub.mime:getBodyPartHeader</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Creating a JMS Trigger</title><link rel="Prev" href="esb.jms.serviceRequirements.html" title="Previous" /><link rel="Next" href="esb.jms.create.addDestination.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/esb.jms.create.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pkfgvpNaimnQxpkmp7aJROg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/esb.jms.create.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_jmsclient_guide.html#wwconnect_header">JMS Client Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/esb.jms.html#wwconnect_header">Working with JMS Triggers</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Creating a JMS Trigger</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EF4FMB" class="Heading_2">Creating a JMS Trigger</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/esb.jms.create.addDestination.html#wwconnect_header">Adding JMS Destinations and Message Selectors to a JMS Trigger</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../pie-webhelp/esb.jms.create.addRoutingRule.html#wwconnect_header">Adding Routing Rules to a Standard JMS Trigger</a></div></dd></dl></div><div id="wwID0E24FMB" class="Context">When you create a JMS trigger, keep the following points in mind:</div><div id="wwID0EI5FMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The JMS connection alias you want <span class="ph">Integration Server</span> to use to obtain connections to and receive messages from the JMS provider must already exist. Although a JMS connection alias does not need to be enabled at the time you create the JMS trigger, the JMS connection alias must be enabled for the JMS trigger to execute at run time.</div><div id="wwID0E65FMB" class="Note_1"><span class="Bold">Note:<br /></span>If you want to manage destinations and durable subscribers on a <span class="ph">webMethods Broker</span> that is used as a JMS provider, the JMS connection alias must be enabled when you work with the JMS trigger.</div><div id="wwID0E16FMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you use a JNDI provider to store JMS administered objects, the Connection Factories that you want the JMS trigger to use to consume messages must already exist.</div><div id="wwID0ENAGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If you use a JNDI provider to store JMS administered objects and the JMS provider is not <span class="ph">webMethods Broker</span>, the destinations (queues and topics) from which this JMS trigger will receive messages must already exist.</div><div id="wwID0EEBGMB" class="Note_1"><span class="Bold">Note:</span><span class="ph">webMethods Broker</span> is deprecated.</div><div id="wwID0E5BGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the JMS provider is <span class="ph">webMethods Broker</span> or <span class="ph">Software AG Universal Messaging</span>, the destinations (queues and topics) from which the JMS trigger receives messages do not need to exist before you create the JMS trigger. Instead, you can create destinations using the JMS trigger editor. You can also create, modify, and delete durable subscribers via the JMS trigger. For more information, see 
+    <a href="../pie-webhelp/esb.jms.create.manageDestinations.html#wwID0ENDKMB"
+   
+     title="Managing Destinations and Durable Subscribers on the JMS Provider through Designer"
+    ><span class="heading-page">Managing Destinations and Durable Subscribers
+on the JMS Provider through Designer
+</span></a>.</div><div id="wwID0ECDGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If the JMS provider is <span class="ph">Universal Messaging</span>, administered objects can be created on demand. If you specify a destination that does not exist in the JNDI namespace and the JMS connection alias used by the JMS trigger is configured to create administered objects on demand, <span class="ph">Integration Server</span> creates the destination the first time the JMS trigger starts. For more information about creating administered objects on demand, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Administrator’s Guide</span>.</div><div id="wwID0EHEGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The transaction type of the JMS connection alias determines whether or not the JMS trigger is transacted (that is, it receives and processes messages as part of a transaction). Transacted JMS triggers have slightly different properties and operate differently than non-transacted JMS triggers. For more information about building a transacted JMS trigger, see 
+    <a href="../pie-webhelp/esb.jms.tx.html#wwID0EVRTMB"
+   
+     title="Building a Transacted JMS Trigger"
+    ><span class="heading-page">Building a Transacted JMS Trigger</span></a>.</div><div id="wwID0EDFGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The trigger service that you want to specify in the routing rule must already exist on the same <span class="ph">Integration Server</span> on which you create the JMS trigger. For more information, see 
+    <a href="../pie-webhelp/esb.jms.serviceRequirements.html#wwID0EWVFMB"
+   
+     title="Standard JMS Trigger Service Requirements"
+    ><span class="heading-page">Standard JMS Trigger Service Requirements</span></a>.</div><div id="wwID0EDGGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>A standard JMS trigger can contain multiple routing rules. Each routing rule must have a unique name. For more information about using multiple routing rules, see 
+    <a href="../pie-webhelp/esb.jms.multipleRoutingRules.html#wwID0E1UKMB"
+   
+     title="Building Standard JMS Triggers with Multiple Routing Rules"
+    ><span class="heading-page">Building Standard JMS Triggers with
+Multiple Routing Rules</span></a>.</div><div id="wwID0E6GGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>A standard JMS trigger that contains an All (AND) or Only one (XOR) join can only have one routing rule and cannot have a batch processing size (<span class="uicontrol">Max batch messages</span> property) greater than 1. A JMS trigger with an Any (Or) join can have multiple routing rules. For more information about batch processing, see 
+    <a href="../pie-webhelp/esb.jms.messageProcessing.batch.html#wwID0EUVNMB"
+   
+     title="About Batch Processing for Standard JMS Triggers"
+    ><span class="heading-page">About Batch Processing for Standard JMS
+						Triggers</span></a>.</div><div id="wwID0E6HGMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="ph">Integration Server</span> uses a consumer to receive messages for a JMS trigger. This consumer encapsulates the actual javax.jms.MessageConsumer and javax.jms.Session.</div><div id="wwID0EXIGMB" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To create a JMS trigger</div><div id="wwID0EDJGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">In the Package Navigator view of </span><span class="Command_002c_Command">Designer</span><span class="Command">, click </span><span class="Command_002c_uicontrol">File &gt; New &gt; JMS Trigger</span><span class="Command">. </span></div><div id="wwID0EIKGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">In the New JMS Trigger dialog box, select the folder in which you want to save the JMS trigger. </span></div><div id="wwID0EALGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">Element name</span><span class="Command"> field, type a name for the JMS trigger using any combination of letters, numbers, and/or the underscore character. </span></div><div id="wwID0E6LGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Finish</span><span class="Command">. </span></div><div class="ww_skin_page_overflow"><div id="wwID0E5MGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">JMS connection alias name</span><span class="Command"> field in the Trigger Settings tab, click <img class="Default" src="../pie-webhelp/images/elipses.gif" width="100%" style="display: inline; float: none; left: 0pt; max-height: 13px; max-width: 22px; top: 0pt" alt="" />. </span></div></div><div id="wwID0EMOGMB" class="Note_1"><span class="Bold">Note:<br /></span>A transacted JMS connection alias cannot be assigned to a JMS trigger if a cluster policy is applied to the connection factory used by the JMS connection alias.</div><div id="wwID0EEPGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">In the Select a JMS connection alias for </span><span class="Command_002c_varname">triggerName</span><span class="Command"> dialog box, select the JMS connection alias that you want this JMS trigger to use to receive messages from the JMS provider. Click </span><span class="Command_002c_uicontrol">OK</span><span class="Command">. </span></div><div id="wwID0EOQGMB" class="Body_1"><span class="ph">Designer</span> sets the <span class="uicontrol">Transaction type</span> property to match the transaction type specified for the JMS connection alias.</div><div id="wwID0E3QGMB" class="Body_1">If a JMS connection alias has not yet been configured on <span class="ph">Integration Server</span>, <span class="ph">Designer</span> displays a message stating the JMS subsystem has not been configured. For information abut creating a JMS connection alias, see <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Administrator’s Guide</span>.</div><div id="wwID0EWRGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>7. </span></span><span class="Command">In the </span><span class="Command_002c_uicontrol">JMS trigger type</span><span class="Command"> list, select one of the following: </span></div><div class="ww_skin_page_overflow"><table class="norules2" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 21.7%"><div id="wwID0E6TGMB" class="Table_Cell_Head">Select</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 78.2%"><div id="wwID0EFUGMB" class="Table_Cell_Head">To...</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUUGMB" class="Table_Cell"><span class="uicontrol">Standard</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6UGMB" class="Table_Cell">Create a standard JMS trigger.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKVGMB" class="Table_Cell"><span class="uicontrol">SOAP-JMS</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVVGMB" class="Table_Cell">Create a SOAP-JMS trigger.</div></td></tr></table></div><div id="wwID0EBWGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>8. </span></span><span class="Command">Under </span><span class="Command_002c_uicontrol">JMS destinations and message selectors</span><span class="Command">, specify the destinations from which the JMS trigger will receive messages. For more information, see </span>
+    <a href="../pie-webhelp/esb.jms.create.addDestination.html#wwID0ETIHMB"
+   
+     title="Adding JMS Destinations and Message Selectors to a JMS Trigger"
+    ><span class="Command_002c_heading-page">Adding JMS Destinations and Message Selectors
+						to a JMS Trigger</span></a><span class="Command">. </span></div><div id="wwID0EPXGMB" class="Note_1"><span class="Bold">Note:<br /></span>For SOAP-JMS triggers, you can specify one destination only.</div><div id="wwID0EHYGMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>9. </span></span><span class="Command">If you selected multiple destinations, select the join type. The join type determines whether </span><span class="Command_002c_Command">Integration Server</span><span class="Command"> needs to receive messages from all, any, or only one of destinations to execute the trigger service. </span></div><div class="ww_skin_page_overflow"><table class="norules2" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 23.8%"><div id="wwID0EQ1GMB" class="Table_Cell_Head">Select...</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 76.1%"><div id="wwID0EW1GMB" class="Table_Cell_Head">If you want...</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EF2GMB" class="Table_Cell"><span class="uicontrol">All (AND)</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQ2GMB" class="Table_Cell"><span class="ph">Integration Server</span> to invoke the trigger service when the trigger receives a message from every destination within the join time-out period. The messages must have the same activation.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EA3GMB" class="Table_Cell"><span class="uicontrol">Any (OR)</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EL3GMB" class="Table_Cell"><span class="ph">Integration Server</span> to invoke the trigger service when the trigger receives a message from any of the specified destinations.</div><div id="wwID0EV3GMB" class="Table_Cell">This is the default join type.</div><div id="wwID0E13GMB" class="Note"><span class="Bold">Note:<br /></span>Using an Any (OR) join is similar to creating multiple JMS triggers that listen to different destinations. While a JMS trigger with an Any (OR) join will use fewer resources (a single thread will poll each destination for messages), it may cause a decrease in performance (it may take longer for one thread to poll multiple destinations).</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EW4GMB" class="Table_Cell"><span class="uicontrol">Only one (XOR)</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EB5GMB" class="Table_Cell"><span class="ph">Integration Server</span> to invoke the trigger service when it receives a message from any of the specified destinations. For the duration of the join time-out period, the <span class="ph">Integration Server</span> discards any messages with the same activation that the trigger receives from the specified destinations.</div></td></tr></table></div><div id="wwID0EW5GMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>10. </span></span><span class="Command">If this is a standard JMS trigger, under </span><span class="Command_002c_uicontrol">Message routing</span><span class="Command">, add routing rules. For more information, see </span>
+    <a href="../pie-webhelp/esb.jms.create.addRoutingRule.html#wwID0E3RJMB"
+   
+     title="Adding Routing Rules to a Standard JMS Trigger"
+    ><span class="Command_002c_heading-page">Adding Routing Rules to a Standard JMS
+						Trigger</span></a><span class="Command">. </span></div><div id="wwID0E66GMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>11. </span></span><span class="Command">In the Properties view, set properties for the JMS trigger. </span></div><div id="wwID0EXAHMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>12. </span></span><span class="Command">Enter comments or notes, if any, in the </span><span class="Command_002c_uicontrol">Comments</span><span class="Command"> tab. </span></div><div id="wwID0EWBHMB" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>13. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">File &gt; Save</span><span class="Command">. </span></div><div id="wwID0EDEHMB" class="title">Related Topics</div><div id="wwID0EHEHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.create.addDestination.html#wwID0ETIHMB"
+   
+     title="Adding JMS Destinations and Message Selectors to a JMS Trigger"
+    ><span class="Link_Text">Adding JMS Destinations and Message Selectors to a JMS Trigger</span></a></div><div id="wwID0ETEHMB" class="heading">
+    <a href="../pie-webhelp/esb.jms.create.modifyDestinations.html#wwID0EIPKMB"
+   
+     title="Modifying Destinations or Durable Subscribers via a JMS Trigger in Designer"
+    ><span class="Link_Text">Modifying Destinations or Durable Subscribers via a JMS Trigger in Designer</span></a></div><div id="wwID0E6EHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.create.addRoutingRule.html#wwID0E3RJMB"
+   
+     title="Adding Routing Rules to a Standard JMS Trigger"
+    ><span class="Link_Text">Adding Routing Rules to a Standard JMS Trigger</span></a></div><div id="wwID0ELFHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.enableDisab.e.html#wwID0ETALMB"
+   
+     title="Enabling or Disabling a JMS Trigger"
+    ><span class="Link_Text">Enabling or Disabling a JMS Trigger</span></a></div><div id="wwID0EXFHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.ackMode.html#wwID0EDWLMB"
+   
+     title="Setting an Acknowledgement Mode"
+    ><span class="Link_Text">Setting an Acknowledgement Mode</span></a></div><div id="wwID0EDGHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.joinTimeOuts.html#wwID0EWBMMB"
+   
+     title="About Join Time-Outs"
+    ><span class="Link_Text">About Join Time-Outs</span></a></div><div id="wwID0EPGHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.executionUser.html#wwID0ELZMMB"
+   
+     title="About Execution Users for JMS Triggers"
+    ><span class="Link_Text">About Execution Users for JMS Triggers</span></a></div><div id="wwID0E2GHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.messageProcessing.html#wwID0EUCNMB"
+   
+     title="About Message Processing"
+    ><span class="Link_Text">About Message Processing</span></a></div><div id="wwID0EHHHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.nonTXErrors.fatalErrors.html#wwID0EKYPMB"
+   
+     title="Fatal Error Handling for Non-Transacted JMS Triggers"
+    ><span class="Link_Text">Fatal Error Handling for Non-Transacted JMS Triggers</span></a></div><div id="wwID0ETHHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.nonTXErrors.transientErrors.html#wwID0EGGQMB"
+   
+     title="Transient Error Handling for Non-Transacted JMS Triggers"
+    ><span class="Link_Text">Transient Error Handling for Non-Transacted JMS Triggers</span></a></div><div id="wwID0E6HHMB" class="heading-page">
+    <a href="../pie-webhelp/esb.jms.create.addRoutingRule.html#wwID0E3RJMB"
+   
+     title="Adding Routing Rules to a Standard JMS Trigger"
+    ><span class="Link_Text">Adding Routing Rules to a Standard JMS Trigger</span></a></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

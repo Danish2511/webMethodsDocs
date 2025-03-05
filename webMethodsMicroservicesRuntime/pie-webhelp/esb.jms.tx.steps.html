@@ -1,0 +1,110 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Steps for Building a Transacted JMS Trigger</title><link rel="Prev" href="esb.jms.tx.properties.html" title="Previous" /><link rel="Next" href="esb.jms.tx.errors.fatalErrors.html" title="Next" /><link rel="StyleSheet" href="css/is_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/is_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/pie-webhelp/esb.jms.tx.steps.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pPW8CMYk9u23iNHLAG19GXg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/pie-webhelp/esb.jms.tx.steps.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Integration Server</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/to-webhelp_intro_is_jmsclient_guide.html#wwconnect_header">JMS Client Development Guide</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/esb.jms.html#wwconnect_header">Working with JMS Triggers</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../pie-webhelp/esb.jms.tx.html#wwconnect_header">Building a Transacted JMS Trigger</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Steps for Building a Transacted JMS Trigger</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EEJUMB" class="Heading_3">Steps for Building a Transacted JMS Trigger</div><div id="wwID0E3JUMB" class="Body">Building a transacted JMS trigger is a process that involves the following basic stages.</div><div class="ww_skin_page_overflow"><table class="norules1" cellspacing="4" summary=""><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 14.2%"><div id="wwID0ENLUMB" class="internalhead">Stage 1</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 85.7%" colspan="2"><div id="wwID0ETLUMB" class="Table_Cell">Create a new JMS trigger on <span class="ph">Integration Server</span>.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 14.2%"><div id="wwID0EFMUMB" class="internalhead">Stage 2</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 85.7%" colspan="2"><div id="wwID0ELMUMB" class="Table_Cell">Specify a JMS connection alias with a transaction type of XA TRANSACTION or LOCAL TRANSACTION.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 14.2%"><div id="wwID0EYMUMB" class="internalhead">Stage 3</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 85.7%" colspan="2"><div id="wwID0E5MUMB" class="Table_Cell">Specify the destination (queues or topics) on the JMS provider from which you want to receive messages. You also specify any message selectors that you want the JMS provider to use to filter messages for the JMS trigger.</div><div id="wwID0EGNUMB" class="Table_Cell">If this a SOAP-JMS trigger, you can specify one destination only.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 14.2%"><div id="wwID0ERNUMB" class="internalhead">Stage 4</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 85.7%" colspan="2"><div id="wwID0EXNUMB" class="Table_Cell">For a standard JMS trigger, create routing rules and specify the services that <span class="ph">Integration Server</span> invokes when the JMS trigger receives messages.</div><div id="wwID0EDOUMB" class="Table_Cell">SOAP-JMS triggers do not use routing rules.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 14.2%"><div id="wwID0EOOUMB" class="internalhead">Stage 5</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 85.7%" colspan="2"><div id="wwID0EUOUMB" class="Table_Cell">Set the following JMS trigger properties:</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 14.2%"></td><td class="internalheadrule" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 26.8%"><div id="wwID0EHPUMB" class="internalheadrule">Property name...</div></td><td class="internalheadrule" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top; width: 58.8%"><div id="wwID0ENPUMB" class="internalheadrule">Description</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5PUMB" class="Table_Cell"><span class="uicontrol">Enabled</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJQUMB" class="Table_Cell">Enables or disables a JMS trigger as follows:</div><div id="wwID0EVQUMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If set to <span class="uicontrol">True</span>, enables a JMS trigger that is currently disabled.</div><div id="wwID0EMRUMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>If set to <span class="uicontrol">False</span>, disables a JMS trigger that is currently enabled.</div><div id="wwID0EESUMB" class="Table_Cell">For more information, see 
+    <a href="../pie-webhelp/esb.jms.enableDisab.e.html#wwID0ETALMB"
+   
+     title="Enabling or Disabling a JMS Trigger"
+    ><span class="heading-page">Enabling or Disabling a JMS Trigger</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EATUMB" class="Table_Cell"><span class="uicontrol">Execution user</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELTUMB" class="Table_Cell">Name of the user account whose credentials <span class="ph">Integration Server</span> uses to execute a service associated with the JMS trigger.</div><div id="wwID0EVTUMB" class="Table_Cell">For more information, see 
+    <a href="../pie-webhelp/esb.jms.executionUser.selecting.html#wwID0EW4MMB"
+   
+     title="Assigning an Execution User to a JMS Trigger"
+    ><span class="heading-page">Assigning an Execution User to a
+JMS Trigger</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERUUMB" class="Table_Cell"><span class="uicontrol">Message processing</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E3UUMB" class="Table_Cell">Specifies whether <span class="ph">Integration Server</span> should process messages serially or concurrently. When set to:</div><div id="wwID0EMVUMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Serial</span>, <span class="ph">Integration Server</span> processes messages received by the trigger one after the other.</div><div id="wwID0EHWUMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Concurrent</span>, <span class="ph">Integration Server</span> processes multiple messages for the trigger at one time.</div><div id="wwID0EDXUMB" class="Table_Cell">For more information, see 
+    <a href="../pie-webhelp/esb.jms.messageProcessing.html#wwID0EUCNMB"
+   
+     title="About Message Processing"
+    ><span class="heading-page">About Message Processing</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6XUMB" class="Table_Cell"><span class="uicontrol">Fatal error handling &gt; Suspend on error</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKYUMB" class="Table_Cell">Specifies whether you want <span class="ph">Integration Server</span> to suspend the trigger when a trigger service ends with an error. Select <span class="uicontrol">True</span> or <span class="uicontrol">False</span>.</div><div id="wwID0E3YUMB" class="Table_Cell">For more information, see 
+    <a href="../pie-webhelp/esb.jms.tx.errors.fatalErrors.html#wwID0ETFVMB"
+   
+     title="Fatal Error Handling for Transacted JMS Triggers"
+    ><span class="heading-page">Fatal Error Handling for Transacted JMS Triggers</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EYZUMB" class="Table_Cell"><span class="uicontrol">Transient error handling</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ED1UMB" class="Table_Cell">Specifies how <span class="ph">Integration Server</span> responds when a transaction is rolled back due to a transient error that occurs during processing of a transacted JMS trigger. When the <span class="uicontrol">On transaction rollback</span> property is set to:</div><div id="wwID0EX1UMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Recover only</span>, <span class="ph">Integration Server</span> recovers the message after a transaction is rolled back due to a transient error. This is the default.</div><div id="wwID0ES2UMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Suspend and recover</span>, <span class="ph">Integration Server</span> suspends the JMS trigger and recovers the message after a resource monitoring service indicates that the resources needed by the trigger service are available.</div><div id="wwID0EO3UMB" class="Table_Cell">For more information, see 
+    <a href="../pie-webhelp/esb.jms.tx.errors.transient.html#wwID0E2ZVMB"
+   
+     title="Transient Error Handling for Transacted JMS Triggers"
+    ><span class="heading-page">Transient Error Handling for Transacted JMS
+				Triggers</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EK4UMB" class="Table_Cell"><span class="uicontrol">Exactly once</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EV4UMB" class="Table_Cell">Specifies whether you want the trigger to process persistent messages once and only once. Set <span class="uicontrol">Detect duplicates</span> to <span class="uicontrol">True</span> to configure exactly once processing.</div><div id="wwID0ED5UMB" class="Table_Cell">For more information, see 
+    <a href="../pie-webhelp/esb.jms.xo.configuring.html#wwID0EEZSMB"
+   
+     title="Configuring Exactly-Once Processing for a JMS Trigger"
+    ><span class="heading-page">Configuring Exactly-Once Processing for a JMS
+						Trigger</span></a>.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E65UMB" class="Table_Cell"><span class="uicontrol">Permissions</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EK6UMB" class="Table_Cell">In <span class="ph">Designer</span>, select the ACLs that you want to assign for each level of access as follows:</div><div id="wwID0E16UMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For the <span class="uicontrol">List ACL</span> permission, specify the ACL whose allowed member can see that the element exists and view the element’s metadata (such as input, output).</div><div id="wwID0ERAVMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For the <span class="uicontrol">Read ACL</span>, specify the ACL whose allowed member can view the source code and metadata of the element.</div><div id="wwID0EIBVMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For the <span class="uicontrol">Write ACL</span>, specify the ACL whose allowed member can lock, check out, edit, rename, and delete the element.</div><div id="wwID0E6BVMB" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>For the <span class="uicontrol">Execute ACL</span>, specify the ACL whose allowed member can execute the service. This level of access only applies to services and web service descriptors.</div></td></tr><tr><td class="internalhead" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4CVMB" class="internalhead">Stage 6</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top" colspan="2"><div id="wwID0EDDVMB" class="Table_Cell">Test and debug the JMS trigger. For more information, see 
+    <a href="../pie-webhelp/esb.jms.debugging.html#wwID0EHNTMB"
+   
+     title="Debugging a JMS Trigger"
+    ><span class="heading-page">Debugging a JMS Trigger</span></a>.</div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
