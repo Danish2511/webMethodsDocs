@@ -1,0 +1,87 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Start the new API Gateway instance</title><link rel="Prev" href="co-upgrading_major_version_zero_downtime.html" title="Previous" /><link rel="Next" href="co-clean_data_api_store.html" title="Next" /><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/yai-webhelp/ta-start_new_gateway_instance.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pLsAQ2vTdUx54awQXPBMQww" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/yai-webhelp/ta-start_new_gateway_instance.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Gateway</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.801.html#wwconnect_header">Upgrading and Migrating to API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/to-upgrading_apigw_zero_downtime_landing_page.html#wwconnect_header">Upgrading API Gateway in Zero Downtime</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/co-upgrading_major_version_zero_downtime.html#wwconnect_header">Upgrading Major Versions in Zero Downtime</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Start the new API Gateway instance</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EBAR4" class="Heading_3">Start the new <span class="ph">API Gateway</span> instance</div><div id="wwID0E2BR4" class="Body">You must install the new <span class="ph">API Gateway</span> instance and perform the following steps:</div><div id="wwID0EMCR4" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">As zero downtime upgrade deals only with the migration of Elasticsearch or API Data Store data, the platform configurations must be migrated to the new </span><span class="Command_002c_Command">API Gateway</span><span class="Command"> instance either manually or using the externalized configurations.. </span></div><div id="wwID0EQDR4" class="Body_1">For more information on the platform configurations that must be migrated to the target <span class="ph">API Gateway</span> instance, see 
+    <a href="../yai-webhelp/co-upgrading_apigtw.html#wwID0EU1G4"
+   
+     title="Introduction"
+    ><span class="heading-page">Migrating the platform configurations</span></a>.</div><div id="wwID0EHER4" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Configure </span><span class="Command_002c_codeph">reindex.remote.whitelist</span><span class="Command"> in the elasticsearch.yml file. </span></div><div id="wwID0ELFR4" class="Body_1">You must explicitly allow the remote Elasticsearch or API Data Store host in elasticsearch.yml using the <span class="inlinetitle">reindex.remote.whitelist</span> property.</div><div id="wwID0EWFR4" class="Body_1">Configure <span class="userinput">reindex.remote.whitelist</span> in elasticsearch.yml file located at <span class="filepath">SAG/InternalDataStore/config</span>. Set the value of old Elasticsearch or API Data Store host and port .</div><div id="wwID0EEGR4" class="Body_1">An example to set the Elasticsearch or API Data Store host and port using the as <span class="codeph">reindex.remote.whitelist</span> is as follows:</div><div id="wwID0EOGR4" class="Preformatted_1">reindex.remote.whitelist: localhost:9200</div><div id="wwID0EWGR4" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command"> If the old Elasticsearch or API Data Store instance is secured with SSL, you must perform one of the following steps to configure the new Elasticsearch or API Data Store to securely connect to the old Elasticsearch or API Data Store. </span></div><div id="wwID0EZHR4" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Configuring SSL parameters in elasticsearch.yml</span></div><div id="wwID0EQIR4" class="List_2_Continued">Configure the SSL related re-index settings in the new Elasticsearch or API Data Store's elasticsearch.yml file. For more information, see 
+    <a href="https://www.elastic.co/guide/en/elasticsearch/reference/7.x/docs-reindex.html#reindex-ssl"
+   
+     target="external_window"
+    ><span class="heading-page">Elasticsearch documentation</span></a> for re-index SSL settings. If you are having a cluster setup, this must be performed in each node.</div><div id="wwID0EBJR4" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Importing old Elasticsearch or API Data Store certificates into new Elasticsearch or API Data Store JVM</span></div><div id="wwID0EYJR4" class="List_2_Continued">You must add the old instance certificates (public key) into the new Elasticsearch or API Data Store JVM's truststore. For example, in case of internal Elasticsearch or API Data Store you must add the public keys to the truststore cacerts file located at<span class="filepath"> \jvm\jvm\jre\lib\security</span>.</div><div id="wwID0EBKR4" class="Note_2"><span class="Bold">Note:<br /></span>If external Elasticsearch is used for the new <span class="ph">API Gateway</span> instance, you must import the certificates to their corresponding JVM.</div><div id="wwID0E3KR4" class="List_2_Continued">The following sample command imports the truststore of old Elasticsearch or API Data Store to the new Elasticsearch or API Data Store JVM.</div><div id="wwID0EBLR4" class="Preformatted_2">$&gt;\jvm\jvm\bin\keytool -import -keystore \jvm\jvm\jre\lib\security\cacerts <br />-file &lt;truststore.jks&gt; -alias &lt;alias&gt;</div><div class="ww_skin_page_overflow"><table class="rules3" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 13.7%"><div id="wwID0EGMR4" class="Table_Cell_Head">Property</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 55.7%"><div id="wwID0EMMR4" class="Table_Cell_Head">Detail</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 30.4%"><div id="wwID0ESMR4" class="Table_Cell_Head">Example</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E6MR4" class="Table_Cell">truststore.jks</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELNR4" class="Table_Cell">Truststore used in the Elasticsearch. Provide the full path of the truststore. It is available at <span class="filepath">\WmAPIGateway\config\resources\elasticsearch\config.properties</span> file with property <span class="uicontrol">pg.gateway.elasticsearch.https.truststore.filepath</span>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1NR4" class="Table_Cell"><span class="filepath">sagconfig/root-ca.jks</span></div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EIOR4" class="Table_Cell">alias</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EOOR4" class="Table_Cell">The alias used in the Elasticsearch.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUOR4" class="Table_Cell">wm.sag.com</div></td></tr></table></div><div id="wwID0EAPR4" class="Body_1">You can now start the new <span class="ph">API Gateway</span> instance with the new Elasticsearch or API Data Store (cluster and Terracotta cluster).</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2016-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

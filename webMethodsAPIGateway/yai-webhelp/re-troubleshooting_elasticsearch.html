@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Troubleshooting Tips: API Data Store</title><link rel="Prev" href="ta-add_node_to_cluster_2.html" title="Previous" /><link rel="Next" href="co-overview_monitoring.html" title="Next" /><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/yai-webhelp/re-troubleshooting_elasticsearch.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN2WWrjEbTeksYVtHNJWTU9w" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/yai-webhelp/re-troubleshooting_elasticsearch.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Gateway</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.032.html#wwconnect_header">Administering API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.078.html#wwconnect_header">Operating API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/co-data_management_housekeeping.html#wwconnect_header">Data Management</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Troubleshooting Tips: API Data Store</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EEP3O" class="Heading_3">Troubleshooting Tips: API Data Store</div><div id="wwID0ETP3O" class="Section_Title">API Gateway package is not accessible from Integration Server.</div><div id="wwID0EYP3O" class="Body">The following error message appears:</div><div id="wwID0E4P3O" class="Body">com.softwareag.apigateway.core.exceptions.DataStoreException</div><div id="wwID0ECQ3O" class="Body">This problem could be because the <span class="uicontrol">defaultEncoding</span> extended setting is modified.</div><div id="wwID0ELQ3O" class="Caution"><span class="Bold">CAUTION:<br /></span>Do not modify this value. If you modify this value, your API Gateway instance will not function as this value is used in encoding all API Gateway transactions. If you migrate from one setup to another, ensure you have specified the same value for the <span class="uicontrol">defaultEncoding</span> setting as the source instance. If this values are not same, the target API Gateway instance does not start.</div><div id="wwID0EHR3O" class="Body">This error message appears: com.softwareag.apigateway.core.exceptions.DataStoreException: com.softwareag.apigateway.core.exceptions.DataStoreException:</div><div id="wwID0EMR3O" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0EWR3O" class="Body">Set the value of the <span class="uicontrol">defaultEncoding</span> extended setting as <span class="userinput">UTF-8</span>.</div><div id="wwID0EMS3O" class="Section_Title">The Event data store on API Gateway is using a lot of disk space.</div><div id="wwID0ERS3O" class="Body">The Elasticsearch JVM is unable to allocate memory for internal objects. Either other process in the machine are consuming more memory or Elasticsearch is not given sufficient heap space.</div><div id="wwID0EWS3O" class="Body">Also JVM has written these information in write.lock file, which is solely used by Elasticsearch for its internal purpose. Elasticsearch expects this file to be of size 0 and should not be modified. Since jvm has written the data, it is showing that as error and filling the disk with log.</div><div id="wwID0E2S3O" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0EFT3O" class="Body">Increase the Event data store JVM heap size.</div><div id="wwID0EST3O" class="Section_Title">I have exceeded the limit for total fields [1000] in index [gateway_default_analytics_]</div><div id="wwID0EXT3O" class="Body">The following error message appears:</div><div id="wwID0E3T3O" class="Body">2019-09-19 00:29:02 UTC [YAI.0300.9999E] error while saving doc Index - gateway_default_analytics, typeName - transactionalEvents: POST http://10.177.129.5:9241/gateway_default_analytics/transactionalEvents: HTTP/1.1 400 Bad Request {"error":{"root_cause":[{"type":"illegal_argument_exception","reason":"Limit of total fields [1000] in index [gateway_default_analytics] has been exceeded"}],"type":"illegal_argument_exception","reason":"Limit of total fields [1000] in index [gateway_default_analytics] has been exceeded"},"status":400}</div><div id="wwID0EBU3O" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0ELU3O" class="Body">Increase the limit for total fields.</div><div id="wwID0EVU3O" class="Preformatted">PUT /gateway_default_analytics_/_settings{"index.mapping.total_fields.limit": 20000}</div><div id="wwID0EEV3O" class="Section_Title">I experienced a low disk space issue and my API Gateway has stopped working for WRITE operations.</div><div id="wwID0EJV3O" class="Body">The following error message appears:</div><div id="wwID0EOV3O" class="Body">Exception: [WARN ][o.e.c.r.a.DiskThresholdMonitor] [localhost1568897216386] flood stage disk watermark [95%] exceeded on [BOf6SQe2SwyI93vi4RlBNQ][localhost1568897216386][C:\SoftwareAG\InternalDataStore\data\nodes\0] free: 2.4gb[2.4%], all indices on this node will be marked read-onlySaving an API -&gt; error message ("Saving API failed. com.softwareag.apigateway.core.exceptions.DataStoreException: Error while saving the document. doc Id - 6d5c7ac0-574a-4a53-acba-a738f21e3142, type name - _doc, message - "index [gateway_default_policy] blocked by: [FORBIDDEN/12/index read-only / allow delete (api)];" ")</div><div id="wwID0ETV3O" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0EIW3O" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Purge the API Gateway data logs and other unwanted data from Elasticsearch. For information on data purging, see 
+    <a href="../yai-webhelp/gtw_archive_purge.html#wwID0E4HHO"
+   
+     title="Archive and Purge using UI"
+    ><span class="heading-page">Archive and Purge using UI</span></a>.</div><div id="wwID0EGX3O" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>Run the following cURL command on the Elasticsearch immediately after you have freed up atleast 15% of the disk space.</div><div id="wwID0EAY3O" class="Preformatted">curl -XPUT -H "Content-Type:<br />application/json"<br />http://localhost:9240/_all/_settings<br /> -d '{"index.blocks.read_only_allow_delete":<br />null}'</div><div id="wwID0EPY3O" class="Section_Title">My Elasticsearch server is not starting. I get a "bootstrap checks failed" error.</div><div id="wwID0EUY3O" class="Body">The following error message appears:</div><div id="wwID0EZY3O" class="Body">[2020-03-25T09:09:20,298][INFO ][o.e.b.BootstrapChecks ] [itsbebel00471.jnj.com1585050877659] bound or publishing to a non-loopback address, enforcing bootstrap checks [2020-03-25T09:09:20,299][ERROR][o.e.b.Bootstrap ] [itsbebel00471.jnj.com1585050877659] node validation exception [1] bootstrap checks failed [1]: system call filters failed to install; check the logs and fix your configuration or disable system call filters at your own risk.</div><div id="wwID0E5Y3O" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0EIZ3O" class="Body">Add bootstrap.system_call_filter: false setting to elasticsearch.yml</div><div id="wwID0EVZ3O" class="Section_Title">When I access the audit logs, the internal datastore, crashes.</div><div id="wwID0E1Z3O" class="Body">The following error message appears:</div><div id="wwID0E6Z3O" class="Body">[2020-03-03T10:03:33,857][ERROR][o.e.ExceptionsHelper ] [ daeipresal43558.eur.ad</div><div id="wwID0EE13O" class="Body">.sag1580968109910] fatal error at org.elasticsearch.ExceptionsHelper.lambda$maybeDieOnAnotherThread$2(ExceptionsHelper.java:310) at java.util.Optional.ifPresent(Optional.java:159) at org.elasticsearch.ExceptionsHelper.maybeDieOnAnotherThread(ExceptionsHelper.java:300) at org.elasticsearch.http.netty4.Netty4HttpRequestHandler.exceptionCaught(Netty4HttpRequestHandler.java:76) [2020-03-03T10:03:33,858][ERROR][o.e.ExceptionsHelper ] [ daeipresal43558.eur.ad .sag1580968109910] fatal error at org.elasticsearch.ExceptionsHelper.lambda$maybeDieOnAnotherThread$2(ExceptionsHelper.java:310) at java.util.Optional.ifPresent(Optional.java:159) at org.elasticsearch.ExceptionsHelper.maybeDieOnAnotherThread(ExceptionsHelper.java:300) at org.elasticsearch.http.netty4.Netty4HttpRequestHandler.exceptionCaught(Netty4HttpRequestHandler.java:76) [2020-03-03T10:03:33,867][ERROR][o.e.b.ElasticsearchUncaughtExceptionHandler] [ daeipresal43558.eur.ad .sag1580968109910] fatal error in thread [Thread-176], exiting java.lang.OutOfMemoryError: Java heap space</div><div id="wwID0EJ13O" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0ET13O" class="Body">Set the -XX:MaxDirectMemorySize property to 4095m.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2016-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

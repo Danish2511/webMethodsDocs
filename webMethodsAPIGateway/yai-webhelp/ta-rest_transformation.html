@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Activating SOAP to Rest Transformation</title><link rel="Prev" href="soap_rest_transformation.html" title="Previous" /><link rel="Next" href="modifying_rest_definitions.html" title="Next" /><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/yai-webhelp/ta-rest_transformation.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pa68md4WkqtT4cPPXjsUdAA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/yai-webhelp/ta-rest_transformation.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Gateway</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.503.html#wwconnect_header">Using API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.535.html#wwconnect_header">Implement APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/soap_rest_transformation.html#wwconnect_header">SOAP to REST Transformation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Activating SOAP to Rest Transformation</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EJZA3" class="Heading_3">Activating SOAP to Rest Transformation</div><div id="wwID0EYZA3" class="Body">You must have the Manage APIs functional privilege assigned to perform this task.</div><div id="wwID0EF1A3" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To activate SOAP to REST transformation for a SOAP operation</div><div id="wwID0ER1A3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command"> Click </span><span class="Command_002c_uicontrol">APIs</span><span class="Command"> in the title navigation bar. </span></div><div id="wwID0EQ2A3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Select the required API from the list of available APIs. </span></div><div id="wwID0EI3A3" class="Step_Result_1">The API details page for the selected API appears.</div><div id="wwID0EO3A3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Edit</span><span class="Command">. </span></div><div id="wwID0EN4A3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">REST transformation</span><span class="Command">. </span></div><div id="wwID0EM5A3" class="Step_Result_1">A list of SOAP operations already exposed to the consumers as well as to be transformed from SOAP to REST appears. By default, all the SOAP operations are in inactive state.</div><div class="ww_skin_page_overflow"><div id="wwID0ES5A3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">Click <img class="Default" src="../yai-webhelp/images/deactivated_1011.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 13px; max-width: 30px; top: 0pt" alt="" /> to activate the SOAP to REST transformation for the SOAP operations. </span></div></div><div id="wwID0EV6A3" class="Step_Info_1">Alternatively, you can activate the SOAP to REST transformation for multiple SOAP operations simultaneously by clicking the <span class="uicontrol">Transform all operations</span> activation toggle button.</div><div id="wwID0EAAB3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">Select the operation to edit the SOAP operations. </span></div><div id="wwID0EYAB3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>7. </span></span><span class="Command">In the Transformation Configuration section, configure the following settings: </span></div><div id="wwID0E2BB3" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Use Schema for XML to JSON transformation </span></div><div id="wwID0ESCB3" class="List_2_Continued">If you select this checkbox, the XML schema (present in the WSDL) defines the data type of the entity. The data type can either be String, Int, Double, Float, or Boolean. In the response from the native server, if an entity is of a different data type other than the ones defined in the XML schema, <span class="ph">API Gateway</span> returns it is as a String data type and not an error.</div><div id="wwID0E3CB3" class="List_2_Continued">If you do not select this checkbox, <span class="ph">API Gateway</span> does not honor the XML schema during transformation. Instead, <span class="ph">API Gateway</span> derives the data type of entities based on the native service response.</div><div id="wwID0EKDB3" class="List_2_Continued">By default, this checkbox is not selected for any SOAP API. If you have migrated your APIs from another instance of <span class="ph">API Gateway</span> , the value of this checkbox will depend on the value of the Extended property <span class="inlinetitle">pg.soapToRest.typeConvertorEnabled</span> in the source <span class="ph">API Gateway</span> of the migrated APIs. The <span class="inlinetitle">pg.soapToRest.typeConvertorEnabled</span> property specifies whether the key values in a SOAP request must be converted to their primitive type when a SOAP API is transformed to REST API.</div><div id="wwID0EHEB3" class="Note_2"><span class="Bold">Note:<br /></span>Date and Enumeration data types are also considered to be strings. When <span class="ph">API Gateway</span> cannot determine the data type of any value, it considers the data type to be a string.</div><div id="wwID0EDFB3" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Use default values from schema</span></div><div id="wwID0E1FB3" class="List_2_Continued">If you select this checkbox, <span class="ph">API Gateway</span> considers the default values provided in the XML schema, if there are no values present in a request or response. If the request or response has some value, this value overrides the default value from XML schema.</div><div id="wwID0EEGB3" class="List_2_Continued">If you do not select this checkbox, <span class="ph">API Gateway</span> does not consider the default values present in the XML schema even if there are no values present in the request or response.</div><div id="wwID0EPGB3" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Remove operation name in response</span></div><div id="wwID0EGHB3" class="List_2_Continued">If you select this checkbox, the root node is not passed as a part of SOAP to REST response and only the JSON is passed. Root node is generally the SOAP operation name or SOAP operation response name, present in the XML schema. This check box is applicable only to JSON responses.</div><div id="wwID0ELHB3" class="List_2_Continued">If you do not select this checkbox, JSON response is accompanied by the root node. By default, this check box is not selected for any SOAP API.</div><div id="wwID0EUHB3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>8. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Save</span><span class="Command">. </span></div><div id="wwID0ETIB3" class="Step_Result_1">The API details page for the selected API appears.</div><div id="wwID0EZIB3" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>9. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">REST transformation</span><span class="Command">. </span></div><div id="wwID0EYJB3" class="Step_Result_1">A list of REST resources for the SOAP operations appears. Click on each resource to view the details that are available as REST definitions.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2016-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

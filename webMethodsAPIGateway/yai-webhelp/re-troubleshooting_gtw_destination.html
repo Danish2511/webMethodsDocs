@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Troubleshooting Tips: API Gateway Destination</title><link rel="Prev" href="gtw_configure_gateway.html" title="Previous" /><link rel="Next" href="gtw_configure_portal.html" title="Next" /><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/yai-webhelp/re-troubleshooting_gtw_destination.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pN10_002bS7XP3F95PzfNmC8XAmQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/yai-webhelp/re-troubleshooting_gtw_destination.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Gateway</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.032.html#wwconnect_header">Administering API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.078.html#wwconnect_header">Operating API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/co-destination_config.html#wwconnect_header">Destination Configuration</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/gtw_configure_gateway.html#wwconnect_header">Configuring Events for API Gateway Destination</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Troubleshooting Tips: API Gateway Destination</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ETRCT" class="Heading_4">Troubleshooting Tips: API Gateway Destination</div><div id="wwID0ECSCT" class="Section_Title">I see that the API Gateway transactions are not logged in API Data Store when there is a medium to high load that is 70 to 400 Transactions per second (TPS)</div><div id="wwID0EHSCT" class="Body">If you have configured an external API Date Store destination, ensure that the configuration is right. This problem might occur when the API Data Store configurations are not set properly to handle the load.</div><div id="wwID0EMSCT" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0EXSCT" class="Body">Set the following configurations to the properties in config.properties file located at <span class="filepath_002c_varname">SAG_Install_Directory</span><span class="filepath">\IntegrationServer\instances\IS_</span><span class="filepath_002c_varname">Instance_Name</span><span class="filepath">\packages\WmAPIGateway\config\resources\elasticsearch\config.properties</span> to meet the following throughput values: Up to 2000 TPS, Up to 500 GB storage utilization, and less than &lt;500 ms native service latency:</div><div id="wwID0EMTCT" class="Preformatted"><br />pg.gateway.elasticsearch.hosts = Elasticsearch Service endpoint, that is localhost:9240<br />pg.gateway.elasticsearch.http.connectionTimeout = 10000<br />pg.gateway.elasticsearch.http.socketTimeout = 30000<br />pg.gateway.elasticsearch.sniff.enable = false<br />pg.gateway.elasticsearch.http.maxRetryTimeout = 100000<br /></div><div id="wwID0ETTCT" class="Body">You can verify the transactional events count using http://&lt;hostname&gt;:&lt;es_port&gt;/testindex/transactionalEvents/count</div><div id="wwID0EYTCT" class="Note"><span class="Bold">Note:<br /></span>You can modify the configurations according to your business requirements.</div><div id="wwID0EOUCT" class="Body">For more information, see 
+    <a href="../yai-webhelp/co-product_configurations.html#wwID0EBK1V"
+   
+     title="Hardware and Product Configurations"
+    ><span class="ph_002c_heading-page">Hardware and Product Configurations</span></a>.</div><div id="wwID0EMVCT" class="Section_Title">I see that I am not able to parameterize custom indices for transaction events in <span class="ph">API Gateway</span></div><div id="wwID0EVVCT" class="Body">Custom indices can be configured for transaction events in <span class="ph">API Gateway</span> under <span class="uicontrol">Destinations &gt; Elasticsearch &gt; Configuration page</span>. But parameterizing custom indices is not supported in <span class="ph">API Gateway</span>. For example, appending the current date to the index name. Consider an index name txnData and it must be appended with the current date, that is txnData_12_08_2020 and rolled up daily.</div><div id="wwID0EHWCT" class="Body"><span class="inlinetitle">Resolution</span>:</div><div id="wwID0ESWCT" class="Body">You can achieve this use case using the Elasticsearch aliases and rollover APIs of Elasticsearch.</div><div id="wwID0EXWCT" class="Body">A sample use case is as follows:</div><div id="wwID0E3WCT" class="Body">Create an alias in the Elasticsearch server, for example txnData and an index rollover like txnData_12_08_2020, txnData_12_08_2020. The alias txnData should point to all the indices txnData_12_08_2020, txnData_12_08_2020. One of the indices in the list is write-enabled and that are the latest and rest of the indices is read-only.</div><div id="wwID0EBXCT" class="Body"><span class="ph">API Gateway</span> sends the events to txnData alias and that alias defines the index that it should write the data to, based on the date.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2016-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

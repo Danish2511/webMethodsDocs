@@ -1,0 +1,95 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Configuring OAuth2 Authentication with Refresh Token</title><link rel="Prev" href="co-refresh_oauth_overview.html" title="Previous" /><link rel="Next" href="co-refresh_oauth_workflow.html" title="Next" /><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_api_gtw_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/yai-webhelp/ta-config_oauth_refresh_token.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="poZNHO74OADu9Mok2hWew0A" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/yai-webhelp/ta-config_oauth_refresh_token.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>API Gateway</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.503.html#wwconnect_header">Using API Gateway</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/_api_gtw_integrated_webhelp.1.535.html#wwconnect_header">Implement APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/gtw_manage_policies.html#wwconnect_header">Policies</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/gtw_iam_policies.html#wwconnect_header">Identify and Access</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/re-iam_identify_authorize_app.html#wwconnect_header">Identify &amp; Authorize</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../yai-webhelp/co-refresh_oauth_overview.html#wwconnect_header">Secure API using OAuth2 with refresh token workflow</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Configuring OAuth2 Authentication with Refresh Token</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EURJY" class="Heading_6">Configuring OAuth2 Authentication with Refresh Token</div><div id="wwID0EDSJY" class="Body">This use case explains how to secure the API using OAuth2 authentication strategy with <span class="emphasis">authorization_code</span> and <span class="emphasis">refresh_token</span> grant types.</div><div id="wwID0ETSJY" class="Body">The use case starts when you create an API and ends when you create an application strategy with OAuth2 authentication scheme.</div><div id="wwID0EYSJY" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To configure OAuth2 Authentication with Refresh Token</div><div id="wwID0EETJY" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Create an API. </span></div><div id="wwID0EBUJY" class="Body_1">For details about creating an API, see 
+    <a href="../yai-webhelp/gtw_create_rest_api_scratch.html#wwID0EVWRW"
+   
+     title="Creating a REST API from Scratch"
+    ><span class="heading-page">Creating a REST API from Scratch</span></a>.</div><div class="ww_skin_page_overflow"><div id="wwID0ESUJY" class="Figure_1"><img class="ScaleFit" src="../yai-webhelp/images/Create_API_refresh.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 374px; max-width: 800px; top: 0pt" alt="" /></div></div><div id="wwID0EHVJY" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command"> Enable the OAuth2 token identification type in the </span><span class="Command_002c_uicontrol"> Identify &amp; Authorize</span><span class="Command"> policy. </span></div><div id="wwID0ELWJY" class="Body_1">For details about <span class="uicontrol"> Identify &amp; Authorize</span> policy, see 
+    <a href="../yai-webhelp/re-iam_identify_authorize_app.html#wwID0EUXSX"
+   
+     title="Identify &amp; Authorize"
+    ><span class="heading-page">Identify &amp; Authorize</span></a>.</div><div class="ww_skin_page_overflow"><div id="wwID0EAXJY" class="Figure_1"><img class="ScaleFit" src="../yai-webhelp/images/Associate_Policy.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 313px; max-width: 800px; top: 0pt" alt="" /></div></div><div id="wwID0EVXJY" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command"> Create OAuth scope in the local authorization server. </span></div><div class="ww_skin_page_overflow"><div id="wwID0ESYJY" class="Figure_1"><img class="ScaleFit" src="../yai-webhelp/images/Create_OAuth_Scope.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 471px; max-width: 800px; top: 0pt" alt="" /></div></div><div id="wwID0EHZJY" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command"> Map the OAuth scope to the API scope. </span></div><div id="wwID0EE1JY" class="Body_1">For details about mapping OAuth scope, see 
+    <a href="../yai-webhelp/gtw_map_oauth_scope.html#wwID0EQFWU"
+   
+     title="OAuth or OpenID Scopes"
+    ><span class="ph_002c_heading-page">OAuth or OpenID Scopes</span></a>.</div><div class="ww_skin_page_overflow"><div id="wwID0E11JY" class="Figure_1"><img class="ScaleFit" src="../yai-webhelp/images/scope_map.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 175px; max-width: 800px; top: 0pt" alt="" /></div></div><div id="wwID0EP2JY" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command"> Create an application with OAuth2 authentication strategy. </span></div><div class="ww_skin_page_overflow"><div id="wwID0EM3JY" class="Figure_1"><img class="ScaleFit" src="../yai-webhelp/images/Map_app.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 195px; max-width: 800px; top: 0pt" alt="" /></div></div><div id="wwID0EG4JY" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>a. </span></span><span class="Command"> Create a new application. </span></div><div id="wwID0ED5JY" class="Body_2">For details about creating an application, see 
+    <a href="../yai-webhelp/gtw_create_application.html#wwID0E2YHX"
+   
+     title="Creating an Application"
+    ><span class="heading-page">Creating an Application</span></a>.</div><div id="wwID0EW5JY" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>b. </span></span><span class="Command"> Associate the application with the API that you have created. </span></div><div id="wwID0EO6JY" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>c. </span></span><span class="Command"> Click the </span><span class="Command_002c_uicontrol">Authentication</span><span class="Command"> tab to create strategy with OAuth2 authentication. </span></div><div class="ww_skin_page_overflow"><div id="wwID0ESAKY" class="Figure_2"><img class="ScaleFit" src="../yai-webhelp/images/Create_App_Strategy.png" width="100%" style="display: inline; float: none; left: 0pt; max-height: 561px; max-width: 800px; top: 0pt" alt="" /></div></div><div id="wwID0EHBKY" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>d. </span></span><span class="Command">Select the </span><span class="Command_002c_uicontrol">Authentication schemes</span><span class="Command"> as </span><span class="Command_002c_emphasis">OAUTH2</span><span class="Command">. </span></div><div id="wwID0EMCKY" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>e. </span></span><span class="Command">Specify the </span><span class="Command_002c_uicontrol">Authentication server</span><span class="Command"> as </span><span class="Command_002c_emphasis">local</span><span class="Command">. </span></div><div id="wwID0ERDKY" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>f. </span></span><span class="Command"> Enable the </span><span class="Command_002c_uicontrol">Generate credentials</span><span class="Command"> toggle button to generate the client dynamically in the authorization server and provide the following information: </span></div><div id="wwID0E2EKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>a. </span></span>Select the <span class="uicontrol">Application Type</span> as <span class="emphasis">Confidential</span>. A confidential client is an application that can keep a client password confidential to the world. This client password is assigned to the client app by the authorization server. This password is used to identify the client to the authorization server, to avoid fraud. An example of a confidential client could be a web app, where no one but the administrator can get access to the server, and see the client password.</div><div id="wwID0EXFKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>b. </span></span>Select the application profile from the <span class="uicontrol">Application profile</span> drop-down menu. For example, web.</div><div id="wwID0EOGKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>c. </span></span>Specify the duration in seconds for which the access token is active in the<span class="uicontrol"> Token lifetime (seconds)</span>.</div><div id="wwID0EFHKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>d. </span></span>Specify the number of times you can use the refresh token in the <span class="uicontrol">Token refresh limit</span> to get a new acceswws token.</div><div id="wwID0E3HKY" class="Note_3"><span class="Bold">Note:<br /></span>To use refresh token unlimitedly, specify the limit as -1.</div><div id="wwID0ETIKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>e. </span></span>Specify the URIs that the authorization server can use to redirect the resource owner's browser during the grant process. You can add multiple URIs by clicking <span class="inlinetitle">+Add</span>.</div><div id="wwID0ELJKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>f. </span></span>Specify the grant type to be used to generate the credentials. For this specific use case, we have selected <span class="emphasis">authorization_code</span>, <span class="emphasis">client_credentials</span>, and <span class="emphasis">refresh_token</span>, which are dynamically populated from the authorization server.</div><div id="wwID0ENKKY" class="Note_3"><span class="Bold">Note:<br /></span>Make sure you have selected <span class="emphasis">refresh_token</span><span class="uicontrol"> grant_type</span>, if you want to get the refresh tokens.</div><div id="wwID0EMLKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>g. </span></span>Select the scopes that are to be mapped for the authentication strategy.</div><div id="wwID0E6LKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>h. </span></span>Click <span class="uicontrol">Add</span> to save the strategy.</div><div id="wwID0EWMKY" class="Numbered_3"><span class="WebWorks_Number" style="width: 18pt"><span>i. </span></span>Click <span class="uicontrol">Save</span> to save the application.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2016-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
