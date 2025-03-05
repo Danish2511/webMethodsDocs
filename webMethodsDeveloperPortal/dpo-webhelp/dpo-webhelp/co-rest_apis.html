@@ -1,0 +1,171 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Overview</title><link rel="Prev" href="to-rest_apis.html" title="Previous" /><link rel="Next" href="analytics.html" title="Next" /><link rel="StyleSheet" href="css/_developer_portal_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_developer_portal_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/dpo-webhelp/co-rest_apis.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pYiGVzV5LzK_002f7VMuaoAcXmw" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/dpo-webhelp/co-rest_apis.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Developer Portal</span>&nbsp;11.0 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/_developer_portal_webhelp.1.013.html#wwconnect_header">Using Developer Portal</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/to-rest_apis.html#wwconnect_header">REST APIs</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Overview</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EMIMQ" class="Heading_2">Overview</div><div id="wwID0EUIMQ" class="Body">The headless architecture feature of <span class="ph">Developer Portal</span> equips you with the APIs that you would require to build an application with the <span class="ph">Developer Portal</span> functionality.</div><div id="wwID0ECJMQ" class="Body">The REST APIs that come along with the <span class="ph">Developer Portal</span> installation allow you to perform all functions that you can accomplish through the application's user interface.</div><div id="wwID0EMJMQ" class="Body"><span class="ph">Developer Portal</span> REST APIs are located at <span class="filepath_002c_varname">SAGInstallDir</span><span class="filepath">\DeveloperPortal\developers\openapis</span>.</div><div id="wwID0EGKMQ" class="Section_Title">Authentication to use <span class="ph">Developer Portal</span> REST APIs</div><div id="wwID0EQKMQ" class="Body">The authentication method applicable for the Developer Portal REST APIs is HTTP Basic authentication.</div><div id="wwID0E4KMQ" class="Section_Title">Access privileges based authorization</div><div id="wwID0ECLMQ" class="Body">The availability of API resources is based on the user privilege. Typically, users who have the <span class="uicontrol">API Administrator</span> privilege have access to all APIs, whereas, the users who have any of the <span class="uicontrol">API Provider</span> and <span class="uicontrol">API Consumer</span> privileges have limited access of API resources.</div><div id="wwID0E3LMQ" class="Section_Title">REST APIs URI format</div><div id="wwID0EBMMQ" class="Body"><span class="ph">Developer Portal</span> allows you to access the API resources using URI paths. The REST call URI must be specified with the required method in the format shown below:</div><div class="ww_skin_page_overflow"><div id="wwID0EJMMQ" class="Figure"><img class="Default" src="../dpo-webhelp/images/rest_api_format.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 134px; max-width: 650px; top: 0pt" alt="" /></div></div><div id="wwID0EENMQ" class="Section_Title">Possible response messages</div><div id="wwID0EJNMQ" class="Body">The following table lists the possible response messages and what they indicate:</div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 30.2%"><div id="wwID0EIOMQ" class="Table_Cell_Head">Response message</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 69.7%"><div id="wwID0EOOMQ" class="Table_Cell_Head">Description</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2OMQ" class="Table_Cell">200 - OK</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBPMQ" class="Table_Cell">Indicates the request sent and response received successfully.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELPMQ" class="Table_Cell">201 - Created</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERPMQ" class="Table_Cell">Indicates that the request is fulfilled, resulting in the creation of a new resource.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2PMQ" class="Table_Cell">400 - Bad request</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBQMQ" class="Table_Cell">Indicates that a parameter is missing in the request due to which it could not be processed.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELQMQ" class="Table_Cell">401 - Unauthorized</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERQMQ" class="Table_Cell">Indicates authorization problem.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2QMQ" class="Table_Cell">403 - Forbidden</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBRMQ" class="Table_Cell">Indicates that there is no permission to the requested resource.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ELRMQ" class="Table_Cell">404 - Not found</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERRMQ" class="Table_Cell">Indicates that the requested resource does not exist.</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2RMQ" class="Table_Cell">500 - Internal server error</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBSMQ" class="Table_Cell">Indicates that an unexpected condition is encountered and no more specific message is suitable.</div></td></tr></table></div><div id="wwID0EUSMQ" class="Section_Title">List of APIs</div><div id="wwID0EZSMQ" class="Body">The REST APIs allow you to perform the following:</div><div id="wwID0EETMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/analytics.html#wwID0E6INQ"
+   
+     title="Viewing analytics"
+    ><span class="heading-page">Viewing analytics</span></a>.</div><div id="wwID0EBUMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_apis.html#wwID0E31NQ"
+   
+     title="Managing APIs"
+    ><span class="heading-page">Managing APIs </span></a>.</div><div id="wwID0E5UMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_applications.html#wwID0EGAPQ"
+   
+     title="Managing applications"
+    ><span class="heading-page">Managing applications </span></a>.</div><div id="wwID0E2VMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_approvals.html#wwID0EHRPQ"
+   
+     title="Managing approvals"
+    ><span class="heading-page">Managing approvals </span></a>.</div><div id="wwID0EYWMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_backup_restore.html#wwID0ESHQQ"
+   
+     title="Managing backup and restore"
+    ><span class="heading-page">Managing backup and restore </span></a>.</div><div id="wwID0EVXMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_comments.html#wwID0EFQQQ"
+   
+     title="Managing comments"
+    ><span class="heading-page">Managing comments</span></a>.</div><div id="wwID0ESYMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_communities.html#wwID0EQ3QQ"
+   
+     title="Managing communities"
+    ><span class="heading-page">Managing communities </span></a></div><div id="wwID0EPZMQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_configurations.html#wwID0EVURQ"
+   
+     title="Managing configurations"
+    ><span class="heading-page">Managing configurations </span></a>.</div><div id="wwID0EM1MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_custom_assets.html#wwID0EWXSQ"
+   
+     title="Managing custom assets"
+    ><span class="heading-page">Managing custom assets</span></a>.</div><div id="wwID0EJ2MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-viewing_events.html#wwID0E2UTQ"
+   
+     title="Viewing Developer Portal events"
+    ><span class="heading-page">Viewing 
+				Developer Portal
+				events</span></a>.</div><div id="wwID0EG3MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-viewing_health.html#wwID0ENAUQ"
+   
+     title="Viewing Developer Portal health"
+    ><span class="heading-page">Viewing 
+				Developer Portal
+				health</span></a>.</div><div id="wwID0ED4MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_notifications.html#wwID0EMMUQ"
+   
+     title="Managing notifications"
+    ><span class="heading-page">Managing notifications </span></a>.</div><div id="wwID0EA5MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-getting_oauth_token.html#wwID0EEXUQ"
+   
+     title="Getting OAuth token"
+    ><span class="heading-page">Getting OAuth token</span></a>.</div><div id="wwID0E45MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_packages.html#wwID0EB5UQ"
+   
+     title="Managing packages"
+    ><span class="heading-page">Managing packages</span></a>.</div><div id="wwID0E16MQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_plans.html#wwID0EMUVQ"
+   
+     title="Managing plans"
+    ><span class="heading-page">Managing plans</span></a>.</div><div id="wwID0EXANQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_providers.html#wwID0EB5VQ"
+   
+     title="Managing providers"
+    ><span class="heading-page">Managing providers</span></a>.</div><div id="wwID0EUBNQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-performing_search.html#wwID0EENWQ"
+   
+     title="Performing search"
+    ><span class="heading-page">Performing search</span></a>.</div><div id="wwID0ERCNQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_teams.html#wwID0E5UWQ"
+   
+     title="Managing teams"
+    ><span class="heading-page">Managing teams</span></a>.</div><div id="wwID0EODNQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_topics.html#wwID0EHCXQ"
+   
+     title="Managing topics"
+    ><span class="heading-page">Managing topics</span></a>.</div><div id="wwID0ELENQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_application_requests.html#wwID0EWVXQ"
+   
+     title="Managing application and subscription requests"
+    ><span class="heading-page">Managing application and subscription requests</span></a>.</div><div id="wwID0EIFNQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_users.html#wwID0EABYQ"
+   
+     title="Managing users"
+    ><span class="heading-page">Managing users</span></a>.</div><div id="wwID0EFGNQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>
+    <a href="../dpo-webhelp/re-managing_webhooks.html#wwID0E53YQ"
+   
+     title="Managing webhooks"
+    ><span class="heading-page">Managing webhooks</span></a>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2014-2024&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

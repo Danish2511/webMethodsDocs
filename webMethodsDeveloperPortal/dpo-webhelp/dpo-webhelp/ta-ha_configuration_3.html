@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Configuring Ignite</title><link rel="Prev" href="ta-ha_configuration_2.html" title="Previous" /><link rel="Next" href="ta-ha_configuration_4.html" title="Next" /><link rel="StyleSheet" href="css/_developer_portal_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_developer_portal_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/dpo-webhelp/ta-ha_configuration_3.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pD_002bw9HLA0NHTflOuy7T5cdA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/dpo-webhelp/ta-ha_configuration_3.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Developer Portal</span>&nbsp;11.0 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/_developer_portal_webhelp.1.013.html#wwconnect_header">Using Developer Portal</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/to-administration.html#wwconnect_header">Administration</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/co-overview.html#wwconnect_header">High availability Configuration</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/ta-ha_configuration.html#wwconnect_header">Configuring High Availability</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Configuring Ignite</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ED1DM" class="Heading_4">Configuring Ignite</div><div id="wwID0ET1DM" class="Body">Developer Portal uses the embedded Ignite-core library to setup a cluster, without having to start any external runtime.</div><div id="wwID0EY1DM" class="Body">In Ignite terminology:</div><div id="wwID0EI2DM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>a single Developer Portal with embedded ignite is an Ignite server node,</div><div id="wwID0E22DM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>together they form an Ignite cluster,</div><div id="wwID0EO3DM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>and it is a stateless cluster as Developer Portal does not require persistence for its distributed caches.</div><div id="wwID0ED4DM" class="Body"><span class="inlinetitle">Ignite cluster discovery</span></div><div id="wwID0EN4DM" class="Body">Each Ignite server node has to open a discovery port. Through this port, the nodes discover each other and form the cluster, and they detect the nodes that are added or removed from the cluster.</div><div id="wwID0ES4DM" class="Body">Each node in the cluster must be configured with a list of initial host names. These nodes will contact each other via the discovery port and form a cluster. Later more nodes can be added to the cluster, and even if their host names are not part of the initial host name list they can join the cluster by contacting one of the initial hosts, and then their host names will be communicated around the cluster.</div><div id="wwID0EX4DM" class="Body"><span class="inlinetitle">Pre-requisites</span></div><div id="wwID0EB5DM" class="Body">Ensure that you have opened up the following ports:</div><div id="wwID0EM5DM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">47500 - 47509</span>. These ports enable the discovery of Ignite nodes.</div><div id="wwID0EC6DM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">47100 - 47200</span>. These ports enable communication between Ignite nodes. Ensure that these ports are accessible across other nodes.</div><div id="wwID0EY6DM" class="List_1_Continued">If you have blocked the access of the port 47100 by any another application in the system, you need to open up the complete series. You can just open up the 47100 port. For more info refer 
+    <a href="https://ignite.apache.org/docs/latest/clustering/network-configuration"
+   
+     target="external_window"
+    ><span class="heading-page">https://ignite.apache.org/docs/latest/clustering/network-configuration</span></a>.</div><div id="wwID0EJAEM" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>It is recommended that you do not open the following local ports when you system is behind firewall:</div><div id="wwID0EBBEM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">10800</span>. Enables communication between the thin client and the Ignite cluster.</div><div id="wwID0EXBEM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">11211</span>. Enables communication between the JDBC client and the Ignite database.</div><div id="wwID0ENCEM" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">47400</span>. Enables node discovery via the UDP port.</div><div id="wwID0EHDEM" class="Body">Perform the following steps in all nodes of a cluster.</div><div id="wwID0EMDEM" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span><span class="ph">To configure Ignite</span></div><div id="wwID0E3DEM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Open the </span><span class="Command_002c_filepath">dpo_wrapper.conf</span><span class="Command"> file from the location, </span><span class="Command_002c_filepath_002c_varname">SAGInstallDir</span><span class="Command_002c_filepath">/DeveloperPortal/configuration</span><span class="Command">. </span></div><div id="wwID0EHFEM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Add the following entries: </span></div><div id="wwID0EEGEM" class="Preformatted_1">wrapper.java.additional.310=-Dportal.server.cache.distributed.enabled=true<br />wrapper.java.additional.311=-Dportal.server.cache.distributed.cluster.peers.0=&lt;devPortal1_hostname&gt;:47500..47509<br />wrapper.java.additional.312=-Dportal.server.cache.distributed.cluster.peers.1=&lt;devPortal2_hostname&gt;:47500..47509<br />wrapper.java.additional.313=-Dportal.server.cache.distributed.cluster.peers.2=&lt;devPortal3_hostname&gt;:47500..47509</div><div id="wwID0EKGEM" class="Note_1"><span class="Bold">Note:<br /></span>The values 311, 312, and 313 mentioned in the code block need not be the same. They are sample values only. You can specify numbers of your choice. As a recommended practice, find the biggest number in the <span class="filepath">dpo_wrapper.conf</span> file and start incrementing the numbers for the next entries as and when you add them to the file. For example, if you see 2008 as the biggest value, then start assigning 2009, 2010 and so on to further entries.</div><div id="wwID0EGHEM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Save</span><span class="Command">. </span></div><div id="wwID0EFIEM" class="Step_Result_1">The configuration is saved.</div><div id="wwID0ELIEM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Start all Developer Portal nodes one after the other. </span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2014-2024&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

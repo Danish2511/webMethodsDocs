@@ -1,0 +1,83 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Configuring API Data Store</title><link rel="Prev" href="ta-ha_configuration.html" title="Previous" /><link rel="Next" href="ta-ha_configuration_3.html" title="Next" /><link rel="StyleSheet" href="css/_developer_portal_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_developer_portal_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/dpo-webhelp/ta-ha_configuration_2.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="ppcZTvmGJk_002bbA94JjXts7MQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/dpo-webhelp/ta-ha_configuration_2.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Developer Portal</span>&nbsp;11.0 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/_developer_portal_webhelp.1.013.html#wwconnect_header">Using Developer Portal</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/to-administration.html#wwconnect_header">Administration</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/co-overview.html#wwconnect_header">High availability Configuration</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../dpo-webhelp/ta-ha_configuration.html#wwconnect_header">Configuring High Availability</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Configuring API Data Store</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E3NDM" class="Heading_4">Configuring API Data Store</div><div id="wwID0EMODM" class="Body">Developer Portal installation includes the API Data Store that is used to store data. For clustering the API Data Stores of the instances, you must perform standard Elasticsearch clustering. For more information, see 
+    <a href="https://www.elastic.co/guide/en/elasticsearch/reference/8.2/high-availability.html"
+   
+     target="external_window"
+    ><span class="heading-page">https://www.elastic.co/guide/en/elasticsearch/reference/8.2/high-availability.html</span></a>.</div><div id="wwID0E3ODM" class="Body">You must perform the following steps in all nodes of a cluster.</div><div id="wwID0EBPDM" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span><span class="ph">To configure the API Data Store</span></div><div id="wwID0ERPDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">Open the </span><span class="Command_002c_filepath">elasticsearch.yml</span><span class="Command"> file from the location, </span><span class="Command_002c_filepath_002c_varname">SAGInstallDir</span><span class="Command_002c_filepath">/InternalDataStore/config/</span><span class="Command">. </span></div><div id="wwID0E3QDM" class="Step_Info_1">The following configuration is a sample of how the configuration appears initially.</div><div id="wwID0EBRDM" class="Preformatted_1">cluster.name: SAG_EventDataStore<br />node.name: portalnode1<br />path.logs: C:\SoftwareAG_DPO\InternalDataStore/logs<br />network.host: 0.0.0.0<br />http.port: 9240<br />discovery.seed_hosts: ["localhost:9340"]<br />transport.port: 9340<br />path.repo: ['C:\SoftwareAG\InternalDataStore/archives']<br />cluster.initial_master_nodes: "portalnode1"<br />xpack.ml.enabled: false<br />xpack.security.enabled: false</div><div id="wwID0EJRDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">Provide the name of the cluster in the </span><span class="Command_002c_uicontrol">cluster.name</span><span class="Command"> property. </span></div><div id="wwID0EISDM" class="Step_Info_1">Nodes with same cluster names form a cluster. That is, if there are three nodes in the cluster, the value in the <span class="uicontrol">cluster.name</span> property must be same across all three nodes. In other words, Elasticsearch forms a cluster with nodes that have the same <span class="uicontrol">cluster.name</span>.</div><div id="wwID0EVSDM" class="Body_1">For example,</div><div id="wwID0E1SDM" class="Preformatted_1">cluster.name: Dev_portal_cluster</div><div id="wwID0EDTDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command">Provide the names of all participating nodes in the </span><span class="Command_002c_uicontrol">discovery.seed_hosts</span><span class="Command"> property in the following format. </span></div><div id="wwID0EHUDM" class="Preformatted_1">host_name:port_name</div><div id="wwID0ECUDM-2" class="Step_Info_1">For example,</div><div id="wwID0ENUDM" class="Preformatted_1">discovery.seed_hosts: ["node1:9340","node2:9340","node3":"9340"]</div><div id="wwID0ETUDM" class="Note_1"><span class="Bold">Note:<br /></span>The value of the port must be same as specified in the <span class="uicontrol">transport.port</span> property.</div><div id="wwID0EPVDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>4. </span></span><span class="Command">Provide the names of the master-eligible nodes in the initial cluster in the </span><span class="Command_002c_uicontrol">cluster.initial_master_nodes</span><span class="Command"> property. </span></div><div id="wwID0EOWDM" class="Step_Info_1">You must provide the <span class="uicontrol">node.name</span> value in the <span class="uicontrol">cluster.initial_master_nodes</span> property.</div><div id="wwID0E3WDM" class="Step_Result_1">This parameter enables cluster bootstrapping when you start a cluster for the first time. This property must be defined on every master-eligible node in the cluster. This setting helps prevent split-brain, the existence of two masters in a single cluster. For example,</div><div id="wwID0EBXDM" class="Preformatted_1">cluster.initial_master_nodes:["portalnode1"]</div><div id="wwID0EJXDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>5. </span></span><span class="Command">Provide the repository in which you want to save the API Data Store backup snapshots in the </span><span class="Command_002c_uicontrol">path.repo</span><span class="Command"> property. </span></div><div id="wwID0EIYDM" class="Step_Info_1">It is important to have a location that is accessible to all the nodes. The location could be network file system, S3, or Azure in the clustered setup.</div><div id="wwID0ENYDM" class="Body_1">Sample configuration:</div><div id="wwID0ESYDM" class="Preformatted_1">cluster.name: Dev_portal_cluster<br />node.name: portalnode1<br />path.logs: /FS/fslocal/DPO1015/InternalDataStore/logs<br />network.host: 0.0.0.0<br />http.port: 9240<br />discovery.seed_hosts:["portal_server1:9340","portal_server2:9340","portal_server3":"9340"]<br />transport.port: 9340<br />path.repo: ['/FS/fslocal/DPO1015/InternalDataStore/archives']<br />cluster.initial_master_nodes: ["portalnode1","portalnode2","portalnode3"]<br />xpack.ml.enabled: false<br />xpack.security.enabled: false<br />xpack.security.transport.ssl.enabled: false<br />xpack.security.http.ssl.enabled: false<br />action.destructive_requires_name: false</div><div id="wwID0E2YDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>6. </span></span><span class="Command">Save the file. </span></div><div id="wwID0ETZDM" class="Step_Result_1">The specified API Data Store nodes are clustered.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2014-2024&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
