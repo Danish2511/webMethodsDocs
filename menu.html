@@ -1,128 +1,122 @@
 <!DOCTYPE html>
 <html>
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <style>
-      body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #222;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-        color: #fff;
-      }
 
-      .menu-container {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-        align-items: center;
-        gap: 20px;
-        padding: 20px;
-        width: 100%; /* Make it responsive */
-        max-width: 1200px; /* Limit container width */
-        box-sizing: border-box;
-      }
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #222;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #fff;
+    }
 
+    .menu-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 20px;
+      padding: 20px;
+      width: 100%;
+      /* Make it responsive */
+      max-width: 1200px;
+      /* Limit container width */
+      box-sizing: border-box;
+    }
+
+    .menu-item {
+      flex: 1 0 calc(25% - 40px);
+      /* 4 items per row, adjust for gap */
+      max-width: 250px;
+      /* Prevent oversized cards */
+      min-width: 200px;
+      /* Ensure minimum size */
+      background-color: #444;
+      color: #fff;
+      padding: 15px;
+      text-align: center;
+      border-radius: 12px;
+      text-decoration: none;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .menu-item:hover {
+      background-color: #555;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
+      transform: translateY(-5px);
+    }
+
+    .menu-item:before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.1);
+      transition: width 0.3s ease;
+      z-index: 1;
+    }
+
+    .menu-item:hover:before {
+      width: 100%;
+    }
+
+    .menu-item span {
+      position: relative;
+      z-index: 2;
+    }
+
+    @media (max-width: 768px) {
       .menu-item {
-        flex: 1 0 calc(25% - 40px); /* 4 items per row, adjust for gap */
-        max-width: 250px; /* Prevent oversized cards */
-        min-width: 200px; /* Ensure minimum size */
-        background-color: #444;
-        color: #fff;
-        padding: 15px;
-        text-align: center;
-        border-radius: 12px;
-        text-decoration: none;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
+        flex: 1 0 calc(50% - 20px);
+        /* 2 items per row on smaller screens */
       }
+    }
 
-      .menu-item:hover {
-        background-color: #555;
-        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4);
-        transform: translateY(-5px);
+    @media (max-width: 480px) {
+      .menu-item {
+        flex: 1 0 100%;
+        /* Single column on very small screens */
       }
+    }
+  </style>
+</head>
 
-      .menu-item:before {
-        content: "";
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 0;
-        height: 100%;
-        background: rgba(255, 255, 255, 0.1);
-        transition: width 0.3s ease;
-        z-index: 1;
-      }
+<body>
+  <div class="menu-container">
+    <a href="webMethodsIntegrationServer/index.html" class="menu-item" target="_parent">webMethods Integration
+      Server</a>
+    <a href="webMethodsJDBC/index.html" class="menu-item" target="_parent">JDBC Adapters</a>
+    <a href="webMethodsUniversalMessaging/index.html" class="menu-item" target="_parent">Universal Messaging</a>
+    <a href="https://documentation.softwareag.com/webmethods/adapters_estandards/eStandards/flatfile_module/wff_10-7/10-7_Flat-File-Integrated-Webhelp/"
+      class="menu-item" target="_parent">FlatFile</a>
+      <a href="webMethodsAdapterforJMS/index.html" class="menu-item" target="_parent">JMS Adapters</a>
+    <!-- <a href="webMethodsApacheKafka/index.html" class="menu-item" target="_parent">Apache Kafka</a>
+    <a href="webMethodsAdapterforMongoDB/index.html" class="menu-item" target="_parent">MongoDB Adapters</a>
+    <a href="webMethodsAPIGateway/index.html" class="menu-item" target="_parent">API Gateway</a>
+    <a href="webMethodsAPIPortal/index.html" class="menu-item" target="_parent">API Portal</a>
+    <a href="webMethodsEDI/index.html" class="menu-item" target="_parent">EDI</a>
+    <a href="webMethodsJMS/index.html" class="menu-item" target="_parent">JMS</a>
+    <a href="MWS/index.html" class="menu-item" target="_parent">My WebMethods Server</a>
+    <a href="webMethodsActiveTransferServer/webhelp/index.html" class="menu-item" target="_parent">Active Transfer</a>
+    <a href="webMethodsTradingNetworks/index.html" class="menu-item" target="_parent">Trading Network</a>
+    <a href="webMethodsDeveloperPortal/dpo-webhelp/index.html" class="menu-item" target="_parent">Developer Portal</a>
+    <a href="webMethodsMicroservicesRuntime/index.html" class="menu-item" target="_parent">Microservices Runtime</a>
+    <a href="webMethodsJavaServices/index.html" class="menu-item" target="_parent">Java Services</a>
+    <a href="webMethodsCloudStreamsServer/index.html" class="menu-item" target="_parent">Cloud Streams</a>
+    <a href="webMethodsTestSuite/index.html" class="menu-item" target="_parent">Test Suite</a> -->
+  </div>
+</body>
 
-      .menu-item:hover:before {
-        width: 100%;
-      }
-
-      .menu-item span {
-        position: relative;
-        z-index: 2;
-      }
-
-      @media (max-width: 768px) {
-        .menu-item {
-          flex: 1 0 calc(50% - 20px); /* 2 items per row on smaller screens */
-        }
-      }
-
-      @media (max-width: 480px) {
-        .menu-item {
-          flex: 1 0 100%; /* Single column on very small screens */
-        }
-      }
-    </style>
-  </head>
-
-  <body>
-    <div class="menu-container">
-      <a
-        href="webMethodsIntegrationServer/index.html"
-        class="menu-item"
-        target="_parent"
-        >webMethods Integration Server</a
-      >
-      <a href="webMethodsJDBC/index.html" class="menu-item" target="_parent"
-        >JDBC Adapters</a
-      >
-      <!-- <a href="webMethodsApacheKafka/index.html" class="menu-item" target="_parent">Apache Kafka</a>
-        <a href="webMethodsAdapterforJMS/index.html" class="menu-item" target="_parent">JMS Adapters</a>
-        <a href="webMethodsAdapterforMongoDB/index.html" class="menu-item" target="_parent">MongoDB Adapters</a>
-        <a href="webMethodsAPIGateway/index.html" class="menu-item" target="_parent">API Gateway</a>
-        <a href="webMethodsAPIPortal/index.html" class="menu-item" target="_parent">API Portal</a>
-        <a href="webMethodsEDI/index.html" class="menu-item" target="_parent">EDI</a>
-        <a href="webMethodsJMS/index.html" class="menu-item" target="_parent">JMS</a> -->
-      <a
-        href="webMethodsUniversalMessaging/index.html"
-        class="menu-item"
-        target="_parent"
-        >Universal Messaging</a
-      >
-      <!-- <a href="MWS/index.html" class="menu-item" target="_parent">My WebMethods Server</a>
-		<a href="webMethodsActiveTransferServer/webhelp/index.html" class="menu-item" target="_parent">Active Transfer</a>
-		<a href="webMethodsTradingNetworks/index.html" class="menu-item" target="_parent">Trading Network</a>
-		<a href="webMethodsDeveloperPortal/dpo-webhelp/index.html" class="menu-item" target="_parent">Developer Portal</a>
-		<a href="webMethodsMicroservicesRuntime/index.html" class="menu-item" target="_parent">Microservices Runtime</a>
-		<a href="webMethodsJavaServices/index.html" class="menu-item" target="_parent">Java Services</a>
-		<a href="webMethodsCloudStreamsServer/index.html" class="menu-item" target="_parent">Cloud Streams</a>
-		<a href="webMethodsTestSuite/index.html" class="menu-item" target="_parent">Test Suite</a> -->
-      <a
-        href="https://documentation.softwareag.com/webmethods/adapters_estandards/eStandards/flatfile_module/wff_10-7/10-7_Flat-File-Integrated-Webhelp/"
-        class="menu-item"
-        target="_parent"
-        >FlatFile</a
-      >
-    </div>
-  </body>
 </html>
