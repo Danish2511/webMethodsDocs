@@ -1,0 +1,105 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Architecture and Components</title><link rel="Prev" href="to-overview_2.html" title="Previous" /><link rel="Next" href="to-overview_4.html" title="Next" /><link rel="StyleSheet" href="css/_jms_iug_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_jms_iug_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/jms-webhelp/to-overview_3.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pikf3PoW5nDxI2OiNNFtD7w" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/jms-webhelp/to-overview_3.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Adapter for JMS</span>&nbsp;6.1 SP1 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../jms-webhelp/to-landing_page.html#wwconnect_header">webMethods Adapter for JMS Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../jms-webhelp/_jms_iug_webhelp.1.006.html#wwconnect_header">webMethods Adapter for JMS Installation and User’s Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../jms-webhelp/to-overview.html#wwconnect_header">About the Adapter for JMS</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Architecture and Components</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EPPAG" class="Heading_3">Architecture and Components</div><div id="wwID0EYPAG" class="Body">The <span class="ph">Adapter for JMS</span> enables you to configure the following components:</div><div id="wwID0EGQAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Adapter Connections: Enable the <span class="ph">webMethods product suite</span> to connect to JMS providers at run time.</div><div id="wwID0E2QAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Adapter Services: Perform operations on JMS providers using the built-in services provided with the <span class="ph">Adapter for JMS</span>.</div><div id="wwID0EQRAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>MessageListener Notifications: Provide Asynchronous notification of messages in queues and topics.</div><div id="wwID0ECSAG" class="Body">The following diagram illustrates how the <span class="ph">Adapter for JMS</span> interfaces with a JMS provider using JMS APIs. Following the diagram are descriptions of the different architectural pieces involved in the integration process.</div><div id="wwID0EMSAG" class="Body">For a more detailed description of the run time data flow for the different types of <span class="ph">Adapter for JMS</span> services, see 
+    <a href="../jms-webhelp/to-overview_10.html#wwID0E55BG"
+   
+     title="Adapter Services"
+    ><span class="heading-page">Adapter Services</span></a>.</div><div class="ww_skin_page_overflow"><div id="wwID0EDTAG" class="Figure"><img class="Default" src="../jms-webhelp/images/arch_and_components.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 254px; max-width: 370px; top: 0pt" alt="" /></div></div><div id="wwID0EWTAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">webMethods Integration Server</span>. The <span class="ph">Adapter for JMS</span> is installed and runs on the <span class="ph">Integration Server</span>.</div><div id="wwID0ESUAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">WmART Package.</span> The WmART package provides a common framework for <span class="ph">webMethods product suite</span> 6.x and later adapters to utilize the <span class="ph">Integration Server</span> functionality, making the <span class="ph">Integration Server</span> the run-time environment for the <span class="ph">Adapter for JMS</span>. The WmART package is installed with the <span class="ph">Integration Server</span>.</div><div id="wwID0E2VAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="uicontrol">Adapter for JMS</span>. The <span class="ph">Adapter for JMS</span> is delivered as a single package called WmJMSAdapter.</div><div id="wwID0EZWAG" class="List_1_Continued">The <span class="ph">Adapter for JMS</span> provides <span class="ph">Integration Server Administrator</span> and <span class="ph">Designer</span> user interfaces that enable you to configure and manage adapter connections, adapter services, and adapter notifications.</div><div id="wwID0EMXAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Adapter Connection Templates</span>. Adapter connections enable the <span class="ph">Adapter for JMS</span> to connect to JMS providers. You must configure an adapter connection before you can configure adapter services or adapter notifications. The <span class="ph">Adapter for JMS</span> connections use JNDI to look up the JMS connection factories.</div><div id="wwID0EJYAG" class="List_1_Continued">You configure adapter connections using the <span class="ph">Integration Server Administrator</span>. For a detailed description of adapter connections, see 
+    <a href="../jms-webhelp/to-overview_5.html#wwID0EEIBG"
+   
+     title="Adapter Connections"
+    ><span class="heading-page">Adapter Connections</span></a>.</div><div id="wwID0E6YAG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Adapter Service Templates</span>. Adapter services enable the <span class="ph">Adapter for JMS</span> to produce and consume messages from JMS destinations (queues and topics). The <span class="ph">Adapter for JMS</span> provides adapter service templates that enable you to configure adapter services. The <span class="ph">Adapter for JMS</span> services use JNDI to look up the JMS destinations.</div><div id="wwID0EA1AG" class="List_1_Continued">You configure adapter services in <span class="ph">Designer</span> using the <span class="ph">Adapter for JMS</span> adapter services templates. For a detailed description of adapter services, see 
+    <a href="../jms-webhelp/to-overview_10.html#wwID0E55BG"
+   
+     title="Adapter Services"
+    ><span class="heading-page">Adapter Services</span></a>.</div><div id="wwID0E11AG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Adapter Notification Template</span>. Adapter notifications enable the <span class="ph">Adapter for JMS</span> to listen to and retrieve messages from JMS destinations (queues and topics). The <span class="ph">Adapter for JMS</span> provides an adapter notification template that enables you to configure adapter notifications. The <span class="ph">Adapter for JMS</span> notifications use JNDI to look up the JMS destinations.</div><div id="wwID0E22AG" class="List_1_Continued">You configure adapter notifications in <span class="ph">Designer</span> using the <span class="ph">Adapter for JMS</span> adapter notification templates. For a detailed description of adapter notifications, see 
+    <a href="../jms-webhelp/to-overview_15.html#wwID0EUABI"
+   
+     title="Adapter Notifications"
+    ><span class="heading-page">Adapter Notifications</span></a>.</div><div id="wwID0EV3AG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">JMS APIs</span>. The <span class="ph">Adapter for JMS</span> uses JMS APIs to interface with JMS providers.</div><div id="wwID0EO4AG" class="List_1_Continued">For more information about the JMS API libraries that the adapter requires, see 
+    <a href="../jms-webhelp/to-install.html#wwID0EOHCI"
+   
+     title="Installing, Upgrading, and Uninstalling the Adapter for JMS"
+    ><span class="heading-page">Installing, Upgrading, and Uninstalling the 
+				Adapter for JMS</span></a>.</div><div id="wwID0EA5AG" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">JMS Provider</span>. <span class="ph">Adapter for JMS</span> services and notifications are associated with specific JMS destinations (queues or topics) in the JMS provider.</div><div id="wwID0EZ5AG" class="List_1_Continued">The <span class="ph">Adapter for JMS</span> can retrieve configured ConnectionFactory and Destination class objects from a JNDI-supported naming service. The <span class="ph">Adapter for JMS</span> does not dictate how a JMS provider should publish connection factory and message destination entities. However, it supports only those JMS providers that publish these objects in a JNDI-supported naming service. To configure objects of these classes and to register them in a JNDI naming service, you must use the administrative tools provided by your JMS provider.</div><div id="wwID0EH6AG" class="List_1_Continued">The ConnectionFactory class exposes methods that enable a JMS application to establish connections to the underlying messaging system.</div><div id="wwID0EM6AG" class="List_1_Continued">Destination class objects identify:</div><div id="wwID0EV6AG" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Topics:</span> An application may publish to, or subscribe to, a topic.</div><div id="wwID0EKABG" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="inlinetitle">Queues:</span> An application may send messages to, or receive messages from, a queue.</div><div id="wwID0EABBG" class="List_1_Continued">For a complete list of JMS providers that the <span class="ph">Adapter for JMS</span> supports, see 
+    <a href="../jms-webhelp/to-install.html#wwID0EOHCI"
+   
+     title="Installing, Upgrading, and Uninstalling the Adapter for JMS"
+    ><span class="heading-page">Installing, Upgrading, and Uninstalling the 
+				Adapter for JMS</span></a>.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2001-2021&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

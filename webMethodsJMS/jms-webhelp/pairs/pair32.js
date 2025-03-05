@@ -1,0 +1,20 @@
+var pairs =
+{
+"requirements":{"list":1,"adapter":1,"beyond":1}
+,"list":{"operating":1}
+,"operating":{"systems":1}
+,"systems":{"jms":1}
+,"jms":{"products":1,"6.1":1}
+,"products":{"webmethods":1,"supported":1}
+,"webmethods":{"products":1,"adapters":1}
+,"supported":{"adapter":1}
+,"adapter":{"jms":1}
+,"6.1":{"sp1":1}
+,"sp1":{"webmethods":1,"hardware":1}
+,"adapters":{"system":1}
+,"system":{"requirements":1}
+,"hardware":{"requirements":1}
+,"beyond":{"integration":1}
+,"integration":{"server":1}
+}
+;Search.control.loadWordPairs(pairs);

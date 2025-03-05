@@ -1,0 +1,27 @@
+var pairs =
+{
+"weblogic":{"server":1,"servers":1}
+,"server":{"authentication":1}
+,"authentication":{"ensure":1,"adapter":1,"configure":1}
+,"ensure":{"proper":1}
+,"proper":{"authentication":1}
+,"adapter":{"jms":1,"throws":1}
+,"jms":{"connected":1}
+,"connected":{"multiple":1,"multipl":1}
+,"multiple":{"weblogic":1}
+,"servers":{"configu":1,"using":1}
+,"configu":{"watt.jmsadapter.weblogic":1}
+,"watt.jmsadapter.weblogic":{"parameter":1}
+,"parameter":{"jaas":1}
+,"jaas":{"authentication":1,"authenticatio":1}
+,"configure":{"parameter":1}
+,"authenticatio":{"adapter":1}
+,"throws":{"exception":1}
+,"exception":{"connected":1}
+,"multipl":{"weblogic":1}
+,"using":{"different":1}
+,"different":{"security":1}
+,"security":{"principles":1}
+,"principles":{"redentials":1}
+}
+;Search.control.loadWordPairs(pairs);

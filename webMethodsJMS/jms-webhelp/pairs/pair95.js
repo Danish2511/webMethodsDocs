@@ -1,0 +1,26 @@
+var pairs =
+{
+"transaction":{"types":1,"(local_transaction)":1,"resource\u0027s":1,"mechanism":1,"(xa_transaction)":1}
+,"types":{"integration":1}
+,"integration":{"server":1}
+,"server":{"supports":1,"manage":1,"administrator\u2019s":1}
+,"supports":{"following":1}
+,"following":{"kinds":1}
+,"kinds":{"transactions":1}
+,"transactions":{"local":1,"webmethods":1}
+,"local":{"transaction":1}
+,"(local_transaction)":{"transaction":1}
+,"resource\u0027s":{"local":1,"xar":1}
+,"mechanism":{"xaresource":1,"information":1}
+,"xaresource":{"transaction":1}
+,"(xa_transaction)":{"transaction":1}
+,"xar":{"esource":1}
+,"esource":{"transaction":1}
+,"information":{"using":1}
+,"using":{"integration":1}
+,"manage":{"transactions":1}
+,"webmethods":{"integration":1}
+,"administrator\u2019s":{"guide":1}
+,"guide":{"release":1}
+}
+;Search.control.loadWordPairs(pairs);

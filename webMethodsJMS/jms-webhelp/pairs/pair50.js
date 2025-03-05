@@ -1,0 +1,24 @@
+var pairs =
+{
+"clustering":{"considerations":1,"webmethods":1,"guide":1}
+,"considerations":{"requirements":1}
+,"requirements":{"note":1,"apply":1}
+,"note":{"following":1}
+,"following":{"sections":1,"considerations":1}
+,"sections":{"assume":1}
+,"assume":{"already":1}
+,"already":{"configur":1}
+,"configur":{"webmethods":1}
+,"webmethods":{"integration":1,"clustering":1}
+,"integration":{"server":1}
+,"server":{"cluster":1,"clustering":1}
+,"cluster":{"details":1}
+,"details":{"webmethods":1}
+,"guide":{"release":1}
+,"release":{"following":1}
+,"apply":{"adapter":1}
+,"adapter":{"jms":1}
+,"jms":{"clustered":1}
+,"clustered":{"environment":1}
+}
+;Search.control.loadWordPairs(pairs);

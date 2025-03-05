@@ -1,0 +1,22 @@
+var pairs =
+{
+"overview":{"chapter":1}
+,"chapter":{"describes":1}
+,"describes":{"configure":1}
+,"configure":{"manage":1}
+,"manage":{"adapter":1}
+,"adapter":{"jms":1,"connection":1,"services":1}
+,"jms":{"services":1,"providers":1}
+,"services":{"adapter":1,"allow":1}
+,"allow":{"clients":1}
+,"clients":{"interact":1}
+,"interact":{"jms":1}
+,"providers":{"using":1}
+,"using":{"configured":1}
+,"configured":{"adapter":1}
+,"connection":{"detailed":1}
+,"detailed":{"descriptions":1}
+,"descriptions":{"available":1}
+,"available":{"adapter":1}
+}
+;Search.control.loadWordPairs(pairs);
