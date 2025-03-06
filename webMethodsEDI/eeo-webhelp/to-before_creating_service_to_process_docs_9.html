@@ -1,0 +1,84 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Customizing the EDI Flat File Schema</title><link rel="Prev" href="to-before_creating_service_to_process_docs_8.html" title="Previous" /><link rel="Next" href="to-before_creating_service_to_process_docs_10.html" title="Next" /><link rel="StyleSheet" href="css/_edi_module_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_edi_module_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/eeo-webhelp/to-before_creating_service_to_process_docs_9.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="phJiDyHbbzVUO5T7ELGr4lg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/eeo-webhelp/to-before_creating_service_to_process_docs_9.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Module for EDI</span>&nbsp;9.12 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/_edi_module_integrated_webhelp.1.055.html#wwconnect_header">Installing and Using EDI Module</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-before_creating_service_to_process_docs.html#wwconnect_header">Before Creating the Service to Process EDI Documents</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-before_creating_service_to_process_docs_4.html#wwconnect_header">Logic to Include in the Service to Process EDI Documents</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-before_creating_service_to_process_docs_8.html#wwconnect_header">Processing the Document Iteratively, Segment by Segment</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Customizing the EDI Flat File Schema</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E1YWQ" class="Heading_4">Customizing the EDI Flat File Schema</div><div id="wwID0EIZWQ" class="Body"> The following procedure describes the high-level steps required to customize the EDI flat file schema for iterative processing using <span class="ph">Designer</span>. For more detailed information about managing flat file schemas, see the <span class="ph"> </span><span class="ph_002c_Citation">Flat File Schema Developer’s Guide</span>.</div><div class="ww_skin_page_overflow"><table class="Rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="padding-left: 2pt; padding-right: 2pt; width: 50.903999999999996pt"><div id="wwID0ES2WQ" class="Table_Cell_Head">Step</div></td><td class="Table_Cell_Head" style="padding-left: 2pt; padding-right: 2pt; width: 381.672pt"><div id="wwID0EY2WQ" class="Table_Cell_Head">Description</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EH3WQ" class="Table_Cell">1</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EN3WQ" class="Table_Cell"> If you created the EDI flat file schema from a SEF file, add the elements for the interchange envelopes and group envelopes into the flat file structure.</div><div id="wwID0EB4WQ" class="Table_Cell"> SEF files do not describe these elements. Your service will execute the <span class="apiname">wm.b2b.edi:convertToValues</span> service against the entire EDI document rather than just a transaction set or file. As a result, the flat file schema needs to reflect the envelope structure.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EE5WQ" class="Table_Cell">2</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EK5WQ" class="Table_Cell">Update the flat file structure to reflect how you want the <span class="apiname">convertToValues</span> service to return segments.</div><div id="wwID0EV5WQ" class="Table_Cell">When you execute the <span class="apiname">convertToValues</span> service with the iterator input parameter set to true, the <span class="apiname">convertToValues</span> service uses the flat file structure to determine the number of segments to process into an IData object. It starts processing at a top-level element and processes all of its children into an IData object in one invocation. For example, if you want the first invocation to return only the ISA header information, update the structure as follows:</div><div id="wwID0EK6WQ" class="Preformatted">ISA   <br /> ISA01   <br /> ISA02   <br />ISA03   <br />ISA04   <br />ISA05   <br />ISA06   <br />ISA07   <br />ISA08   <br />ISA09   <br />ISA10   <br />ISA11   <br />ISA12   <br />ISA13   <br />ISA14   <br />ISA15   <br />ISA15   <br />GS   <br />.   <br />.   <br />.</div><div id="wwID0EQ6WQ" class="Table_Cell">Because GS is not a child under ISA, the <span class="apiname">convertToValues</span> service would return only the ISA entry as an IData object. A subsequent call would act on the GS entry.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBAXQ" class="Table_Cell">3</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHAXQ" class="Table_Cell"> Identify the repeating sections of the EDI document that you want to loop over to process and remove these sections from the flat file schema structure. For example, in an ANSI X12 810 document, you might want to loop over the <span class="codeph">IT1</span> (line item) segments because you want the line items included in the invoice.</div><div class="ww_skin_page_overflow"><div id="wwID0E6AXQ" class="Figure"><img class="Default" src="../eeo-webhelp/images/b4-create-srv_ex_loop_over_repeating_sections.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 265px; max-width: 315px; top: 0pt" alt="" /></div></div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVBXQ" class="Table_Cell">4</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E2BXQ" class="Table_Cell">During execution of the <span class="apiname">convertToValues</span> service with the updated flat file schema, when the service encounters sections of the document that are not defined in the flat file schema structure, it places those sections as unparsed in the returned IData object. The unparsed sections will be in either an element named <span class="varname">unDefData</span>, or in an element named <span class="varname">_RID_</span> if the document is considered large. For more information about large documents, see 
+    <a href="../eeo-webhelp/to-handling_large_docs.html#wwID0E5JLQ"
+   
+     title="Handling Large Documents When Using Trading Networks"
+    ><span class="heading-page">Handling Large Documents When Using 
+				Trading Networks </span></a>.</div><div class="ww_skin_page_overflow"><div id="wwID0EZCXQ" class="Figure"><img class="Default" src="../eeo-webhelp/images/b4-create-srv_sample_returned_idata_object.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 111px; max-width: 153px; top: 0pt" alt="" /></div></div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EPDXQ" class="Table_Cell">5</div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EVDXQ" class="Table_Cell">Create new flat file schemas for the sections that you removed from the EDI flat file schema.</div><div id="wwID0E2DXQ" class="Table_Cell">In your service, you will perform a second pass of the <span class="apiname">convertToValues</span> service for the unparsed sections of the document. When you invoke the <span class="apiname">convertToValues</span> service for the second pass, the input flat file schema is this new flat file schema that you are creating that defines the structure of the data left unparsed, that is, a repeating section of the document that you want to process iteratively.</div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2000-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

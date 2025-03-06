@@ -1,0 +1,100 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Configuring Control Number Settings</title><link rel="Prev" href="to-defining_control_num_info_5.html" title="Previous" /><link rel="Next" href="to-defining_control_num_info_7.html" title="Next" /><link rel="StyleSheet" href="css/_edi_module_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_edi_module_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/eeo-webhelp/to-defining_control_num_info_6.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pcAaKglbv6W2TGnuLJozjXQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/eeo-webhelp/to-defining_control_num_info_6.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Module for EDI</span>&nbsp;9.12 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/_edi_module_integrated_webhelp.1.055.html#wwconnect_header">Installing and Using EDI Module</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-defining_control_num_info.html#wwconnect_header">Defining Control Number Information for Trading Partners</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-defining_control_num_info_3.html#wwconnect_header">Managing Control Number Information</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Configuring Control Number Settings</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EM64O" class="Heading_3">Configuring Control Number Settings</div><div class="WebWorks_MiniTOC"><div class="WebWorks_MiniTOC_Heading">&nbsp;</div><dl class="WebWorks_MiniTOC_List"><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../eeo-webhelp/to-defining_control_num_info_7.html#wwconnect_header">Configuring Control Number Settings Using the My webMethods Control Numbers Page</a></div></dd><dd><div class="WebWorks_MiniTOC_Entry"><a class="WebWorks_MiniTOC_Link" href="../eeo-webhelp/to-defining_control_num_info_8.html#wwconnect_header">Configuring Control Number Settings Using the My webMethods Partner Profiles Page</a></div></dd></dl></div><div id="wwID0EV64O" class="Body">             <span class="ph">Module for EDI</span> uses the control number maximum, minimum, increment, and window settings to determine the next control number to expect, whether a control number is valid or invalid, and whether an invalid control number is a duplicate or an out-of-sequence control number. <span class="ph">Module for EDI</span> maintains these settings in the EDIControlNumber table.</div><div id="wwID0EZD5O" class="Body">The table below describes the control number settings and their defaults.</div><div class="ww_skin_page_overflow"><table class="rules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 24.9%"><div id="wwID0EJF5O" class="Table_Cell_Head">Setting</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 49.9%"><div id="wwID0EPF5O" class="Table_Cell_Head">Description</div></td><td class="Table_Cell_Head" style="background-color: #CFCFCE; border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 25.1%"><div id="wwID0EVF5O" class="Table_Cell_Head">Default</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEG5O" class="Table_Cell">control number</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESG5O" class="Table_Cell">The next control number to expect. You can set an initial value. <span class="ph">Module for EDI</span> updates this setting so it is always set to the next expected control number.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E4G5O" class="Table_Cell">1</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EIH5O" class="Table_Cell">     control number increment</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBJ5O" class="Table_Cell">The value you want <span class="ph">Module for EDI</span> to use to increment a control number when determining the next expected control number.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMJ5O" class="Table_Cell">1</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EXJ5O" class="Table_Cell">     control number maximum</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EQL5O" class="Table_Cell">The highest number the control number can be.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EWL5O" class="Table_Cell">99999999999999</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EBM5O" class="Table_Cell">     control number minimum</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E1N5O" class="Table_Cell">The lowest number the control number can be.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EAO5O" class="Table_Cell">0 (for VDA)</div><div id="wwID0EGO5O" class="Table_Cell">1 (for all other standards)</div></td></tr><tr><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ERO5O" class="Table_Cell">     control number window</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EKQ5O" class="Table_Cell">A number used to compute a range of numbers. <span class="ph">Module for EDI</span> uses this range of numbers to determine whether an invalid control number is a duplicate or an out-of-sequence control number. For more information, see 
+    <a href="../eeo-webhelp/to-optional_inbound_proc_with_tn_5.html#wwID0EUMKR"
+   
+     title="Invalid Control Numbers"
+    ><span class="heading-page">Invalid Control Numbers</span></a>.</div></td><td class="Table_Cell" style="border-bottom-color: Black; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5Q5O" class="Table_Cell">100</div></td></tr></table></div><div id="wwID0EIR5O" class="Body">For example, <span class="ph">Module for EDI</span> receives an Interchange document that has an interchange header identifying sender A, receiver B, a production mode of Production, and a type of Envelope. The module locates the control number settings by locating the EDIControlNumber table entry for sender A, receiver B, where production mode is Production, and type is Envelope. If the module is validating a control number in an inbound document, and an EDIControlNumber table entry does not exist for the combination of sender/receiver, EDI standard/version, production mode, and type, the module:</div><div id="wwID0EWR5O" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span>Adds an entry to the table</div><div id="wwID0EHS5O" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span>Sets the control number maximum, minimum, increment, and window to their defaults</div><div id="wwID0EYS5O" class="Numbered_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span>Sets the next expected control number to the sum of the control number from the inbound EDI document plus the control number increment</div><div id="wwID0EKT5O" class="Note"><span class="Bold">Note:<br /></span>It is possible for <span class="ph">Module for EDI</span> to encounter more than one sender/receiver pair that maps to the same <span class="ph">Trading Networks</span> internal ID. For example, when you have the same sender ID/receiver ID pair combination for two separate sender/receiver pairs, the two pairs map to the same <span class="ph">Trading Networks</span> internal ID. Because <span class="ph">Module for EDI</span> uses the same <span class="ph">Trading Networks</span> internal ID to identify senders and receivers in the EDIControlNumber table, both sender/receiver pairs correlate to the same row in the EDIControlNumber table. As a result, when <span class="ph">Module for EDI</span> receives a document from either sender/receiver pair, it will update the next expected control number in the same row of the EDIControlNumber table.</div><div id="wwID0EXU5O" class="Body_-_Note_-_not_first">When your environment is set up so that <span class="ph">Module for EDI</span> maintains separate control number sequences for each sender/receiver pair, the module will indicate that the example’s control numbers are invalid. This is because the module checks the control number sequences for two sender/receiver pairs using the same EDIControl number entry.</div><div id="wwID0EBV5O" class="Body_-_Note_-_not_first">To identify sender and receiver pairs correctly in this scenario, set the EDIAllowCustomControlNumberSequence property to true. When EDIAllowCustomControlNumberSequence is set to true, <span class="ph">Module for EDI</span> looks up the next control number using both the sender/receiver ID and the sender/receiver qualifiers.</div><div id="wwID0ELV5O" class="Body_-_Note_-_not_first">For more information about the EDIAllowCustomControlNumberSequence property, see 
+    <a href="../eeo-webhelp/to-configuring_edi_module_4.html#wwID0ECAIM"
+   
+     title="Defining Module for EDI Properties"
+    ><span class="heading-page">Defining 
+						Module for EDI Properties</span></a>.</div><div id="wwID0E2V5O" class="Body">Configure control number settings using either the Control Numbers page or the Partner Profiles page in <span class="ph">My webMethods</span>. For more information about configuring control number settings using the Control Numbers page, see 
+    <a href="../eeo-webhelp/to-defining_control_num_info_7.html#wwID0EWX5O"
+   
+     title="Configuring Control Number Settings Using the My webMethods Control Numbers Page"
+    ><span class="heading-page">Configuring Control Number Settings Using
+										the 
+										My webMethods Control Numbers Page</span></a>. For more information about configuring control number settings using the Partner Profiles page, see 
+    <a href="../eeo-webhelp/to-defining_control_num_info_8.html#wwID0ELEAQ"
+   
+     title="Configuring Control Number Settings Using the My webMethods Partner Profiles Page"
+    ><span class="heading-page">Configuring Control Number Settings Using
+										the 
+										My webMethods Partner Profiles Page</span></a>.</div><div id="wwID0EXW5O" class="Note"><span class="Bold">Note:<br /></span>You must have the Manage Control Numbers general functional permission to configure control number settings using the Control Number page.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2000-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

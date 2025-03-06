@@ -1,0 +1,92 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>FAReconciliation Variable</title><link rel="Prev" href="to-defining_partner_info_14.html" title="Previous" /><link rel="Next" href="to-defining_partner_info_16.html" title="Next" /><link rel="StyleSheet" href="css/_edi_module_integrated_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_edi_module_integrated_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/eeo-webhelp/to-defining_partner_info_15.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pmjxLQIrBPETpE_002fiGw4MKOA" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/eeo-webhelp/to-defining_partner_info_15.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Module for EDI</span>&nbsp;9.12 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/_edi_module_integrated_webhelp.1.055.html#wwconnect_header">Installing and Using EDI Module</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-defining_partner_info.html#wwconnect_header">Defining Trading Partner Information</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-defining_partner_info_7.html#wwconnect_header">Defining EDI Trading Partner Agreements</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../eeo-webhelp/to-defining_partner_info_10.html#wwconnect_header">wm.b2b.editn.TPA:EDITPA IS Document Type</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">FAReconciliation Variable</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EYEJO" class="Heading_4">FAReconciliation Variable</div><div id="wwID0ERFJO" class="Definition_Term"><span class="varname">FAReconciliation</span> EDITPA Variable</div><div id="wwID0E3FJO" class="Definition_Description">Default: false</div><div id="wwID0EBGJO" class="Definition_Description">   The <span class="varname">FAReconciliation</span> variable indicates whether to enable FA reconciliation so <span class="ph">Module for EDI</span> performs both of the following:</div><div id="wwID0EMHJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Reconciles inbound FA acknowledgments that it receives with the outbound EDI documents that it has sent</div><div id="wwID0EEIJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Reconciles outbound FA acknowledgments that it sends with the inbound EDI documents that it has received</div><div id="wwID0E4IJO" class="Definition_Description">To reconcile FAs, <span class="ph">Module for EDI</span> makes a record of each Group/Interchange EDI document that it sends and receives through <span class="ph">Trading Networks</span>. For ANSI EDI documents, the module records each Group document it sends or receives. For UN/EDIFACT EDI documents, the module records each Group document if the EDI document contains Group-level documents; if it does not, the module records Interchange-level document. <span class="ph">Module for EDI</span> records the information about these documents to the EDITRACKING table, which is a <span class="ph">Module for EDI</span>-specific table in the <span class="ph">Trading Networks</span> database. For more information about the EDITRACKING table, see 
+    <a href="../eeo-webhelp/to-forming_docs_to_send_outbound_using_tn_17.html#wwID0ESTZR"
+   
+     title="Routing the Outbound EDI Document to Trading Networks"
+    ><span class="heading-page">Routing the Outbound EDI Document to 
+								Trading Networks </span></a>.</div><div id="wwID0EAKJO" class="Note_1"><span class="Bold">Note:</span>  When you form an outbound EDI document and send it directly to the <span class="ph">Trading Networks</span> processing rules rather than allow <span class="ph">Trading Networks</span> to recognize the document with its TN document types, you will need to invoke the <span class="apiname">wm.b2b.editn:trackEDIdocs</span> service to record the outbound document in the EDITRACKING table.</div><div id="wwID0E2LJO" class="Definition_Description">When FA reconciliation is enabled, <span class="ph">Module for EDI</span> updates the status for each Group/Interchange document in the EDITRACKING table when it sends or receives the Group/Interchange document's corresponding FA. For more information about FA reconciliation, see 
+    <a href="../eeo-webhelp/to-reonciling_fas.html#wwID0ESFFS"
+   
+     title="Reconciling Functional Acknowledgments"
+    ><span class="heading-page">Reconciling Functional Acknowledgments</span></a>.</div><div class="ww_skin_page_overflow"><table class="NoRules1" cellspacing="0" summary=""><tr><td class="Table_Cell_Head" style="padding-left: 2pt; padding-right: 2pt; width: 90pt"><div id="wwID0ESNJO" class="Table_Cell_Head">Value</div></td><td class="Table_Cell_Head" style="padding-left: 2pt; padding-right: 2pt; width: 342pt"><div id="wwID0EYNJO" class="Table_Cell_Head">Description</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EHOJO" class="Table_Cell"><span class="codeph">true</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0ESOJO" class="Table_Cell"><span class="ph">Module for EDI</span> enables FA reconciliation.</div><div id="wwID0EAPJO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module sends or receives a Group/Interchange document through <span class="ph">Trading Networks</span>, it adds an entry to the EDITRACKING table the document and sets the FA status to <span class="uicontrol">None</span>.</div><div id="wwID0EZPJO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module receives or sends the corresponding FA, it attempts to locate the corresponding Group/Interchange document in the EDITRACKING table.</div><div id="wwID0ENQJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module locates a matching entry, it updates the FA status. For example, if the module locates one matching document and the FA has the "A" (Accept) status, the module updates the FA status to <span class="uicontrol">Accept</span>.</div><div id="wwID0ECRJO" class="List_2_Continued">For a list of all possible statuses, see 
+    <a href="../eeo-webhelp/to-reonciling_fas_6.html#wwID0E1MGS"
+   
+     title="FA Statuses"
+    ><span class="heading-page">FA Statuses</span></a>.</div><div id="wwID0ESRJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module cannot find a matching entry, it adds an entry for the FA to the EDITRACKING table.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EMSJO" class="Table_Cell"><span class="codeph">false</span></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EXSJO" class="Table_Cell">  <span class="ph">Module for EDI</span> disables FA reconciliation.</div><div id="wwID0EPTJO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module sends or receives a Group/Interchange document through <span class="ph">Trading Networks</span>, it adds an entry to the EDITRACKING table the document and sets the  FA status to <span class="uicontrol">Disable</span>.</div><div id="wwID0EWUJO" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module receives or sends the corresponding FA, it attempts to locate the corresponding Group/Interchange document in the EDITRACKING table.</div><div id="wwID0EKVJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module locates a matching entry and the status is <span class="uicontrol">Disable</span>, it does nothing.</div><div id="wwID0E6VJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module locates a matching entry and the status is <span class="uicontrol">None</span>, it updates the status to <span class="uicontrol">Disable</span>.</div><div id="wwID0EYWJO" class="List_2"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When the module cannot find a matching entry, it adds an entry for the FA to the EDITRACKING table.</div></td></tr></table></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2000-2023&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
