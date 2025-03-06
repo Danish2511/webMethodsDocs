@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>The Intervals for Metric Publishing</title><link rel="Prev" href="to-admin_config_6.html" title="Previous" /><link rel="Next" href="to-admin_config_8.html" title="Next" /><link rel="StyleSheet" href="css/_cloudstreams_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_cloudstreams_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/wst-webhelp/to-admin_config_7.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pLh8TKIY558bKHOEH4_002fvUmQ" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/wst-webhelp/to-admin_config_7.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>CloudStreams</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-wst_webhelp_landing_page.html#wwconnect_header">webMethods CloudStreams Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/_cloudstreams_webhelp.1.006.html#wwconnect_header">Administering webMethods CloudStreams</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-admin_config.html#wwconnect_header">CloudStreams Configuration Options</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-admin_config_3.html#wwconnect_header">The Administration Options</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-admin_config_6.html#wwconnect_header">Setting the Database Options for Publishing Performance Metrics and Events</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">The Intervals for Metric Publishing</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EA5BK" class="Heading_5">The Intervals for Metric Publishing</div><div id="wwID0EJ5BK" class="Body"><span class="ph">CloudStreams</span> tracks performance metrics by intervals. The interval is a period of time you set in <span class="ph">CloudStreams</span>, during which metrics are collected for reporting to <span class="ph">CloudStreams</span>.</div><div id="wwID0E15BK" class="Body">There are two cases in which you specify an interval when measuring performance:</div><div id="wwID0EF6BK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When you publish performance indicator (KPI) metrics and events to the <span class="ph">CloudStreams</span> Analytics dashboard. In this case, you set the interval in <span class="ph">Integration Server Administrator</span>, in <span class="uicontrol">Solutions &gt; CloudStreams &gt; Administration &gt; Database</span>.</div><div id="wwID0EEACK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>When monitoring a virtual service's run-time performance with the actions <span class="Quote">Monitor Service Performance</span>, <span class="Quote">Monitor Service Level Agreement</span>, or <span class="Quote">Throttling Traffic Optimization</span>. In this case, you set an interval in the action's <span class="Quote">interval</span> parameter.</div><div id="wwID0EMBCK" class="Body">The rules of intervals are the same in both cases.</div><div id="wwID0ERBCK" class="Body"><span class="ph">CloudStreams</span> only tracks metrics for the current interval. At the end of the interval, <span class="ph">CloudStreams</span> aggregates the metrics and reports them to <span class="ph">CloudStreams</span>. <span class="ph">CloudStreams</span> resets its counters immediately for the next interval, even if the last interval's data has not yet been reported to the database (so there is no gap between intervals when metrics are not accumulated). <span class="ph">CloudStreams</span> does not calculate and aggregate metrics across intervals. If <span class="ph">CloudStreams</span> is shut down or the service is undeployed before the current interval expires, the performance data is discarded.</div><div id="wwID0EVCCK" class="Section_Title">Examples of interval metric publishing</div><div id="wwID0E1CCK" class="Body">For example, suppose that the tracking interval is 10 minutes. One of the key performance indicator (KPI) metrics is <span class="Quote">Availability</span>, which reports the amount of time that a service was available during the current interval, shown as a percentage. The green boxes in the illustration below indicate successful requests and the red ones indicate unsuccessful requests.</div><div id="wwID0EFDCK" class="Body">A request is considered unsuccessful when a network fault occurs or when the native service is unavailable due to the following errors:</div><div id="wwID0EQDCK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>ConnectException</div><div id="wwID0EDECK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>MalformedURLException</div><div id="wwID0EWECK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>NoRouteToHostException</div><div id="wwID0EJFCK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>ProtocolException</div><div id="wwID0E3FCK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>SocketTimeoutException</div><div id="wwID0EPGCK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>UnknownHostException</div><div id="wwID0ECHCK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>UnknownServiceException</div><div id="wwID0EVHCK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Web Service not available</div><div id="wwID0EIICK" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The service cannot be found</div><div id="wwID0E3ICK" class="Body">In the case of a normal application-level SOAP fault, <span class="ph">CloudStreams</span> considers the request to be successful. In the illustration below, in Interval 1 (0 - 10 minutes) a request failed at the 4 minute mark, followed by a successful request at the 5 minute mark. Therefore, <span class="ph">CloudStreams</span> considers the interval between 4 and 5 minutes to be service downtime (even though this may not be accurate). So in this case, for Interval 1 the availability is 9/10 (90%). In the case of Interval 2, only one request was sent, and it failed at the 1 minute mark. Therefore, <span class="ph">CloudStreams</span> considers the time between 1 minute to the end of the interval as service downtime. So the time between the start of Interval 2 (the 10 minute mark) to the failed request is service uptime (1 minute); the availability is 1/10 (10%) for Interval 2. At the end of the interval, <span class="ph">CloudStreams</span> resets the KPI metrics.</div><div id="wwID0ESJCK" class="Body">The <span class="Quote">Availability</span> status of a service is transferred to the beginning of the next interval. When <span class="ph">CloudStreams</span> starts up, it is assumed that the services are available. If a service is unavailable at the end of interval 1, and no activity occurs for several intervals, the service's availability is 0 during the intervals when no activity occurred.</div><div class="ww_skin_page_overflow"><div id="wwID0EOCCK-12" class="Section"><img class="largesource" src="../wst-webhelp/images/fig_Availability.png" width="100%" style="display: block; float: none; left: 0pt; max-height: 189px; max-width: 505px; top: 0pt" alt="" /></div></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

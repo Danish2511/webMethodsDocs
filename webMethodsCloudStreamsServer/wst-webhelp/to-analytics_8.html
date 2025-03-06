@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>SQL Statement Execution and Connection Timeouts</title><link rel="Prev" href="to-analytics_7.html" title="Previous" /><link rel="Next" href="to-analytics_9.html" title="Next" /><link rel="StyleSheet" href="css/_cloudstreams_webhelp.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_cloudstreams_webhelp_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/wst-webhelp/to-analytics_8.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pcFmSjGRMBke25rUMAYmN7g" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/wst-webhelp/to-analytics_8.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>CloudStreams</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-wst_webhelp_landing_page.html#wwconnect_header">webMethods CloudStreams Documentation</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/_cloudstreams_webhelp.1.006.html#wwconnect_header">Administering webMethods CloudStreams</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-analytics.html#wwconnect_header">CloudStreams Analytics (Deprecated)</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-analytics_5.html#wwconnect_header">Installation and Configuration Tasks</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../wst-webhelp/to-analytics_7.html#wwconnect_header">Creating a JDBC Connection Pool for CloudStreams</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">SQL Statement Execution and Connection Timeouts</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0ECOUQ" class="Heading_5">SQL Statement Execution and Connection Timeouts</div><div id="wwID0ELOUQ" class="Body">The <span class="ph">CloudStreams</span> event-sending component relies on the JDBC pools connection properties for configuring the DataDirect driver properties.</div><div id="wwID0EVOUQ" class="Body">It is expected that any DataDirect driver settings will be configured via property settings in the connection URL. Minimally, it is recommended that timeouts be configured for connections and SQL statement execution since by default the DataDirect driver uses <span class="Quote">0</span> for its default settings (which implies that no timeouts are used).</div><div id="wwID0EAPUQ" class="Body">Following is a sample connection URL with the property settings <span class="codeph">QueryTimeout</span> and <span class="codeph">LoginTimeout</span>:</div><div id="wwID0EOPUQ" class="Body"><span class="filepath">jdbc:wm:oracle://</span><span class="filepath_002c_varname">&lt;server&gt;</span><span class="filepath">:</span><span class="filepath_002c_varname">&lt;1521|port&gt;</span><span class="filepath">;serviceName=</span><span class="filepath_002c_varname">&lt;value&gt;</span><span class="filepath">;QueryTimeout=</span><span class="filepath_002c_varname">&lt;seconds&gt;</span><span class="filepath">;LoginTimeout=</span><span class="filepath_002c_varname">&lt;seconds&gt;</span></div><div id="wwID0EVQUQ" class="Body">Note the following:</div><div id="wwID0ETRUQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The <span class="codeph">LoginTimeout</span> property controls connection timeouts.</div><div id="wwID0EJSUQ" class="List_1_Continued">If <span class="codeph">LoginTimeout</span> is not specified, the connection pool will use the value of the global <span class="ph">Integration Server</span> property <span class="parmname">watt.server.jdbc.loginTimeout</span> to attempt to connect to the database.</div><div id="wwID0E3SUQ" class="List_1_Continued">The <span class="parmname">watt.server.jdbc.loginTimeout</span> property is located in <span class="filepath_002c_varname">IntegrationServer_directory</span><span class="filepath">\instances\</span><span class="filepath_002c_varname">instance_name</span><span class="filepath">\config\server.cnf</span>. This property sets the maximum time, in seconds, that the JDBC driver on <span class="ph">Integration Server</span> is to wait for a response while attempting to connect to a database. If <span class="ph">Integration Server</span> does not receive a response in the allotted time, it terminates the request, logs the error and moves on. The default value is 60 seconds.</div><div id="wwID0E6TUQ" class="Note_1"><span class="Bold">Note:<br /></span>The DataDirect property <span class="codeph">LoginTimeout</span> takes precedence over the global <span class="ph">Integration Server</span> property <span class="parmname">watt.server.jdbc.loginTimeout</span>, which means you can override the global property on a case-by-case basis.</div><div id="wwID0EWVUQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The <span class="codeph">QueryTimeout</span> property controls timeouts for queries and for inserting events.</div><div id="wwID0EMWUQ" class="List_1_Continued">Although the name <span class="codeph">QueryTimeout</span> suggests its scope is limited to queries, it actually applies to <span class="emphasis">all</span> SQL statements, including INSERTs.</div><div id="wwID0E2WUQ" class="List_1_Continued">If The <span class="codeph">QueryTimeout</span> property is not specified, there is no timeout for SQL statements executing on connections in this pool. So it is recommended that you specify a <span class="codeph">QueryTimeout</span> value for this pool.</div><div id="wwID0EJXUQ" class="List_1_Continued">If you experience timeouts while inserting events, you should consider increasing the <span class="codeph">QueryTimeout</span> property (and/or reducing the <span class="ph">CloudStreams</span> property <span class="parmname">pg.jdbc.batchSize</span>, which is described below).</div><div id="wwID0E4XUQ" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>The <span class="ph">CloudStreams</span> property <span class="parmname">pg.jdbc.batchSize</span> controls the size of the events batch.</div><div id="wwID0EZYUQ" class="List_1_Continued"><span class="ph">CloudStreams</span> uses the optimized JDBC batch API to send its events to the relational database using prepared statements. The <span class="ph">CloudStreams</span> property <span class="parmname">pg.jdbc.batchSize</span> controls how many events the sender can insert into a given batch (25 events by default). So, a batch of events is sent to the database every time the value of <span class="parmname">pg.jdbc.batchSize</span> is reached. Increasing the batch size can improve database performance, but will also increase the statement execution time.</div><div id="wwID0EQZUQ" class="List_1_Continued">The <span class="parmname">pg.jdbc.batchSize</span> property is located in:</div><div id="wwID0E2ZUQ" class="List_1_Continued"><span class="filepath_002c_varname">IntegrationServer_directory</span><span class="filepath">\instances\</span><span class="filepath_002c_varname">instance_name</span><span class="filepath">\packages\WmCloudStreams\config\resources\wst-config.properties</span></div><div id="wwID0EQ1UQ" class="List_1_Continued">Additionally, if more than 3 seconds elapse since the last batch was sent, any received events will be sent to the database, even if the batch threshold has not been reached. This ensures there is not a substantial delay between the time an event is created and when it is inserted into the table.</div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

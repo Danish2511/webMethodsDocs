@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html
+  xml:lang="en"
+  lang="en"
+  data-highlight-require-whitespace="true"
+  xmlns="http://www.w3.org/1999/xhtml"
+>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8" />
+    <meta http-equiv="Content-Style-Type" content="text/css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <title>FORM_ENCODED_PARAM</title>
+    <link rel="Prev" href="to-custom_connector_26.html" title="Previous" />
+    <link rel="Next" href="to-custom_connector_28.html" title="Next" />
+    <link
+      rel="StyleSheet"
+      href="css/_cloudstreams_webhelp.css"
+      type="text/css"
+      media="all"
+    />
+    <link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" />
+    <link rel="StyleSheet" href="css/social.css" type="text/css" media="all" />
+    <link
+      rel="StyleSheet"
+      href="css/webworks.css"
+      type="text/css"
+      media="all"
+    />
+    <!--[if IE 7
+      ]><link
+        rel="StyleSheet"
+        href="css/_cloudstreams_webhelp_IE7.css"
+        type="text/css"
+        media="all"
+    /><![endif]-->
+    <link rel="StyleSheet" href="css/print.css" type="text/css" media="print" />
+    <script type="text/javascript">
+      "use strict";
+
+      var redirect_url, page_hash;
+
+      if (
+        window === window.top &&
+        window.navigator.userAgent.indexOf("bot/") === -1
+      ) {
+        // Redirect
+        //
+        redirect_url =
+          "../index.html#page/wst-webhelp/to-custom_connector_27.html";
+        if (window.document.location.hash.length > 1) {
+          // Sanitize and append it
+          //
+          page_hash = window.document.location.hash.substring(1);
+          page_hash = page_hash.replace(
+            /[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi,
+            ""
+          );
+          redirect_url += "#" + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+      }
+    </script>
+    <script type="text/javascript" src="scripts/common.js"></script>
+    <script type="text/javascript" src="scripts/page.js"></script>
+    <script type="text/javascript" src="scripts/search-client.js"></script>
+    <script type="text/javascript" src="scripts/unidata.js"></script>
+    <script type="text/javascript" src="scripts/unibreak.js"></script>
+  </head>
+  <body
+    id="pHoJWzVFfUMcDUXLFYjoCYg"
+    class="ww_skin_page_body"
+    onload="Page.OnLoad('../index.html#page/wst-webhelp/to-custom_connector_27.html');"
+  >
+    <header id="wwconnect_header">
+      <!-- Produkt Name und Version in Breadcrumbs SQ -->
+      <div class="ww_skin_breadcrumbs">
+        <span>CloudStreams</span>&nbsp;10.15 |
+        <span class="ww_skin_breadcrumbs_parent"
+          ><a
+            href="../wst-webhelp/to-wst_webhelp_landing_page.html#wwconnect_header"
+            >webMethods CloudStreams Documentation</a
+          ></span
+        ><span class="ww_skin_breadcrumbs_divider"> | </span
+        ><span class="ww_skin_breadcrumbs_parent"
+          ><a
+            href="../wst-webhelp/_cloudstreams_webhelp.1.006.html#wwconnect_header"
+            >Administering webMethods CloudStreams</a
+          ></span
+        ><span class="ww_skin_breadcrumbs_divider"> | </span
+        ><span class="ww_skin_breadcrumbs_parent"
+          ><a href="../wst-webhelp/to-custom_connector.html#wwconnect_header"
+            >Cloud Connections, Services, and Connector Listeners</a
+          ></span
+        ><span class="ww_skin_breadcrumbs_divider"> | </span
+        ><span class="ww_skin_breadcrumbs_parent"
+          ><a href="../wst-webhelp/to-custom_connector_22.html#wwconnect_header"
+            >REST Parameters</a
+          ></span
+        ><span class="ww_skin_breadcrumbs_divider"> | </span
+        ><span class="ww_skin_breadcrumbs_parent"
+          ><a href="../wst-webhelp/to-custom_connector_23.html#wwconnect_header"
+            >Parameter Types</a
+          ></span
+        ><span class="ww_skin_breadcrumbs_divider"> | </span
+        ><span class="ww_skin_breadcrumbs_current">FORM_ENCODED_PARAM</span>
+      </div>
+      <div class="ww_skin_page_toolbar">
+        <a
+          class="ww_behavior_print ww_skin ww_skin_print"
+          title="Print"
+          href="#"
+          >&nbsp;</a
+        >
+      </div>
+    </header>
+    <div id="wwID0EKSMQ" class="Heading_5">FORM_ENCODED_PARAM</div>
+    <div id="wwID0ETSMQ" class="Body">
+      <span class="emphasis">FORM_ENCODED_PARAM</span> allows you to send simple
+      key value parameters embedded in the Request body for POST or PUT
+      requests. This uses the default web form encoding, which is
+      <span class="emphasis">application/x-www-form-urlencoded</span>.
+    </div>
+    <div id="wwID0ECTMQ" class="Body">
+      You can define a parameter of type FORM_ENCODED_PARAM if you want to send
+      the parameter as part of the Request body. You can also format the input
+      data into a desired output format using the formatter, similar to
+      QUERYSTRING_PARAM.
+    </div>
+    <div id="wwID0EHTMQ" class="Body">
+      To define a form URL encoded parameter, you have to create a parameter
+      type and set the style as FORM_ENCODED_PARAM
+    </div>
+    <div id="wwID0EMTMQ" class="Body">
+      <span class="inlinetitle">Example</span>
+    </div>
+    <div id="wwID0EWTMQ" class="Body">
+      A sample resource definition with FORM_ENCODED_PARAM parameter is as
+      follows:
+    </div>
+    <div id="wwID0E2TMQ" class="Preformatted">
+      &lt;resource method="POST" path="/Accounts" name="CreateSubAccount" <br />
+      displayName="Create SubAccount"&gt;<br />
+      &lt;description&gt;Create new subaccount&lt;/description&gt; <br />
+      &lt;parameters&gt; <br />
+      &lt;parameter name="FriendlyName" isRequired="true" <br />
+      style="FORM_ENCODED_PARAM"&gt;<br />
+      &lt;description&gt;Friendly Name&lt;/description&gt;<br />
+      &lt;/parameter&gt;<br />
+      &lt;parameter name="Status" isRequired="true" <br />
+      style="FORM_ENCODED_PARAM"&gt;<br />
+      &lt;description&gt;Status of account&lt;/description&gt;<br />
+      &lt;/parameter&gt; <br />
+      &lt;/parameters&gt; <br />
+      &lt;responses&gt;<br />
+      ...<br />
+      &lt;/responses&gt;<br />
+      &lt;/resource&gt;<br />
+    </div>
+    <div id="wwID0EBUMQ" class="Body">
+      For passing parameters of FORM_ENCODED_PARAM type, you must not define the
+      Request body for a Resource, as the generated parameter key value string
+      will be automatically embedded in the Request body. In the above example,
+      two parameters of type FORM_ENCODED_PARAM are defined as
+      <span class="emphasis">FriendlyName</span> and
+      <span class="emphasis">Status</span>. When the service created by the
+      sample resource definition is run, the following sample Request payload is
+      sent to the back end:
+    </div>
+    <div id="wwID0ERUMQ" class="Preformatted">
+      POST /2010-04-01/Accounts/AC53e967de85059b65475d0059882a9e02 HTTP/1.1<br />Content-Type:
+      application/x-www-form-urlencoded; charset=UTF-8<br />Content-Length:
+      39<br />Host: api.twilio.com<br />Connection: Keep-Alive<br />Authorization:
+      Basic secret_goes_here
+    </div>
+    <div id="wwID0EXUMQ" class="Body">
+      <span class="emphasis">FriendlyName=NewFrName&amp;Status=suspended</span>
+      is also sent as part of the same Request body:
+    </div>
+    <div id="wwID0ECVMQ" class="Preformatted">
+      FriendlyName=NewFrName&amp;Status=suspended
+    </div>
+    <div id="wwID0EIVMQ" class="Body">
+      In the above sample Request payload, as the Content-Type is automatically
+      set to <span class="emphasis">application/x-www-form-urlencoded</span>,
+      you do not have to explicitly set the Content-Type. Further, the
+      parameters, <span class="emphasis">FriendlyName</span> and
+      <span class="emphasis">Status</span> are URL encoded and are specified as
+      an ampersand (&amp;) separated list of key-value pairs (<span
+        class="emphasis"
+        >FriendlyName=NewFrName</span
+      >
+      and <span class="emphasis">Status=suspended</span>), with the
+      corresponding Content-Length set accordingly.
+    </div>
+    <footer>
+      <!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br />
+      <hr style="border: 1px solid; border-color: #1776bf" />
+      <!-- FRWE: Why is the font family information hard-coded?? -->
+      <div
+        style="
+          font-family: 'Roboto', Sans-Serif;
+          font-size: 10px;
+          margin-top: 6px;
+          margin-bottom: 6px;
+          text-align: center;
+        "
+      >
+        <a href="http://www.softwareag.com/licenses"
+          >Copyright © 2013-2022&nbsp;Software AG, Darmstadt, Germany and/or
+          Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or
+          its affiliates and/or their licensors</a
+        >
+      </div>
+      <!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  -->
+    </footer>
+  </body>
+</html>
