@@ -1,0 +1,107 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Configuring Trading Networks for a Clustered Environment</title><link rel="Prev" href="to-configuration_10.html" title="Previous" /><link rel="Next" href="to-configuration_12.html" title="Next" /><link rel="StyleSheet" href="css/_tn_guides_integrated_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_tn_guides_integrated_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/otn-webhelp/to-configuration_11.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pvhQFLwbDO9komT8K4pxfbg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/otn-webhelp/to-configuration_11.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Trading Networks</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../otn-webhelp/_tn_guides_integrated_diba2.1.0006.html#wwconnect_header">Administering Trading Networks</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../otn-webhelp/to-configuration.html#wwconnect_header">Configuring Trading Networks</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Configuring Trading Networks for a Clustered Environment</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0E5ADM" class="Heading_2">Configuring <span class="ph">Trading Networks</span> for a Clustered Environment</div><div id="wwID0ERBDM" class="Body">When you cluster <span class="ph">Trading Networks</span> instances, you can configure the instances so that data cached in memory, user accounts, and properties are synchronized on all instances in the cluster. However, the <span class="ph">Integration Server</span>s that host the <span class="ph">Trading Networks</span> instances need not be in cluster. For more information on clustering <span class="ph">Integration Server</span>s, refer <span class="ph"> </span><span class="ph_002c_Citation">webMethods Integration Server Clustering Guide</span>.</div><div id="wwID0ERCDM" class="Body">Use the following procedure to configure <span class="ph">Trading Networks</span> for a clustered environment.</div><div id="wwID0E2CDM" class="Important"><span class="Bold">Important:<br /></span>When you save the properties you edit in this procedure, <span class="ph">Trading Networks</span> will update all properties, including those that you did not edit. In a clustered environment, this will cause <span class="ph">Trading Networks</span> to synchronize all properties. If you want the <span class="ph">Trading Networks</span> instances in the cluster to maintain different values for some properties, set the 
+    <a href="../otn-webhelp/to-app_tn_config_props_13.html#wwID0ER22Q"
+   
+     title="tn.cluster.notifyPropertyChange"
+    ><span class="heading-no-quotes">tn.cluster.notifyPropertyChange</span></a> property to <span class="codeph">false</span>, and maintain the properties for each server individually.</div><div id="wwID0ELEDM" class="procedure"><span><img src="icon_task_xpe.png" alt="*" border="0" width="20" height="13" /></span>To configure <span class="ph">Trading Networks</span> for a clustered environment</div><div id="wwID0E1EDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>1. </span></span><span class="Command">On each </span><span class="Command_002c_Command">Integration Server</span><span class="Command"> in the cluster, create a remote server alias for the other </span><span class="Command_002c_Command">Integration Server</span><span class="Command">s in the cluster. For instructions, see </span><span class="Command_002c_Command"> </span><span class="Command_002c_Command_002c_Citation">webMethods Integration Server Administrator’s Guide</span><span class="Command">. </span></div><div id="wwID0EOGDM" class="Important_1"><span class="Bold">Important:<br /></span>If you have already created a remote server alias so the <span class="ph">Integration Server</span> is part of a cluster without <span class="ph">Trading Networks</span>, you must create an additional remote server alias for the <span class="ph">Integration Server</span> that is specifically for the <span class="ph">Trading Networks</span> cluster.</div><div id="wwID0EXHDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>2. </span></span><span class="Command">To update the </span><span class="Command_002c_Command">Trading Networks</span><span class="Command"> properties.cnf file for each </span><span class="Command_002c_Command">Trading Networks</span><span class="Command"> instance in the cluster, do the following: </span></div><div id="wwID0E4IDM" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>a. </span></span><span class="Command">In </span><span class="Command_002c_Command">My webMethods</span><span class="Command">: </span><span class="Command_002c_uicontrol">Administration &gt; Integration &gt; B2B Settings &gt; Configure Properties</span><span class="Command">. </span></div><div id="wwID0EAKDM" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>b. </span></span><span class="Command">Add or edit the properties: </span></div><div id="wwID0EDLDM" class="Table_Description">The following table lists the properties:</div><div class="ww_skin_page_overflow"><table class="norules2" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 40.9%"><div id="wwID0EEMDM" class="Table_Cell_Head">Property</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 59%"><div id="wwID0EKMDM" class="Table_Cell_Head">Setting</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZMDM" class="Table_Cell">
+    <a href="../otn-webhelp/to-app_tn_config_props_14.html#wwID0ET42Q"
+   
+     title="tn.cluster.sync.remoteAliases"
+    ><span class="heading-no-quotes">tn.cluster.sync.remoteAliases</span></a></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJNDM" class="Table_Cell">Remote server aliases you created in step 1.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUNDM" class="Table_Cell">
+    <a href="../otn-webhelp/to-app_tn_config_props_23.html#wwID0EQW3Q"
+   
+     title="tn.query.threshold"
+    ><span class="heading-no-quotes">tn.query.threshold</span></a></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEODM" class="Table_Cell">Number of rows of query results for <span class="ph">Trading Networks</span> to store in the session object. When clustered, <span class="ph">Trading Networks</span> should not store query results in the session object; set this property to “-1”. for example:</div><div id="wwID0ESODM" class="Table_Cell"><span class="codeph">tn.query.threshold=-1</span></div></td></tr></table></div><div id="wwID0EDPDM" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>c. </span></span><span class="Command">Set these properties to </span><span class="Command_002c_codeph">true</span><span class="Command">: </span></div><div class="ww_skin_page_overflow"><table class="norules2" cellspacing="4" summary=""><tr><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 45.4%"><div id="wwID0EJRDM" class="Table_Cell_Head">Property value to set</div></td><td class="Table_Cell_Head" style="border-bottom-color: #0899CC; border-bottom-style: solid; border-bottom-width: thin; padding-left: 2pt; padding-right: 2pt; width: 54.5%"><div id="wwID0EPRDM" class="Table_Cell_Head">Notification to all the servers in the cluster</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0E5RDM" class="Table_Cell">
+    <a href="../otn-webhelp/to-app_tn_config_props_11.html#wwID0E4X2Q"
+   
+     title="tn.cluster.notifyCacheChange"
+    ><span class="heading-no-quotes">tn.cluster.notifyCacheChange</span></a></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EOSDM" class="Table_Cell">Change to data cached in memory.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EZSDM" class="Table_Cell">
+    <a href="../otn-webhelp/to-app_tn_config_props_12.html#wwID0E2Z2Q"
+   
+     title="tn.cluster.notifyProfileAddUser"
+    ><span class="heading-no-quotes">tn.cluster.notifyProfileAddUser</span></a></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EJTDM" class="Table_Cell">New user accounts.</div></td></tr><tr><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EUTDM" class="Table_Cell">
+    <a href="../otn-webhelp/to-app_tn_config_props_13.html#wwID0ER22Q"
+   
+     title="tn.cluster.notifyPropertyChange"
+    ><span class="heading-no-quotes">tn.cluster.notifyPropertyChange</span></a></div></td><td class="Table_Cell" style="padding-left: 2pt; padding-right: 2pt; vertical-align: top"><div id="wwID0EEUDM" class="Table_Cell">Change to <span class="ph">Trading Networks</span> properties.</div></td></tr></table></div><div id="wwID0EVUDM" class="Substep_2"><span class="WebWorks_Number" style="width: 18pt"><span>d. </span></span><span class="Command">Click </span><span class="Command_002c_uicontrol">Save</span><span class="Command">. </span></div><div id="wwID0EUVDM" class="Step_1"><span class="WebWorks_Number" style="width: 18pt"><span>3. </span></span><span class="Command"> </span><span class="Command_002c_Command">Trading Networks</span><span class="Command"> data cached in memory, user accounts, and properties are automatically synchronized on all </span><span class="Command_002c_Command">Integration Server</span><span class="Command">s in the cluster. To turn one of these synchronizations off for a </span><span class="Command_002c_Command">Trading Networks</span><span class="Command"> instance, modify the appropriate property in the </span><span class="Command_002c_Command">Trading Networks</span><span class="Command"> properties.cnf file. For example, if you want to manually control user account creation, turn off the </span>
+    <a href="../otn-webhelp/to-app_tn_config_props_12.html#wwID0E2Z2Q"
+   
+     title="tn.cluster.notifyProfileAddUser"
+    ><span class="Command_002c_heading-no-quotes">tn.cluster.notifyProfileAddUser</span></a><span class="Command"> property. </span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2024&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>

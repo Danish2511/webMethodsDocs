@@ -1,0 +1,79 @@
+<!DOCTYPE html ><html xml:lang="en" lang="en" data-highlight-require-whitespace="true" xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html;charset=utf-8" /><meta http-equiv="Content-Style-Type" content="text/css" /><meta name="viewport" content="width=device-width, initial-scale=1.0" /><link rel="shortcut icon" href="favicon.ico" type="image/x-icon" /><meta http-equiv="X-UA-Compatible" content="IE=edge" /><title>Monitoring Multiple Events in Array Lists</title><link rel="Prev" href="to-config_12.html" title="Previous" /><link rel="Next" href="to-config_14.html" title="Next" /><link rel="StyleSheet" href="css/_tn_guides_integrated_diba2.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/skin.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/social.css" type="text/css" media="all" /><link rel="StyleSheet" href="css/webworks.css" type="text/css" media="all" /><!--[if IE 7]><link rel="StyleSheet" href="css/_tn_guides_integrated_diba2_IE7.css" type="text/css" media="all" /><![endif]--><link rel="StyleSheet" href="css/print.css" type="text/css" media="print" /><script type="text/javascript">
+    'use strict';
+
+    var redirect_url, page_hash;
+
+    if ((window === window.top) && (window.navigator.userAgent.indexOf('bot/') === -1)) {
+        // Redirect
+        //
+        redirect_url = "../index.html#page/otn-webhelp/to-config_13.html";
+        if (window.document.location.hash.length > 1) {
+            // Sanitize and append it
+            //
+            page_hash = window.document.location.hash.substring(1);
+            page_hash = page_hash.replace(/[\\><:;"]|%5C|%3C|%3E|%3A|%3B|%22/gi, '');
+            redirect_url += '#' + page_hash;
+        }
+        window.document.location.replace(redirect_url);
+    }
+</script><script type="text/javascript" src="scripts/common.js"></script><script type="text/javascript" src="scripts/page.js"></script><script type="text/javascript" src="scripts/search-client.js"></script><script type="text/javascript" src="scripts/unidata.js"></script><script type="text/javascript" src="scripts/unibreak.js"></script></head><body id="pqNwEA2OiGFqG_002fluq3RSAEg" class="ww_skin_page_body" onload="Page.OnLoad('../index.html#page/otn-webhelp/to-config_13.html');"><header id="wwconnect_header"><!-- Produkt Name und Version in Breadcrumbs SQ --><div class="ww_skin_breadcrumbs"><span>Trading Networks</span>&nbsp;10.15 |
+		     <span class="ww_skin_breadcrumbs_parent"><a href="../otn-webhelp/_tn_guides_integrated_diba2.1.1000.html#wwconnect_header">Optimizing B2B Interactions</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_parent"><a href="../otn-webhelp/to-config.html#wwconnect_header">Configuring Trading Networks Transaction Data for Optimize for B2B</a></span><span class="ww_skin_breadcrumbs_divider"> | </span><span class="ww_skin_breadcrumbs_current">Monitoring Multiple Events in Array Lists</span></div><div class="ww_skin_page_toolbar"><a class="ww_behavior_print ww_skin ww_skin_print" title="Print" href="#">&nbsp;</a></div></header><div id="wwID0EAH5W" class="Heading_2">Monitoring Multiple Events in Array Lists</div><div id="wwID0EJH5W" class="Body">When configuring custom attributes for monitoring and the attributes are for an array data type (for example, DATETIME LIST), you can post the events to <span class="ph">Optimize</span> in arrays of events or as a single array with all the values. You specify your choice while configuring the event map (from the <span class="uicontrol">Administration &gt; Integration &gt; B2B &gt; Business Monitoring</span> page).</div><div id="wwID0EXH5W" class="Body">When configuring the event map:</div><div id="wwID0EAI5W" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Selecting <span class="uicontrol">Post multiple events for arrays</span> sends multiple events for the same document when there is a arraylist in custom attributes or multiple elements in system attributes.</div><div id="wwID0EVI5W" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Clearing <span class="uicontrol">Post multiple events for arrays</span> sends all attribute values in a single event for an array (for example, ordernumber1, ordernumber2, ordernumber3).</div><div id="wwID0ELJ5W" class="Body">To post events to <span class="ph">Optimize</span> in arrays of events rather a single array with all the values, go to the <span class="uicontrol">Administration &gt; Integration &gt; B2B &gt; Business Monitoring</span> page, and select <span class="uicontrol">Post multiple events for arrays</span>, as shown below.</div><div id="wwID0ECK5W" class="Figure_Title">Post Multiple Events for Arrays selection</div><div class="ww_skin_page_overflow"><div id="wwID0E4J5W-2" class="Figure"><img class="Default" src="../otn-webhelp/images/PostMultipleEvents4Arrays.gif" width="100%" style="display: block; float: none; left: 0pt; max-height: 303px; max-width: 431px; top: 0pt" alt="" /></div></div><div id="wwID0ESK5W" class="Body">When <span class="uicontrol">Post multiple events for arrays</span> is selected, the <span class="uicontrol">Maximum Number of Items</span> field is disabled for the attributes.</div><div id="wwID0EAL5W" class="Body">After you configure the event map, click the <span class="uicontrol">Save and Configure Event Map</span> button. The Event Map page appears, with the individual array element.</div><div id="wwID0EKL5W" class="Body">After the event map is configured and the document type is enabled for monitoring, <span class="ph">Trading Networks</span> sends events to <span class="ph">Optimize</span> as follows:</div><div id="wwID0ENM5W" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span><span class="ph">Optimize</span> determines how many events to create for this transaction based on the maximum size of arrays in the extracted monitored attributes.</div><div id="wwID0EDN5W" class="List_1_Continued">For example, the attributes "Sender Profile Group," "Receiver Profile Group," and custom attributes "ArrayList1" and "ArrayList2" are enabled for monitoring. <span class="ph">Optimize</span> determines the maximum number of elements available in the four attributes and creates that many events. If "ArrayList1" has 20 elements and the other attributes each contain fewer than 20 elements, <span class="ph">Optimize</span> creates 20 events.</div><div id="wwID0EDO5W" class="List_1"><span class="WebWorks_Number" style="width: 18pt"><span><img src="chapterTOC_bullet.png" alt="*" border="0" width="10" height="10" /></span></span>Individual attributes such as Sender, Receiver, and InternalID are always populated in all events. Arrays are populated in terms of their size.</div><div id="wwID0EVO5W" class="List_1_Continued">For example, if five events are to be created and "ArrayList1" has five elements and "ArrayList2" has two elements, the events are populated as follows:</div><div id="wwID0E1O5W" class="List_1_Continued">1st event - <span class="codeph">Sender / Receiver / InternalID / Arraylist1[0] / Arraylist2[0]</span></div><div id="wwID0EEP5W" class="List_1_Continued">2nd event - <span class="codeph">Sender / Receiver / InternalID / Arraylist1[1] / Arraylist2[1]</span></div><div id="wwID0EOP5W" class="List_1_Continued">3rd event - <span class="codeph">Sender / Receiver / InternalID / Arraylist1[2]</span></div><div id="wwID0EYP5W" class="List_1_Continued">4th event - <span class="codeph">Sender / Receiver / InternalID / Arraylist1[3]</span></div><div id="wwID0ECQ5W" class="List_1_Continued">5th event - <span class="codeph">Sender / Receiver / InternalID / Arraylist1[4]</span></div><footer><!-- Related Topics --><!--                --><!-- Disqus --><!--        --><!-- Google Translation --><!--                    --><!-- SQ insert Footer --><br /><hr style="border:1px solid; border-color: #1776BF; " /><!-- FRWE: Why is the font family information hard-coded?? --><div style="font-family: 'Roboto', Sans-Serif; font-size: 10px; margin-top: 6px; margin-bottom: 6px; text-align: center;"><a href="http://www.softwareag.com/licenses">Copyright © 2007-2024&nbsp;Software AG, Darmstadt, Germany and/or Software AG USA, Inc., Reston, VA, USA, and/or its subsidiaries and/or its affiliates and/or their licensors</a></div><!-- SQ insert Date 
+	 <div style="text-align: center; font-weight: bold;" wwpage:content="pub-date">January 1, 2015</div> --><!-- old Footer 2016
+	  <div class="footer">Copyright &#169; <span wwpage:content="sag:product-copyrfirst"></span>, <span wwpage:content="sag:organization-copyrholder"></span>, <a href="http://sag.com/" wwpage:attribute-href="sag:organization-url" wwpage:content="sag:organization-url">http://sag.com/</a>
+   --><!-- SQ Variablen --><!-- Copyright Test --><!--	  <div style="text-decoration: underline">Copyright Import Test:</div>
+	  <wwpage:Import wwpage:content-from-file="Copyright/copyright_en.asp" />
+	  <br></br>--><!--
+	  <!-\- SQ Variables - Information from xresources -\->
+	  <div style="text-decoration: underline">From xresources:</div>
+	  <div>sag:organization-id == <span wwpage:content="sag:organization-id"></span></div>
+	  <div>sag:organization-name == <span wwpage:content="sag:organization-name"></span></div>
+	  <div>sag:organization-copyrholder == <span wwpage:content="sag:organization-copyrholder"></span></div>
+	  <div>sag:organization-url == <span wwpage:content="sag:organization-url"></span></div>
+	  
+	  <div>sag:family-id == <span wwpage:content="sag:family-id"></span></div>
+	  <div>sag:family-name == <span wwpage:content="sag:family-name"></span></div>
+	  <div>sag:family-organization == <span wwpage:content="sag:family-organization"></span></div>
+	  
+	  <div>sag:product-id == <span wwpage:content="sag:product-id"></span></div>
+	  <div>sag:product-name == <span wwpage:content="sag:product-name"></span></div>
+	  <div>sag:product-copyrfirst == <span wwpage:content="sag:product-copyrfirst"></span></div>
+	  <div>sag:product-family == <span wwpage:content="sag:product-family"></span></div>
+	  
+	  <!-\- SQ Variables - Values from DITA-Map and Keymap-\->
+	  <br></br>
+	  <div style="text-decoration: underline">From DITA/Book-Map:</div>
+	  <div>ProdInfo Prodname == <span wwpage:replace="wwvars:ProdInfoProdName"></span></div>
+	  <div>ProdInfo Mod First == <span wwpage:replace="wwvars:ProdInfoModFirst"></span></div>
+	  <div>ProdInfo Mod Last == <span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>ProdInfo Rel First == <span wwpage:replace="wwvars:ProdInfoRelFirst"></span></div>
+	  <div>ProdInfo Rel Last == <span wwpage:replace="wwvars:ProdInfoRelLast"></span></div>
+	  <div>ProdInfo Vers First == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span></div>
+	  <div>ProdInfo Vers Last == <span wwpage:replace="wwvars:ProdInfoVersLast"></span></div>
+	  <div>ProdInfo vrm vers.rel.mod == <span wwpage:replace="wwvars:ProdInfoVersFirst"></span>.<span wwpage:replace="wwvars:ProdInfoRelLast"></span>.<span wwpage:replace="wwvars:ProdInfoModLast"></span></div>
+	  <div>BookID PartNo == <span wwpage:replace="wwvars:BookPartNo"></span></div>
+	  <div>othermeta release-version == <span wwpage:replace="wwvars:ReleaseVersion"></span></div>
+	  <div>othermeta release-date == <span wwpage:replace="wwvars:ReleaseDate"></span></div>
+	  <div>othermeta release-edition == <span wwpage:replace="wwvars:ReleaseEdition"></span></div>
+	  <div>othermeta product == <span wwpage:replace="wwvars:Product"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">From x_runtime/keymap.ditamap:</div>
+	  <div>sag:product-shortname == <span wwpage:replace="wwvars:sag:product-shortname"></span></div>
+	  <div>sag:product-longname == <span wwpage:replace="wwvars:sag:product-longname"></span></div>
+	  <div>versionAdd == <span wwpage:replace="wwvars:versionAdd"></span></div>
+	  <div>yearFYLY == <span wwpage:replace="wwvars:yearFYLY"></span></div>
+	  <div>fingerprint == <span wwpage:replace="wwvars:fingerprint"></span></div>
+	  <div>sag:CopyrightDeclaration == <span wwpage:replace="wwvars:sag:CopyrightDeclaration"></span></div>
+	  <div>pdfReleaseDate == <span wwpage:replace="wwvars:pdfReleaseDate"></span></div>
+	  <div>documentID == <span wwpage:replace="wwvars:documentID"></span></div>
+	  <br></br>
+	  <div style="text-decoration: underline">Reserve:</div>
+	  <div>organization == <span wwpage:content="organization"></span></div>
+	  <div>product-name == <span wwpage:content="product-name"></span></div>
+	  <div>copyright-first == <span wwpage:content="copyright-first"></span></div>
+	  <div>copyright-last == <span wwpage:content="copyright-last"></span></div>
+	  <div>copyright-first-b == <span wwpage:content="wwvars:copyright-first-b"></span></div>
+	  <div>copyright-last-b == <span wwpage:content="copyright-last-b"></span></div>
+	  <div>doc-id-one == <span wwpage:content="doc-id-one"></span></div>
+	  <div>doc-id-two == <span wwpage:content="doc-id-two"></span></div>  
+	  <div>Published == <span wwpage:content="pub-date"></span></div>
+	  --></footer></body></html>
