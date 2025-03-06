@@ -1,25 +1,70 @@
 <html>
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <style>
-        body {
-        margin: 0;
-        padding: 0;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: 100vh;
-      }
-      img {
-        display: flex;
-        flex-direction: row;
-        justify-content: flex-start;
-      }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      position: relative;
+      font-family: Arial, sans-serif;
+    }
+
+    .logo {
+      position: absolute;
+      left: 20px;
+      /* Adjust as needed */
+    }
+
+    .title {
+      text-align: center;
+    }
+
+    .datetime-container {
+      position: absolute;
+      right: 20px;      
+      text-align: left;
+      font-size: 16px;
+    }
+  </style>
 </head>
+
 <body>
-    <img src="logo.png" alt="Logo" width="80">
-    <h1>webMethods Documentation</h1>
+  <img src="logo.png" alt="Logo" width="80" class="logo">
+  <h1 class="title">VKraft Technical Documentation</h1>
+  <div class="datetime-container" id="datetime"></div>
+  <script>
+    function updateDateTime() {
+      const now = new Date();
+      const hours = now.getHours();
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      const seconds = now.getSeconds().toString().padStart(2, '0');
+      const day = now.toLocaleDateString('en-US', { weekday: 'long' });
+      const date = now.toLocaleDateString('en-US');
+
+      // Determine greeting based on time
+      let greeting = "Good Morning";
+      if (hours >= 12 && hours < 18) {
+        greeting = "Good Afternoon";
+      } else if (hours >= 18) {
+        greeting = "Good Evening";
+      }
+
+      // Set the formatted time
+      document.getElementById('datetime').innerHTML = `
+              <strong>${greeting}, Dear User!</strong>
+          `;
+    }
+
+    // Update every second
+    setInterval(updateDateTime, 1000);
+    updateDateTime(); // Initial call to avoid delay
+  </script>
 </body>
+
 </html>
